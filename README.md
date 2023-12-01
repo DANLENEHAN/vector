@@ -1,10 +1,82 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
-
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+If you have installed everything skip to 'Step 5'
 
-## Step 1: Start the Metro Server
+## Step 1: Install Brew
+
+```bash
+# fresh install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# update
+brew update
+```
+## Step 2: Install Node
+
+```bash
+# If you need to install node
+brew install node
+
+# Check node version
+npm n --version
+
+# Install latest node version
+npm install n latest
+```
+
+## Step 3: IOS installs
+
+Watchman is a tool by Facebook for watching changes in the filesystem. It is highly recommended you install it for better performance.
+
+```bash
+brew install watchman
+```
+
+Install Xcode via the [Mac App Store.]( https://apps.apple.com/us/app/xcode/id497799835?mt=12) Installing Xcode will also install the iOS Simulator and all the necessary tools to build your iOS app.
+
+CocoaPods is one of the dependency management system available for iOS. CocoaPods is a Ruby gem. You can install CocoaPods using the version of Ruby that ships with the latest version of macOS.
+
+```bash
+# Install drb dependency
+sudo gem install drb -v 2.0.5
+
+# Install activesupport dependency
+gem install activesupport -v 6.1.7.6
+
+# install cocoapods
+sudo gem install cocoapods
+```
+
+## Step 4: Android installs
+
+Install the OpenJDK distribution called Azul Zulu using Homebrew.
+
+```bash
+brew tap homebrew/cask-versions
+
+brew install --cask zulu11
+
+# Get path to where cask was installed to double-click installer
+brew info --cask zulu11
+```
+
+After you install the JDK, update your JAVA_HOME environment variable.
+
+```bash
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
+```
+
+Download and install [Android Studio.](https://developer.android.com/studio/index.html).
+
+The React Native tools require some environment variables to be set up in order to build apps with native code.
+
+```bash
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+## Step 5: Start the Metro Server
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
