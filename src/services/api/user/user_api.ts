@@ -10,11 +10,9 @@ export interface LoginResponse {
   token: string;
 }
 
-export const loginUser = async (
-  credentials: LoginRequest,
-): Promise<LoginResponse> => {
+export const loginUser = async (credentials: LoginRequest): Promise<string> => {
   try {
-    const response: AxiosResponse<LoginResponse> = await api.post(
+    const response: AxiosResponse<string> = await api.post(
       '/user/login',
       credentials,
     );

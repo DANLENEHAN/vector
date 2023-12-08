@@ -12,9 +12,11 @@ import {loginUser} from '../services/api/user/user_api';
 const LoginScreen: React.FC = () => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [response, setResponse] = useState('');
 
-  const handleLogin = () => {
-    loginUser({email, password});
+  const handleLogin = async () => {
+    const loginResponse = await loginUser({email: email, password: password});
+    setResponse(loginResponse);
   };
 
   return (
@@ -42,6 +44,7 @@ const LoginScreen: React.FC = () => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
+      <Text>{response}</Text>
     </View>
   );
 };
