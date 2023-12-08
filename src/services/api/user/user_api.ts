@@ -6,10 +6,6 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  token: string;
-}
-
 export const loginUser = async (credentials: LoginRequest): Promise<string> => {
   try {
     const response: AxiosResponse<string> = await api.post(
