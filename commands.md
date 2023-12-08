@@ -75,8 +75,3 @@ CMD + M
 ```
 
 ## Other
-
-React Icons
-```bash
-npm install react-native-elements react-native-vector-icons
-```
