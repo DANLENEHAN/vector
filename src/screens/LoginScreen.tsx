@@ -7,14 +7,14 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-import api from '../../apiConfig';
+import {loginUser} from '../services/api/user/user_api';
 
 const LoginScreen: React.FC = () => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    api.post('user/login', {email, password});
+    loginUser({email, password});
   };
 
   return (
