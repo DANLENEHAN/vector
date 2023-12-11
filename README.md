@@ -106,7 +106,14 @@ yarn android
 
 ### For iOS
 
+
+
 ```bash
+# cd into ios folder
+cd ios
+# install pods
+pod install
+
 # using npm
 npm run ios
 
@@ -130,6 +137,18 @@ Now that you have successfully run the app, let's modify it.
 ## Congratulations! :tada:
 
 You've successfully run and modified your React Native App. :partying_face:
+
+### Font Awesome
+Setup
+Install the package via npm:
+npm i --save @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-core react-native-svg
+Move into the ios folder and install the pods:
+cd ios && pod install
+
+Add free icon packs to your app: 
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-brands-svg-icons
+npm i --save @fortawesome/free-regular-svg-icons
 
 ### Now what?
 
