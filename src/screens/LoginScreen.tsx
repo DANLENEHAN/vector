@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../services/api/user/user_api';
 
 const LoginScreen: React.FC = () => {
@@ -23,7 +23,7 @@ const LoginScreen: React.FC = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <View style={styles.inputContainer}>
-        <Icon name="user" type="font-awesome" />
+        <Icon name="person" size={30} color="blue" />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -32,7 +32,7 @@ const LoginScreen: React.FC = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Icon name="lock" type="font-awesome" />
+        <Icon name="lock" size={30} color="black" />
         <TextInput
           style={styles.input}
           placeholder="Password"
