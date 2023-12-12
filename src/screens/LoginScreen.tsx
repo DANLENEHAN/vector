@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../services/api/user/user_api';
+import ScreenWrapper from '../components/ScreenWrapper';
 
 const LoginScreen: React.FC = () => {
   const [email, setUsername] = useState('');
@@ -20,32 +21,34 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <View style={styles.inputContainer}>
-        <Icon name="person" size={30} color="blue" />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={text => setUsername(text)}
-        />
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.inputContainer}>
+          <Icon name="person" size={30} color="blue" />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setUsername(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Icon name="lock" size={30} color="black" />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={text => setPassword(text)}
+          />
+        </View>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <Text>{response}</Text>
       </View>
-      <View style={styles.inputContainer}>
-        <Icon name="lock" size={30} color="black" />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={text => setPassword(text)}
-        />
-      </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <Text>{response}</Text>
-    </View>
+    </ScreenWrapper>
   );
 };
 

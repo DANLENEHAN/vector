@@ -1,24 +1,22 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, useColorScheme} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import LoginScreen from './src/screens/LoginScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <LoginScreen />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
