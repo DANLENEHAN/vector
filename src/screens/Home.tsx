@@ -5,7 +5,6 @@ import {View, StyleSheet, Text} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 // Layouts
-import ScreenWrapper from '../components/layout/ScreenWrapper';
 import BaseLayout from '../components/layout/BaseLayout';
 
 type HomeScreenProps = {
@@ -14,13 +13,11 @@ type HomeScreenProps = {
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   return (
-    <ScreenWrapper>
-      <BaseLayout navigation={navigation}>
-        <View style={styles.content}>
-          <Text>Home</Text>
-        </View>
-      </BaseLayout>
-    </ScreenWrapper>
+    <BaseLayout navigation={navigation}>
+      <View style={styles.content}>
+        <Text>Home</Text>
+      </View>
+    </BaseLayout>
   );
 };
 

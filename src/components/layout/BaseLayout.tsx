@@ -6,6 +6,8 @@ import BottomNavBar from '../navbar/BottomNavBar';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
+// Layouts
+import ScreenWrapper from './ScreenWrapper';
 
 type BaseLayoutProps = {
   children: React.ReactNode;
@@ -14,11 +16,13 @@ type BaseLayoutProps = {
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({children, navigation}) => {
   return (
-    <View style={styles.container}>
-      <TopNavBar navigation={navigation} />
-      <View style={styles.content}>{children}</View>
-      <BottomNavBar navigation={navigation} />
-    </View>
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <TopNavBar navigation={navigation} />
+        {children}
+        <BottomNavBar navigation={navigation} />
+      </View>
+    </ScreenWrapper>
   );
 };
 
