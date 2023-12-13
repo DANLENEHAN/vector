@@ -1,11 +1,7 @@
 import {RouteProp} from '@react-navigation/native';
 
 export type RootStackParamList = {
-  Home: {
-    // NOTE: Remove props when useContext is implemented
-    theme: 'light' | 'dark';
-    setTheme?: (theme: 'light' | 'dark') => void;
-  };
+  Home: undefined;
   Login: undefined;
 };
 

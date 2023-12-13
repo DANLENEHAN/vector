@@ -28,10 +28,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
     try {
       await loginUser({email: email, password: password});
       // NOTE: Remove props when useContext is implemented
-      navigation.navigate('Home', {
-        theme: 'dark',
-        setTheme: theme => console.log(`Set theme to: ${theme}`),
-      });
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -60,10 +57,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
       });
       await loginUser({email: email, password: password});
       // NOTE: Remove props when useContext is implemented
-      navigation.navigate('Home', {
-        theme: 'dark',
-        setTheme: theme => console.log(`Set theme to: ${theme}`), // Example function parameter
-      });
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Account creation failed:', error);
     }

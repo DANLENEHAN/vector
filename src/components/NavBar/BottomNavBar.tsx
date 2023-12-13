@@ -2,12 +2,10 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import NavItem from './NavItem';
 import {lightTheme, darkTheme} from '../../theme';
+import {useTheme} from '../../context/ThemeContext';
 
-type BottomNavBarProps = {
-  theme: 'light' | 'dark';
-};
-
-const BottomNavBar: React.FC<BottomNavBarProps> = ({theme}) => {
+const BottomNavBar: React.FC = () => {
+  const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 
   return (
@@ -16,31 +14,26 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({theme}) => {
         icon="home"
         label="Home"
         onPress={() => console.log('Pressed Home')}
-        theme={theme}
       />
       <NavItem
         icon="compass"
         label="Discover"
         onPress={() => console.log('Pressed Discover')}
-        theme={theme}
       />
       <NavItem
         icon="plus"
         label="Track"
         onPress={() => console.log('Pressed Track')}
-        theme={theme}
       />
       <NavItem
         icon="users"
         label="Social"
         onPress={() => console.log('Pressed Social')}
-        theme={theme}
       />
       <NavItem
         icon="calendar-check"
         label="Progress"
         onPress={() => console.log('Pressed Progress')}
-        theme={theme}
       />
     </View>
   );

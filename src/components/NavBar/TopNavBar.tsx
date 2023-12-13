@@ -2,12 +2,10 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import NavItem from './NavItem';
 import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+import {useTheme} from '../../context/ThemeContext';
 
-type TopNavBarProps = {
-  theme: 'light' | 'dark';
-};
-
-const TopNavBar: React.FC<TopNavBarProps> = ({theme}) => {
+const TopNavBar: React.FC = () => {
+  const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 
   return (
@@ -17,7 +15,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({theme}) => {
           icon="search"
           label=""
           onPress={() => console.log('Pressed Search')}
-          theme={theme}
         />
       </View>
       <View style={styles.logoContainer}>
@@ -30,7 +27,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({theme}) => {
           icon="user-circle"
           label=""
           onPress={() => console.log('Pressed Profile')}
-          theme={theme}
         />
       </View>
     </View>
