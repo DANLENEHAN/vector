@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {loginUser, createUser} from '../services/api/user/functions';
-import ScreenWrapper from '../components/layout/ScreenWrapper';
 import {RootStackParamList} from '../navigation/types';
+//Layouts
+import ScreenWrapper from '../components/layout/ScreenWrapper';
+// Components
 import ButtonComponent from '../components/buttons/ButtonComponent';
 import TextInputComponent from '../components/inputs/TextInputComponent';
 import ClickableLink from '../components/buttons/ClickableLink';
