@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {loginUser, createUser} from '../services/api/user/functions';
-import ScreenWrapper from '../components/ScreenWrapper';
+import ScreenWrapper from '../components/layout/ScreenWrapper';
 import {RootStackParamList} from '../navigation/types';
 import ButtonComponent from '../components/buttons/ButtonComponent';
 import TextInputComponent from '../components/inputs/TextInputComponent';
 import ClickableLink from '../components/buttons/ClickableLink';
 
 type LoginScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
 };
 
 const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {

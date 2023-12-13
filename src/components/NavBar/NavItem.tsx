@@ -6,14 +6,14 @@ import {useTheme} from '../../context/ThemeContext';
 
 type NavItemProps = {
   icon: string;
-  label: string;
+  label?: string;
   onPress: () => void;
 };
 
 const NavItem: React.FC<NavItemProps> = ({icon, label, onPress}) => {
+  //Setup theme for the component
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-
   return (
     <TouchableOpacity
       style={[styles.navItem, {backgroundColor: currentTheme.background}]}
