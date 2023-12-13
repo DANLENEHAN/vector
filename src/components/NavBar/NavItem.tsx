@@ -3,14 +3,14 @@ import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
 
-type NavElementProps = {
+type NavItemProps = {
   icon: string;
   label: string;
   onPress: () => void;
   theme: 'light' | 'dark';
 };
 
-const NavItem: React.FC<NavElementProps> = ({icon, label, onPress, theme}) => {
+const NavItem: React.FC<NavItemProps> = ({icon, label, onPress, theme}) => {
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 
   return (
