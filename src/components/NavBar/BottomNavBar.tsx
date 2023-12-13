@@ -20,8 +20,8 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({theme}) => {
       />
       <NavItem
         icon="compass"
-        label="Progress"
-        onPress={() => console.log('Pressed Progress')}
+        label="Discover"
+        onPress={() => console.log('Pressed Discover')}
         theme={theme}
       />
       <NavItem
