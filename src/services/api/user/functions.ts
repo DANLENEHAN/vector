@@ -9,8 +9,7 @@ export const createUser = async (userData: UserCreateSchema): Promise<void> => {
       userData,
     );
 
-    // NOTE: API should return a 204 status code, but it returns 201 instead.
-    if (response.status === 201) {
+    if (response.status === 204) {
       return Promise.resolve();
     } else {
       // Handle unexpected response status codes.
@@ -48,8 +47,7 @@ export const loginUser = async (
       credentials,
     );
 
-    // NOTE: API should return a 204 status code, but it returns 201 instead.
-    if (response.status === 201) {
+    if (response.status === 204) {
       return Promise.resolve();
     } else {
       // Handle unexpected response status codes.

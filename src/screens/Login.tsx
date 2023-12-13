@@ -1,16 +1,12 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {View, Text, StyleSheet} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {loginUser, createUser} from '../services/api/user/functions';
 import ScreenWrapper from '../components/ScreenWrapper';
 import {RootStackParamList} from '../navigation/types';
+import ButtonComponent from '../components/buttons/ButtonComponent';
+import TextInputComponent from '../components/inputs/TextInputComponent';
+import ViewLink from '../components/buttons/ViewLink';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -65,6 +61,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
     setIsLogin(!isLogin);
   };
 
+  const viewLinkText = isLogin
+    ? 'New here? Create Account'
+    : 'Got an Account? Login';
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -73,64 +73,43 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         ) : (
           <Text style={styles.title}>Create Account</Text>
         )}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={text => setUsername(text)}
-          />
-          <Icon name="person" size={30} color="black" />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your password"
-            secureTextEntry
-            value={password}
-            onChangeText={text => setPassword(text)}
-          />
-          <Icon name="lock" size={30} color="black" />
-        </View>
+        <TextInputComponent
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={text => setUsername(text)}
+          iconName="person"
+        />
+        <TextInputComponent
+          placeholder="Enter your password"
+          value={password}
+          onChangeText={text => setPassword(text)}
+          iconName="lock"
+        />
         <View>
           {isLogin ? (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.loginButton}>
-                <Text style={styles.buttonText}>Forgot Password</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.createAccountButton,
-                  isEmailFilled && isPasswordFilled
-                    ? styles.createAccountButtonBlack
-                    : styles.createAccountButtonGray,
-                ]}
+              <ButtonComponent
+                text="Forgot Password"
+                disabled={false}
+                onPress={() => null}
+              />
+              <ButtonComponent
                 onPress={handleLogin}
-                disabled={!isEmailFilled || !isPasswordFilled}>
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
+                disabled={!isEmailFilled || !isPasswordFilled}
+                text="Login"
+              />
             </View>
           ) : (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.createAccountButton,
-                  isEmailFilled && isPasswordFilled
-                    ? styles.createAccountButtonBlack
-                    : styles.createAccountButtonGray,
-                ]}
+              <ButtonComponent
                 onPress={handleCreateAccount}
-                disabled={!isEmailFilled || !isPasswordFilled}>
-                <Text style={styles.buttonText}>Create Account</Text>
-              </TouchableOpacity>
+                disabled={!isEmailFilled || !isPasswordFilled}
+                text="Create Account"
+              />
             </View>
           )}
         </View>
-        <TouchableOpacity onPress={toggleView}>
-          <Text>
-            {isLogin ? 'New here? Create Account' : 'Got an Account? Login'}
-          </Text>
-        </TouchableOpacity>
+        <ViewLink onPress={toggleView} text={viewLinkText} />
       </View>
     </ScreenWrapper>
   );
@@ -154,45 +133,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     marginBottom: 16,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 8,
-  },
-  input: {
-    flex: 1,
-    marginLeft: 8,
-  },
-  loginButton: {
-    flex: 1,
-    backgroundColor: 'black',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  createAccountButton: {
-    flex: 1,
-    backgroundColor: 'black',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  createAccountButtonBlack: {
-    backgroundColor: 'black',
-  },
-  createAccountButtonGray: {
-    backgroundColor: 'gray',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
