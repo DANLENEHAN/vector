@@ -1,21 +1,21 @@
-// React imports
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
+
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 // Layouts
 import BaseLayout from '../components/layout/BaseLayout';
 
-type HomeScreenProps = {
+type SettingsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
   return (
     <BaseLayout navigation={navigation}>
       <View style={styles.content}>
-        <Text>Home</Text>
+        <Text>Settings</Text>
       </View>
     </BaseLayout>
   );
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default SettingsScreen;

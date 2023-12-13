@@ -3,8 +3,9 @@ import {View, StyleSheet} from 'react-native';
 import NavItem from './NavItem';
 import {lightTheme, darkTheme} from '../../theme';
 import {useTheme} from '../../context/ThemeContext';
+import {NavBarProps} from './types';
 
-const BottomNavBar: React.FC = () => {
+const BottomNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 
@@ -13,7 +14,7 @@ const BottomNavBar: React.FC = () => {
       <NavItem
         icon="home"
         label="Home"
-        onPress={() => console.log('Pressed Home')}
+        onPress={() => navigation.navigate('Home')}
       />
       <NavItem
         icon="compass"

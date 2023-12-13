@@ -1,8 +1,8 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 interface ScreenWrapperProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({children}) => {
