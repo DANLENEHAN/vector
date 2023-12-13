@@ -12,11 +12,7 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   return (
     <View style={[styles.navBar, {backgroundColor: currentTheme.background}]}>
       <View style={styles.sideItem}>
-        <NavItem
-          icon="search"
-          label=""
-          onPress={() => console.log('Pressed Search')}
-        />
+        <NavItem icon="search" onPress={() => console.log('Pressed Search')} />
       </View>
       <View style={styles.logoContainer}>
         <Text style={[styles.logoText, {color: currentTheme.text}]}>
@@ -26,7 +22,6 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
       <View style={styles.sideItem}>
         <NavItem
           icon="user-circle"
-          label=""
           onPress={() => navigation.navigate('Settings')}
         />
       </View>
