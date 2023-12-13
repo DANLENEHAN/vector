@@ -3,17 +3,14 @@ import {View, StyleSheet} from 'react-native';
 import BottomNavBar from '../components/NavBar/BottomNavBar';
 import TopNavBar from '../components/NavBar/TopNavBar';
 import ScreenWrapper from '../components/ScreenWrapper';
-import {HomeScreenProps} from '../navigation/types';
 
-const HomeScreen: React.FC<HomeScreenProps> = ({route}) => {
-  const {theme} = route.params;
-
+const HomeScreen: React.FC = () => {
   return (
     <ScreenWrapper>
       <View style={styles.container}>
-        <TopNavBar theme={theme} />
+        <TopNavBar />
         <View style={styles.content}>{/* Place your main content here */}</View>
-        <BottomNavBar theme={theme} />
+        <BottomNavBar />
       </View>
     </ScreenWrapper>
   );
