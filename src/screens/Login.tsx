@@ -27,7 +27,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       await loginUser({email: email, password: password});
-      navigation.navigate('Home');
+      // NOTE: Remove props when useContext is implemented
+      navigation.navigate('Home', {
+        theme: 'dark',
+        setTheme: theme => console.log(`Set theme to: ${theme}`),
+      });
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -36,6 +40,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
   const handleCreateAccount = async () => {
     try {
       await createUser({
+        // NOTE: Remove these hard-coded values when the UI is implemented fully
         email: email,
         password: password,
         age: 125,
@@ -54,7 +59,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         weight_unit_pref: 'kg',
       });
       await loginUser({email: email, password: password});
-      navigation.navigate('Home');
+      // NOTE: Remove props when useContext is implemented
+      navigation.navigate('Home', {
+        theme: 'dark',
+        setTheme: theme => console.log(`Set theme to: ${theme}`), // Example function parameter
+      });
     } catch (error) {
       console.error('Account creation failed:', error);
     }

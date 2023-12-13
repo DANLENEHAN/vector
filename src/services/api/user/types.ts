@@ -5,14 +5,14 @@ export interface LoginUserSchema {
 
 export interface UserCreateSchema {
   age: number;
-  birthday: string; // Format: "YYYY-MM-DD"
+  birthday: string;
   date_format_pref: DateFormat;
   email: string;
   first_name: string;
   gender: Gender;
   goal: FitnessGoal;
   height_unit_pref: HeightUnit;
-  language: string; // Example: "en"
+  language: string;
   last_name: string;
   password: string;
   phone_number: string;

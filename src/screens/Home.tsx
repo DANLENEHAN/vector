@@ -3,21 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import BottomNavBar from '../components/NavBar/BottomNavBar';
 import TopNavBar from '../components/NavBar/TopNavBar';
 import ScreenWrapper from '../components/ScreenWrapper';
-import {RouteProp} from '@react-navigation/native';
+import {HomeScreenProps} from '../navigation/types';
 
-type HomeScreenRouteProp = RouteProp<
-  {
-    Home: {
-      theme: 'light' | 'dark';
-      setTheme?: (theme: 'light' | 'dark') => void;
-    };
-  },
-  'Home'
->;
-
-type HomeScreenProps = {
-  route: HomeScreenRouteProp;
-};
 const HomeScreen: React.FC<HomeScreenProps> = ({route}) => {
   const {theme} = route.params;
 
