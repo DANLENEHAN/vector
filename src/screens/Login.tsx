@@ -6,7 +6,7 @@ import ScreenWrapper from '../components/ScreenWrapper';
 import {RootStackParamList} from '../navigation/types';
 import ButtonComponent from '../components/buttons/ButtonComponent';
 import TextInputComponent from '../components/inputs/TextInputComponent';
-import ViewLink from '../components/buttons/ViewLink';
+import ClickableLink from '../components/buttons/ClickableLink';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -109,7 +109,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
             </View>
           )}
         </View>
-        <ViewLink onPress={toggleView} text={viewLinkText} />
+        <ClickableLink onPress={toggleView} text={viewLinkText} />
       </View>
     </ScreenWrapper>
   );

@@ -1,12 +1,12 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 
-type ViewLinkProps = {
+type ClickableLinkProps = {
   onPress: () => void;
   text: string;
 };
 
-const ViewLink: React.FC<ViewLinkProps> = ({onPress, text}) => {
+const ClickableLink: React.FC<ClickableLinkProps> = ({onPress, text}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Text>{text}</Text>
@@ -14,4 +14,4 @@ const ViewLink: React.FC<ViewLinkProps> = ({onPress, text}) => {
   );
 };
 
-export default ViewLink;
+export default ClickableLink;
