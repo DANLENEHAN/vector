@@ -48,7 +48,11 @@ const AuthNavigator: React.FC = () => {
           component={LoginScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="App" component={AppNavigator} />
+        <Stack.Screen
+          name="App"
+          component={AppNavigator}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
