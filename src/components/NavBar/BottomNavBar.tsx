@@ -5,6 +5,7 @@ import {lightTheme, darkTheme} from '../../theme';
 import {useTheme} from '../../context/ThemeContext';
 
 const BottomNavBar: React.FC<any> = ({navigation}) => {
+  // NOTE: DL insisted on this 14-12-2023
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 
