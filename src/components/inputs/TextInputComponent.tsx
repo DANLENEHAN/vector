@@ -34,8 +34,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View
-      style={[styles.inputContainer, {borderColor: currentTheme.inputBorder}]}>
+    <View style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
       <TextInput
         style={[
           styles.input,

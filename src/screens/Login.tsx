@@ -78,8 +78,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   return (
     <ScreenWrapper>
-      <View
-        style={[styles.container, {backgroundColor: currentTheme.background}]}>
+      <View style={styles.container}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
           {isLogin ? 'Login' : 'Create Account'}
         </Text>

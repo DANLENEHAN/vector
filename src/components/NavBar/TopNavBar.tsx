@@ -20,7 +20,15 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={[styles.navBar, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[
+        styles.navBar,
+        {
+          backgroundColor: currentTheme.background,
+          borderTopColor: currentTheme.borders,
+          borderBottomColor: currentTheme.borders,
+        },
+      ]}>
       <View style={styles.sideItem}>
         <NavItem icon="search" onPress={() => console.log('Pressed Search')} />
       </View>
