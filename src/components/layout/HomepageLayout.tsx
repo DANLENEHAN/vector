@@ -8,12 +8,15 @@ import {RootStackParamList} from '../../navigation/types';
 // Layouts
 import ScreenWrapper from './ScreenWrapper';
 
-type BaseLayoutProps = {
+type HomepageLayoutProps = {
   children: React.ReactNode;
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-const BaseLayout: React.FC<BaseLayoutProps> = ({children, navigation}) => {
+const HomepageLayout: React.FC<HomepageLayoutProps> = ({
+  children,
+  navigation,
+}) => {
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -32,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BaseLayout;
+export default HomepageLayout;

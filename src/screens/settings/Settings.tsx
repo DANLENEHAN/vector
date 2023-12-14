@@ -1,22 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-
-// Navigation
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-// Layouts
-import BaseLayout from '../components/layout/BaseLayout';
 // Components
-import SettingsOption from '../components/settings/SettingsOption';
-import ProfileHeader from '../components/settings/ProfileHeader';
+import SettingsOption from '../../components/settings/SettingsOption';
+import ProfileHeader from '../../components/settings/ProfileHeader';
+// Types
+import { ScreenProps } from '../types';
 
-type SettingsScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
-};
-
-const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
+const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
-    <BaseLayout navigation={navigation}>
       <View style={styles.content}>
         <View style={styles.profileSection}>
           <ProfileHeader
@@ -28,7 +19,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
         <View style={styles.settingsSection}>
           <SettingsOption
             icon="user"
-            onPress={() => console.log('Pressed Account Settings')}
+            onPress={() => navigation.navigate('AccountSettings')}
             label="Account Settings"
           />
           <SettingsOption
@@ -43,7 +34,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
           />
         </View>
       </View>
-    </BaseLayout>
   );
 };
 

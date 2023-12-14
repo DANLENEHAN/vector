@@ -3,9 +3,9 @@ import {View, StyleSheet} from 'react-native';
 import NavItem from './NavItem';
 import {lightTheme, darkTheme} from '../../theme';
 import {useTheme} from '../../context/ThemeContext';
-import {NavBarProps} from './types';
 
-const BottomNavBar: React.FC<NavBarProps> = ({navigation}) => {
+const BottomNavBar: React.FC<any> = ({navigation}) => {
+  // NOTE: DL insisted on this 14-12-2023
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
 

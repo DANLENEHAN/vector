@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
 import {useTheme} from '../../context/ThemeContext';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 type SettingsOptionProps = {
   icon: string;

@@ -1,23 +1,18 @@
 // React imports
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-// Navigation
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
 // Layouts
-import BaseLayout from '../components/layout/BaseLayout';
+import HomepageLayout from '../components/layout/HomepageLayout';
+// Types
+import {ScreenProps} from './types';
 
-type HomeScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
-};
-
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
-    <BaseLayout navigation={navigation}>
+    <HomepageLayout navigation={navigation}>
       <View style={styles.content}>
         <Text>Home</Text>
       </View>
-    </BaseLayout>
+    </HomepageLayout>
   );
 };
 
