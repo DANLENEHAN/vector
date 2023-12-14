@@ -1,6 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+import {
+  fonts,
+  fontSizes,
+  lightThemeColors,
+  darkThemeColors,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
@@ -16,7 +21,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
   onPress,
 }) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <TouchableOpacity

@@ -1,7 +1,16 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+
+// Styling
+import {
+  fonts,
+  fontSizes,
+  paddings,
+  margins,
+  lightThemeColors,
+  darkThemeColors,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 type NavItemProps = {
@@ -13,7 +22,7 @@ type NavItemProps = {
 const NavItem: React.FC<NavItemProps> = ({icon, label, onPress}) => {
   //Setup theme for the component
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <TouchableOpacity
       style={[styles.navItem, {backgroundColor: currentTheme.background}]}
@@ -33,12 +42,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    padding: paddings.small,
   },
   navLabel: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    marginTop: 4,
+    marginTop: margins.small,
   },
 });
 

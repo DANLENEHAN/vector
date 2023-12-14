@@ -2,6 +2,17 @@ import React from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+// Styling
+import {
+  paddings,
+  margins,
+  borderRadius,
+  borderWidth,
+  darkThemeColors,
+  lightThemeColors,
+} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
+
 type TextInputProps = {
   placeholder: string;
   value: string;
@@ -19,17 +30,20 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   secureTextEntry = false,
   autoCapitalize = false,
 }) => {
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, {color: currentTheme.text}]}
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
       />
-      <Icon name={iconName} size={30} color="black" />
+      <Icon name={iconName} size={30} color={currentTheme.icon} />
     </View>
   );
 };
@@ -38,14 +52,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 8,
+    marginBottom: margins.large,
+    borderWidth: borderWidth.xsmall,
+    borderRadius: borderRadius.medium,
+    padding: paddings.small,
   },
   input: {
     flex: 1,
-    marginLeft: 8,
+    marginLeft: margins.small,
   },
 });
 

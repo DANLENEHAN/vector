@@ -1,13 +1,23 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import NavItem from './NavItem';
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
-import {useTheme} from '../../context/ThemeContext';
 import {NavBarProps} from './types';
+
+// Styling
+import {
+  fonts,
+  fontSizes,
+  fontWeights,
+  lightThemeColors,
+  darkThemeColors,
+  margins,
+  borderWidth,
+} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <View style={[styles.navBar, {backgroundColor: currentTheme.background}]}>
@@ -35,20 +45,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderTopWidth: 1,
-    marginTop: 30,
+    borderWidth: borderWidth.xsmall,
+    marginTop: margins.xxLarge,
   },
   logoText: {
-    fontSize: fontSizes.extraLarge,
+    fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
-    marginTop: 4,
-    fontWeight: '900',
+    marginTop: margins.small,
+    fontWeight: fontWeights.ultraBold,
   },
   sideItem: {
-    flex: 1, // Adjust this as necessary to align with BottomNavBar
+    flex: 1,
   },
   logoContainer: {
-    flex: 3, // Adjust this as necessary to match the width of the middle three items of BottomNavBar
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },

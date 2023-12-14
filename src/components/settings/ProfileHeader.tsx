@@ -1,6 +1,16 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+
+// Styling
+import {
+  fonts,
+  fontSizes,
+  lightThemeColors,
+  darkThemeColors,
+  margins,
+  paddings,
+  borderRadius,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 type ProfileHeaderProps = {
@@ -15,7 +25,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   userUsername,
 }) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <View style={styles.profileContainerContainer}>
@@ -44,25 +54,24 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: paddings.large,
     flex: 1,
   },
   profileImage: {
     width: 75,
     height: 75,
-    borderRadius: 50,
-    marginBottom: 10,
+    borderRadius: borderRadius.circle,
+    marginBottom: margins.small,
   },
   userName: {
     fontSize: fontSizes.medium,
     fontFamily: fonts.primary,
     fontWeight: 'bold',
-    marginBottom: 3,
+    marginBottom: margins.small,
   },
   userUsername: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    fontWeight: 'normal',
     marginBottom: 3,
   },
 });
