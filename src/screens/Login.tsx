@@ -4,7 +4,7 @@ import {loginUser, createUser} from '../services/api/user/functions';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Components
-import ButtonComponent from '../components/buttons/Button';
+import ButtonComponent from '../components/buttons/ButtonComponent';
 import TextInputComponent from '../components/inputs/TextInputComponent';
 import ClickableLink from '../components/buttons/ClickableLink';
 // Types

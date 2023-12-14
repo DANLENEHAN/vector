@@ -2,17 +2,17 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 // Layouts
-import BaseLayout from '../components/layout/HomepageLayout';
+import HomepageLayout from '../components/layout/HomepageLayout';
 // Types
 import {ScreenProps} from './types';
 
 const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
-    <BaseLayout navigation={navigation}>
+    <HomepageLayout navigation={navigation}>
       <View style={styles.content}>
         <Text>Home</Text>
       </View>
-    </BaseLayout>
+    </HomepageLayout>
   );
 };
 
