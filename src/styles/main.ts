@@ -1,5 +1,10 @@
 // Common styling used throughout the app
 
+const black = '#FFFFFF';
+const white = '#333333';
+const blue = '#3498db';
+const purple = '#9b59b6';
+
 export const fonts = {
   primary: 'Montserrat',
   secondary: 'Lato',
@@ -50,26 +55,24 @@ export const fontWeights: Record<FontTypes, FontWeights> = {
 };
 
 export const lightThemeColors = {
-  background: '#FFFFFF',
-  icon: '#333333',
-  button: '#333333',
-  buttonText: '#FFFFFF',
-  text: '#333333',
-  primary: '#3498db',
-  secondary: '#9b59b6',
+  background: black,
+  icon: white,
+  button: white,
+  buttonText: black,
+  text: white,
+  primary: blue,
+  secondary: purple,
 };
 
 export const darkThemeColors = {
-  background: '#333333',
-  button: '#FFFFFF',
-  buttonText: '#333333',
-  icon: '#FFFFFF',
-  text: '#FFFFFF',
-  primary: '#3498db',
-  secondary: '#9b59b6',
+  background: white,
+  button: black,
+  buttonText: white,
+  icon: black,
+  text: black,
+  primary: blue,
+  secondary: purple,
 };
-
-export const disabledButton = 'gray';
 
 export const paddings = {
   xsmall: 5,
@@ -103,3 +106,5 @@ export const borderWidth = {
   large: 4,
   xlarge: 6,
 };
+
+export const disabledButton = 'gray';
