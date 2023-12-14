@@ -1,11 +1,11 @@
 import React from 'react';
-import Navigation from './src/navigation/Navigation';
+import AuthNavigator from './src/navigation/Navigation';
 import {ThemeProvider} from './src/context/ThemeContext';
 
 function App(): JSX.Element {
   return (
     <ThemeProvider>
-      <Navigation />
+      <AuthNavigator />
     </ThemeProvider>
   );
 }
