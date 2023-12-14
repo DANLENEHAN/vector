@@ -7,15 +7,17 @@ type TextInputProps = {
   value: string;
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
+  autoCapitalize?: boolean;
   iconName: string;
 };
 
 const TextInputComponent: React.FC<TextInputProps> = ({
   placeholder,
   value,
+  iconName,
   onChangeText,
   secureTextEntry = false,
-  iconName,
+  autoCapitalize = false,
 }) => {
   return (
     <View style={styles.inputContainer}>
@@ -25,6 +27,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
+        autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
       />
       <Icon name={iconName} size={30} color="black" />
     </View>

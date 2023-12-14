@@ -86,6 +86,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
           value={password}
           onChangeText={text => setPassword(text)}
           iconName="lock"
+          secureTextEntry={true}
         />
         <View>
           {isLogin ? (
