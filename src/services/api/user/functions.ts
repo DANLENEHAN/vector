@@ -74,3 +74,34 @@ export const loginUser = async (
     }
   }
 };
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    const response: AxiosResponse<void> = await api.post('/user/logout');
+
+    if (response.status === 204) {
+      return Promise.resolve();
+    } else {
+      // Handle unexpected response status codes.
+      throw `Unexpected status code: ${response.status}`;
+    }
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (axiosError.response) {
+      const statusCode = axiosError.response.status;
+      const errorMessage =
+        (axiosError.response?.data as {message?: string})?.message ||
+        'Unknown error occurred';
+
+      switch (statusCode) {
+        case 400:
+          throw `Logout failed due to invalid credentials: ${errorMessage}`;
+        default:
+          throw `Unexpected status code: ${statusCode}`;
+      }
+    } else {
+      // Handle network or other errors.
+      throw axiosError.message || 'Unknown error occurred';
+    }
+  }
+};
