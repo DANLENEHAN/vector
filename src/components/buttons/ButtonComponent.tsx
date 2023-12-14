@@ -27,7 +27,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   style,
 }) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'light' ? darkThemeColors : lightThemeColors;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <TouchableOpacity
