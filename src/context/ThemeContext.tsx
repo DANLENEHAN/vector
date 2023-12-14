@@ -20,10 +20,10 @@ export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   // Getting the system's color scheme
-  const colorScheme = Appearance.getColorScheme();
+  const initialColorScheme = Appearance.getColorScheme();
   // State to hold the current theme, defaulting to system preference
   const [theme, setTheme] = useState<'light' | 'dark'>(
-    colorScheme === 'dark' ? 'dark' : 'light',
+    initialColorScheme === 'dark' ? 'dark' : 'light',
   );
 
   // Effect to subscribe to changes in system's color scheme

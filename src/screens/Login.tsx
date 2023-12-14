@@ -25,7 +25,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       await loginUser({email: email, password: password});
-      navigation.navigate('Home');
+      navigation.navigate('App');
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -53,7 +53,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
         weight_unit_pref: 'kg',
       });
       await loginUser({email: email, password: password});
-      navigation.navigate('Home');
+      navigation.navigate('App');
     } catch (error) {
       console.error('Account creation failed:', error);
     }
