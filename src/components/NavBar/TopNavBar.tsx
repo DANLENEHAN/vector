@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 60,
     borderTopWidth: 1,
+    marginTop: 30,
   },
   logoText: {
     fontSize: fontSizes.extraLarge,
