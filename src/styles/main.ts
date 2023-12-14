@@ -1,7 +1,7 @@
 // Common styling used throughout the app
 
-const black = '#FFFFFF';
-const white = '#333333';
+const black = '#333333';
+const white = '#FFFFFF';
 const blue = '#3498db';
 const purple = '#9b59b6';
 
@@ -55,21 +55,23 @@ export const fontWeights: Record<FontTypes, FontWeights> = {
 };
 
 export const lightThemeColors = {
-  background: black,
-  icon: white,
-  button: white,
-  buttonText: black,
-  text: white,
+  background: white,
+  button: black,
+  buttonText: white,
+  icon: black,
+  inputBorder: black,
+  text: black,
   primary: blue,
   secondary: purple,
 };
 
 export const darkThemeColors = {
-  background: white,
-  button: black,
-  buttonText: white,
-  icon: black,
-  text: black,
+  background: black,
+  button: white,
+  buttonText: black,
+  icon: white,
+  inputBorder: white,
+  text: white,
   primary: blue,
   secondary: purple,
 };

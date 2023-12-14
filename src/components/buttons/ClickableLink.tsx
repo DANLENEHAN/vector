@@ -4,12 +4,17 @@ import {TouchableOpacity, Text} from 'react-native';
 type ClickableLinkProps = {
   onPress: () => void;
   text: string;
+  textStyle: object;
 };
 
-const ClickableLink: React.FC<ClickableLinkProps> = ({onPress, text}) => {
+const ClickableLink: React.FC<ClickableLinkProps> = ({
+  onPress,
+  text,
+  textStyle,
+}) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text>{text}</Text>
+      <Text style={textStyle}>{text}</Text>
     </TouchableOpacity>
   );
 };

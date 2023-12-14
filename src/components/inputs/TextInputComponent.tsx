@@ -34,9 +34,15 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={styles.inputContainer}>
+    <View
+      style={[styles.inputContainer, {borderColor: currentTheme.inputBorder}]}>
       <TextInput
-        style={[styles.input, {color: currentTheme.text}]}
+        style={[
+          styles.input,
+          {
+            color: currentTheme.text,
+          },
+        ]}
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}

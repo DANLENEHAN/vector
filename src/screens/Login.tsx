@@ -78,7 +78,8 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <View
+        style={[styles.container, {backgroundColor: currentTheme.background}]}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
           {isLogin ? 'Login' : 'Create Account'}
         </Text>
@@ -119,7 +120,11 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
             </View>
           )}
         </View>
-        <ClickableLink onPress={toggleView} text={viewLinkText} />
+        <ClickableLink
+          textStyle={{color: currentTheme.text}}
+          onPress={toggleView}
+          text={viewLinkText}
+        />
       </View>
     </ScreenWrapper>
   );
