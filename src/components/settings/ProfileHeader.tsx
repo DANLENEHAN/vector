@@ -15,14 +15,14 @@ import {useTheme} from '../../context/ThemeContext';
 
 type ProfileHeaderProps = {
   profileImageUrl: string;
-  userName: string;
-  userUsername: string;
+  name: string;
+  username: string;
 };
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImageUrl,
-  userName,
-  userUsername,
+  name,
+  username,
 }) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -35,11 +35,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           {backgroundColor: currentTheme.background},
         ]}>
         <Image style={styles.profileImage} source={{uri: profileImageUrl}} />
-        <Text style={[styles.userName, {color: currentTheme.text}]}>
-          {userName}
-        </Text>
-        <Text style={[styles.userUsername, {color: currentTheme.text}]}>
-          {userUsername}
+        <Text style={[styles.name, {color: currentTheme.text}]}>{name}</Text>
+        <Text style={[styles.username, {color: currentTheme.text}]}>
+          {username}
         </Text>
       </View>
     </View>
@@ -63,13 +61,13 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.circle,
     marginBottom: margins.small,
   },
-  userName: {
+  name: {
     fontSize: fontSizes.medium,
     fontFamily: fonts.primary,
     fontWeight: 'bold',
     marginBottom: margins.small,
   },
-  userUsername: {
+  username: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
     marginBottom: margins.xSmall,

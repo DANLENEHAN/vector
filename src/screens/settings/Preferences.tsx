@@ -1,6 +1,4 @@
 import React from 'react';
-// Functions
-import {logoutUser} from '../../services/api/user/functions';
 // Components
 import SettingsPage from './SettingsPage';
 // Types
@@ -10,16 +8,6 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
-  // Function to handle logout
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      navigation.navigate('Login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
-
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? lightThemeColors : darkThemeColors;
 
@@ -34,11 +22,11 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
       }}
       settingOptionsConfig={[
         {
-          icon: 'arrow-right-from-bracket',
-          onPress: () => handleLogout(),
-          label: 'Logout',
-          logo_circle_color: currentTheme.error,
-          caret: false,
+          icon: 'circle-half-stroke',
+          onPress: () => {},
+          label: 'App Appearance',
+          logo_circle_color: currentTheme.primary,
+          caret: true,
         },
       ]}
     />

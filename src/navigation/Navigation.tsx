@@ -11,6 +11,7 @@ import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 import SettingsScreen from '../screens/settings/Settings';
 import AccountSettings from '../screens/settings/AccountSettings';
+import Preferences from '../screens/settings/Preferences';
 import Splash from '../screens/Splash';
 
 // Components
@@ -38,6 +39,11 @@ const AppNavigator: React.FC = () => {
       <Tab.Screen
         name="AccountSettings"
         component={AccountSettings}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Preferences"
+        component={Preferences}
         options={{headerShown: false}}
       />
     </Tab.Navigator>
