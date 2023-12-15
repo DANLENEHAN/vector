@@ -2,7 +2,7 @@ import React from 'react';
 // Functions
 import {logoutUser} from '../../services/api/user/functions';
 // Components
-import SettingsPage from './SettingsPage';
+import SettingsPage from '../../components/settings/SettingsPage';
 // Types
 import {ScreenProps} from '../types';
 // Theme

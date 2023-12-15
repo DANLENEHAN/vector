@@ -1,11 +1,14 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 // Components
-import SettingsOption from '../../components/settings/SettingsOption';
-import Header from '../../components/navbar/Header';
-import ProfileHeader from '../../components/settings/ProfileHeader';
+import SettingsOption from './SettingsOption';
+import Header from '../navbar/Header';
+import ProfileHeader from './ProfileHeader';
 // Types
-import {SettingsHeaderConfig, SettingOptionsConfig} from './types';
+import {
+  SettingsHeaderConfig,
+  SettingOptionsConfig,
+} from '../../screens/settings/types';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';

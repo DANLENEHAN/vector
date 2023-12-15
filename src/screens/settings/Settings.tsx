@@ -1,6 +1,6 @@
 import React from 'react';
 // Components
-import SettingsPage from './SettingsPage';
+import SettingsPage from '../../components/settings/SettingsPage';
 // Types
 import {ScreenProps} from '../types';
 
