@@ -12,6 +12,8 @@ type SettingsOptionProps = {
   label: string;
   onPress: () => void;
   fontColor?: string;
+  caret?: boolean;
+  logo_circle_color?: string;
 };
 
 const SettingsOption: React.FC<SettingsOptionProps> = ({
@@ -19,6 +21,8 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
   label,
   onPress,
   fontColor,
+  caret,
+  logo_circle_color,
 }) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
@@ -31,12 +35,17 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
       ]}
       onPress={onPress}>
       <View style={styles.logoHolder}>
-        <Icon
-          name={icon}
-          solid
-          size={28}
-          color={fontColor ? fontColor : currentTheme.text}
-        />
+        <View
+          style={[
+            styles.logoCircle,
+            {
+              backgroundColor: logo_circle_color
+                ? logo_circle_color
+                : currentTheme.primary,
+            },
+          ]}>
+          <Icon name={icon} solid size={20} color={currentTheme.background} />
+        </View>
       </View>
       <View style={styles.labelHolder}>
         <Text
@@ -50,8 +59,21 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           ]}>
           {label}
         </Text>
+        <View style={styles.bottomBorder} />
       </View>
-      <View style={styles.bottomBorder} />
+
+      <View style={styles.logoHolder}>
+        {caret && (
+          <Icon
+            name="caret-right"
+            solid
+            size={20}
+            color={fontColor ? fontColor : currentTheme.text}
+          />
+        )}
+      </View>
+
+      {/*<View style={styles.bottomBorder} />*/}
     </TouchableOpacity>
   );
 };
@@ -62,12 +84,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   logoHolder: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   labelHolder: {
-    flex: 3,
+    flex: 6,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -76,10 +98,18 @@ const styles = StyleSheet.create({
   bottomBorder: {
     position: 'absolute',
     bottom: 0,
-    left: '5%', // Align to start at 5% (90% width centered)
+    left: '0%', // Align to start at 5% (90% width centered)
     right: '5%', // Align to end at 5%
     height: 1, // Thickness of the border
     backgroundColor: '#CCCCCC', // Border color, can be adjusted
+  },
+  logoCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    backgroundColor: '#CCCCCC',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

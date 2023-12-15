@@ -28,7 +28,7 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <View style={styles.content}>
       <Header
-        label="Settings"
+        label="Account Settings"
         navigation={navigation}
         targetScreen="Settings"
       />
@@ -37,7 +37,9 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
           icon="arrow-right-from-bracket"
           onPress={() => handleLogout()}
           label="Logout"
-          fontColor={currentTheme.error}
+          fontColor={currentTheme.text}
+          logo_circle_color={currentTheme.error}
+          caret={false}
         />
       </View>
     </View>
