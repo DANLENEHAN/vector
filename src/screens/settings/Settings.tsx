@@ -21,16 +21,19 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
           icon="user"
           onPress={() => navigation.navigate('AccountSettings')}
           label="Account Settings"
+          caret={true}
         />
         <SettingsOption
           icon="cog"
           onPress={() => console.log('Pressed Preferences')}
           label="Preferences"
+          caret={true}
         />
         <SettingsOption
           icon="question"
           onPress={() => console.log('Pressed Support')}
           label="Support"
+          caret={true}
         />
       </View>
     </View>

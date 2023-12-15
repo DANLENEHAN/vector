@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   userUsername: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    marginBottom: 3,
+    marginBottom: margins.xSmall,
   },
 });
 

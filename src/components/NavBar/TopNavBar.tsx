@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderWidth: borderWidth.xsmall,
+    borderWidth: borderWidth.xSmall,
     marginTop: margins.xxLarge,
   },
   logoText: {
