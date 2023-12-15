@@ -10,9 +10,13 @@ import {lightTheme, darkTheme} from '../../theme';
 
 type HeaderBackButtonProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
+  targetScreen: keyof RootStackParamList;
 };
 
-const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
+const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
+  navigation,
+  targetScreen,
+}) => {
   //Setup theme for the component
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
@@ -22,7 +26,7 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
         styles.headerBackButton,
         {backgroundColor: currentTheme.background},
       ]}
-      onPress={() => navigation.navigate('Settings')}>
+      onPress={() => navigation.navigate(targetScreen)}>
       <Icon name="arrow-left" size={25} color={currentTheme.text} />
     </TouchableOpacity>
   );

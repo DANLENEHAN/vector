@@ -14,19 +14,11 @@ import AccountSettings from '../screens/settings/AccountSettings';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
-import HeaderBackButton from '../components/buttons/HeaderBackButton';
-
-// Theme
-import {useTheme} from '../context/ThemeContext';
-import {lightTheme, darkTheme, fonts} from '../theme';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const AppNavigator: React.FC = () => {
-  const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
-
   return (
     <Tab.Navigator
       tabBar={props => <BottomNavBar {...props} />}
@@ -44,20 +36,7 @@ const AppNavigator: React.FC = () => {
       <Tab.Screen
         name="AccountSettings"
         component={AccountSettings}
-        options={({navigation}) => ({
-          // Access navigation prop correctly here
-          headerShown: true,
-          headerTitle: 'Account Settings',
-          headerStyle: {
-            backgroundColor: currentTheme.background,
-          },
-          headerTitleStyle: {
-            color: currentTheme.text,
-            fontFamily: fonts.primary,
-            fontWeight: 'bold',
-          },
-          headerLeft: () => <HeaderBackButton navigation={navigation} />,
-        })}
+        options={{headerShown: false}}
       />
     </Tab.Navigator>
   );
