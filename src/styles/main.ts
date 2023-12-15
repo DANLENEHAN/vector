@@ -4,6 +4,7 @@ const black = '#333333';
 const white = '#FFFFFF';
 const blue = '#3498db';
 const purple = '#9b59b6';
+const gray = 'gray';
 
 export const fonts = {
   primary: 'Montserrat',
@@ -57,6 +58,7 @@ export const fontWeights: Record<FontTypes, FontWeights> = {
 export const lightThemeColors = {
   background: white,
   button: black,
+  disabledButton: gray,
   buttonText: white,
   icon: black,
   borders: black,
@@ -68,6 +70,7 @@ export const lightThemeColors = {
 export const darkThemeColors = {
   background: black,
   button: white,
+  disabledButton: gray,
   buttonText: black,
   icon: white,
   borders: white,
@@ -108,5 +111,3 @@ export const borderWidth = {
   large: 4,
   xlarge: 6,
 };
-
-export const disabledButton = 'gray';

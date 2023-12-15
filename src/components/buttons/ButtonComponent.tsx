@@ -9,7 +9,6 @@ import {
   margins,
   darkThemeColors,
   lightThemeColors,
-  disabledButton,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
@@ -35,7 +34,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
         styles.button,
         style,
         disabled
-          ? {backgroundColor: disabledButton}
+          ? {backgroundColor: currentTheme.disabledButton}
           : {backgroundColor: currentTheme.button},
       ]}
       onPress={onPress}
