@@ -11,6 +11,7 @@ import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 import SettingsScreen from '../screens/settings/Settings';
 import AccountSettings from '../screens/settings/AccountSettings';
+import Splash from '../screens/Splash';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -73,6 +74,11 @@ const AuthNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Login"
           component={LoginScreen}

@@ -2,6 +2,10 @@ import {AxiosResponse, AxiosError} from 'axios';
 import api from '../apiService';
 import {UserCreateSchema, LoginUserSchema} from './types';
 
+// Services
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FlaskLoginCookie} from '../../asyncStorage/types';
+
 export const createUser = async (userData: UserCreateSchema): Promise<void> => {
   try {
     const response: AxiosResponse<void> = await api.post(
@@ -46,8 +50,15 @@ export const loginUser = async (
       '/user/login',
       credentials,
     );
-
     if (response.status === 204) {
+      const cookieHeader = response.headers['set-cookie'];
+      if (cookieHeader) {
+        const targetCookie = cookieHeader.find(cookie =>
+          cookie.includes('session'),
+        );
+        const cookieValue = targetCookie.split(';')[0].split('=')[1].trim();
+        AsyncStorage.setItem(FlaskLoginCookie, cookieValue);
+      }
       return Promise.resolve();
     } else {
       // Handle unexpected response status codes.
@@ -80,6 +91,7 @@ export const logoutUser = async (): Promise<void> => {
     const response: AxiosResponse<void> = await api.post('/user/logout');
 
     if (response.status === 204) {
+      AsyncStorage.removeItem(FlaskLoginCookie);
       return Promise.resolve();
     } else {
       // Handle unexpected response status codes.
@@ -96,6 +108,39 @@ export const logoutUser = async (): Promise<void> => {
       switch (statusCode) {
         case 400:
           throw `Logout failed due to invalid credentials: ${errorMessage}`;
+        default:
+          throw `Unexpected status code: ${statusCode}`;
+      }
+    } else {
+      // Handle network or other errors.
+      throw axiosError.message || 'Unknown error occurred';
+    }
+  }
+};
+
+export const testAuthentication = async (): Promise<void> => {
+  try {
+    const response: AxiosResponse<void> = await api.get('/user/authenticated');
+
+    if (response.status === 200) {
+      console.log('User authenticated');
+      return Promise.resolve();
+    } else {
+      // Handle unexpected response status codes.
+      throw `Unexpected status code: ${response.status}`;
+    }
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (axiosError.response) {
+      const statusCode = axiosError.response.status;
+      const errorMessage =
+        (axiosError.response?.data as {message?: string})?.message ||
+        'Unknown error occurred';
+
+      switch (statusCode) {
+        case 500:
+          console.log('User not authenticated');
+          throw `User not authenticated: ${errorMessage}`;
         default:
           throw `Unexpected status code: ${statusCode}`;
       }
