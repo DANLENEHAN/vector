@@ -1,6 +1,17 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
+import {
+  fontSizes,
+  fontWeights,
+  paddings,
+  borderRadius,
+  margins,
+  darkThemeColors,
+  lightThemeColors,
+} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
+
 type ButtonProps = {
   onPress: () => void;
   disabled: boolean;
@@ -14,16 +25,23 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   text,
   style,
 }) => {
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
   return (
     <TouchableOpacity
       style={[
         styles.button,
         style,
-        disabled ? styles.buttonGray : styles.buttonBlack,
+        disabled
+          ? {backgroundColor: currentTheme.disabledButton}
+          : {backgroundColor: currentTheme.button},
       ]}
       onPress={onPress}
       disabled={disabled}>
-      <Text style={styles.buttonText}>{text}</Text>
+      <Text style={[styles.buttonText, {color: currentTheme.buttonText}]}>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -31,22 +49,14 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     flex: 1,
-    backgroundColor: 'black',
-    padding: 12,
-    borderRadius: 8,
+    padding: paddings.small,
+    borderRadius: borderRadius.medium,
     alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  buttonBlack: {
-    backgroundColor: 'black',
-  },
-  buttonGray: {
-    backgroundColor: 'gray',
+    marginHorizontal: margins.small,
   },
   buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: fontSizes.medium,
+    fontWeight: fontWeights.bold,
   },
 });
 

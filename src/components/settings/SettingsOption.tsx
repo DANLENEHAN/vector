@@ -2,9 +2,15 @@ import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
-// Theme
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+import {
+  fonts,
+  fontSizes,
+  lightThemeColors,
+  darkThemeColors,
+  iconSizes,
+  borderRadius,
+  borderWidth,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 type SettingsOptionProps = {
@@ -25,7 +31,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
   logo_circle_color,
 }) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <TouchableOpacity
@@ -44,7 +50,12 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
                 : currentTheme.primary,
             },
           ]}>
-          <Icon name={icon} solid size={20} color={currentTheme.background} />
+          <Icon
+            name={icon}
+            solid
+            size={iconSizes.medium}
+            color={currentTheme.background}
+          />
         </View>
       </View>
       <View style={styles.labelHolder}>
@@ -59,7 +70,6 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           ]}>
           {label}
         </Text>
-        <View style={styles.bottomBorder} />
       </View>
 
       <View style={styles.logoHolder}>
@@ -67,13 +77,13 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           <Icon
             name="caret-right"
             solid
-            size={20}
+            size={iconSizes.medium}
             color={fontColor ? fontColor : currentTheme.text}
           />
         )}
       </View>
 
-      {/*<View style={styles.bottomBorder} />*/}
+      <View style={styles.bottomBorder} />
     </TouchableOpacity>
   );
 };
@@ -98,15 +108,15 @@ const styles = StyleSheet.create({
   bottomBorder: {
     position: 'absolute',
     bottom: 0,
-    left: '0%', // Align to start at 5% (90% width centered)
-    right: '5%', // Align to end at 5%
-    height: 1, // Thickness of the border
+    left: '5%',
+    right: '5%',
+    height: borderWidth.xSmall,
     backgroundColor: '#CCCCCC', // Border color, can be adjusted
   },
   logoCircle: {
     width: 40,
     height: 40,
-    borderRadius: 50,
+    borderRadius: borderRadius.circle,
     backgroundColor: '#CCCCCC',
     justifyContent: 'center',
     alignItems: 'center',

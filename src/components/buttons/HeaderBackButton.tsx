@@ -4,9 +4,16 @@ import {TouchableOpacity, StyleSheet} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-// Theme
+
+// Styling
 import {useTheme} from '../../context/ThemeContext';
-import {lightTheme, darkTheme} from '../../theme';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  margins,
+  paddings,
+  iconSizes,
+} from '../../styles/main';
 
 type HeaderBackButtonProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -19,7 +26,7 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
 }) => {
   //Setup theme for the component
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <TouchableOpacity
       style={[
@@ -27,15 +34,19 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
         {backgroundColor: currentTheme.background},
       ]}
       onPress={() => navigation.navigate(targetScreen)}>
-      <Icon name="arrow-left" size={25} color={currentTheme.text} />
+      <Icon
+        name="arrow-left"
+        size={iconSizes.large}
+        color={currentTheme.text}
+      />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   headerBackButton: {
-    marginLeft: 10,
-    padding: 10,
+    marginLeft: margins.small,
+    padding: paddings.small,
   },
 });
 

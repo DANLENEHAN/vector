@@ -8,7 +8,7 @@ import Header from '../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../types';
 // Theme
-import {lightTheme, darkTheme} from '../../theme';
+import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
@@ -23,7 +23,7 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? lightThemeColors : darkThemeColors;
 
   return (
     <View style={styles.content}>
@@ -37,7 +37,6 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
           icon="arrow-right-from-bracket"
           onPress={() => handleLogout()}
           label="Logout"
-          fontColor={currentTheme.text}
           logo_circle_color={currentTheme.error}
           caret={false}
         />

@@ -9,6 +9,16 @@ import TextInputComponent from '../components/inputs/TextInputComponent';
 import ClickableLink from '../components/buttons/ClickableLink';
 // Types
 import {ScreenProps} from './types';
+// Styling
+import {
+  fontSizes,
+  fontWeights,
+  darkThemeColors,
+  lightThemeColors,
+  paddings,
+  margins,
+} from '../styles/main';
+import {useTheme} from '../context/ThemeContext';
 
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
@@ -17,6 +27,9 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
+
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleLogin = async () => {
     try {
@@ -66,11 +79,9 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <View style={styles.container}>
-        {isLogin ? (
-          <Text style={styles.title}>Login</Text>
-        ) : (
-          <Text style={styles.title}>Create Account</Text>
-        )}
+        <Text style={[styles.title, {color: currentTheme.text}]}>
+          {isLogin ? 'Login' : 'Create Account'}
+        </Text>
         <TextInputComponent
           placeholder="Enter your email"
           value={email}
@@ -108,7 +119,11 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
             </View>
           )}
         </View>
-        <ClickableLink onPress={toggleView} text={viewLinkText} />
+        <ClickableLink
+          textStyle={{color: currentTheme.text}}
+          onPress={toggleView}
+          text={viewLinkText}
+        />
       </View>
     </ScreenWrapper>
   );
@@ -119,19 +134,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: paddings.medium,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: 16,
+    marginBottom: margins.medium,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 16,
+    fontSize: fontSizes.xLarge,
+    fontWeight: fontWeights.bold,
+    marginBottom: margins.medium,
   },
 });
 

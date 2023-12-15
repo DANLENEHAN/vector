@@ -2,7 +2,15 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
 // Theme
-import {fonts, fontSizes, lightTheme, darkTheme} from '../../theme';
+import {
+  fonts,
+  fontSizes,
+  lightThemeColors,
+  darkThemeColors,
+  margins,
+  fontWeights,
+  borderWidth,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 // Components
 import HeaderBackButton from '../buttons/HeaderBackButton';
@@ -18,7 +26,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({navigation, label, targetScreen}) => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <View style={[styles.header, {backgroundColor: currentTheme.background}]}>
@@ -49,14 +57,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 100,
-    borderTopWidth: 1,
-    marginTop: 30,
+    borderTopWidth: borderWidth.xSmall,
+    marginTop: margins.xxLarge,
   },
   logoText: {
-    fontSize: fontSizes.extraLarge,
+    fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
-    marginTop: 4,
-    fontWeight: '700',
+    marginTop: margins.xSmall,
+    fontWeight: fontWeights.bold,
     alignContent: 'center',
     justifyContent: 'center',
   },

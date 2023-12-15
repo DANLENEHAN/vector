@@ -1,13 +1,18 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import NavItem from './NavItem';
-import {lightTheme, darkTheme} from '../../theme';
+
+// Styling
+import {
+  lightThemeColors,
+  darkThemeColors,
+  borderWidth,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 const BottomNavBar: React.FC<any> = ({navigation}) => {
-  // NOTE: DL insisted on this 14-12-2023
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <View style={[styles.navBar, {backgroundColor: currentTheme.background}]}>
@@ -46,7 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderTopWidth: 1,
+    borderWidth: borderWidth.xSmall,
   },
 });
 

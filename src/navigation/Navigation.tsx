@@ -21,6 +21,7 @@ const Tab = createBottomTabNavigator();
 const AppNavigator: React.FC = () => {
   return (
     <Tab.Navigator
+      // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <BottomNavBar {...props} />}
       backBehavior="history">
       <Tab.Screen
