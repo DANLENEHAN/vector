@@ -16,7 +16,7 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
       navigation={navigation}
       settingsHeaderConfig={{
         navHeaderConfig: {
-          label: 'Account Settings',
+          label: 'Preferences',
           includeBackButton: true,
         },
       }}
