@@ -12,13 +12,18 @@ import {
   darkThemeColors,
   margins,
   paddings,
+  iconSizes,
 } from '../../styles/main';
 
 type HeaderBackButtonProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
+  targetScreen: keyof RootStackParamList;
 };
 
-const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
+const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
+  navigation,
+  targetScreen,
+}) => {
   //Setup theme for the component
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -28,8 +33,12 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
         styles.headerBackButton,
         {backgroundColor: currentTheme.background},
       ]}
-      onPress={() => navigation.navigate('Settings')}>
-      <Icon name="arrow-left" size={25} color={currentTheme.text} />
+      onPress={() => navigation.navigate(targetScreen)}>
+      <Icon
+        name="arrow-left"
+        size={iconSizes.large}
+        color={currentTheme.text}
+      />
     </TouchableOpacity>
   );
 };

@@ -10,6 +10,7 @@ import {
   margins,
   lightThemeColors,
   darkThemeColors,
+  iconSizes,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
@@ -27,7 +28,12 @@ const NavItem: React.FC<NavItemProps> = ({icon, label, onPress}) => {
     <TouchableOpacity
       style={[styles.navItem, {backgroundColor: currentTheme.background}]}
       onPress={onPress}>
-      <Icon name={icon} solid size={28} color={currentTheme.text} />
+      <Icon
+        name={icon}
+        solid
+        size={iconSizes.large}
+        color={currentTheme.text}
+      />
       {label && (
         <Text style={[styles.navLabel, {color: currentTheme.text}]}>
           {label}

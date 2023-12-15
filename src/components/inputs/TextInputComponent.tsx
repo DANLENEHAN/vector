@@ -10,6 +10,7 @@ import {
   borderWidth,
   darkThemeColors,
   lightThemeColors,
+  iconSizes,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
@@ -48,7 +49,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
         secureTextEntry={secureTextEntry}
         autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
       />
-      <Icon name={iconName} size={30} color={currentTheme.icon} />
+      <Icon name={iconName} size={iconSizes.xLarge} color={currentTheme.icon} />
     </View>
   );
 };
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: margins.large,
-    borderWidth: borderWidth.xsmall,
+    borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
     padding: paddings.small,
   },

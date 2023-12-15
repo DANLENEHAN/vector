@@ -15,24 +15,11 @@ import Splash from '../screens/Splash';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
-import HeaderBackButton from '../components/buttons/HeaderBackButton';
-
-// Styling
-import {useTheme} from '../context/ThemeContext';
-import {
-  lightThemeColors,
-  darkThemeColors,
-  fonts,
-  fontWeights,
-} from '../styles/main';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const AppNavigator: React.FC = () => {
-  const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
   return (
     <Tab.Navigator
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -51,20 +38,7 @@ const AppNavigator: React.FC = () => {
       <Tab.Screen
         name="AccountSettings"
         component={AccountSettings}
-        options={({navigation}) => ({
-          // Access navigation prop correctly here
-          headerShown: true,
-          headerTitle: 'Account Settings',
-          headerStyle: {
-            backgroundColor: currentTheme.background,
-          },
-          headerTitleStyle: {
-            fontWeight: fontWeights.bold,
-            color: currentTheme.text,
-            fontFamily: fonts.primary,
-          },
-          headerLeft: () => <HeaderBackButton navigation={navigation} />,
-        })}
+        options={{headerShown: false}}
       />
     </Tab.Navigator>
   );

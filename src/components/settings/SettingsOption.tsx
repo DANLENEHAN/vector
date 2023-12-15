@@ -1,24 +1,34 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import {
   fonts,
   fontSizes,
   lightThemeColors,
   darkThemeColors,
+  iconSizes,
+  borderRadius,
+  borderWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 
 type SettingsOptionProps = {
   icon: string;
   label: string;
   onPress: () => void;
+  fontColor?: string;
+  caret?: boolean;
+  logo_circle_color?: string;
 };
 
 const SettingsOption: React.FC<SettingsOptionProps> = ({
   icon,
   label,
   onPress,
+  fontColor,
+  caret,
+  logo_circle_color,
 }) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -31,14 +41,29 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
       ]}
       onPress={onPress}>
       <View style={styles.logoHolder}>
-        <Icon name={icon} solid size={28} color={currentTheme.text} />
+        <View
+          style={[
+            styles.logoCircle,
+            {
+              backgroundColor: logo_circle_color
+                ? logo_circle_color
+                : currentTheme.primary,
+            },
+          ]}>
+          <Icon
+            name={icon}
+            solid
+            size={iconSizes.medium}
+            color={currentTheme.background}
+          />
+        </View>
       </View>
       <View style={styles.labelHolder}>
         <Text
           style={[
             styles.labelText,
             {
-              color: currentTheme.text,
+              color: fontColor ? fontColor : currentTheme.text,
               fontSize: fontSizes.medium,
               fontFamily: fonts.secondary,
             },
@@ -46,6 +71,21 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           {label}
         </Text>
       </View>
+
+      <View style={styles.logoHolder}>
+        {caret && (
+          <Icon
+            name="caret-right"
+            solid
+            size={iconSizes.medium}
+            color={fontColor ? fontColor : currentTheme.text}
+          />
+        )}
+      </View>
+
+      <View
+        style={[styles.bottomBorder, {backgroundColor: currentTheme.borders}]}
+      />
     </TouchableOpacity>
   );
 };
@@ -56,17 +96,31 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   logoHolder: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   labelHolder: {
-    flex: 3,
+    flex: 6,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   labelText: {},
   logoText: {},
+  bottomBorder: {
+    position: 'absolute',
+    bottom: 0,
+    left: '5%',
+    right: '5%',
+    height: borderWidth.xSmall,
+  },
+  logoCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: borderRadius.circle,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default SettingsOption;

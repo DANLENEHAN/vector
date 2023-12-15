@@ -27,7 +27,7 @@ export type FontTypes =
   | 'light'
   | 'normal'
   | 'medium'
-  | 'semibold'
+  | 'semiBold'
   | 'bold'
   | 'extraBold'
   | 'ultraBold';
@@ -49,7 +49,7 @@ export const fontWeights: Record<FontTypes, FontWeights> = {
   light: '300',
   normal: 'normal',
   medium: '500',
-  semibold: '600',
+  semiBold: '600',
   bold: 'bold',
   extraBold: '800',
   ultraBold: '900',
@@ -61,10 +61,13 @@ export const lightThemeColors = {
   disabledButton: gray,
   buttonText: white,
   icon: black,
-  borders: black,
+  borders: '#CCCCCC',
   text: black,
   primary: blue,
   secondary: purple,
+  lightText: '#575757', // Lighter text color for less emphasis
+  darkText: '#333333', // Darker text color for more emphasis
+  error: '#FF3B30', // Error text color
 };
 
 export const darkThemeColors = {
@@ -73,26 +76,29 @@ export const darkThemeColors = {
   disabledButton: gray,
   buttonText: black,
   icon: white,
-  borders: white,
+  borders: '#CCCCCC',
   text: white,
   primary: blue,
   secondary: purple,
+  lightText: '#E5E5EA',
+  darkText: '#F2F2F7',
+  error: '#FF453A',
 };
 
 export const paddings = {
-  xsmall: 5,
+  xSmall: 5,
   small: 10,
   medium: 15,
   large: 20,
-  xlarge: 25,
+  xLarge: 25,
 };
 
 export const margins = {
-  xsmall: 5,
+  xSmall: 5,
   small: 10,
   medium: 15,
   large: 20,
-  xlarge: 25,
+  xLarge: 25,
   xxLarge: 30,
 };
 
@@ -105,9 +111,16 @@ export const borderRadius = {
 };
 
 export const borderWidth = {
-  xsmall: 1,
+  xSmall: 1,
   small: 2,
   medium: 3,
   large: 4,
-  xlarge: 6,
+  xLarge: 6,
+};
+
+export const iconSizes = {
+  small: 15,
+  medium: 20,
+  large: 25,
+  xLarge: 30,
 };
