@@ -83,7 +83,9 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
         )}
       </View>
 
-      <View style={styles.bottomBorder} />
+      <View
+        style={[styles.bottomBorder, {backgroundColor: currentTheme.borders}]}
+      />
     </TouchableOpacity>
   );
 };
@@ -111,13 +113,11 @@ const styles = StyleSheet.create({
     left: '5%',
     right: '5%',
     height: borderWidth.xSmall,
-    backgroundColor: '#CCCCCC', // Border color, can be adjusted
   },
   logoCircle: {
     width: 40,
     height: 40,
     borderRadius: borderRadius.circle,
-    backgroundColor: '#CCCCCC',
     justifyContent: 'center',
     alignItems: 'center',
   },
