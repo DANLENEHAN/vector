@@ -1,11 +1,11 @@
 import React from 'react';
 // Components
-import SettingsPage from '../../components/settings/SettingsPage';
+import SettingsPage from '../../../components/settings/SettingsPage';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '../../types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+import {useTheme} from '../../../context/ThemeContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();

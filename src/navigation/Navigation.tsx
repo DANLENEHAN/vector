@@ -10,8 +10,8 @@ import {RootStackParamList} from '../navigation/types';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 import SettingsScreen from '../screens/settings/Settings';
-import AccountSettings from '../screens/settings/AccountSettings';
-import Preferences from '../screens/settings/Preferences';
+import AccountSettings from '../screens/settings/options/AccountSettings';
+import Preferences from '../screens/settings/options/Preferences';
 import Splash from '../screens/Splash';
 
 // Components
