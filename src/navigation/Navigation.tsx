@@ -16,19 +16,25 @@ import AccountSettings from '../screens/settings/AccountSettings';
 import BottomNavBar from '../components/navbar/BottomNavBar';
 import HeaderBackButton from '../components/buttons/HeaderBackButton';
 
-// Theme
+// Styling
 import {useTheme} from '../context/ThemeContext';
-import {lightTheme, darkTheme, fonts} from '../theme';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  fonts,
+  fontWeights,
+} from '../styles/main';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const AppNavigator: React.FC = () => {
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? darkTheme : lightTheme;
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
     <Tab.Navigator
+      // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <BottomNavBar {...props} />}
       backBehavior="history">
       <Tab.Screen
@@ -52,9 +58,9 @@ const AppNavigator: React.FC = () => {
             backgroundColor: currentTheme.background,
           },
           headerTitleStyle: {
+            fontWeight: fontWeights.bold,
             color: currentTheme.text,
             fontFamily: fonts.primary,
-            fontWeight: 'bold',
           },
           headerLeft: () => <HeaderBackButton navigation={navigation} />,
         })}

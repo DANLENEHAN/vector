@@ -1,12 +1,27 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
+import {darkThemeColors, lightThemeColors} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
 interface ScreenWrapperProps {
   children: React.ReactNode;
 }
 
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({children}) => {
-  return <View style={styles.screenWrapper}>{children}</View>;
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
+  return (
+    <View
+      style={[
+        styles.screenWrapper,
+        {
+          backgroundColor: currentTheme.background,
+        },
+      ]}>
+      {children}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
