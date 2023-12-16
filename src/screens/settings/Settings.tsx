@@ -25,7 +25,9 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
       <View style={styles.settingsSection}>
         <SettingsOption
           icon="user"
-          onPress={() => navigation.navigate('AccountSettings')}
+          onPress={() =>
+            navigation.navigate('Settings', {screen: 'AccountSettings'})
+          }
           label="Account Settings"
           caret={true}
         />

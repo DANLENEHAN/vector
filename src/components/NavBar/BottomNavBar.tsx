@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import NavItem from './NavItem';
+import {BottomBarProps} from './types';
 
 // Styling
 import {lightThemeColors, darkThemeColors, paddings} from '../../styles/main';
@@ -15,7 +16,7 @@ const routeMapping: any = {
 };
 const hiddenRoutes = ['Settings', 'Search'];
 
-const BottomNavBar: React.FC<any> = ({navigation, state}) => {
+const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
@@ -32,6 +33,7 @@ const BottomNavBar: React.FC<any> = ({navigation, state}) => {
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
+            canPreventDefault: true,
           });
 
           if (!isFocused && !event.defaultPrevented) {

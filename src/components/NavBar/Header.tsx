@@ -21,10 +21,11 @@ import {RootStackParamList} from '../../navigation/types';
 type HeaderProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
   label: string;
-  targetScreen?: keyof RootStackParamList;
+  //targetScreen?: keyof RootStackParamList;
+  goBack?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({navigation, label, targetScreen}) => {
+const Header: React.FC<HeaderProps> = ({navigation, label, goBack}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -34,12 +35,7 @@ const Header: React.FC<HeaderProps> = ({navigation, label, targetScreen}) => {
         // Include the HeaderBackButton component if targetScreen is defined
       }
       <View style={styles.sideItem}>
-        {targetScreen && (
-          <HeaderBackButton
-            navigation={navigation}
-            targetScreen={targetScreen}
-          />
-        )}
+        {goBack && <HeaderBackButton navigation={navigation} />}
       </View>
       <View style={styles.logoContainer}>
         <Text style={[styles.logoText, {color: currentTheme.darkText}]}>

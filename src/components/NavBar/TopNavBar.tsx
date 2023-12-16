@@ -13,8 +13,9 @@ import {
   borderWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
+import {NavBarProps} from './types';
 
-const TopNavBar: React.FC<any> = ({navigation}) => {
+const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
