@@ -5,10 +5,17 @@ export type SettingsParamList = {
   AccountSettings: undefined;
 };
 
+export type HomeParamList = {
+  Home: undefined;
+  Discover: undefined;
+  Track: undefined;
+  Social: undefined;
+  Progress: undefined;
+  Settings: NavigatorScreenParams<SettingsParamList>;
+};
+
 export type RootStackParamList = {
   Splash: undefined;
-  App: undefined;
-  Home: undefined;
+  App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
-  Settings: NavigatorScreenParams<SettingsParamList> | undefined;
 };

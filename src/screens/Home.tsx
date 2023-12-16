@@ -4,9 +4,9 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '../components/layout/HomepageLayout';
 // Types
-import {ScreenProps} from './types';
+import {HomeScreenProps} from './types';
 
-const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   return (
     <HomepageLayout navigation={navigation}>
       <View style={styles.content}>
