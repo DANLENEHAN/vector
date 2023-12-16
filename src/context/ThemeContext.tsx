@@ -6,12 +6,14 @@ import React, {
   ReactNode,
 } from 'react';
 import {Appearance} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UserPreference} from '../services/asyncStorage/types';
 
 type ThemeContextType = {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
-  userPreferredTheme: 'light' | 'dark';
-  setUserPreferredTheme: (theme: 'light' | 'dark') => void;
+  systemTheme: 'light' | 'dark';
+  setSystemTheme: (theme: 'light' | 'dark') => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>(null!);
@@ -28,30 +30,32 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   );
 
   // State to hold the user's preferred theme
-  const [userPreferredTheme, setUserPreferredTheme] = useState<
-    'light' | 'dark'
-  >(
-    'light', // Set the default to 'light', you can change it based on your preference.
-  );
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>('light');
 
   // Effect to subscribe to changes in system's color scheme
   useEffect(() => {
-    // Listening for changes in the system's theme
+    let userPreference: string | null = null;
+    AsyncStorage.getItem(UserPreference).then(value => {
+      userPreference = value;
+    });
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
-      // Only update the theme if the user hasn't selected a different theme
-      if (!userPreferredTheme) {
-        setTheme(colorScheme === 'dark' ? 'dark' : 'light');
+      const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
+      setSystemTheme(systemColorScheme);
+      if (!userPreference || userPreference === 'system') {
+        setTheme(systemColorScheme);
+      } else {
+        setTheme(userPreference === 'dark' ? 'dark' : 'light');
       }
     });
 
     // Cleaning up the listener when the component unmounts
     return () => subscription.remove();
-  }, [userPreferredTheme]);
+  }, [systemTheme]);
 
   // Function to set the theme and user's preferred theme
   const setThemeAndUserPreferredTheme = (newTheme: 'light' | 'dark') => {
     setTheme(newTheme);
-    setUserPreferredTheme(newTheme);
+    setSystemTheme(newTheme);
   };
 
   return (
@@ -59,8 +63,8 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
       value={{
         theme,
         setTheme: setThemeAndUserPreferredTheme,
-        userPreferredTheme,
-        setUserPreferredTheme,
+        systemTheme,
+        setSystemTheme,
       }}>
       {children}
     </ThemeContext.Provider>

@@ -4,9 +4,11 @@ import Header from '../../../components/navbar/Header';
 import OptionGroup from '../../../components/settings/OptionGroup';
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 import {useTheme} from '../../../context/ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UserPreference} from '../../../services/asyncStorage/types';
 
 const AppAppearance: React.FC<any> = ({navigation}) => {
-  const {theme, setTheme} = useTheme(); // Added setTheme
+  const {theme, setTheme, systemTheme} = useTheme(); // Added setTheme
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   // Define options based on the theme
@@ -23,8 +25,13 @@ const AppAppearance: React.FC<any> = ({navigation}) => {
 
   // Callback function to set the theme when an option is pressed
   const handleOptionPress = (index: number) => {
-    const selectedTheme = options[index].value as 'light' | 'dark'; // Explicit type cast
-    setTheme(selectedTheme);
+    const selectedTheme = options[index].value as 'light' | 'dark' | 'system';
+    if (selectedTheme === 'system') {
+      setTheme(systemTheme);
+    } else {
+      AsyncStorage.setItem(UserPreference, selectedTheme);
+      setTheme(selectedTheme);
+    }
   };
 
   return (
