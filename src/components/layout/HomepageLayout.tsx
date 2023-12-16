@@ -20,7 +20,7 @@ const HomepageLayout: React.FC<HomepageLayoutProps> = ({
   return (
     <ScreenWrapper>
       <View style={styles.container}>
-        <TopNavBar navigation={navigation} />
+        {<TopNavBar navigation={navigation} />}
         {children}
       </View>
     </ScreenWrapper>

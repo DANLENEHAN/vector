@@ -8,10 +8,10 @@ import {RootStackParamList} from '../navigation/types';
 
 // Screens
 import LoginScreen from '../screens/Login';
-import HomeScreen from '../screens/Home';
 import SettingsScreen from '../screens/settings/Settings';
 import AccountSettings from '../screens/settings/AccountSettings';
 import Splash from '../screens/Splash';
+import Generic from '../screens/Generic';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -22,25 +22,59 @@ const Tab = createBottomTabNavigator();
 const AppNavigator: React.FC = () => {
   return (
     <Tab.Navigator
-      // eslint-disable-next-line react/no-unstable-nested-components
-      tabBar={props => <BottomNavBar {...props} />}
-      backBehavior="history">
+      screenOptions={{headerShown: false}}
+      tabBar={props => <BottomNavBar {...props} />}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
-        options={{headerShown: false}}
+        component={Generic}
+        initialParams={{name: 'Home'}}
+      />
+      <Tab.Screen
+        name="Discover"
+        component={Generic}
+        initialParams={{name: 'Discover'}}
+      />
+      <Tab.Screen
+        name="Track"
+        component={Generic}
+        initialParams={{name: 'Track'}}
+      />
+      <Tab.Screen
+        name="Social"
+        component={Generic}
+        initialParams={{name: 'Social'}}
+      />
+      <Tab.Screen
+        name="Progress"
+        component={Generic}
+        initialParams={{name: 'Progress'}}
       />
       <Tab.Screen
         name="Settings"
+        component={SettingsNavigator}
+        options={{tabBarButton: () => null}}
+      />
+    </Tab.Navigator>
+  );
+};
+
+//Stack navigator for settigns screens
+const SettingsStack = createNativeStackNavigator();
+
+const SettingsNavigator: React.FC = () => {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsHome"
         component={SettingsScreen}
         options={{headerShown: false}}
       />
-      <Tab.Screen
+      <SettingsStack.Screen
         name="AccountSettings"
         component={AccountSettings}
         options={{headerShown: false}}
       />
-    </Tab.Navigator>
+    </SettingsStack.Navigator>
   );
 };
 

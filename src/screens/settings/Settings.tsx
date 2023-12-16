@@ -5,10 +5,16 @@ import SettingsOption from '../../components/settings/SettingsOption';
 import ProfileHeader from '../../components/settings/ProfileHeader';
 // Types
 import {ScreenProps} from '../types';
+// Theme
+import {lightThemeColors, darkThemeColors} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
 
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
   return (
-    <View style={styles.content}>
+    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
       <View style={styles.profileSection}>
         <ProfileHeader
           userName="Dan Lenehan"

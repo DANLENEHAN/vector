@@ -11,6 +11,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   iconSizes,
+  fontWeights,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
@@ -18,12 +19,19 @@ type NavItemProps = {
   icon: string;
   label?: string;
   onPress: () => void;
+  isActive?: boolean;
 };
 
-const NavItem: React.FC<NavItemProps> = ({icon, label, onPress}) => {
+const NavItem: React.FC<NavItemProps> = ({
+  icon,
+  label,
+  onPress,
+  isActive = false,
+}) => {
   //Setup theme for the component
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
   return (
     <TouchableOpacity
       style={[styles.navItem, {backgroundColor: currentTheme.background}]}
@@ -31,11 +39,16 @@ const NavItem: React.FC<NavItemProps> = ({icon, label, onPress}) => {
       <Icon
         name={icon}
         solid
-        size={iconSizes.large}
+        size={iconSizes.medium}
         color={currentTheme.text}
+        style={isActive && {color: currentTheme.primary}}
       />
       {label && (
-        <Text style={[styles.navLabel, {color: currentTheme.text}]}>
+        <Text
+          style={[
+            styles.navLabel,
+            {color: isActive ? currentTheme.primary : currentTheme.text},
+          ]}>
           {label}
         </Text>
       )}
@@ -48,12 +61,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: paddings.small,
+    padding: paddings.xSmall,
+    paddingBottom: paddings.medium,
+    marginLeft: margins.xSmall,
+    marginRight: margins.xSmall,
   },
   navLabel: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
     marginTop: margins.small,
+    fontWeight: fontWeights.semiBold,
   },
 });
 

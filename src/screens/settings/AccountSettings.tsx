@@ -23,14 +23,13 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const {theme} = useTheme();
-  const currentTheme = theme === 'dark' ? lightThemeColors : darkThemeColors;
-
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View style={styles.content}>
+    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
       <Header
         label="Account Settings"
         navigation={navigation}
-        targetScreen="Settings"
+        targetScreen="SettingsHome"
       />
       <View style={styles.settingsSection}>
         <SettingsOption
@@ -50,6 +49,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    //No background color
   },
   profileSection: {
     flex: 3,

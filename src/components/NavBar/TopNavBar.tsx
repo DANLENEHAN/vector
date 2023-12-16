@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import NavItem from './NavItem';
-import {NavBarProps} from './types';
 
 // Styling
 import {
@@ -15,7 +14,7 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
+const TopNavBar: React.FC<any> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -40,7 +39,9 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
       <View style={styles.sideItem}>
         <NavItem
           icon="user-circle"
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() =>
+            navigation.navigate('Settings', {screen: 'SettingsHome'})
+          }
         />
       </View>
     </View>

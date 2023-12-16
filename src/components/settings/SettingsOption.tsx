@@ -53,7 +53,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           <Icon
             name={icon}
             solid
-            size={iconSizes.medium}
+            size={iconSizes.small}
             color={currentTheme.background}
           />
         </View>
@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
     height: borderWidth.xSmall,
   },
   logoCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: borderRadius.circle,
+    width: 25,
+    height: 25,
+    borderRadius: borderRadius.small,
     justifyContent: 'center',
     alignItems: 'center',
   },
