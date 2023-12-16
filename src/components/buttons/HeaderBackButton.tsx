@@ -17,13 +17,9 @@ import {
 
 type HeaderBackButtonProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
-  targetScreen: keyof RootStackParamList;
 };
 
-const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
-  navigation,
-  targetScreen,
-}) => {
+const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
   //Setup theme for the component
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -33,7 +29,7 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
         styles.headerBackButton,
         {backgroundColor: currentTheme.background},
       ]}
-      onPress={() => navigation.navigate(targetScreen)}>
+      onPress={() => navigation.goBack()}>
       <Icon
         name="arrow-left"
         size={iconSizes.large}

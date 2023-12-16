@@ -1,0 +1,54 @@
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+// Components
+import SettingsOption from '../../../components/settings/SettingsOption';
+import Header from '../../../components/navbar/Header';
+
+// Types
+import {ScreenProps} from '../../types';
+// Theme
+import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+import {useTheme} from '../../../context/ThemeContext';
+
+const Preferences: React.FC<ScreenProps> = ({navigation}) => {
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  return (
+    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
+      <Header
+        label="Preferences"
+        navigation={navigation}
+        includeBackArrow={true}
+      />
+      <View style={styles.settingsSection}>
+        <SettingsOption
+          icon={'circle-half-stroke'}
+          onPress={() => navigation.navigate('AppAppearance')}
+          label="App Appearance"
+          logo_circle_color={currentTheme.primary}
+          caret={true}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileSection: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  settingsSection: {
+    flex: 7,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+});
+
+export default Preferences;
