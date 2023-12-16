@@ -23,7 +23,8 @@ const AppNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{headerShown: false}}
-      tabBar={props => <BottomNavBar {...props} />}>
+      tabBar={props => <BottomNavBar {...props} />}
+      backBehavior="history">
       <Tab.Screen
         name="Home"
         component={Generic}
