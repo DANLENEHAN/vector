@@ -1,11 +1,15 @@
 import React from 'react';
 import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+
+// Styling
 import {
   fonts,
   fontSizes,
   lightThemeColors,
   darkThemeColors,
   paddings,
+  borderWidth,
+  iconSizes,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -58,9 +62,20 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
 
           <View style={styles.tickcontainer}>
             {selectedOption === index && (
-              <Icon name="check" solid size={30} color={currentTheme.text} />
+              <Icon
+                name="check"
+                size={iconSizes.medium}
+                color={currentTheme.text}
+              />
             )}
           </View>
+
+          <View
+            style={[
+              styles.bottomBorder,
+              {backgroundColor: currentTheme.borders},
+            ]}
+          />
         </TouchableOpacity>
       ))}
     </View>
@@ -84,8 +99,14 @@ const styles = StyleSheet.create({
   },
   optionContainer: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
     padding: paddings.small,
+  },
+  bottomBorder: {
+    position: 'absolute',
+    bottom: 0,
+    left: '3%',
+    right: '3%',
+    height: borderWidth.xSmall,
   },
 });
 
