@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import NavItem from './NavItem';
-import {NavBarProps} from './types';
 
 // Styling
 import {
@@ -14,6 +13,7 @@ import {
   borderWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
+import {NavBarProps} from './types';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -40,7 +40,9 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
       <View style={styles.sideItem}>
         <NavItem
           icon="user-circle"
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() =>
+            navigation.navigate('Settings', {screen: 'SettingsHome'})
+          }
         />
       </View>
     </View>

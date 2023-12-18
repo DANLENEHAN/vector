@@ -7,8 +7,6 @@ import ScreenWrapper from '../components/layout/ScreenWrapper';
 import ButtonComponent from '../components/buttons/ButtonComponent';
 import TextInputComponent from '../components/inputs/TextInputComponent';
 import ClickableLink from '../components/buttons/ClickableLink';
-// Types
-import {ScreenProps} from './types';
 // Styling
 import {
   fontSizes,
@@ -19,7 +17,10 @@ import {
   margins,
 } from '../styles/main';
 import {useTheme} from '../context/ThemeContext';
+// Types
+import {ScreenProps} from './types';
 
+// Note fix typing of props
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -34,7 +35,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       await loginUser({email: email, password: password});
-      navigation.navigate('App');
+      navigation.navigate('App', {screen: 'Home'});
     } catch (error) {
       console.error('Login failed:', error);
     }

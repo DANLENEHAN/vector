@@ -3,14 +3,18 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '../components/layout/HomepageLayout';
-// Types
-import {HomeScreenProps} from './types';
+// Styling
+import {fontSizes, lightThemeColors, darkThemeColors} from '../styles/main';
+import {useTheme} from '../context/ThemeContext';
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const Generic: React.FC<any> = ({navigation, route}) => {
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const {name} = route.params;
   return (
     <HomepageLayout navigation={navigation}>
       <View style={styles.content}>
-        <Text>Home</Text>
+        <Text style={{color: currentTheme.text}}>{name}</Text>
       </View>
     </HomepageLayout>
   );
@@ -27,7 +31,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: fontSizes.xLarge,
   },
 });
 
-export default HomeScreen;
+export default Generic;
