@@ -6,6 +6,8 @@ import React, {
   ReactNode,
 } from 'react';
 import {Appearance} from 'react-native';
+
+// Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserPreference} from '../services/asyncStorage/types';
 
@@ -24,7 +26,7 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   // Getting the system's color scheme
   const initialColorScheme = Appearance.getColorScheme();
 
-  // State to hold the current theme, defaulting to system preference
+  // State to hold the current theme
   const [theme, setTheme] = useState<'light' | 'dark'>(
     initialColorScheme === 'dark' ? 'dark' : 'light',
   );
@@ -34,7 +36,8 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     'light' | 'dark' | 'system'
   >('light');
 
-  // Effect to subscribe to changes in system's color scheme
+  // Effect to set store theme preference and subscribe
+  // to changes in system's color scheme
   useEffect(() => {
     AsyncStorage.getItem(UserPreference).then(value => {
       if (value) {
@@ -46,6 +49,10 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     });
 
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      /* This function is called when:
+        - Opening the app, if there's been a system theme change.
+        - Closing the app.
+      */
       const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
       if (!userPreferenceTheme || userPreferenceTheme === 'system') {
         setTheme(systemColorScheme);

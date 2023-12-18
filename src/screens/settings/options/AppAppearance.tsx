@@ -1,19 +1,21 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+
+// Components
+import {Appearance, View, StyleSheet} from 'react-native';
 import Header from '../../../components/navbar/Header';
 import OptionGroup from '../../../components/settings/OptionGroup';
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+
+// Styling
 import {useTheme} from '../../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserPreference} from '../../../services/asyncStorage/types';
-import {Appearance} from 'react-native';
 
 const AppAppearance: React.FC<any> = ({navigation}) => {
   const {theme, setTheme, userPreferenceTheme, setUserPreferenceTheme} =
     useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  // Define options based on the theme
   const options = [
     {value: 'system', label: 'System Preferences'},
     {value: 'dark', label: 'Dark Mode'},
@@ -58,13 +60,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  profileSection: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   settingsSection: {
-    flex: 7,
+    flex: 1,
   },
 });
 

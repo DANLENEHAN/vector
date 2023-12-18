@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+
 // Components
+import {View, StyleSheet} from 'react-native';
 import SettingsOption from '../../../components/settings/SettingsOption';
 import Header from '../../../components/navbar/Header';
 
 // Types
 import {ScreenProps} from '../../types';
+
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 import {useTheme} from '../../../context/ThemeContext';
@@ -36,11 +38,6 @@ const Preferences: React.FC<ScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileSection: {
-    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },

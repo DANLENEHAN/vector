@@ -34,20 +34,19 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleOptionPress = (index: number) => {
-    // Call the callback function if provided
     if (onOptionPress) {
       onOptionPress(index);
     }
   };
 
   return (
-    <View style={styles.groupContainer}>
+    <View style={styles.optionGroup}>
       {options.map((option, index) => (
         <TouchableOpacity
-          style={[styles.optionContainer]}
+          style={[styles.option]}
           key={index}
           onPress={() => handleOptionPress(index)}>
-          <View style={styles.labelContainer}>
+          <View style={styles.optionLabel}>
             <Text
               style={[
                 {
@@ -60,7 +59,7 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
             </Text>
           </View>
 
-          <View style={styles.tickcontainer}>
+          <View style={styles.optionTick}>
             {selectedOption === index && (
               <Icon
                 name="check"
@@ -83,23 +82,23 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
 };
 
 const styles = StyleSheet.create({
-  groupContainer: {
+  optionGroup: {
     flex: 1,
     flexDirection: 'column',
   },
-  labelContainer: {
+  option: {
+    flexDirection: 'row',
+    padding: paddings.small,
+  },
+  optionLabel: {
     flex: 7,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  tickcontainer: {
+  optionTick: {
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    padding: paddings.small,
   },
   bottomBorder: {
     position: 'absolute',
