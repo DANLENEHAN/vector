@@ -26,17 +26,12 @@ const ThemeScreen: React.FC<any> = ({navigation}) => {
   const initialSelectedIndex = options.findIndex(
     option => option.value === userPreferenceTheme,
   );
-
-  console.log('In Theme');
-  console.log('currentTheme', theme);
   // Callback function to set the theme when an option is pressed
   const handleOptionPress = (index: number) => {
     const selectedTheme = options[index].value as 'light' | 'dark' | 'system';
     if (selectedTheme === 'system') {
-      console.log('setting sys them');
       setTheme(Appearance.getColorScheme() === 'dark' ? 'dark' : 'light');
     } else {
-      console.log('setting user theme');
       setTheme(selectedTheme);
     }
     setUserPreferenceTheme(selectedTheme);
