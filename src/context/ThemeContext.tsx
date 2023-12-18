@@ -7,38 +7,64 @@ import React, {
 } from 'react';
 import {Appearance} from 'react-native';
 
-// Defining the shape of the context's value
+// Services
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UserThemePreference} from '../services/asyncStorage/types';
+
 type ThemeContextType = {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
+  userPreferenceTheme: 'light' | 'dark' | 'system';
+  setUserPreferenceTheme: (theme: 'light' | 'dark' | 'system') => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>(null!);
 
-// Using the context in a custom hook for easy access
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
-  // Getting the system's color scheme
-  const initialColorScheme = Appearance.getColorScheme();
-  // State to hold the current theme, defaulting to system preference
-  const [theme, setTheme] = useState<'light' | 'dark'>(
-    initialColorScheme === 'dark' ? 'dark' : 'light',
-  );
+  // useState will not reset the variables on re-render
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [userPreferenceTheme, setUserPreferenceTheme] = useState<
+    'light' | 'dark' | 'system'
+  >('light');
 
-  // Effect to subscribe to changes in system's color scheme
+  // Run once on mount
   useEffect(() => {
-    // Listening for changes in the system's theme
+    // Set theme from cache if it exists otherwise use systems
+    AsyncStorage.getItem(UserThemePreference).then(value => {
+      if (value) {
+        setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
+        if (value === 'system') {
+          setTheme(Appearance.getColorScheme());
+        } else {
+          setTheme(value as 'light' | 'dark');
+        }
+      }
+    });
+
+    // Create system theme subscription
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
-      setTheme(colorScheme === 'dark' ? 'dark' : 'light');
+      const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
+      if (!userPreferenceTheme || userPreferenceTheme === 'system') {
+        setTheme(systemColorScheme);
+      } else {
+        setTheme(userPreferenceTheme === 'dark' ? 'dark' : 'light');
+      }
     });
 
     // Cleaning up the listener when the component unmounts
     return () => subscription.remove();
-  }, []);
+  });
 
   return (
-    <ThemeContext.Provider value={{theme, setTheme}}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme: setTheme,
+        userPreferenceTheme,
+        setUserPreferenceTheme,
+      }}>
       {children}
     </ThemeContext.Provider>
   );
