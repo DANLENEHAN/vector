@@ -45,14 +45,9 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   });
 
-  // Effect to set store theme preference and subscribe
-  // to changes in system's color scheme
+  // Effect to subscribe to changes in system's color scheme
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
-      /* This function is called when:
-        - Opening the app, if there's been a system theme change.
-        - Closing the app.
-      */
       const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
       if (!userPreferenceTheme || userPreferenceTheme === 'system') {
         setTheme(systemColorScheme);
