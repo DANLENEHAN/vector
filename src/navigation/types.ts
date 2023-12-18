@@ -3,6 +3,8 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 export type SettingsParamList = {
   SettingsHome: undefined;
   AccountSettings: undefined;
+  Preferences: undefined;
+  Theme: undefined;
 };
 
 export type HomeParamList = {
@@ -18,7 +20,4 @@ export type RootStackParamList = {
   Splash: undefined;
   App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
-  AccountSettings: undefined;
-  Preferences: undefined;
-  Theme: undefined;
 };
