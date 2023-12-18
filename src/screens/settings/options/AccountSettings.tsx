@@ -1,15 +1,15 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 // Functions
-import {logoutUser} from '../../services/api/user/functions';
+import {logoutUser} from '../../../services/api/user/functions';
 // Components
-import SettingsOption from '../../components/settings/SettingsOption';
-import Header from '../../components/navbar/Header';
+import SettingsOption from '../../../components/settings/SettingsOption';
+import Header from '../../../components/navbar/Header';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '../../types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+import {useTheme} from '../../../context/ThemeContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   // Function to handle logout
@@ -26,7 +26,11 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <Header label="Account Settings" navigation={navigation} goBack={true} />
+      <Header
+        label="Account Settings"
+        navigation={navigation}
+        includeBackArrow={true}
+      />
       <View style={styles.settingsSection}>
         <SettingsOption
           icon="arrow-right-from-bracket"

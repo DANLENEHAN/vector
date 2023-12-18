@@ -56,8 +56,10 @@ export const loginUser = async (
         const targetCookie = cookieHeader.find(cookie =>
           cookie.includes('session'),
         );
-        const cookieValue = targetCookie.split(';')[0].split('=')[1].trim();
-        AsyncStorage.setItem(FlaskLoginCookie, cookieValue);
+        const cookieValue = targetCookie?.split(';')[0].split('=')[1].trim();
+        if (cookieValue) {
+          AsyncStorage.setItem(FlaskLoginCookie, cookieValue);
+        }
       }
       return Promise.resolve();
     } else {
