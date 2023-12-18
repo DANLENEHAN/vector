@@ -1,2 +1,2 @@
 export const FlaskLoginCookie = 'flask-cookie-key';
-export const UserPreference = 'user-pref-key';
+export const UserThemePreference = 'user-theme-pref-key';

@@ -9,7 +9,7 @@ import {Appearance} from 'react-native';
 
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserPreference} from '../services/asyncStorage/types';
+import {UserThemePreference} from '../services/asyncStorage/types';
 
 type ThemeContextType = {
   theme: 'light' | 'dark';
@@ -23,30 +23,27 @@ const ThemeContext = createContext<ThemeContextType>(null!);
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
-  // Getting the system's color scheme
-  const initialColorScheme = Appearance.getColorScheme();
-
-  // State to hold the current theme
-  const [theme, setTheme] = useState<'light' | 'dark'>(
-    initialColorScheme === 'dark' ? 'dark' : 'light',
-  );
-
-  // State to hold the user's preferred theme
+  // useState will not reset the variables on re-render
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [userPreferenceTheme, setUserPreferenceTheme] = useState<
     'light' | 'dark' | 'system'
   >('light');
 
-  AsyncStorage.getItem(UserPreference).then(value => {
-    if (value) {
-      setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
-      if (value !== 'system') {
-        setTheme(value as 'light' | 'dark');
-      }
-    }
-  });
-
-  // Effect to subscribe to changes in system's color scheme
+  // Run once on mount
   useEffect(() => {
+    // Set theme from cache if it exists otherwise use systems
+    AsyncStorage.getItem(UserThemePreference).then(value => {
+      if (value) {
+        setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
+        if (value === 'system') {
+          setTheme(Appearance.getColorScheme());
+        } else {
+          setTheme(value as 'light' | 'dark');
+        }
+      }
+    });
+
+    // Create system theme subscription
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
       if (!userPreferenceTheme || userPreferenceTheme === 'system') {

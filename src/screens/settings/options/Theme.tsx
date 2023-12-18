@@ -9,9 +9,9 @@ import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 // Styling
 import {useTheme} from '../../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserPreference} from '../../../services/asyncStorage/types';
+import {UserThemePreference} from '../../../services/asyncStorage/types';
 
-const AppAppearance: React.FC<any> = ({navigation}) => {
+const ThemeScreen: React.FC<any> = ({navigation}) => {
   const {theme, setTheme, userPreferenceTheme, setUserPreferenceTheme} =
     useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -27,24 +27,24 @@ const AppAppearance: React.FC<any> = ({navigation}) => {
     option => option.value === userPreferenceTheme,
   );
 
+  console.log('In Theme');
+  console.log('currentTheme', theme);
   // Callback function to set the theme when an option is pressed
   const handleOptionPress = (index: number) => {
     const selectedTheme = options[index].value as 'light' | 'dark' | 'system';
     if (selectedTheme === 'system') {
+      console.log('setting sys them');
       setTheme(Appearance.getColorScheme() === 'dark' ? 'dark' : 'light');
     } else {
+      console.log('setting user theme');
       setTheme(selectedTheme);
     }
     setUserPreferenceTheme(selectedTheme);
-    AsyncStorage.setItem(UserPreference, selectedTheme);
+    AsyncStorage.setItem(UserThemePreference, selectedTheme);
   };
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <Header
-        label="App Appearance"
-        navigation={navigation}
-        includeBackArrow={true}
-      />
+      <Header label="Theme" navigation={navigation} includeBackArrow={true} />
       <View style={styles.settingsSection}>
         <OptionGroup
           options={options}
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppAppearance;
+export default ThemeScreen;

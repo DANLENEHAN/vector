@@ -25,8 +25,8 @@ const Preferences: React.FC<ScreenProps> = ({navigation}) => {
       <View style={styles.settingsSection}>
         <SettingsOption
           icon={'circle-half-stroke'}
-          onPress={() => navigation.navigate('AppAppearance')}
-          label="App Appearance"
+          onPress={() => navigation.navigate('Theme')}
+          label="Theme"
           logo_circle_color={currentTheme.primary}
           caret={true}
         />

@@ -20,5 +20,5 @@ export type RootStackParamList = {
   Login: undefined;
   AccountSettings: undefined;
   Preferences: undefined;
-  AppAppearance: undefined;
+  Theme: undefined;
 };
