@@ -9,7 +9,9 @@ import {RootStackParamList} from '../navigation/types';
 // Screens
 import LoginScreen from '../screens/Login';
 import SettingsScreen from '../screens/settings/Settings';
-import AccountSettings from '../screens/settings/AccountSettings';
+import AccountSettings from '../screens/settings/options/AccountSettings';
+import ThemeScreen from '../screens/settings/options/Theme';
+import Preferences from '../screens/settings/options/Preferences';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
 
@@ -69,6 +71,16 @@ const SettingsNavigator: React.FC = () => {
       <SettingsStack.Screen
         name="AccountSettings"
         component={AccountSettings}
+        options={{headerShown: false}}
+      />
+      <SettingsStack.Screen
+        name="Preferences"
+        component={Preferences}
+        options={{headerShown: false}}
+      />
+      <SettingsStack.Screen
+        name="Theme"
+        component={ThemeScreen}
         options={{headerShown: false}}
       />
     </SettingsStack.Navigator>
