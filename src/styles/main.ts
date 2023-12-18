@@ -123,4 +123,5 @@ export const iconSizes = {
   medium: 20,
   large: 25,
   xLarge: 30,
+  xxLarge: 35,
 };

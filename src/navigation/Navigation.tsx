@@ -12,6 +12,7 @@ import SettingsScreen from '../screens/settings/Settings';
 import AccountSettings from '../screens/settings/AccountSettings';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
+import WelnessTracking from '../screens/tracking/WellnessTracking';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -37,8 +38,8 @@ const AppNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Track"
-        component={Generic}
-        initialParams={{name: 'Track'}}
+        component={WelnessTracking}
+        //initialParams={{name: 'Track'}}
       />
       <Tab.Screen
         name="Social"

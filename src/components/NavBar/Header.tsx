@@ -16,10 +16,10 @@ import {useTheme} from '../../context/ThemeContext';
 import HeaderBackButton from '../buttons/HeaderBackButton';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
+import {RootStackParamList, HomeParamList} from '../../navigation/types';
 
 type HeaderProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
+  navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
   label: string;
   //targetScreen?: keyof RootStackParamList;
   goBack?: boolean;
