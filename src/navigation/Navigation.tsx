@@ -73,16 +73,6 @@ const SettingsNavigator: React.FC = () => {
         component={AccountSettings}
         options={{headerShown: false}}
       />
-      <SettingsStack.Screen
-        name="Preferences"
-        component={Preferences}
-        options={{headerShown: false}}
-      />
-      <SettingsStack.Screen
-        name="AppAppearance"
-        component={AppAppearance}
-        options={{headerShown: false}}
-      />
     </SettingsStack.Navigator>
   );
 };
@@ -104,6 +94,16 @@ const AuthNavigator: React.FC = () => {
         <Stack.Screen
           name="App"
           component={AppNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Preferences"
+          component={Preferences}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AppAppearance"
+          component={AppAppearance}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
