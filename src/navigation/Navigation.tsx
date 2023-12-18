@@ -52,11 +52,7 @@ const AppNavigator: React.FC = () => {
         component={Generic}
         initialParams={{name: 'Progress'}}
       />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsNavigator}
-        options={{tabBarButton: () => null}}
-      />
+      <Tab.Screen name="Settings" component={SettingsNavigator} />
     </Tab.Navigator>
   );
 };
@@ -111,6 +107,7 @@ const AuthNavigator: React.FC = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
+      <Tab.Screen name="Settings" component={SettingsNavigator} />
     </NavigationContainer>
   );
 };
