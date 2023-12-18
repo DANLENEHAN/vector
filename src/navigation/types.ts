@@ -19,8 +19,6 @@ export type RootStackParamList = {
   App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
   AccountSettings: undefined;
-  SettingsHome: undefined;
   Preferences: undefined;
   AppAppearance: undefined;
-  Settings: NavigatorScreenParams<SettingsParamList> | undefined;
 };
