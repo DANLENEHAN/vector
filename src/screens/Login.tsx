@@ -17,9 +17,11 @@ import {
   margins,
 } from '../styles/main';
 import {useTheme} from '../context/ThemeContext';
+// Types
+import {ScreenProps} from './types';
 
 // Note fix typing of props
-const LoginScreen: React.FC<any> = ({navigation}) => {
+const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);

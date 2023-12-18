@@ -4,12 +4,12 @@ import {View, StyleSheet} from 'react-native';
 import SettingsOption from '../../components/settings/SettingsOption';
 import ProfileHeader from '../../components/settings/ProfileHeader';
 // Types
-import {ScreenProps} from '../types';
+import {HomeScreenProps} from '../types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
+const SettingsScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
