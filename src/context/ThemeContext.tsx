@@ -39,12 +39,14 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     AsyncStorage.getItem(UserPreference).then(value => {
       if (value) {
         setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
+        if (value !== 'system') {
+          setTheme(value as 'light' | 'dark');
+        }
       }
     });
 
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
-      setUserPreferenceTheme(systemColorScheme);
       if (!userPreferenceTheme || userPreferenceTheme === 'system') {
         setTheme(systemColorScheme);
       } else {
@@ -56,17 +58,11 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return () => subscription.remove();
   }, [userPreferenceTheme]);
 
-  // Function to set the theme and user's preferred theme
-  const setThemeAndUserPreferredTheme = (newTheme: 'light' | 'dark') => {
-    setTheme(newTheme);
-    setUserPreferenceTheme(newTheme);
-  };
-
   return (
     <ThemeContext.Provider
       value={{
         theme,
-        setTheme: setThemeAndUserPreferredTheme,
+        setTheme: setTheme,
         userPreferenceTheme,
         setUserPreferenceTheme,
       }}>
