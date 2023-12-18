@@ -40,7 +40,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
       <Header
         label="Health & Wellness"
         navigation={navigation}
-        goBack={false}
+        includeBackArrow={false}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>

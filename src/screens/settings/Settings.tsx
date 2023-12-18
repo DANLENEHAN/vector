@@ -33,7 +33,9 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
         />
         <SettingsOption
           icon="cog"
-          onPress={() => navigation.navigate('Preferences')}
+          onPress={() =>
+            navigation.navigate('Settings', {screen: 'Preferences'})
+          }
           label="Preferences"
           caret={true}
         />
