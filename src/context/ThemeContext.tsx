@@ -36,18 +36,18 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     'light' | 'dark' | 'system'
   >('light');
 
+  AsyncStorage.getItem(UserPreference).then(value => {
+    if (value) {
+      setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
+      if (value !== 'system') {
+        setTheme(value as 'light' | 'dark');
+      }
+    }
+  });
+
   // Effect to set store theme preference and subscribe
   // to changes in system's color scheme
   useEffect(() => {
-    AsyncStorage.getItem(UserPreference).then(value => {
-      if (value) {
-        setUserPreferenceTheme(value as 'light' | 'dark' | 'system');
-        if (value !== 'system') {
-          setTheme(value as 'light' | 'dark');
-        }
-      }
-    });
-
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       /* This function is called when:
         - Opening the app, if there's been a system theme change.
@@ -63,7 +63,7 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     // Cleaning up the listener when the component unmounts
     return () => subscription.remove();
-  }, [userPreferenceTheme]);
+  });
 
   return (
     <ThemeContext.Provider
