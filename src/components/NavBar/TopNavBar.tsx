@@ -28,7 +28,6 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
         styles.navBar,
         {
           backgroundColor: currentTheme.background,
-          borderTopColor: currentTheme.borders,
           borderBottomColor: currentTheme.borders,
           shadowColor: currentTheme.shadow,
         },
@@ -68,12 +67,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderTopWidth: borderWidth.small,
     borderBottomWidth: borderWidth.small,
     marginTop: margins.xxLarge,
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 2,
+    shadowOpacity: 1.0,
     elevation: 5,
   },
   iconContainer: {

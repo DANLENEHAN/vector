@@ -17,7 +17,7 @@ import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
 import Workout from '../screens/track/Workout';
 import Nutrition from '../screens/track/Nutrition';
-import Wellness from '../screens/track/Wellness';
+import WelnessTracking from '../screens/track/WellnessTracking';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -43,7 +43,7 @@ const TrackNavigator: React.FC = () => {
       />
       <TrackTabStack.Screen
         name="Wellness"
-        component={Wellness}
+        component={WelnessTracking}
         initialParams={{name: 'Wellness'}}
       />
     </TrackTabStack.Navigator>

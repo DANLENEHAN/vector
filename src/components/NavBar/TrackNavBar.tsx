@@ -22,13 +22,18 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
 
   return (
     <View
-      style={[styles.container, {backgroundColor: currentTheme.background}]}>
+      style={[
+        styles.navBarContainer,
+        {
+          backgroundColor: currentTheme.background,
+          shadowColor: currentTheme.shadow,
+        },
+      ]}>
       <View
         style={[
           styles.navBar,
           {
             backgroundColor: currentTheme.background,
-            borderTopColor: currentTheme.borders,
             borderBottomColor: currentTheme.borders,
             shadowColor: currentTheme.shadow,
           },
@@ -66,21 +71,19 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  navBarContainer: {
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 4,
+    shadowOpacity: 1.0,
+    elevation: 5,
   },
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderTopWidth: borderWidth.small,
     borderBottomWidth: borderWidth.small,
     marginTop: margins.xxLarge,
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
   },
   label: {
     fontSize: fontSizes.medium,

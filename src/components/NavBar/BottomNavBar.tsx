@@ -4,7 +4,12 @@ import NavItem from './NavItem';
 import {BottomBarProps} from './types';
 
 // Styling
-import {lightThemeColors, darkThemeColors, paddings} from '../../styles/main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  paddings,
+  borderWidth,
+} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 const routeMapping: any = {
@@ -20,7 +25,15 @@ const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View style={[styles.navBar, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[
+        styles.navBar,
+        {
+          backgroundColor: currentTheme.background,
+          shadowColor: currentTheme.shadow,
+          borderTopColor: currentTheme.borders,
+        },
+      ]}>
       {state.routes.map((route: any, index: number) => {
         const {label, icon} = routeMapping[route.name] || {};
         if (hiddenRoutes.includes(route.name)) {
@@ -63,10 +76,10 @@ const styles = StyleSheet.create({
     height: 65,
     paddingTop: paddings.small,
     // Added shadow
-    shadowColor: '#000',
+    borderTopWidth: borderWidth.small,
     shadowOffset: {width: 0, height: -2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
     elevation: 5, // for android shadow
   },
 });

@@ -4,9 +4,9 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '../components/layout/HomepageLayout';
 // Types
-import {HomeScreenProps} from './types';
+import {ScreenProps} from './types';
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <HomepageLayout navigation={navigation}>
       <View style={styles.content}>
@@ -17,11 +17,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   content: {
     flex: 1,
     width: '100%',

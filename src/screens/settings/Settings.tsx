@@ -4,12 +4,12 @@ import {View, StyleSheet} from 'react-native';
 import SettingsOption from '../../components/settings/SettingsOption';
 import ProfileHeader from '../../components/settings/ProfileHeader';
 // Types
-import {HomeScreenProps} from '../types';
+import {ScreenProps} from '../types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-const SettingsScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -33,7 +33,9 @@ const SettingsScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         />
         <SettingsOption
           icon="cog"
-          onPress={() => navigation.navigate('Preferences')}
+          onPress={() =>
+            navigation.navigate('Settings', {screen: 'Preferences'})
+          }
           label="Preferences"
           caret={true}
         />

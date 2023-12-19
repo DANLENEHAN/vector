@@ -4,13 +4,13 @@ import {View, StyleSheet} from 'react-native';
 import TopNavBar from '../navbar/TopNavBar';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeParamList} from '../../navigation/types';
+import {HomeParamList, RootStackParamList} from '../../navigation/types';
 // Layouts
 import ScreenWrapper from './ScreenWrapper';
 
 type HomepageLayoutProps = {
   children: React.ReactNode;
-  navigation: NativeStackNavigationProp<HomeParamList>;
+  navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
 };
 
 const HomepageLayout: React.FC<HomepageLayoutProps> = ({

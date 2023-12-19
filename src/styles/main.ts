@@ -68,7 +68,7 @@ export const lightThemeColors = {
   lightText: '#575757', // Lighter text color for less emphasis
   darkText: '#333333', // Darker text color for more emphasis
   error: '#FF3B30', // Error text color
-  shadow: 'rgba(0, 0, 0, 0.3)',
+  shadow: 'rgba(150, 150, 150, 0.3)',
 };
 
 export const darkThemeColors = {
@@ -84,7 +84,7 @@ export const darkThemeColors = {
   lightText: '#E5E5EA',
   darkText: '#F2F2F7',
   error: '#FF453A',
-  shadow: 'rgba(255, 255, 255, 0.1)',
+  shadow: 'rgba(50, 50, 50, 0.3)',
 };
 
 export const paddings = {
@@ -125,4 +125,5 @@ export const iconSizes = {
   medium: 20,
   large: 25,
   xLarge: 30,
+  xxLarge: 35,
 };

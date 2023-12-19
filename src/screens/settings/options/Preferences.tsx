@@ -21,11 +21,12 @@ const Preferences: React.FC<ScreenProps> = ({navigation}) => {
         label="Preferences"
         navigation={navigation}
         includeBackArrow={true}
+        includeTopMargin={true}
       />
       <View style={styles.settingsSection}>
         <SettingsOption
           icon={'circle-half-stroke'}
-          onPress={() => navigation.navigate('Theme')}
+          onPress={() => navigation.navigate('Settings', {screen: 'Theme'})}
           label="Theme"
           logo_circle_color={currentTheme.primary}
           caret={true}
