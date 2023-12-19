@@ -14,12 +14,19 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
+// Props for a clickable tile component.
 type ClickableTileProps = {
+  // Callback function to be called when the tile is pressed.
   onPress: () => void;
+  //The label text for the tile.
   label: string;
+  // Additional styles for the tile. (Optional)
   style?: object;
+  // The icon for the tile.
   icon: string;
+  // The background color of the tile.
   backgroundColor: string;
+  // The last tracked date for the tile. (Optional)
   lastTracked?: string;
 };
 

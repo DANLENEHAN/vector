@@ -4,6 +4,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {RootStackParamList} from '../navigation/types';
 
 // Screens
@@ -14,52 +15,72 @@ import ThemeScreen from '../screens/settings/options/Theme';
 import Preferences from '../screens/settings/options/Preferences';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
-import WelnessTracking from '../screens/tracking/WellnessTracking';
+import Workout from '../screens/track/Workout';
+import Nutrition from '../screens/track/Nutrition';
+import WelnessTracking from '../screens/track/WellnessTracking';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
+import TrackNavBar from '../components/navbar/TrackNavBar';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator();
+const AppStack = createNativeStackNavigator<RootStackParamList>();
+const AppHomeTabStack = createBottomTabNavigator();
+const SettingsStack = createNativeStackNavigator();
+const TrackTabStack = createMaterialTopTabNavigator();
+
+const TrackNavigator: React.FC = () => {
+  return (
+    <TrackTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
+      <TrackTabStack.Screen
+        name="Workout"
+        component={Workout}
+        initialParams={{name: 'Workout'}}
+      />
+      <TrackTabStack.Screen
+        name="Nutrition"
+        component={Nutrition}
+        initialParams={{name: 'Nutrition'}}
+      />
+      <TrackTabStack.Screen
+        name="Wellness"
+        component={WelnessTracking}
+        initialParams={{name: 'Wellness'}}
+      />
+    </TrackTabStack.Navigator>
+  );
+};
 
 const AppNavigator: React.FC = () => {
   return (
-    <Tab.Navigator
+    <AppHomeTabStack.Navigator
       screenOptions={{headerShown: false}}
       tabBar={props => <BottomNavBar {...props} />}
       backBehavior="history">
-      <Tab.Screen
+      <AppHomeTabStack.Screen
         name="Home"
         component={Generic}
         initialParams={{name: 'Home'}}
       />
-      <Tab.Screen
+      <AppHomeTabStack.Screen
         name="Discover"
         component={Generic}
         initialParams={{name: 'Discover'}}
       />
-      <Tab.Screen
-        name="Track"
-        component={WelnessTracking}
-        //initialParams={{name: 'Track'}}
-      />
-      <Tab.Screen
+      <AppHomeTabStack.Screen name="Track" component={TrackNavigator} />
+      <AppHomeTabStack.Screen
         name="Social"
         component={Generic}
         initialParams={{name: 'Social'}}
       />
-      <Tab.Screen
+      <AppHomeTabStack.Screen
         name="Progress"
         component={Generic}
         initialParams={{name: 'Progress'}}
       />
-      <Tab.Screen name="Settings" component={SettingsNavigator} />
-    </Tab.Navigator>
+      <AppHomeTabStack.Screen name="Settings" component={SettingsNavigator} />
+    </AppHomeTabStack.Navigator>
   );
 };
-
-//Stack navigator for settigns screens
-const SettingsStack = createNativeStackNavigator();
 
 const SettingsNavigator: React.FC = () => {
   return (
@@ -91,24 +112,24 @@ const SettingsNavigator: React.FC = () => {
 const AuthNavigator: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <AppStack.Navigator>
+        <AppStack.Screen
           name="Splash"
           component={Splash}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        <AppStack.Screen
           name="Login"
           component={LoginScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        <AppStack.Screen
           name="App"
           component={AppNavigator}
           options={{headerShown: false}}
         />
-      </Stack.Navigator>
-      <Tab.Screen name="Settings" component={SettingsNavigator} />
+        <AppHomeTabStack.Screen name="Settings" component={SettingsNavigator} />
+      </AppStack.Navigator>
     </NavigationContainer>
   );
 };

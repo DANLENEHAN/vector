@@ -2,7 +2,7 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 // Layouts
-import HomepageLayout from '../../components/layout/HomepageLayout';
+import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
@@ -36,7 +36,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <HomepageLayout navigation={navigation}>
+    <ScreenWrapper>
       <Header
         label="Health & Wellness"
         navigation={navigation}
@@ -47,7 +47,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
           {tile_data.map((tile, index) => (
             <ClickableTile
               key={index}
-              onPress={() => console.log(`clicked ${tile.label}`)}
+              onPress={() => tile.onPress()}
               label={tile.label}
               icon={tile.icon}
               lastTracked={tile.lastTracked}
@@ -56,7 +56,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
           ))}
         </View>
       </ScrollView>
-    </HomepageLayout>
+    </ScreenWrapper>
   );
 };
 
