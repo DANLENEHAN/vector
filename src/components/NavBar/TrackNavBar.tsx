@@ -30,6 +30,7 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
             backgroundColor: currentTheme.background,
             borderTopColor: currentTheme.borders,
             borderBottomColor: currentTheme.borders,
+            shadowColor: currentTheme.shadow,
           },
         ]}>
         {state.routes.map((route, index) => {
@@ -73,9 +74,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60,
-    borderTopWidth: borderWidth.xSmall,
-    borderBottomWidth: borderWidth.xSmall,
+    borderTopWidth: borderWidth.small,
+    borderBottomWidth: borderWidth.small,
     marginTop: margins.xxLarge,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   label: {
     fontSize: fontSizes.medium,
