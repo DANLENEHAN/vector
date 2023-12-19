@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import NavItem from './NavItem';
 
 // Styling
 import {
@@ -11,8 +10,12 @@ import {
   darkThemeColors,
   margins,
   borderWidth,
+  iconSizes,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+
+// Typing
 import {NavBarProps} from './types';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
@@ -29,17 +32,26 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
           borderBottomColor: currentTheme.borders,
         },
       ]}>
-      <View style={styles.sideItem}>
-        <NavItem icon="search" onPress={() => console.log('Pressed Search')} />
+      <View style={styles.iconContainer}>
+        <Icon
+          name={'magnifying-glass'}
+          solid
+          size={iconSizes.large}
+          color={currentTheme.text}
+          onPress={() => console.log('Pressed Search')}
+        />
       </View>
       <View style={styles.logoContainer}>
         <Text style={[styles.logoText, {color: currentTheme.text}]}>
           SHEIVA
         </Text>
       </View>
-      <View style={styles.sideItem}>
-        <NavItem
-          icon="user-circle"
+      <View style={styles.iconContainer}>
+        <Icon
+          name={'user'}
+          solid
+          size={iconSizes.large}
+          color={currentTheme.text}
           onPress={() =>
             navigation.navigate('Settings', {screen: 'SettingsHome'})
           }
@@ -52,25 +64,25 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   navBar: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
     height: 60,
-    borderWidth: borderWidth.xSmall,
+    borderTopWidth: borderWidth.xSmall,
+    borderBottomWidth: borderWidth.xSmall,
     marginTop: margins.xxLarge,
+  },
+  iconContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    flex: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logoText: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
-    marginTop: margins.small,
     fontWeight: fontWeights.ultraBold,
-  },
-  sideItem: {
-    flex: 1,
-  },
-  logoContainer: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

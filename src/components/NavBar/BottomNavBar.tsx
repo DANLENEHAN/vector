@@ -8,7 +8,7 @@ import {lightThemeColors, darkThemeColors, paddings} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
 const routeMapping: any = {
-  Home: {label: 'Home', icon: 'home'},
+  Home: {label: 'Home', icon: 'house'},
   Track: {label: 'Track', icon: 'plus'},
   Discover: {label: 'Discover', icon: 'compass'},
   Social: {label: 'Social', icon: 'users'},
