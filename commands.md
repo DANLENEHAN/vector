@@ -75,3 +75,20 @@ CMD + M
 ```
 
 ## Other
+
+If everything goes to shit..
+
+Delete these folders/files
+```bash
+rm -rf node_modules
+rm -rf ios/Pods
+rm ios/Podfile.lock 
+rm -rf ~/Library/Developer/Xcode/DerivedData
+pod cache clean --all
+```
+
+Re-install
+```bash
+npm install
+cd ios; pod install
+```
