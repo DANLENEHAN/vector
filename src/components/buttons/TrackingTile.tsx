@@ -45,7 +45,11 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.tile, style, {backgroundColor: backgroundColor}]}
+      style={[
+        styles.tile,
+        style,
+        {backgroundColor: backgroundColor, shadowColor: currentTheme.shadow},
+      ]}
       onPress={onPress}
       activeOpacity={0.7}>
       <View style={styles.tileContent}>
@@ -96,9 +100,8 @@ const styles = StyleSheet.create({
     height: 120,
     marginVertical: margins.small,
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: 2,
     elevation: 3,
-    shadowColor: '#000',
   },
   tileContent: {
     flex: 1,

@@ -9,7 +9,6 @@ import {
   darkThemeColors,
   margins,
   fontWeights,
-  borderWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 // Components
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 100,
-    borderTopWidth: borderWidth.xSmall,
   },
   logoText: {
     fontSize: fontSizes.xLarge,
