@@ -9,7 +9,6 @@ import {
   darkThemeColors,
   margins,
   fontWeights,
-  borderWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 // Components
@@ -19,21 +18,34 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList, HomeParamList} from '../../navigation/types';
 
 type HeaderProps = {
+  // Navigation prop for the screen
   navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
+  // Label for the header
   label: string;
+  // Whether or not to include the back arrow
   includeBackArrow: boolean;
+  // Whether or not to include top margin (If the header is the first item on the screen)
+  includeTopMargin: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({
   navigation,
   label,
   includeBackArrow,
+  includeTopMargin,
 }) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={[styles.header, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[
+        styles.header,
+        {
+          backgroundColor: currentTheme.background,
+          marginTop: includeTopMargin ? margins.xxLarge : undefined,
+        },
+      ]}>
       {
         // Include the HeaderBackButton component if targetScreen is defined
       }
@@ -56,8 +68,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 100,
-    borderTopWidth: borderWidth.xSmall,
-    marginTop: margins.xxLarge,
   },
   logoText: {
     fontSize: fontSizes.xLarge,

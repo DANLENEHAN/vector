@@ -30,6 +30,7 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
         label="Account Settings"
         navigation={navigation}
         includeBackArrow={true}
+        includeTopMargin={true}
       />
       <View style={styles.settingsSection}>
         <SettingsOption

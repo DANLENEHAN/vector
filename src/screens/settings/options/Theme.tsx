@@ -39,7 +39,12 @@ const ThemeScreen: React.FC<any> = ({navigation}) => {
   };
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <Header label="Theme" navigation={navigation} includeBackArrow={true} />
+      <Header
+        label="Theme"
+        navigation={navigation}
+        includeBackArrow={true}
+        includeTopMargin={true}
+      />
       <View style={styles.settingsSection}>
         <OptionGroup
           options={options}
