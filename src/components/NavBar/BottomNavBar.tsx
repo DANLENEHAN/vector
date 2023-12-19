@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     // Added shadow
     borderTopWidth: borderWidth.small,
     shadowOffset: {width: 0, height: -2},
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
     elevation: 5, // for android shadow
   },
 });

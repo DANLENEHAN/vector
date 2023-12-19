@@ -99,9 +99,9 @@ const styles = StyleSheet.create({
     width: '45%',
     height: 120,
     marginVertical: margins.small,
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    shadowRadius: 3,
     elevation: 3,
+    shadowOpacity: 1.0,
   },
   tileContent: {
     flex: 1,

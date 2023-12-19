@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: borderWidth.small,
     marginTop: margins.xxLarge,
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
     shadowRadius: 2,
+    shadowOpacity: 1.0,
     elevation: 5,
   },
   iconContainer: {
