@@ -41,6 +41,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
         label="Health & Wellness"
         navigation={navigation}
         includeBackArrow={false}
+        includeTopMargin={false}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>

@@ -21,8 +21,7 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View
-      style={[styles.container, {backgroundColor: currentTheme.background}]}>
+    <View style={[{backgroundColor: currentTheme.background}]}>
       <View
         style={[
           styles.navBar,
@@ -66,9 +65,6 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
