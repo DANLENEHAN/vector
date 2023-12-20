@@ -12,23 +12,27 @@ import Header from '../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../types';
 
-const tile_data = [
+type TileData = {
+  label: string;
+  icon: string;
+  backgroundColor?: string;
+  lastTracked?: string;
+};
+
+const tile_data: TileData[] = [
   {
     label: 'Sleep',
     icon: 'bed',
     lastTracked: '8 hours ago',
-    onPress: () => console.log('clicked sleep'),
     backgroundColor: '#F5A623',
   },
   {
     label: 'Weight',
     icon: 'weight-scale',
-    onPress: () => console.log('clicked weight'),
   },
   {
     label: 'Mood',
     icon: 'face-smile',
-    onPress: () => console.log('clicked mood'),
   },
 ];
 

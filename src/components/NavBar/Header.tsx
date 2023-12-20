@@ -14,12 +14,11 @@ import {useTheme} from '../../context/ThemeContext';
 // Components
 import HeaderBackButton from '../buttons/HeaderBackButton';
 // Navigation
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList, HomeParamList} from '../../navigation/types';
+import {ScreenNavigationProp} from '../../navigation/types';
 
 type HeaderProps = {
   // Navigation prop for the screen
-  navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
+  navigation: ScreenNavigationProp;
   // Label for the header
   label: string;
   // Whether or not to include the back arrow
