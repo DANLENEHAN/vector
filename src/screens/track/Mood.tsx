@@ -20,25 +20,15 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 
-const moodOptions = [
-  'Awful',
-  'Very Bad',
-  'Bad',
-  'Okay',
-  'Good',
-  'Very Good',
-  'Amazing',
-];
-
-const moodIcons = [
-  'sad-cry', // Awful
-  'frown', // Very Bad
-  'meh', // Bad
-  'meh-blank', // Okay
-  'smile', // Good
-  'grin', // Very Good
-  'laugh', // Amazing
-];
+const moods = {
+  awful: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
+  veryBad: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
+  bad: {label: 'Bad', icon: 'meh', color: '#FFC542'},
+  okay: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
+  good: {label: 'Good', icon: 'smile', color: '#8CE25F'},
+  veryGood: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
+  amazing: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
+};
 
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [moodValue, setMoodValue] = useState<number>(3);
@@ -46,37 +36,26 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const calculateHeartColor = (value: number) => {
-    const colorMap = [
-      '#FF4D4D', // Awful
-      '#FF8C4B', // Very Bad
-      '#FFC542', // Bad
-      '#FFEB47', // Okay
-      '#8CE25F', // Good
-      '#5EDC4E', // Very Good
-      '#4EDC5E', // Amazing
-    ];
-
-    // Ensure the value is within bounds
-    const index = Math.min(Math.max(0, Math.round(value)), colorMap.length - 1);
-
-    return colorMap[index];
-  };
-
   const handleSliderChange = (newValue: number) => {
     setMoodValue(newValue);
   };
 
   const handleSaveMood = async () => {
-    const user = await getUserDetails();
-    createStat({
-      unit: 'out_of_10', // NOTE: Should probaly change to reflect the moodOptions array
-      stat_type: StatType.Feeling,
-      user_id: user.user_id,
-      value: moodValue,
-    });
-    navigation.goBack();
+    try {
+      const user = await getUserDetails();
+      await createStat({
+        unit: 'out_of_10',
+        stat_type: StatType.Feeling,
+        user_id: user.user_id,
+        value: moodValue,
+      });
+      navigation.goBack();
+    } catch (error) {
+      console.log("Couldn't save mood", error);
+    }
   };
+
+  const mood = moods[Object.keys(moods)[moodValue]];
 
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
@@ -96,17 +75,17 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         </Text>
         <Icon
           style={{marginBottom: margins.xxLarge}}
-          name={moodIcons[moodValue]}
+          name={mood.icon}
           solid
           size={300}
-          color={calculateHeartColor(moodValue)}
+          color={mood.color}
         />
         <Text
           style={[
             {color: currentTheme.text, shadowColor: currentTheme.shadow},
             styles.moodText,
           ]}>
-          {moodOptions[moodValue]}
+          {mood.label}
         </Text>
         <Slider
           style={[styles.slider, {marginBottom: margins.xxLarge}]}
@@ -114,9 +93,10 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           onValueChange={handleSliderChange}
           step={1}
           minimumValue={0}
-          maximumValue={moodOptions.length - 1}
-          thumbTintColor={calculateHeartColor(moodValue)}
-          minimumTrackTintColor="#D3D3D3"
+          maximumValue={Object.keys(moods).length - 1}
+          thumbTintColor={mood.color}
+          maximumTrackTintColor={currentTheme.icon}
+          minimumTrackTintColor={currentTheme.icon}
         />
         <ButtonComponent
           text="Capture"
@@ -146,7 +126,6 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center',
     textAlignVertical: 'center',
-    maxWidth: 275,
   },
   slider: {
     width: 300,
