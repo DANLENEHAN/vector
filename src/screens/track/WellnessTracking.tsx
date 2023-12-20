@@ -48,7 +48,9 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
           {tile_data.map((tile, index) => (
             <ClickableTile
               key={index}
-              onPress={() => tile.onPress()}
+              onPress={() =>
+                navigation.navigate(tile.label as 'Sleep' | 'Weight' | 'Mood')
+              }
               label={tile.label}
               icon={tile.icon}
               lastTracked={tile.lastTracked}

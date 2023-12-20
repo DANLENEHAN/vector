@@ -20,4 +20,7 @@ export type RootStackParamList = {
   Splash: undefined;
   App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
+  Mood: undefined;
+  Sleep: undefined;
+  Weight: undefined;
 };
