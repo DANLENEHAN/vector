@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Components
-import Header from '../../components/navbar/Header';
+import HeaderBackButton from '../../components/buttons/HeaderBackButton';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 
 // Types
@@ -19,7 +19,7 @@ const moodOptions = [
   'Awful',
   'Very Bad',
   'Bad',
-  'Ok',
+  'Okay',
   'Good',
   'Very Good',
   'Amazing',
@@ -36,7 +36,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
       '#FF4D4D', // Awful
       '#FF8C4B', // Very Bad
       '#FFC542', // Bad
-      '#FFEB47', // Ok
+      '#FFEB47', // Okay
       '#8CE25F', // Good
       '#5EDC4E', // Very Good
       '#4EDC5E', // Amazing
@@ -57,20 +57,20 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
       <View style={styles.headerSection}>
-        <Header
-          label="Mindful Moments"
-          navigation={navigation}
-          includeBackArrow={true}
-          includeTopMargin={true}
-        />
+        <HeaderBackButton navigation={navigation} />
       </View>
       <View style={styles.contentSection}>
-        <Text style={[styles.title, {marginBottom: margins.xxLarge}]}>
-          What word captures your current emotion?
+        <Text
+          style={[
+            styles.title,
+            {
+              marginBottom: margins.xxxLarge,
+              color: currentTheme.text,
+            },
+          ]}>
+          Express your mood in a word...
         </Text>
-        <TouchableOpacity
-          onPress={() => console.log('Pressed Heart')}
-          style={styles.iconContainer}>
+        <View style={styles.iconContainer}>
           <Icon
             name="heart"
             solid
@@ -78,19 +78,19 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
             color={calculateHeartColor(moodValue)}
           />
           <Text style={styles.overlayText}>{moodOptions[moodValue]}</Text>
-        </TouchableOpacity>
+        </View>
         <Slider
-          style={[styles.slider, {marginBottom: margins.xxLarge}]}
+          style={[styles.slider, {marginBottom: margins.xxxLarge}]}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
           minimumValue={0}
           maximumValue={moodOptions.length - 1}
-          thumbTintColor={calculateHeartColor(moodValue)} // Dynamically set thumb color
-          minimumTrackTintColor="#D3D3D3" // Track color
+          thumbTintColor={calculateHeartColor(moodValue)}
+          minimumTrackTintColor="#D3D3D3"
         />
         <ButtonComponent
-          text="Capture Mood"
+          text="Capture"
           disabled={false}
           onPress={handleSaveMood}
         />
@@ -105,12 +105,10 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: margins.large,
   },
   contentSection: {
     flex: 9,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
@@ -119,7 +117,6 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center', // Center the text horizontally
     textAlignVertical: 'center', // Center the text vertically
-    marginBottom: margins.xxLarge,
     maxWidth: 275,
   },
   slider: {
