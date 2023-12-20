@@ -20,14 +20,24 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 
-const moods = {
-  awful: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
-  veryBad: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
-  bad: {label: 'Bad', icon: 'meh', color: '#FFC542'},
-  okay: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
-  good: {label: 'Good', icon: 'smile', color: '#8CE25F'},
-  veryGood: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
-  amazing: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
+interface Mood {
+  label: string;
+  icon: string;
+  color: string;
+}
+
+interface MoodsDictionary {
+  [key: number]: Mood;
+}
+
+const moods: MoodsDictionary = {
+  0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
+  1: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
+  2: {label: 'Bad', icon: 'meh', color: '#FFC542'},
+  3: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
+  4: {label: 'Good', icon: 'smile', color: '#8CE25F'},
+  5: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
+  6: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
 };
 
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
@@ -55,7 +65,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
     }
   };
 
-  const mood = moods[Object.keys(moods)[moodValue]];
+  const mood = moods[moodValue];
 
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>

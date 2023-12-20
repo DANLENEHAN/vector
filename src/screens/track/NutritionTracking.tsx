@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
@@ -37,6 +37,16 @@ const NutritionTracking: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <View style={styles.content}>
+        <Text
+          style={[
+            styles.title,
+            {
+              marginBottom: margins.xxLarge,
+              color: currentTheme.text,
+            },
+          ]}>
+          Fuel your body!
+        </Text>
         {tile_data.map((tile, index) => (
           <ClickableTile
             style={[{marginBottom: margins.xLarge}, styles.clickableTitle]}
