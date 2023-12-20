@@ -1,5 +1,5 @@
 // React Native imports
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
@@ -12,8 +12,17 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-const UnitSelector = ({units}) => {
-  const [activeUnit, setActiveUnit] = useState(units[0]);
+type UnitSelectorProps = {
+  units: string[];
+  activeUnit: string;
+  setActiveUnit: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const UnitSelector: React.FC<UnitSelectorProps> = ({
+  units,
+  activeUnit,
+  setActiveUnit,
+}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -47,7 +56,7 @@ const UnitSelector = ({units}) => {
 const styles = StyleSheet.create({
   unitSelector: {
     height: 50,
-    width: '80%',
+    width: '60%',
     backgroundColor: 'green',
     borderRadius: borderRadius.medium,
     flexDirection: 'row',

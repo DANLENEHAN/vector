@@ -1,10 +1,29 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {TextInput, StyleSheet} from 'react-native';
+// Styling
+import {
+  darkThemeColors,
+  lightThemeColors,
+  fontSizes,
+  fonts,
+} from '../../styles/main';
+import {useTheme} from '../../context/ThemeContext';
 
-const NumberInput = ({allowFloat, ...props}) => {
-  const [value, setValue] = useState('');
+type NumberInputProps = {
+  allowFloat: boolean;
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+};
 
-  const handleChange = text => {
+const NumberInput: React.FC<NumberInputProps> = ({
+  allowFloat,
+  inputValue,
+  setInputValue,
+}) => {
+  //const [inputValue, setInputValue] = useState(allowFloat ? '0.0' : '0');
+  const {theme} = useTheme();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const handleChange = (text: string) => {
     let validatedText = text;
 
     // Allow only numbers and, if allowFloat is true, a single dot for float values
@@ -13,17 +32,31 @@ const NumberInput = ({allowFloat, ...props}) => {
     } else {
       validatedText = text.replace(/[^0-9]/g, '');
     }
-    setValue(validatedText);
+    setInputValue(validatedText);
+  };
+
+  const handleFocus = () => {
+    console.log('Removing 0');
+    if (inputValue === '0' || inputValue === '0.0') {
+      setInputValue('');
+    }
+  };
+
+  const handleBlur = () => {
+    if (inputValue.trim() === '') {
+      setInputValue(allowFloat ? '0.0' : '0');
+    }
   };
 
   return (
     <TextInput
-      {...props}
-      value={value}
+      value={inputValue}
       defaultValue={allowFloat ? '0.0' : '0'}
-      style={styles.textInput}
+      style={[styles.textInput, {color: currentTheme.text}]}
       onChangeText={handleChange}
       keyboardType={allowFloat ? 'numeric' : 'number-pad'}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     />
   );
 };
@@ -31,11 +64,12 @@ const NumberInput = ({allowFloat, ...props}) => {
 const styles = StyleSheet.create({
   textInput: {
     height: 60,
-    borderColor: 'gray',
-    borderWidth: 1,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
+    //borderColor: 'gray',
+    //borderBottomWidth: 1,
+    width: 120,
+    textAlign: 'center',
+    fontFamily: fonts.primary,
+    fontSize: fontSizes.title,
     margin: 10,
   },
 });
