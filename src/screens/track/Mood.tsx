@@ -88,22 +88,28 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           style={[
             styles.title,
             {
-              marginBottom: margins.xLarge,
+              marginBottom: margins.xxLarge,
               color: currentTheme.text,
             },
           ]}>
-          Express your mood in a word...
+          What's your mood?
         </Text>
         <Icon
-          style={{marginBottom: margins.xLarge}}
+          style={{marginBottom: margins.xxLarge}}
           name={moodIcons[moodValue]}
           solid
           size={300}
           color={calculateHeartColor(moodValue)}
         />
-        <Text style={styles.overlayText}>{moodOptions[moodValue]}</Text>
+        <Text
+          style={[
+            {color: currentTheme.text, shadowColor: currentTheme.shadow},
+            styles.moodText,
+          ]}>
+          {moodOptions[moodValue]}
+        </Text>
         <Slider
-          style={[styles.slider, {marginBottom: margins.large}]}
+          style={[styles.slider, {marginBottom: margins.xxLarge}]}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
@@ -138,23 +144,18 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
-    textAlign: 'center', // Center the text horizontally
-    textAlignVertical: 'center', // Center the text vertically
+    textAlign: 'center',
+    textAlignVertical: 'center',
     maxWidth: 275,
   },
   slider: {
     width: 300,
     height: 40,
   },
-  overlayText: {
-    // position: 'absolute',
-    color: 'white',
+  moodText: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 2,
   },
 });
 
