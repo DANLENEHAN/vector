@@ -33,13 +33,13 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const calculateHeartColor = (value: number) => {
     const colorMap = [
-      '#FF0000',
-      '#FF4500',
-      '#FF8C00',
-      '#FFFF00',
-      '#ADFF2F',
-      '#32CD32',
-      '#008000',
+      '#FF4D4D', // Awful
+      '#FF8C4B', // Very Bad
+      '#FFC542', // Bad
+      '#FFEB47', // Ok
+      '#8CE25F', // Good
+      '#5EDC4E', // Very Good
+      '#4EDC5E', // Amazing
     ];
 
     // Ensure the value is within bounds
@@ -52,9 +52,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
     setMoodValue(newValue);
   };
 
-  const handleSaveMood = () => {
-    // Implement your logic for saving the mood
-  };
+  const handleSaveMood = () => {};
 
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
@@ -82,12 +80,14 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           <Text style={styles.overlayText}>{moodOptions[moodValue]}</Text>
         </TouchableOpacity>
         <Slider
-          style={[{width: 300}, {marginBottom: margins.xxLarge}]}
+          style={[styles.slider, {marginBottom: margins.xxLarge}]}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
           minimumValue={0}
           maximumValue={moodOptions.length - 1}
+          thumbTintColor={calculateHeartColor(moodValue)} // Dynamically set thumb color
+          minimumTrackTintColor="#D3D3D3" // Track color
         />
         <ButtonComponent
           text="Capture Mood"
@@ -122,7 +122,10 @@ const styles = StyleSheet.create({
     marginBottom: margins.xxLarge,
     maxWidth: 275,
   },
-
+  slider: {
+    width: 300,
+    height: 40,
+  },
   iconContainer: {
     position: 'relative',
     alignItems: 'center',
@@ -130,10 +133,13 @@ const styles = StyleSheet.create({
   },
   overlayText: {
     position: 'absolute',
-    color: 'black',
+    color: 'white',
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
   },
 });
 
