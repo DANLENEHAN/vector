@@ -81,8 +81,8 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
           setActiveUnit={setActiveUnit}
         />
         <ButtonComponent
-          text="Capture"
-          disabled={false}
+          text="Track"
+          disabled={waterValue === '0'}
           onPress={handleSavedWater}
         />
       </View>
