@@ -4,7 +4,7 @@ const black = '#333333';
 const white = '#FFFFFF';
 const blue = '#3498db';
 const purple = '#9b59b6';
-const gray = 'gray';
+export const gray = 'gray';
 
 export const buttonHeight = 50;
 export const buttonWidth = 160;
@@ -105,7 +105,6 @@ export const margins = {
   large: 20,
   xLarge: 25,
   xxLarge: 30,
-  xxxLarge: 40,
 };
 
 export const borderRadius = {
