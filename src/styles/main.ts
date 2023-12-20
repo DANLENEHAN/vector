@@ -17,6 +17,7 @@ export const fontSizes = {
   medium: 16,
   large: 20,
   xLarge: 24,
+  title: 32,
 };
 
 // Typing required for adding fontWeight

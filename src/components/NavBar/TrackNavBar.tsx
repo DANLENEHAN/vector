@@ -16,10 +16,13 @@ import {
 //Services
 import {useTheme} from '../../context/ThemeContext';
 
-const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
+const TrackNavBar: React.FC<BottomBarProps> = ({
+  navigation,
+  state,
+  descriptors,
+}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
   return (
     <View
       style={[
@@ -40,6 +43,9 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
         ]}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
+          const tabLabel =
+            (descriptors[route.key].options.tabBarLabel as string) ||
+            route.name;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -60,7 +66,7 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
                   styles.label,
                   {color: isFocused ? currentTheme.primary : currentTheme.text},
                 ]}>
-                {route.name}
+                {tabLabel}
               </Text>
             </TouchableOpacity>
           );

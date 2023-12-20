@@ -1,8 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 // Navigation
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList, HomeParamList} from '../../navigation/types';
+import {ScreenNavigationProp} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Styling
@@ -16,7 +15,7 @@ import {
 } from '../../styles/main';
 
 type HeaderBackButtonProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
+  navigation: ScreenNavigationProp;
 };
 
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {

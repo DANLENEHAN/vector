@@ -1,13 +1,13 @@
 // Navigation
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList, HomeParamList} from '../../navigation/types';
+import {ScreenNavigationProp} from '../../navigation/types';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
 export type NavBarProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
+  navigation: ScreenNavigationProp;
 };
 
 export type BottomBarProps = {
   state: BottomTabBarProps['state'];
   navigation: BottomTabBarProps['navigation'];
+  descriptors: BottomTabBarProps['descriptors'];
 };

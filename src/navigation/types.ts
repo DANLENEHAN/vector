@@ -1,4 +1,5 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export type SettingsParamList = {
   SettingsHome: undefined;
@@ -20,4 +21,11 @@ export type RootStackParamList = {
   Splash: undefined;
   App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
+  Mood: undefined;
+  Sleep: undefined;
+  Weight: undefined;
 };
+
+export type ScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList & HomeParamList
+>;
