@@ -6,6 +6,9 @@ const blue = '#3498db';
 const purple = '#9b59b6';
 const gray = 'gray';
 
+export const buttonHeight = 50;
+export const buttonWidth = 160;
+
 export const fonts = {
   primary: 'Montserrat',
   secondary: 'Lato',

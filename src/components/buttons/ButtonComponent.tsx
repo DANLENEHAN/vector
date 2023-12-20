@@ -9,6 +9,8 @@ import {
   margins,
   darkThemeColors,
   lightThemeColors,
+  buttonHeight,
+  buttonWidth,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
@@ -48,11 +50,13 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
     padding: paddings.small,
     borderRadius: borderRadius.medium,
     alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: margins.small,
+    minWidth: buttonWidth,
+    minHeight: buttonHeight,
   },
   buttonText: {
     fontSize: fontSizes.medium,

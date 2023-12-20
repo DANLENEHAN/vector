@@ -96,7 +96,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           iconName="lock"
           secureTextEntry={true}
         />
-        <View>
+        <View style={styles.buttonContainer}>
           {isLogin ? (
             <View style={styles.buttonContainer}>
               <ButtonComponent
@@ -113,6 +113,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           ) : (
             <View style={styles.buttonContainer}>
               <ButtonComponent
+                style={styles.createAccButton}
                 onPress={handleCreateAccount}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Create Account"
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
     width: '100%',
     marginBottom: margins.medium,
   },
@@ -147,6 +149,10 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
     fontWeight: fontWeights.bold,
     marginBottom: margins.medium,
+  },
+  createAccButton: {
+    // Override default button width
+    minWidth: 225,
   },
 });
 
