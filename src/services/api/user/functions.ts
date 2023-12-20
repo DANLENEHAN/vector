@@ -1,6 +1,6 @@
 import {AxiosResponse, AxiosError} from 'axios';
 import api from '../apiService';
-import {UserCreateSchema, LoginUserSchema} from './types';
+import {UserCreateSchema, UserGetSchema, LoginUserSchema} from './types';
 
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -142,6 +142,39 @@ export const testAuthentication = async (): Promise<void> => {
       switch (statusCode) {
         case 500:
           console.log('User not authenticated');
+          throw `User not authenticated: ${errorMessage}`;
+        default:
+          throw `Unexpected status code: ${statusCode}`;
+      }
+    } else {
+      // Handle network or other errors.
+      throw axiosError.message || 'Unknown error occurred';
+    }
+  }
+};
+
+export const getUserDetails = async (): Promise<UserGetSchema> => {
+  try {
+    const response: AxiosResponse<UserGetSchema> = await api.get(
+      '/user/details',
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      // Handle unexpected response status codes.
+      throw `Unexpected status code: ${response.status}`;
+    }
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (axiosError.response) {
+      const statusCode = axiosError.response.status;
+      const errorMessage =
+        (axiosError.response?.data as {message?: string})?.message ||
+        'Unknown error occurred';
+
+      switch (statusCode) {
+        case 500:
           throw `User not authenticated: ${errorMessage}`;
         default:
           throw `Unexpected status code: ${statusCode}`;

@@ -9,11 +9,16 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 
 // Types
 import {ScreenProps} from '../types';
+import {StatType} from '../../services/api/stat/types';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
+
+// Services
+import {createStat} from '../../services/api/stat/functions';
+import {getUserDetails} from '../../services/api/user/functions';
 
 const moodOptions = [
   'Awful',
@@ -52,7 +57,16 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
     setMoodValue(newValue);
   };
 
-  const handleSaveMood = () => {};
+  const handleSaveMood = async () => {
+    const user = await getUserDetails();
+    createStat({
+      unit: 'feeling',
+      stat_type: StatType.Feeling,
+      user_id: user.user_id,
+      value: moodValue,
+    });
+    navigation.goBack();
+  };
 
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
@@ -64,7 +78,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           style={[
             styles.title,
             {
-              marginBottom: margins.xxxLarge,
+              marginBottom: margins.large,
               color: currentTheme.text,
             },
           ]}>
