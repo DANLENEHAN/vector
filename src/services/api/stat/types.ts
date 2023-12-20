@@ -14,3 +14,8 @@ export interface StatSchema {
   user_id: number;
   value: number;
 }
+
+export enum WeightUnit {
+  KG = 'KG',
+  LBS = 'LBS',
+}

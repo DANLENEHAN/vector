@@ -20,7 +20,7 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 // Types
-import {StatType} from '../../services/api/stat/types';
+import {StatType, WeightUnit} from '../../services/api/stat/types';
 
 const WeightTracking: React.FC<any> = ({navigation}) => {
   const {theme} = useTheme();
@@ -32,8 +32,7 @@ const WeightTracking: React.FC<any> = ({navigation}) => {
     allowFloatingNumbers ? '0.0' : '0',
   );
   // Variables to track the unit selection
-  const units = ['KG', 'LBS'];
-  const [activeUnit, setActiveUnit] = useState(units[0]);
+  const [activeUnit, setActiveUnit] = useState<string>(WeightUnit.KG);
 
   // Function to handle the tracking of the weight
   const handleSaveWeight = async () => {
@@ -82,7 +81,7 @@ const WeightTracking: React.FC<any> = ({navigation}) => {
             setInputValue={setWeightValue}
           />
           <UnitSelector
-            units={['KG', 'LBS']}
+            units={Object.values(WeightUnit)}
             activeUnit={activeUnit}
             setActiveUnit={setActiveUnit}
           />
