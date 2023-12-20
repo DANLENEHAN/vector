@@ -22,6 +22,27 @@ export interface UserCreateSchema {
   weight_unit_pref: WeightUnit;
 }
 
+export interface UserGetSchema {
+  user_id: number;
+  username: string;
+  email: string;
+  status: 'active' | 'inactive';
+  profile_link: string | null;
+  premium: boolean;
+  age: number;
+  birthday: string;
+  first_name: string;
+  last_name: string;
+  gender: 'male' | 'female' | 'other';
+  phone_number: string;
+  height_unit_pref: 'cm' | 'in';
+  weight_unit_pref: 'kg' | 'lb';
+  date_format_pref: string;
+  language: string;
+  goal: string;
+  superuser: boolean;
+}
+
 // NOTE: Swap to enums when they are available...
 export interface DateFormat {}
 

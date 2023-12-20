@@ -26,12 +26,14 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <Header
-        label="Account Settings"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <View style={styles.headerSection}>
+        <Header
+          label="Account Settings"
+          navigation={navigation}
+          includeBackArrow={true}
+          includeTopMargin={true}
+        />
+      </View>
       <View style={styles.settingsSection}>
         <SettingsOption
           icon="arrow-right-from-bracket"
@@ -52,13 +54,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //No background color
   },
-  profileSection: {
-    flex: 3,
+  headerSection: {
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   settingsSection: {
-    flex: 7,
+    flex: 8,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
