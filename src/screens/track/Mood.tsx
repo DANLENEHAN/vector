@@ -30,6 +30,16 @@ const moodOptions = [
   'Amazing',
 ];
 
+const moodIcons = [
+  'sad-cry', // Awful
+  'frown', // Very Bad
+  'meh', // Bad
+  'meh-blank', // Okay
+  'smile', // Good
+  'grin', // Very Good
+  'laugh', // Amazing
+];
+
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [moodValue, setMoodValue] = useState<number>(3);
 
@@ -78,23 +88,22 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           style={[
             styles.title,
             {
-              marginBottom: margins.large,
+              marginBottom: margins.xLarge,
               color: currentTheme.text,
             },
           ]}>
           Express your mood in a word...
         </Text>
-        <View style={styles.iconContainer}>
-          <Icon
-            name="heart"
-            solid
-            size={300}
-            color={calculateHeartColor(moodValue)}
-          />
-          <Text style={styles.overlayText}>{moodOptions[moodValue]}</Text>
-        </View>
+        <Icon
+          style={{marginBottom: margins.xLarge}}
+          name={moodIcons[moodValue]}
+          solid
+          size={300}
+          color={calculateHeartColor(moodValue)}
+        />
+        <Text style={styles.overlayText}>{moodOptions[moodValue]}</Text>
         <Slider
-          style={[styles.slider, {marginBottom: margins.xxxLarge}]}
+          style={[styles.slider, {marginBottom: margins.large}]}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
@@ -137,13 +146,8 @@ const styles = StyleSheet.create({
     width: 300,
     height: 40,
   },
-  iconContainer: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   overlayText: {
-    position: 'absolute',
+    // position: 'absolute',
     color: 'white',
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
