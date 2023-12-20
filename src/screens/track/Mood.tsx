@@ -60,7 +60,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const handleSaveMood = async () => {
     const user = await getUserDetails();
     createStat({
-      unit: 'feeling',
+      unit: 'out_of_10', // NOTE: Should probaly change to reflect the moodOptions array
       stat_type: StatType.Feeling,
       user_id: user.user_id,
       value: moodValue,
