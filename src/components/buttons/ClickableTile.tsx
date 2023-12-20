@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.medium,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '45%',
+    minWidth: '45%',
     height: 120,
     marginVertical: margins.small,
     shadowRadius: 3,

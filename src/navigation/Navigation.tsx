@@ -16,7 +16,7 @@ import Preferences from '../screens/settings/options/Preferences';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
 import Workout from '../screens/track/Workout';
-import Nutrition from '../screens/track/Nutrition';
+import NutritionTracking from '../screens/track/NutritionTracking';
 import WelnessTracking from '../screens/track/WellnessTracking';
 import MoodScreen from '../screens/track/Mood';
 
@@ -32,21 +32,9 @@ const TrackTabStack = createMaterialTopTabNavigator();
 const TrackNavigator: React.FC = () => {
   return (
     <TrackTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
-      <TrackTabStack.Screen
-        name="Workout"
-        component={Workout}
-        initialParams={{name: 'Workout'}}
-      />
-      <TrackTabStack.Screen
-        name="Nutrition"
-        component={Nutrition}
-        initialParams={{name: 'Nutrition'}}
-      />
-      <TrackTabStack.Screen
-        name="Wellness"
-        component={WelnessTracking}
-        initialParams={{name: 'Wellness'}}
-      />
+      <TrackTabStack.Screen name="Workout" component={Workout} />
+      <TrackTabStack.Screen name="Nutrition" component={NutritionTracking} />
+      <TrackTabStack.Screen name="Wellness" component={WelnessTracking} />
     </TrackTabStack.Navigator>
   );
 };
