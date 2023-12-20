@@ -8,7 +8,7 @@ export enum StatType {
 }
 
 export interface StatSchema {
-  note: string | null;
+  note?: string;
   stat_type: StatType;
   unit: string;
   user_id: number;
