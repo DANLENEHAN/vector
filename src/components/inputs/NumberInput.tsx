@@ -13,12 +13,14 @@ type NumberInputProps = {
   allowFloat: boolean;
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  style?: object;
 };
 
 const NumberInput: React.FC<NumberInputProps> = ({
   allowFloat,
   inputValue,
   setInputValue,
+  style,
 }) => {
   //const [inputValue, setInputValue] = useState(allowFloat ? '0.0' : '0');
   const {theme} = useTheme();
@@ -52,7 +54,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     <TextInput
       value={inputValue}
       defaultValue={allowFloat ? '0.0' : '0'}
-      style={[styles.textInput, {color: currentTheme.text}]}
+      style={[style, styles.textInput, {color: currentTheme.text}]}
       onChangeText={handleChange}
       keyboardType={allowFloat ? 'numeric' : 'number-pad'}
       onFocus={handleFocus}
@@ -64,13 +66,10 @@ const NumberInput: React.FC<NumberInputProps> = ({
 const styles = StyleSheet.create({
   textInput: {
     height: 60,
-    //borderColor: 'gray',
-    //borderBottomWidth: 1,
     width: 120,
     textAlign: 'center',
     fontFamily: fonts.primary,
     fontSize: fontSizes.title,
-    margin: 10,
   },
 });
 

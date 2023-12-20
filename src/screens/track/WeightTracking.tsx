@@ -9,6 +9,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   fontWeights,
+  margins,
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 // Components
@@ -21,8 +22,9 @@ import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/stat/types';
+import {ScreenProps} from '../types';
 
-const WeightTracking: React.FC<any> = ({navigation}) => {
+const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -76,6 +78,7 @@ const WeightTracking: React.FC<any> = ({navigation}) => {
         </View>
         <View style={styles.trackContainer}>
           <NumberInput
+            style={styles.numberInput}
             allowFloat={true}
             inputValue={weightValue}
             setInputValue={setWeightValue}
@@ -120,6 +123,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: fontSizes.xLarge,
+  },
+  numberInput: {
+    margin: margins.small,
   },
 });
 

@@ -20,6 +20,7 @@ import NutritionTracking from '../screens/track/NutritionTracking';
 import WeightTracking from '../screens/track/WeightTracking';
 import WellnessTracking from '../screens/track/WellnessTracking';
 import MoodScreen from '../screens/track/Mood';
+import WaterScreen from '../screens/track/Water';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -141,6 +142,11 @@ const AuthNavigator: React.FC = () => {
         <AppStack.Screen
           name="Mood"
           component={MoodScreen}
+          options={{headerShown: false}}
+        />
+        <AppStack.Screen
+          name="Water"
+          component={WaterScreen}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>

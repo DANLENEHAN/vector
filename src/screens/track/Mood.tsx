@@ -73,18 +73,11 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         <HeaderBackButton navigation={navigation} />
       </View>
       <View style={styles.contentSection}>
-        <Text
-          style={[
-            styles.title,
-            {
-              marginBottom: margins.xxLarge,
-              color: currentTheme.text,
-            },
-          ]}>
+        <Text style={[styles.title, {color: currentTheme.text}]}>
           What's your mood?
         </Text>
         <Icon
-          style={{marginBottom: margins.xxLarge}}
+          style={styles.moodIcon}
           name={mood.icon}
           solid
           size={300}
@@ -98,7 +91,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           {mood.label}
         </Text>
         <Slider
-          style={[styles.slider, {marginBottom: margins.xxLarge}]}
+          style={styles.slider}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
@@ -136,15 +129,20 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center',
     textAlignVertical: 'center',
+    marginBottom: margins.xxLarge,
   },
   slider: {
     width: 300,
     height: 40,
+    marginBottom: margins.xxLarge,
   },
   moodText: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
+  },
+  moodIcon: {
+    marginBottom: margins.xxLarge,
   },
 });
 

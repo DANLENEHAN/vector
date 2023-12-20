@@ -19,3 +19,8 @@ export enum WeightUnit {
   KG = 'KG',
   LBS = 'LBS',
 }
+
+export enum WaterUnit {
+  ML = 'ML',
+  OZ = 'FL OZ',
+}
