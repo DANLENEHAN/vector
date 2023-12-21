@@ -17,7 +17,8 @@ import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
 import Workout from '../screens/track/Workout';
 import Nutrition from '../screens/track/Nutrition';
-import WelnessTracking from '../screens/track/WellnessTracking';
+import WeightTracking from '../screens/track/WeightTracking';
+import WellnessTracking from '../screens/track/WellnessTracking';
 import MoodScreen from '../screens/track/Mood';
 
 // Components
@@ -43,9 +44,11 @@ const TrackNavigator: React.FC = () => {
         initialParams={{name: 'Nutrition'}}
       />
       <TrackTabStack.Screen
-        name="Wellness"
-        component={WelnessTracking}
-        initialParams={{name: 'Wellness'}}
+        name="WellnessTracking"
+        component={WellnessTracking}
+        options={{
+          tabBarLabel: 'Wellness',
+        }}
       />
     </TrackTabStack.Navigator>
   );
@@ -129,12 +132,17 @@ const AuthNavigator: React.FC = () => {
           component={AppNavigator}
           options={{headerShown: false}}
         />
+
+        <AppHomeTabStack.Screen
+          name="Weight"
+          component={WeightTracking}
+          options={{headerShown: false}}
+        />
         <AppStack.Screen
           name="Mood"
           component={MoodScreen}
           options={{headerShown: false}}
         />
-        <AppHomeTabStack.Screen name="Settings" component={SettingsNavigator} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
