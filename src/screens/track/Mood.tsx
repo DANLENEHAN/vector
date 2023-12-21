@@ -20,15 +20,15 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 
-interface Mood {
+type Mood = {
   label: string;
   icon: string;
   color: string;
-}
+};
 
-interface MoodsDictionary {
+type MoodsDictionary = {
   [key: number]: Mood;
-}
+};
 
 const moods: MoodsDictionary = {
   0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},

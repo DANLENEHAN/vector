@@ -3,9 +3,10 @@ import {View, StyleSheet} from 'react-native';
 
 import {darkThemeColors, lightThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
-interface ScreenWrapperProps {
+
+type ScreenWrapperProps = {
   children: React.ReactNode;
-}
+};
 
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({children}) => {
   const {theme} = useTheme();
