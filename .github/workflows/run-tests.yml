@@ -21,6 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Check Current Working Directory
-      run: pwd
-    - name: Run tests
+      run: |
+        pwd
+        ls -l
+      - name: Run tests
       run: npm test
