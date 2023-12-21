@@ -20,7 +20,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
   inputValue,
   setInputValue,
 }) => {
-  //const [inputValue, setInputValue] = useState(allowFloat ? '0.0' : '0');
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const handleChange = (text: string) => {
@@ -64,8 +63,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
 const styles = StyleSheet.create({
   textInput: {
     height: 60,
-    //borderColor: 'gray',
-    //borderBottomWidth: 1,
     width: 120,
     textAlign: 'center',
     fontFamily: fonts.primary,

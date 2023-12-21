@@ -20,7 +20,13 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createStat} from '../../services/api/stat/functions';
 import {getUserDetails} from '../../services/api/user/functions';
 
-const moods = {
+type Mood = {
+  label: string;
+  icon: string;
+  color: string;
+};
+
+const moods: {[key: string]: Mood} = {
   awful: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
   veryBad: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
   bad: {label: 'Bad', icon: 'meh', color: '#FFC542'},

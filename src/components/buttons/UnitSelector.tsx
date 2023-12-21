@@ -57,10 +57,8 @@ const styles = StyleSheet.create({
   unitSelector: {
     height: 50,
     width: '60%',
-    backgroundColor: 'green',
     borderRadius: borderRadius.medium,
     flexDirection: 'row',
-
     shadowRadius: 3,
     elevation: 3,
     shadowOpacity: 1.0,
@@ -84,7 +82,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   },
-  activeUnit: {},
 });
 
 export default UnitSelector;
