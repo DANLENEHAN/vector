@@ -1,9 +1,9 @@
-export interface LoginUserSchema {
+export type LoginUserSchema = {
   email: string;
   password: string;
-}
+};
 
-export interface UserCreateSchema {
+export type UserCreateSchema = {
   age: number;
   birthday: string;
   date_format_pref: DateFormat;
@@ -20,9 +20,9 @@ export interface UserCreateSchema {
   status: ProfileStatus;
   username: string;
   weight_unit_pref: WeightUnit;
-}
+};
 
-export interface UserGetSchema {
+export type UserGetSchema = {
   user_id: number;
   username: string;
   email: string;
@@ -41,17 +41,17 @@ export interface UserGetSchema {
   language: string;
   goal: string;
   superuser: boolean;
-}
+};
 
 // NOTE: Swap to enums when they are available...
-export interface DateFormat {}
+export type DateFormat = {};
 
-export interface Gender {}
+export type Gender = {};
 
-export interface FitnessGoal {}
+export type FitnessGoal = {};
 
-export interface HeightUnit {}
+export type HeightUnit = {};
 
-export interface WeightUnit {}
+export type WeightUnit = {};
 
-export interface ProfileStatus {}
+export type ProfileStatus = {};

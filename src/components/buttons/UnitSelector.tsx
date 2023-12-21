@@ -16,12 +16,14 @@ type UnitSelectorProps = {
   units: string[];
   activeUnit: string;
   setActiveUnit: React.Dispatch<React.SetStateAction<string>>;
+  style?: object;
 };
 
 const UnitSelector: React.FC<UnitSelectorProps> = ({
   units,
   activeUnit,
   setActiveUnit,
+  style,
 }) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -29,6 +31,7 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
   return (
     <View
       style={[
+        style,
         styles.unitSelector,
         {
           backgroundColor: currentTheme.disabledButton,

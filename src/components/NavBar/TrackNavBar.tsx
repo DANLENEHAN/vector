@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {BottomBarProps} from './types';
+import {TopBarProps} from './types';
 // Styling
 import {
   fonts,
@@ -16,7 +16,7 @@ import {
 //Services
 import {useTheme} from '../../context/ThemeContext';
 
-const TrackNavBar: React.FC<BottomBarProps> = ({
+const TrackNavBar: React.FC<TopBarProps> = ({
   navigation,
   state,
   descriptors,

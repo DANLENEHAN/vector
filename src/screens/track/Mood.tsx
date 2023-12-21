@@ -26,14 +26,18 @@ type Mood = {
   color: string;
 };
 
-const moods: {[key: string]: Mood} = {
-  awful: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
-  veryBad: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
-  bad: {label: 'Bad', icon: 'meh', color: '#FFC542'},
-  okay: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
-  good: {label: 'Good', icon: 'smile', color: '#8CE25F'},
-  veryGood: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
-  amazing: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
+type MoodsDictionary = {
+  [key: number]: Mood;
+};
+
+const moods: MoodsDictionary = {
+  0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
+  1: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
+  2: {label: 'Bad', icon: 'meh', color: '#FFC542'},
+  3: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
+  4: {label: 'Good', icon: 'smile', color: '#8CE25F'},
+  5: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
+  6: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
 };
 
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
@@ -61,7 +65,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
     }
   };
 
-  const mood = moods[Object.keys(moods)[moodValue]];
+  const mood = moods[moodValue];
 
   return (
     <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
@@ -69,18 +73,11 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         <HeaderBackButton navigation={navigation} />
       </View>
       <View style={styles.contentSection}>
-        <Text
-          style={[
-            styles.title,
-            {
-              marginBottom: margins.xxLarge,
-              color: currentTheme.text,
-            },
-          ]}>
+        <Text style={[styles.title, {color: currentTheme.text}]}>
           What's your mood?
         </Text>
         <Icon
-          style={{marginBottom: margins.xxLarge}}
+          style={styles.moodIcon}
           name={mood.icon}
           solid
           size={300}
@@ -94,7 +91,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           {mood.label}
         </Text>
         <Slider
-          style={[styles.slider, {marginBottom: margins.xxLarge}]}
+          style={styles.slider}
           value={moodValue}
           onValueChange={handleSliderChange}
           step={1}
@@ -132,15 +129,20 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center',
     textAlignVertical: 'center',
+    marginBottom: margins.xxLarge,
   },
   slider: {
     width: 300,
     height: 40,
+    marginBottom: margins.xxLarge,
   },
   moodText: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
+  },
+  moodIcon: {
+    marginBottom: margins.xxLarge,
   },
 });
 
