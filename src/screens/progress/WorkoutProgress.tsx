@@ -17,7 +17,7 @@ const WokroutProgressScreen: React.FC<any> = ({route}) => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.content}>
+      <View style={styles.content} testID="workout-progress-screen">
         <Text style={{color: currentTheme.text}}>{route.name}</Text>
       </View>
     </ScreenWrapper>

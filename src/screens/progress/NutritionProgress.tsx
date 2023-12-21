@@ -17,7 +17,7 @@ const NutritionProgressScreen: React.FC<any> = ({route}) => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.content}>
+      <View style={styles.content} testID="nutrition-progress-screen">
         <Text style={{color: currentTheme.text}}>{route.name}</Text>
       </View>
     </ScreenWrapper>

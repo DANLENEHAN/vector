@@ -59,7 +59,8 @@ const TrackNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
                 style={[
                   styles.label,
                   {color: isFocused ? currentTheme.primary : currentTheme.text},
-                ]}>
+                ]}
+                testID={`tab-label-${route.name.toLowerCase()}`}>
                 {route.name}
               </Text>
             </TouchableOpacity>
