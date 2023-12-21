@@ -11,6 +11,7 @@ import {RootStackParamList} from '../navigation/types';
 import LoginScreen from '../screens/Login';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
+import WeightTracking from '../screens/track/WeightTracking';
 import MoodScreen from '../screens/track/Mood';
 
 // Stack navigators
@@ -79,6 +80,12 @@ const AuthNavigator: React.FC = () => {
         <AppStack.Screen
           name="App"
           component={AppNavigator}
+          options={{headerShown: false}}
+        />
+
+        <AppHomeTabStack.Screen
+          name="Weight"
+          component={WeightTracking}
           options={{headerShown: false}}
         />
         <AppStack.Screen

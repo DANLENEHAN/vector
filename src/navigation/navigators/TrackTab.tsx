@@ -7,7 +7,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 // Screens
 import Workout from '../../screens/track/Workout';
 import Nutrition from '../../screens/track/Nutrition';
-import WelnessTracking from '../../screens/track/WellnessTracking';
+import WellnessTracking from '../../screens/track/WellnessTracking';
 
 // Components
 import TrackNavBar from '../../components/navbar/TrackNavBar';
@@ -30,9 +30,11 @@ const TrackTabNavigator: React.FC = () => {
         initialParams={{name: 'Nutrition'}}
       />
       <TrackTabStack.Screen
-        name="Wellness"
-        component={WelnessTracking}
-        initialParams={{name: 'Wellness'}}
+        name="WellnessTracking"
+        component={WellnessTracking}
+        options={{
+          tabBarLabel: 'Wellness',
+        }}
       />
     </TrackTabStack.Navigator>
   );
