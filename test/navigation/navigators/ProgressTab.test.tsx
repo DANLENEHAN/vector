@@ -29,13 +29,13 @@ describe('ProgressTabNavigator Tests', () => {
 
     // Test the tab labels are correct
     const workoutTabLabel = getByTestId('tab-label-workoutprogress');
-    expect(workoutTabLabel.props.children).toBe('WorkoutProgress');
+    expect(workoutTabLabel.props.children).toBe('Workout');
 
     const nutritionTabLabel = getByTestId('tab-label-nutritionprogress');
-    expect(nutritionTabLabel.props.children).toBe('NutritionProgress');
+    expect(nutritionTabLabel.props.children).toBe('Nutrition');
 
     const wellnessTabLabel = getByTestId('tab-label-wellnessprogress');
-    expect(wellnessTabLabel.props.children).toBe('WellnessProgress');
+    expect(wellnessTabLabel.props.children).toBe('Wellness');
   });
 
   // Test if correct content for each tab is rendered
