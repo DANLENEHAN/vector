@@ -19,6 +19,9 @@ import Workout from '../screens/track/Workout';
 import Nutrition from '../screens/track/Nutrition';
 import WelnessTracking from '../screens/track/WellnessTracking';
 import MoodScreen from '../screens/track/Mood';
+import WellnessProgressScreen from '../screens/progress/WellnessProgress';
+import WorkoutProgressScreen from '../screens/progress/WorkoutProgress';
+import NutritionProgressScreen from '../screens/progress/NutritionProgress';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -28,7 +31,9 @@ const AppStack = createNativeStackNavigator<RootStackParamList>();
 const AppHomeTabStack = createBottomTabNavigator();
 const SettingsStack = createNativeStackNavigator();
 const TrackTabStack = createMaterialTopTabNavigator();
+const ProgressTabStack = createMaterialTopTabNavigator();
 
+// Navigation for the Tracking page
 const TrackNavigator: React.FC = () => {
   return (
     <TrackTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
@@ -51,6 +56,39 @@ const TrackNavigator: React.FC = () => {
   );
 };
 
+// Navigation for the Tracking page
+const ProgressNavigator: React.FC = () => {
+  return (
+    <ProgressTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
+      <ProgressTabStack.Screen
+        name="WorkoutProgress"
+        component={WorkoutProgressScreen}
+        initialParams={{name: 'Workout'}}
+        options={{
+          tabBarLabel: 'Workout',
+        }}
+      />
+      <ProgressTabStack.Screen
+        name="NutritionProgress"
+        component={NutritionProgressScreen}
+        initialParams={{name: 'Nutrition'}}
+        options={{
+          tabBarLabel: 'Nutrition',
+        }}
+      />
+      <ProgressTabStack.Screen
+        name="WellnessProgress"
+        component={WellnessProgressScreen}
+        initialParams={{name: 'Wellness'}}
+        options={{
+          tabBarLabel: 'Wellness',
+        }}
+      />
+    </ProgressTabStack.Navigator>
+  );
+};
+
+// Navigation for the Home page
 const AppNavigator: React.FC = () => {
   return (
     <AppHomeTabStack.Navigator
@@ -73,16 +111,13 @@ const AppNavigator: React.FC = () => {
         component={Generic}
         initialParams={{name: 'Social'}}
       />
-      <AppHomeTabStack.Screen
-        name="Progress"
-        component={Generic}
-        initialParams={{name: 'Progress'}}
-      />
+      <AppHomeTabStack.Screen name="Progress" component={ProgressNavigator} />
       <AppHomeTabStack.Screen name="Settings" component={SettingsNavigator} />
     </AppHomeTabStack.Navigator>
   );
 };
 
+// Navigation for the Settings page
 const SettingsNavigator: React.FC = () => {
   return (
     <SettingsStack.Navigator>
@@ -110,6 +145,7 @@ const SettingsNavigator: React.FC = () => {
   );
 };
 
+// Navigation for the entire app
 const AuthNavigator: React.FC = () => {
   return (
     <NavigationContainer>
