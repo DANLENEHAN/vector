@@ -13,20 +13,20 @@ import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
 import WeightTracking from '../screens/track/WeightTracking';
 import MoodScreen from '../screens/track/Mood';
-
-// Stack navigators
-import SettingsStackNavigator from './navigators/SettingsStack';
-import TrackTabNavigator from './navigators/TrackTab';
-import ProgressTabNavigator from './navigators/ProgressTab';
+import WaterScreen from '../screens/track/Water';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
 
+//
+
 // Navigation stacks
+import TrackTabNavigator from './navigators/TrackTab';
+import ProgressTabNavigator from './navigators/ProgressTab';
+import SettingsStackNavigator from './navigators/SettingsStack';
 const AppStack = createNativeStackNavigator<RootStackParamList>();
 const AppHomeTabStack = createBottomTabNavigator();
 
-// Navigation for the Home page
 const AppNavigator: React.FC = () => {
   return (
     <AppHomeTabStack.Navigator
@@ -82,8 +82,7 @@ const AuthNavigator: React.FC = () => {
           component={AppNavigator}
           options={{headerShown: false}}
         />
-
-        <AppHomeTabStack.Screen
+        <AppStack.Screen
           name="Weight"
           component={WeightTracking}
           options={{headerShown: false}}
@@ -91,6 +90,11 @@ const AuthNavigator: React.FC = () => {
         <AppStack.Screen
           name="Mood"
           component={MoodScreen}
+          options={{headerShown: false}}
+        />
+        <AppStack.Screen
+          name="Water"
+          component={WaterScreen}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>

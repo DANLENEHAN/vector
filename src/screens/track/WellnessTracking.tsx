@@ -7,7 +7,7 @@ import ScreenWrapper from '../../components/layout/ScreenWrapper';
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 // Components
-import ClickableTile from '../../components/buttons/TrackingTile';
+import ClickableTile from '../../components/buttons/ClickableTile';
 import Header from '../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../types';

@@ -6,7 +6,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 
 // Screens
 import Workout from '../../screens/track/Workout';
-import Nutrition from '../../screens/track/Nutrition';
+import Nutrition from '../../screens/track/NutritionTracking';
 import WellnessTracking from '../../screens/track/WellnessTracking';
 
 // Components

@@ -24,6 +24,8 @@ export type RootStackParamList = {
   Mood: undefined;
   Sleep: undefined;
   Weight: undefined;
+  Water: undefined;
+  Macronutrients: undefined;
 };
 
 export type ScreenNavigationProp = NativeStackNavigationProp<

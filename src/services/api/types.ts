@@ -1,4 +1,4 @@
-export interface QuerySchema {}
+export type QuerySchema = {};
 
 export enum SortOrder {
   Ascending = 'asc',

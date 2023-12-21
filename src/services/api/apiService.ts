@@ -1,10 +1,10 @@
 import axios, {AxiosInstance} from 'axios';
 
-interface ApiConfigMap {
+type ApiConfigMap = {
   development: string;
   production: string;
   staging: string;
-}
+};
 
 const API_URLS: ApiConfigMap = {
   development: 'http://localhost:5000',
