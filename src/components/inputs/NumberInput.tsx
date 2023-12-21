@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.primary,
     fontSize: fontSizes.title,
+    margin: 10,
   },
 });
 
