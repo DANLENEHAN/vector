@@ -21,7 +21,7 @@ import {ScreenProps} from '../types';
 const tile_data = [
   {
     label: 'Calorie & Macros',
-    route: 'Food',
+    route: 'Macronutrients',
     icon: 'utensils',
     lastTracked: '8 hours ago',
     backgroundColor: '#F5A623',
@@ -53,7 +53,9 @@ const NutritionTracking: React.FC<ScreenProps> = ({navigation}) => {
           <ClickableTile
             style={[{marginBottom: margins.xLarge}, styles.clickableTitle]}
             key={index}
-            onPress={() => navigation.navigate(tile.route as 'Water' | 'Food')}
+            onPress={() =>
+              navigation.navigate(tile.route as 'Water' | 'Macronutrients')
+            }
             label={tile.label}
             icon={tile.icon}
             lastTracked={tile.lastTracked}
