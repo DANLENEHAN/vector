@@ -1,4 +1,4 @@
-import {AxiosResponse, AxiosError} from 'axios';
+import {AxiosResponse} from 'axios';
 import api from '../apiService';
 import {UserCreateSchema, UserGetSchema} from '../swagger/data-contracts';
 import {User} from '../swagger/User';
@@ -35,7 +35,7 @@ export const createUser = async (
 export const loginUser = async (data: {
   email: string;
   password: string;
-}): Promise<void> => {
+}): Promise<void | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<void> = await UserApi.loginCreate(data);
     if (response.status === 204) {
@@ -55,28 +55,11 @@ export const loginUser = async (data: {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      // Handle specific response status codes.
-      switch (statusCode) {
-        case 401:
-          throw `Login failed: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 
-export const logoutUser = async (): Promise<void> => {
+export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<void> = await UserApi.logoutCreate();
 
@@ -88,58 +71,26 @@ export const logoutUser = async (): Promise<void> => {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 400:
-          throw `Logout failed due to invalid credentials: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 
-export const testAuthentication = async (): Promise<void> => {
-  try {
-    const response: AxiosResponse<void> = await UserApi.authenticatedList();
+export const testAuthentication =
+  async (): Promise<void | SwaggerValidationError> => {
+    try {
+      const response: AxiosResponse<void> = await UserApi.authenticatedList();
 
-    if (response.status === 200) {
-      console.log('User authenticated');
-      return Promise.resolve();
-    } else {
-      // Handle unexpected response status codes.
-      throw `Unexpected status code: ${response.status}`;
-    }
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 500:
-          console.log('User not authenticated');
-          throw `User not authenticated: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
+      if (response.status === 200) {
+        console.log('User authenticated');
+        return Promise.resolve();
+      } else {
+        // Handle unexpected response status codes.
+        throw `Unexpected status code: ${response.status}`;
       }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
+    } catch (error) {
+      return HandleSwaggerValidationError(error, {500: null});
     }
-  }
-};
+  };
 
 export const getUserDetails = async (): Promise<UserGetSchema> => {
   try {
@@ -152,22 +103,7 @@ export const getUserDetails = async (): Promise<UserGetSchema> => {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 500:
-          throw `User not authenticated: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    const validationError = HandleSwaggerValidationError(error, {500: null});
+    throw Error(`Error: ${validationError.message}`);
   }
 };

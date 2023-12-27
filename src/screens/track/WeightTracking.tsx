@@ -54,7 +54,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
         stat_type: StatType.Weight,
         user_id: user.user_id,
         value: parsedWeight,
-        note: null,
       });
       console.log('Successfully saved weight (', parsedWeight, activeUnit, ')');
       navigation.goBack();

@@ -58,7 +58,6 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         stat_type: StatType.Feeling,
         user_id: user.user_id,
         value: moodValue,
-        note: null,
       });
       navigation.goBack();
     } catch (error) {

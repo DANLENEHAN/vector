@@ -40,16 +40,16 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleLogin = async () => {
-    try {
-      await loginUser({email: email, password: password});
+    let response = await loginUser({email: email, password: password});
+    if (response === undefined) {
       navigation.navigate('App', {screen: 'Home'});
-    } catch (error) {
-      console.error('Login failed:', error);
+    } else {
+      console.error(`Error: ${response.message}`);
     }
   };
 
   const handleCreateAccount = async () => {
-    const response = await createUser({
+    let response = await createUser({
       // NOTE: Remove these hard-coded values when the UI is implemented fully
       email: email,
       password: password,
@@ -70,7 +70,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
     });
     if (response === undefined) {
       console.log('Account creation successful, logging in.');
-      await loginUser({email: email, password: password});
+      response = await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
     } else {
       console.error(`Error: ${response.message}`);
