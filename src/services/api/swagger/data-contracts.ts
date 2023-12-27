@@ -10,9 +10,7 @@
 
 /**
  * BodypartCreateSchema
- *
- *     Schema for validating the full exercise_bodypart schema
- *
+ * Schema for validating the full exercise_bodypart schema
  */
 export interface BodypartCreateSchema {
   /** Muscle groups */
@@ -23,9 +21,7 @@ export interface BodypartCreateSchema {
 
 /**
  * BodypartGetSchema
- *
- *     ExerciseBodyPartGetSchema get schema
- *
+ * ExerciseBodyPartGetSchema get schema
  */
 export interface BodypartGetSchema {
   /**
@@ -53,9 +49,7 @@ export interface BodypartGetSchema {
 
 /**
  * BodypartQuerySchema
- *
- *     Schema to validate the bodypart query schema
- *
+ * Schema to validate the bodypart query schema
  */
 export interface BodypartQuerySchema {
   /**
@@ -64,14 +58,14 @@ export interface BodypartQuerySchema {
    * @default {}
    * @example {"bodypart_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
@@ -97,9 +91,7 @@ export enum DifficultyLevel {
 
 /**
  * EquipmentCreateSchema
- *
- *     Schema for validating the full equipment schema
- *
+ * Schema for validating the full equipment schema
  */
 export interface EquipmentCreateSchema {
   /**
@@ -107,7 +99,7 @@ export interface EquipmentCreateSchema {
    * @default null
    * @example "Rogue"
    */
-  brand: string;
+  brand?: string | null;
   /**
    * Description
    * @example "A pair of 10lb dumbbells"
@@ -115,31 +107,28 @@ export interface EquipmentCreateSchema {
   description: string;
   /**
    * Increment
-   * @min 0
    * @default null
    * @example 2.5
    */
-  increment: number;
+  increment?: number | null;
   /**
    * Max Weight
-   * @min 0
    * @default null
    * @example 100
    */
-  max_weight: number;
+  max_weight?: number | null;
   /**
    * Min Weight
-   * @min 0
    * @default null
    * @example 10
    */
-  min_weight: number;
+  min_weight?: number | null;
   /**
    * Model
    * @default null
    * @example "Rogue 10lb dumbbells"
    */
-  model: string;
+  model?: string | null;
   /**
    * Name
    * @example "Dumbbells"
@@ -150,14 +139,12 @@ export interface EquipmentCreateSchema {
    * @default null
    * @example "Dumbbell"
    */
-  type: string;
+  type?: string | null;
 }
 
 /**
  * EquipmentGetSchema
- *
- *     Schema for validating the equipment get schema
- *
+ * Schema for validating the equipment get schema
  */
 export interface EquipmentGetSchema {
   /**
@@ -165,7 +152,7 @@ export interface EquipmentGetSchema {
    * @default null
    * @example "Rogue"
    */
-  brand: string;
+  brand?: string | null;
   /**
    * Created At
    * @example "2021-05-18T20:00:00"
@@ -184,31 +171,28 @@ export interface EquipmentGetSchema {
   equipment_id: number;
   /**
    * Increment
-   * @min 0
    * @default null
    * @example 2.5
    */
-  increment: number;
+  increment?: number | null;
   /**
    * Max Weight
-   * @min 0
    * @default null
    * @example 100
    */
-  max_weight: number;
+  max_weight?: number | null;
   /**
    * Min Weight
-   * @min 0
    * @default null
    * @example 10
    */
-  min_weight: number;
+  min_weight?: number | null;
   /**
    * Model
    * @default null
    * @example "Rogue 10lb dumbbells"
    */
-  model: string;
+  model?: string | null;
   /**
    * Name
    * @example "Dumbbells"
@@ -219,7 +203,7 @@ export interface EquipmentGetSchema {
    * @default null
    * @example "Dumbbell"
    */
-  type: string;
+  type?: string | null;
   /**
    * Updated At
    * @example "2021-05-18T20:00:00"
@@ -229,9 +213,7 @@ export interface EquipmentGetSchema {
 
 /**
  * EquipmentQuerySchema
- *
- *     Schema to validate the equipment query schema
- *
+ * Schema to validate the equipment query schema
  */
 export interface EquipmentQuerySchema {
   /**
@@ -240,21 +222,19 @@ export interface EquipmentQuerySchema {
    * @default {}
    * @example {"equipment_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * EquipmentUpdateSchema
- *
- *     Schema for validating the equipment update schema
- *
+ * Schema for validating the equipment update schema
  */
 export interface EquipmentUpdateSchema {
   /**
@@ -262,7 +242,7 @@ export interface EquipmentUpdateSchema {
    * @default null
    * @example "Rogue"
    */
-  brand: string;
+  brand?: string | null;
   /**
    * Description
    * @example "A pair of 10lb dumbbells"
@@ -276,31 +256,28 @@ export interface EquipmentUpdateSchema {
   equipment_id: number;
   /**
    * Increment
-   * @min 0
    * @default null
    * @example 2.5
    */
-  increment: number;
+  increment?: number | null;
   /**
    * Max Weight
-   * @min 0
    * @default null
    * @example 100
    */
-  max_weight: number;
+  max_weight?: number | null;
   /**
    * Min Weight
-   * @min 0
    * @default null
    * @example 10
    */
-  min_weight: number;
+  min_weight?: number | null;
   /**
    * Model
    * @default null
    * @example "Rogue 10lb dumbbells"
    */
-  model: string;
+  model?: string | null;
   /**
    * Name
    * @example "Dumbbells"
@@ -311,14 +288,12 @@ export interface EquipmentUpdateSchema {
    * @default null
    * @example "Dumbbell"
    */
-  type: string;
+  type?: string | null;
 }
 
 /**
  * ExerciseBodypartCreateSchema
- *
- *     Schema for validating the full exercise_bodypart schema
- *
+ * Schema for validating the full exercise_bodypart schema
  */
 export interface ExerciseBodypartCreateSchema {
   /**
@@ -340,9 +315,7 @@ export interface ExerciseBodypartCreateSchema {
 
 /**
  * ExerciseBodypartGetSchema
- *
- *     ExerciseBodypart get schema
- *
+ * ExerciseBodypart get schema
  */
 export interface ExerciseBodypartGetSchema {
   /**
@@ -381,9 +354,7 @@ export interface ExerciseBodypartGetSchema {
 
 /**
  * ExerciseBodypartQuerySchema
- *
- *     Schema to validate the exercise bodypart query schema
- *
+ * Schema to validate the exercise bodypart query schema
  */
 export interface ExerciseBodypartQuerySchema {
   /**
@@ -392,21 +363,19 @@ export interface ExerciseBodypartQuerySchema {
    * @default {}
    * @example {"exercise_bodypart_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * ExerciseBodypartUpdateSchema
- *
- *     ExerciseBodypart update schema
- *
+ * ExerciseBodypart update schema
  */
 export interface ExerciseBodypartUpdateSchema {
   /**
@@ -433,9 +402,7 @@ export interface ExerciseBodypartUpdateSchema {
 
 /**
  * ExerciseCreateSchema
- *
- *     Schema for validating the full exercise schema
- *
+ * Schema for validating the full exercise schema
  */
 export interface ExerciseCreateSchema {
   /**
@@ -466,9 +433,7 @@ export interface ExerciseCreateSchema {
 
 /**
  * ExerciseEquipmentCreateSchema
- *
- *     Schema for validating the full exercise_equipment schema
- *
+ * Schema for validating the full exercise_equipment schema
  */
 export interface ExerciseEquipmentCreateSchema {
   /**
@@ -485,9 +450,7 @@ export interface ExerciseEquipmentCreateSchema {
 
 /**
  * ExerciseEquipmentGetSchema
- *
- *     ExerciseEquipmentGetSchema get schema
- *
+ * ExerciseEquipmentGetSchema get schema
  */
 export interface ExerciseEquipmentGetSchema {
   /**
@@ -521,9 +484,7 @@ export interface ExerciseEquipmentGetSchema {
 
 /**
  * ExerciseEquipmentQuerySchema
- *
- *     Schema to validate the exercise equipment query schema
- *
+ * Schema to validate the exercise equipment query schema
  */
 export interface ExerciseEquipmentQuerySchema {
   /**
@@ -532,21 +493,19 @@ export interface ExerciseEquipmentQuerySchema {
    * @default {}
    * @example {"exercise_equipment_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * ExerciseEquipmentUpdateSchema
- *
- *     ExerciseEquipmentGetSchema update schema
- *
+ * ExerciseEquipmentGetSchema update schema
  */
 export interface ExerciseEquipmentUpdateSchema {
   /**
@@ -568,9 +527,7 @@ export interface ExerciseEquipmentUpdateSchema {
 
 /**
  * ExerciseGetSchema
- *
- *     Exercise get schema
- *
+ * Exercise get schema
  */
 export interface ExerciseGetSchema {
   /**
@@ -623,9 +580,7 @@ export interface ExerciseGetSchema {
 
 /**
  * ExerciseQuerySchema
- *
- *     Schema to validate the exercise query schema
- *
+ * Schema to validate the exercise query schema
  */
 export interface ExerciseQuerySchema {
   /**
@@ -634,21 +589,19 @@ export interface ExerciseQuerySchema {
    * @default {}
    * @example {"exercise_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * ExerciseUpdateSchema
- *
- *     Schema for validating the full exercise schema
- *
+ * Schema for validating the full exercise schema
  */
 export interface ExerciseUpdateSchema {
   /**
@@ -744,19 +697,16 @@ export enum MuscleGroup {
 
 /**
  * PlanComponentCreateSchema
- *
- *     Validation schema for the Plan Component model.
- *
+ * Validation schema for the Plan Component model.
  */
 export interface PlanComponentCreateSchema {
   /**
    * Description
    * The description of the plan component
-   * @maxLength 150
    * @default null
    * @example "My plan component description"
    */
-  description: string;
+  description?: string | null;
   /**
    * Name
    * The name of the plan component
@@ -775,19 +725,16 @@ export interface PlanComponentCreateSchema {
 
 /**
  * PlanComponentGetSchema
- *
- *     Validation schema for the Plan Component model.
- *
+ * Validation schema for the Plan Component model.
  */
 export interface PlanComponentGetSchema {
   /**
    * Description
    * The description of the plan component
-   * @maxLength 150
    * @default null
    * @example "My plan component description"
    */
-  description: string;
+  description?: string | null;
   /**
    * Name
    * The name of the plan component
@@ -813,9 +760,7 @@ export interface PlanComponentGetSchema {
 
 /**
  * PlanComponentQuerySchema
- *
- *     Schema to validate the plan component query schema
- *
+ * Schema to validate the plan component query schema
  */
 export interface PlanComponentQuerySchema {
   /**
@@ -824,31 +769,28 @@ export interface PlanComponentQuerySchema {
    * @default {}
    * @example {"plan_component_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * PlanComponentUpdateSchema
- *
- *     Validation schema for the Plan Component model.
- *
+ * Validation schema for the Plan Component model.
  */
 export interface PlanComponentUpdateSchema {
   /**
    * Description
    * The description of the plan component
-   * @maxLength 150
    * @default null
    * @example "My plan component description"
    */
-  description: string;
+  description?: string | null;
   /**
    * Name
    * The name of the plan component
@@ -874,9 +816,7 @@ export interface PlanComponentUpdateSchema {
 
 /**
  * PlanCreateSchema
- *
- *     Validation schema for the Plan model.
- *
+ * Validation schema for the Plan model.
  */
 export interface PlanCreateSchema {
   /**
@@ -889,20 +829,19 @@ export interface PlanCreateSchema {
   /**
    * Description
    * The description of the plan
-   * @maxLength 150
    * @default null
    * @example "My plan description"
    */
-  description: string;
+  description?: string | null;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Active
    * The plan is activly being used by the user
    * @default true
    * @example true
    */
-  is_active: boolean;
+  is_active?: boolean;
   /**
    * Name
    * The name of the plan
@@ -914,9 +853,7 @@ export interface PlanCreateSchema {
 
 /**
  * PlanGetSchema
- *
- *     Validation schema for the Plan model.
- *
+ * Validation schema for the Plan model.
  */
 export interface PlanGetSchema {
   /**
@@ -929,20 +866,19 @@ export interface PlanGetSchema {
   /**
    * Description
    * The description of the plan
-   * @maxLength 150
    * @default null
    * @example "My plan description"
    */
-  description: string;
+  description?: string | null;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Active
    * The plan is activly being used by the user
    * @default true
    * @example true
    */
-  is_active: boolean;
+  is_active?: boolean;
   /**
    * Name
    * The name of the plan
@@ -961,9 +897,7 @@ export interface PlanGetSchema {
 
 /**
  * PlanQuerySchema
- *
- *     Schema to validate the plan query schema
- *
+ * Schema to validate the plan query schema
  */
 export interface PlanQuerySchema {
   /**
@@ -972,21 +906,19 @@ export interface PlanQuerySchema {
    * @default {}
    * @example {"plan_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * PlanUpdateSchema
- *
- *     Validation schema for the Plan model.
- *
+ * Validation schema for the Plan model.
  */
 export interface PlanUpdateSchema {
   /**
@@ -999,20 +931,19 @@ export interface PlanUpdateSchema {
   /**
    * Description
    * The description of the plan
-   * @maxLength 150
    * @default null
    * @example "My plan description"
    */
-  description: string;
+  description?: string | null;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Active
    * The plan is activly being used by the user
    * @default true
    * @example true
    */
-  is_active: boolean;
+  is_active?: boolean;
   /**
    * Name
    * The name of the plan
@@ -1042,9 +973,7 @@ export enum ProfileStatus {
 
 /**
  * QuerySchema
- *
- *     Validation schema for the Query model.
- *
+ * Validation schema for the Query model.
  */
 export interface QuerySchema {
   /**
@@ -1053,21 +982,19 @@ export interface QuerySchema {
    * @default {}
    * @example {"stat_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * SetComponentCreateSchema
- *
- *     Schema to validate the set component create schema
- *
+ * Schema to validate the set component create schema
  */
 export interface SetComponentCreateSchema {
   /**
@@ -1075,7 +1002,7 @@ export interface SetComponentCreateSchema {
    * @default null
    * @example "Leave nothing in the tank here"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -1090,11 +1017,10 @@ export interface SetComponentCreateSchema {
   exercise_id: number;
   /**
    * Feeling
-   * @min 0
    * @default null
    * @example 10
    */
-  feeling: number;
+  feeling?: number | null;
   /**
    * Name
    * @example "Bench dropset"
@@ -1105,7 +1031,7 @@ export interface SetComponentCreateSchema {
    * @default null
    * @example "I could have done one more"
    */
-  note: string;
+  note?: string | null;
   /**
    * Reps
    * @min 0
@@ -1117,21 +1043,19 @@ export interface SetComponentCreateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Rir
-   * @min -1
    * @default null
    * @example 0
    */
-  rir: number;
+  rir?: number | null;
   /**
    * Rpe
-   * @min 0
    * @default null
    * @example 10
    */
-  rpe: number;
+  rpe?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1155,7 +1079,7 @@ export interface SetComponentCreateSchema {
    * @default null
    * @example "2-0-1-1"
    */
-  tempo: string;
+  tempo?: string | null;
   /**
    * Weight
    * @min 0
@@ -1168,9 +1092,7 @@ export interface SetComponentCreateSchema {
 
 /**
  * SetComponentGetSchema
- *
- *     Schema to validate the set component get response schema
- *
+ * Schema to validate the set component get response schema
  */
 export interface SetComponentGetSchema {
   /**
@@ -1178,7 +1100,7 @@ export interface SetComponentGetSchema {
    * @default null
    * @example "Leave nothing in the tank here"
    */
-  description: string;
+  description?: string | null;
   /**
    * Duration
    * @min 0
@@ -1199,11 +1121,10 @@ export interface SetComponentGetSchema {
   exercise_id: number;
   /**
    * Feeling
-   * @min 0
    * @default null
    * @example 10
    */
-  feeling: number;
+  feeling?: number | null;
   /**
    * Name
    * @example "Bench dropset"
@@ -1214,7 +1135,7 @@ export interface SetComponentGetSchema {
    * @default null
    * @example "I could have done one more"
    */
-  note: string;
+  note?: string | null;
   /**
    * Reps
    * @min 0
@@ -1226,21 +1147,19 @@ export interface SetComponentGetSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Rir
-   * @min -1
    * @default null
    * @example 0
    */
-  rir: number;
+  rir?: number | null;
   /**
    * Rpe
-   * @min 0
    * @default null
    * @example 10
    */
-  rpe: number;
+  rpe?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1264,7 +1183,7 @@ export interface SetComponentGetSchema {
    * @default null
    * @example "2-0-1-1"
    */
-  tempo: string;
+  tempo?: string | null;
   /**
    * Weight
    * @min 0
@@ -1277,9 +1196,7 @@ export interface SetComponentGetSchema {
 
 /**
  * SetComponentQuerySchema
- *
- *     Schema to validate the set query schema
- *
+ * Schema to validate the set query schema
  */
 export interface SetComponentQuerySchema {
   /**
@@ -1288,23 +1205,21 @@ export interface SetComponentQuerySchema {
    * @default {}
    * @example {"set_component_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * SetComponentTreeCreateSchema
- *
- *     A tree version of the SetComponentCreateSchema where
- *     'set_id' is not required upfront because the all the
- *     objects in the tree will be created together.
- *
+ * A tree version of the SetComponentCreateSchema where
+ * 'set_id' is not required upfront because the all the
+ * objects in the tree will be created together.
  */
 export interface SetComponentTreeCreateSchema {
   /**
@@ -1312,7 +1227,7 @@ export interface SetComponentTreeCreateSchema {
    * @default null
    * @example "Leave nothing in the tank here"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -1327,11 +1242,10 @@ export interface SetComponentTreeCreateSchema {
   exercise_id: number;
   /**
    * Feeling
-   * @min 0
    * @default null
    * @example 10
    */
-  feeling: number;
+  feeling?: number | null;
   /**
    * Name
    * @example "Bench dropset"
@@ -1342,7 +1256,7 @@ export interface SetComponentTreeCreateSchema {
    * @default null
    * @example "I could have done one more"
    */
-  note: string;
+  note?: string | null;
   /**
    * Reps
    * @min 0
@@ -1354,21 +1268,19 @@ export interface SetComponentTreeCreateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Rir
-   * @min -1
    * @default null
    * @example 0
    */
-  rir: number;
+  rir?: number | null;
   /**
    * Rpe
-   * @min 0
    * @default null
    * @example 10
    */
-  rpe: number;
+  rpe?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1386,7 +1298,7 @@ export interface SetComponentTreeCreateSchema {
    * @default null
    * @example "2-0-1-1"
    */
-  tempo: string;
+  tempo?: string | null;
   /**
    * Weight
    * @min 0
@@ -1399,9 +1311,7 @@ export interface SetComponentTreeCreateSchema {
 
 /**
  * SetComponentUpdateSchema
- *
- *     Schema to validate the set component update schema
- *
+ * Schema to validate the set component update schema
  */
 export interface SetComponentUpdateSchema {
   /**
@@ -1409,7 +1319,7 @@ export interface SetComponentUpdateSchema {
    * @default null
    * @example "Leave nothing in the tank here"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -1424,11 +1334,10 @@ export interface SetComponentUpdateSchema {
   exercise_id: number;
   /**
    * Feeling
-   * @min 0
    * @default null
    * @example 10
    */
-  feeling: number;
+  feeling?: number | null;
   /**
    * Name
    * @example "Bench dropset"
@@ -1439,7 +1348,7 @@ export interface SetComponentUpdateSchema {
    * @default null
    * @example "I could have done one more"
    */
-  note: string;
+  note?: string | null;
   /**
    * Reps
    * @min 0
@@ -1451,21 +1360,19 @@ export interface SetComponentUpdateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Rir
-   * @min -1
    * @default null
    * @example 0
    */
-  rir: number;
+  rir?: number | null;
   /**
    * Rpe
-   * @min 0
    * @default null
    * @example 10
    */
-  rpe: number;
+  rpe?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1489,7 +1396,7 @@ export interface SetComponentUpdateSchema {
    * @default null
    * @example "2-0-1-1"
    */
-  tempo: string;
+  tempo?: string | null;
   /**
    * Weight
    * @min 0
@@ -1502,9 +1409,7 @@ export interface SetComponentUpdateSchema {
 
 /**
  * SetCreateSchema
- *
- *     Schema for validating the full set schema
- *
+ * Schema for validating the full set schema
  */
 export interface SetCreateSchema {
   /**
@@ -1528,7 +1433,7 @@ export interface SetCreateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1551,9 +1456,7 @@ export interface SetCreateSchema {
 
 /**
  * SetGetSchema
- *
- *     Schema to validate the set get schema
- *
+ * Schema to validate the set get schema
  */
 export interface SetGetSchema {
   /**
@@ -1583,7 +1486,7 @@ export interface SetGetSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1612,9 +1515,7 @@ export interface SetGetSchema {
 
 /**
  * SetQuerySchema
- *
- *     Schema to validate the set query schema
- *
+ * Schema to validate the set query schema
  */
 export interface SetQuerySchema {
   /**
@@ -1623,24 +1524,22 @@ export interface SetQuerySchema {
    * @default {}
    * @example {"set_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * SetTreeCreateSchema
- *
- *     A tree version of the SetCreateSchema where
- *     all child components are included nested within the set.
- *     The set itself is also nested within it's parent workout
- *     component so the 'workout_component_id' is excluded.
- *
+ * A tree version of the SetCreateSchema where
+ * all child components are included nested within the set.
+ * The set itself is also nested within it's parent workout
+ * component so the 'workout_component_id' is excluded.
  */
 export interface SetTreeCreateSchema {
   /**
@@ -1664,7 +1563,7 @@ export interface SetTreeCreateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1683,13 +1582,11 @@ export interface SetTreeCreateSchema {
 
 /**
  * SetTreeRootCreateSchema
- *
- *     A tree version of the SetCreateSchema where
- *     all child components are included nested within set.
- *     The set in this case is not nested within the workout componet.
- *     It is the root of the workout tree. So the 'workout_component_id' is
- *     required.
- *
+ * A tree version of the SetCreateSchema where
+ * all child components are included nested within set.
+ * The set in this case is not nested within the workout componet.
+ * It is the root of the workout tree. So the 'workout_component_id' is
+ * required.
  */
 export interface SetTreeRootCreateSchema {
   /**
@@ -1713,7 +1610,7 @@ export interface SetTreeRootCreateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1738,9 +1635,7 @@ export interface SetTreeRootCreateSchema {
 
 /**
  * SetUpdateSchema
- *
- *     Schema to validate the set update schema
- *
+ * Schema to validate the set update schema
  */
 export interface SetUpdateSchema {
   /**
@@ -1758,7 +1653,7 @@ export interface SetUpdateSchema {
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -1792,9 +1687,7 @@ export enum SeverityLevel {
 
 /**
  * StatQuerySchema
- *
- *     Validate queries for stats
- *
+ * Validate queries for stats
  */
 export interface StatQuerySchema {
   /**
@@ -1803,31 +1696,28 @@ export interface StatQuerySchema {
    * @default {}
    * @example {"stat_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * StatSchema
- *
- *     Validation schema for the Stat model.
- *
+ * Validation schema for the Stat model.
  */
 export interface StatSchema {
   /**
    * Note
    * The note of the stat
-   * @maxLength 100
    * @default null
    * @example "I feel great!"
    */
-  note: string;
+  note?: string | null;
   /**
    * The type of the stat
    * @example "weight"
@@ -1948,9 +1838,7 @@ export enum SubMuscleGroup {
 
 /**
  * UserCreateSchema
- *
- *     Schema for validating the full user schema
- *
+ * Schema for validating the full user schema
  */
 export interface UserCreateSchema {
   /**
@@ -2023,9 +1911,9 @@ export interface UserCreateSchema {
    * Premium
    * @default false
    */
-  premium: boolean;
+  premium?: boolean;
   /** @default "active" */
-  status: ProfileStatus;
+  status?: ProfileStatus;
   /**
    * Username
    * @minLength 8
@@ -2040,9 +1928,7 @@ export interface UserCreateSchema {
 
 /**
  * UserGetSchema
- *
- *     User get schema
- *
+ * User get schema
  */
 export interface UserGetSchema {
   /**
@@ -2112,9 +1998,9 @@ export interface UserGetSchema {
    * Premium
    * @default false
    */
-  premium: boolean;
+  premium?: boolean;
   /** @default "active" */
-  status: ProfileStatus;
+  status?: ProfileStatus;
   /**
    * Updated At
    * @example "2021-05-18T12:00:00.000Z"
@@ -2140,9 +2026,7 @@ export interface UserGetSchema {
 
 /**
  * UserQuerySchema
- *
- *     Schema to validate the user query schema
- *
+ * Schema to validate the user query schema
  */
 export interface UserQuerySchema {
   /**
@@ -2151,21 +2035,19 @@ export interface UserQuerySchema {
    * @default {}
    * @example {"user_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * UserUpdateSchema
- *
- *     Schema for validating user details excluding password
- *
+ * Schema for validating user details excluding password
  */
 export interface UserUpdateSchema {
   /**
@@ -2230,9 +2112,9 @@ export interface UserUpdateSchema {
    * Premium
    * @default false
    */
-  premium: boolean;
+  premium?: boolean;
   /** @default "active" */
-  status: ProfileStatus;
+  status?: ProfileStatus;
   /**
    * Username
    * @minLength 8
@@ -2257,9 +2139,7 @@ export enum WeightUnit {
 
 /**
  * WorkoutComponentCreateSchema
- *
- *     Schema to validate the workout component create schema
- *
+ * Schema to validate the workout component create schema
  */
 export interface WorkoutComponentCreateSchema {
   /**
@@ -2267,7 +2147,7 @@ export interface WorkoutComponentCreateSchema {
    * @default null
    * @example "An exercise circuit for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2284,13 +2164,13 @@ export interface WorkoutComponentCreateSchema {
    * @default null
    * @example "Circut was too easy, add more weight"
    */
-  note: string;
+  note?: string | null;
   /**
    * Rest Time
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -2313,9 +2193,7 @@ export interface WorkoutComponentCreateSchema {
 
 /**
  * WorkoutComponentGetSchema
- *
- *     Schema to validate the workout get response schema
- *
+ * Schema to validate the workout get response schema
  */
 export interface WorkoutComponentGetSchema {
   /**
@@ -2323,7 +2201,7 @@ export interface WorkoutComponentGetSchema {
    * @default null
    * @example "An exercise circuit for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * Duration
    * @min 0
@@ -2346,13 +2224,13 @@ export interface WorkoutComponentGetSchema {
    * @default null
    * @example "Circut was too easy, add more weight"
    */
-  note: string;
+  note?: string | null;
   /**
    * Rest Time
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -2381,9 +2259,7 @@ export interface WorkoutComponentGetSchema {
 
 /**
  * WorkoutComponentQuerySchema
- *
- *     Schema to validate the workout component query schema
- *
+ * Schema to validate the workout component query schema
  */
 export interface WorkoutComponentQuerySchema {
   /**
@@ -2392,24 +2268,22 @@ export interface WorkoutComponentQuerySchema {
    * @default {}
    * @example {"workout_component_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * WorkoutComponentTreeCreateSchema
- *
- *     A tree version of the WorkoutComponentCreateSchema where
- *     all child components are included nested within the workout component.
- *     The workout component itself is also nested within it's parent workout
- *     so the 'workout_id' is excluded.
- *
+ * A tree version of the WorkoutComponentCreateSchema where
+ * all child components are included nested within the workout component.
+ * The workout component itself is also nested within it's parent workout
+ * so the 'workout_id' is excluded.
  */
 export interface WorkoutComponentTreeCreateSchema {
   /**
@@ -2417,7 +2291,7 @@ export interface WorkoutComponentTreeCreateSchema {
    * @default null
    * @example "An exercise circuit for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2434,13 +2308,13 @@ export interface WorkoutComponentTreeCreateSchema {
    * @default null
    * @example "Circut was too easy, add more weight"
    */
-  note: string;
+  note?: string | null;
   /**
    * Rest Time
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -2459,13 +2333,11 @@ export interface WorkoutComponentTreeCreateSchema {
 
 /**
  * WorkoutComponentTreeRootCreateSchema
- *
- *     A tree version of the WorkoutComponentCreateSchema where
- *     all child components are included nested within the workout component.
- *     The workout component in this case is not nested within the workout.
- *     It is the root of the workout tree. So the 'workout_id' is
- *     required.
- *
+ * A tree version of the WorkoutComponentCreateSchema where
+ * all child components are included nested within the workout component.
+ * The workout component in this case is not nested within the workout.
+ * It is the root of the workout tree. So the 'workout_id' is
+ * required.
  */
 export interface WorkoutComponentTreeRootCreateSchema {
   /**
@@ -2473,7 +2345,7 @@ export interface WorkoutComponentTreeRootCreateSchema {
    * @default null
    * @example "An exercise circuit for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2490,13 +2362,13 @@ export interface WorkoutComponentTreeRootCreateSchema {
    * @default null
    * @example "Circut was too easy, add more weight"
    */
-  note: string;
+  note?: string | null;
   /**
    * Rest Time
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -2521,9 +2393,7 @@ export interface WorkoutComponentTreeRootCreateSchema {
 
 /**
  * WorkoutComponentUpdateSchema
- *
- *     Schema to validate the workout update schema
- *
+ * Schema to validate the workout update schema
  */
 export interface WorkoutComponentUpdateSchema {
   /**
@@ -2531,7 +2401,7 @@ export interface WorkoutComponentUpdateSchema {
    * @default null
    * @example "An exercise circuit for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2548,13 +2418,13 @@ export interface WorkoutComponentUpdateSchema {
    * @default null
    * @example "Circut was too easy, add more weight"
    */
-  note: string;
+  note?: string | null;
   /**
    * Rest Time
    * @default null
    * @example 60
    */
-  rest_time: number;
+  rest_time?: number | null;
   /**
    * Sequence
    * @min 0
@@ -2577,9 +2447,7 @@ export interface WorkoutComponentUpdateSchema {
 
 /**
  * WorkoutCreateSchema
- *
- *     Schema for validating the full workout schema
- *
+ * Schema for validating the full workout schema
  */
 export interface WorkoutCreateSchema {
   /**
@@ -2593,7 +2461,7 @@ export interface WorkoutCreateSchema {
    * @default null
    * @example "A workout for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2601,13 +2469,13 @@ export interface WorkoutCreateSchema {
    */
   end_time: string;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Template
    * @default false
    * @example false
    */
-  is_template: boolean;
+  is_template?: boolean;
   /**
    * Location
    * @example "Home"
@@ -2623,14 +2491,13 @@ export interface WorkoutCreateSchema {
    * @default null
    * @example "Remember to stretch after"
    */
-  note: string;
+  note?: string | null;
   /**
    * Plan Component Id
-   * @min 0
    * @default null
    * @example 1
    */
-  plan_component_id: number;
+  plan_component_id?: number | null;
   /**
    * Start Time
    * @format date-time
@@ -2641,9 +2508,7 @@ export interface WorkoutCreateSchema {
 
 /**
  * WorkoutGetSchema
- *
- *     Schema to validate the workout get response schema
- *
+ * Schema to validate the workout get response schema
  */
 export interface WorkoutGetSchema {
   /**
@@ -2657,7 +2522,7 @@ export interface WorkoutGetSchema {
    * @default null
    * @example "A workout for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * Duration
    * @min 0
@@ -2671,13 +2536,13 @@ export interface WorkoutGetSchema {
    */
   end_time: string;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Template
    * @default false
    * @example false
    */
-  is_template: boolean;
+  is_template?: boolean;
   /**
    * Location
    * @example "Home"
@@ -2693,14 +2558,13 @@ export interface WorkoutGetSchema {
    * @default null
    * @example "Remember to stretch after"
    */
-  note: string;
+  note?: string | null;
   /**
    * Plan Component Id
-   * @min 0
    * @default null
    * @example 1
    */
-  plan_component_id: number;
+  plan_component_id?: number | null;
   /**
    * Start Time
    * @format date-time
@@ -2717,9 +2581,7 @@ export interface WorkoutGetSchema {
 
 /**
  * WorkoutQuerySchema
- *
- *     Schema to validate the workout query schema
- *
+ * Schema to validate the workout query schema
  */
 export interface WorkoutQuerySchema {
   /**
@@ -2728,24 +2590,22 @@ export interface WorkoutQuerySchema {
    * @default {}
    * @example {"workout_id":{"eq":1}}
    */
-  filters: object;
+  filters?: object;
   /**
    * Sort
    * The sort to apply to the query
    * @default ["created_at:desc"]
    * @example ["created_at:desc"]
    */
-  sort: any[];
+  sort?: any[];
 }
 
 /**
  * WorkoutTreeCreateSchema
- *
- *     A tree version of the WorkoutCreateSchema where
- *     all child components are included nested within the workout.
- *     The workout itself is also nested within it's parent plan component
- *     so the 'plan_component_id' is excluded.
- *
+ * A tree version of the WorkoutCreateSchema where
+ * all child components are included nested within the workout.
+ * The workout itself is also nested within it's parent plan component
+ * so the 'plan_component_id' is excluded.
  */
 export interface WorkoutTreeCreateSchema {
   /**
@@ -2759,7 +2619,7 @@ export interface WorkoutTreeCreateSchema {
    * @default null
    * @example "A workout for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2767,13 +2627,13 @@ export interface WorkoutTreeCreateSchema {
    */
   end_time: string;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Template
    * @default false
    * @example false
    */
-  is_template: boolean;
+  is_template?: boolean;
   /**
    * Location
    * @example "Home"
@@ -2789,7 +2649,7 @@ export interface WorkoutTreeCreateSchema {
    * @default null
    * @example "Remember to stretch after"
    */
-  note: string;
+  note?: string | null;
   /**
    * Start Time
    * @format date-time
@@ -2802,13 +2662,11 @@ export interface WorkoutTreeCreateSchema {
 
 /**
  * WorkoutTreeRootCreateSchema
- *
- *     A tree version of the WorkoutCreateSchema where
- *     all child components are included nested within the workout.
- *     The workout in this case is not nested within the plan component.
- *     It is the root of the workout tree. So the 'plan_component_id' is
- *     required.
- *
+ * A tree version of the WorkoutCreateSchema where
+ * all child components are included nested within the workout.
+ * The workout in this case is not nested within the plan component.
+ * It is the root of the workout tree. So the 'plan_component_id' is
+ * required.
  */
 export interface WorkoutTreeRootCreateSchema {
   /**
@@ -2822,7 +2680,7 @@ export interface WorkoutTreeRootCreateSchema {
    * @default null
    * @example "A workout for my legs"
    */
-  description: string;
+  description?: string | null;
   /**
    * End Time
    * @format date-time
@@ -2830,13 +2688,13 @@ export interface WorkoutTreeRootCreateSchema {
    */
   end_time: string;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Is Template
    * @default false
    * @example false
    */
-  is_template: boolean;
+  is_template?: boolean;
   /**
    * Location
    * @example "Home"
@@ -2852,14 +2710,13 @@ export interface WorkoutTreeRootCreateSchema {
    * @default null
    * @example "Remember to stretch after"
    */
-  note: string;
+  note?: string | null;
   /**
    * Plan Component Id
-   * @min 0
    * @default null
    * @example 1
    */
-  plan_component_id: number;
+  plan_component_id?: number | null;
   /**
    * Start Time
    * @format date-time
@@ -2872,9 +2729,7 @@ export interface WorkoutTreeRootCreateSchema {
 
 /**
  * WorkoutUpdateSchema
- *
- *     Schema to validate the workout update schema
- *
+ * Schema to validate the workout update schema
  */
 export interface WorkoutUpdateSchema {
   /**
@@ -2888,9 +2743,9 @@ export interface WorkoutUpdateSchema {
    * @default null
    * @example "A workout for my legs"
    */
-  description: string;
+  description?: string | null;
   /** @default null */
-  goal: FitnessGoal | null;
+  goal?: FitnessGoal | null;
   /**
    * Location
    * @example "Home"
@@ -2906,14 +2761,13 @@ export interface WorkoutUpdateSchema {
    * @default null
    * @example "Remember to stretch after"
    */
-  note: string;
+  note?: string | null;
   /**
    * Plan Component Id
-   * @min 0
    * @default null
    * @example 1
    */
-  plan_component_id: number;
+  plan_component_id?: number | null;
   /**
    * Workout Id
    * @min 0

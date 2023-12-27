@@ -14,17 +14,18 @@ import {ScreenProps} from './types';
 
 const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
   const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem(FlaskLoginCookie);
-      if (value !== null) {
-        await testAuthentication();
-        navigation.navigate('App', {screen: 'Home'});
-      } else {
-        console.log('Auth failed, login required, redirecting');
-        navigation.navigate('Login');
-      }
-    } catch (e) {
-      console.log(`Trouble reading key ${FlaskLoginCookie} deleting...`);
+    const value = await AsyncStorage.getItem(FlaskLoginCookie);
+    if (value === null) {
+      console.log('Auth failed, login required, redirecting');
+      navigation.navigate('Login');
+    }
+    const response = await testAuthentication();
+    if (response === undefined) {
+      navigation.navigate('App', {screen: 'Home'});
+    } else {
+      console.log(
+        `Trouble logging in with key ${FlaskLoginCookie} value ${value}. Deleting...`,
+      );
       AsyncStorage.removeItem(FlaskLoginCookie);
       navigation.navigate('Login');
     }

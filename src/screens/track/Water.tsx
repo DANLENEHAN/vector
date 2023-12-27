@@ -51,7 +51,6 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
         stat_type: StatType.Water,
         user_id: user.user_id,
         value: parsedWater,
-        note: null,
       });
       navigation.goBack();
     } catch (error) {
