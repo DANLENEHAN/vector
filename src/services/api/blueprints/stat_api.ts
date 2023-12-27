@@ -1,7 +1,9 @@
 import {AxiosResponse, AxiosError} from 'axios';
 import api from '../apiService';
-import {StatSchema} from './types';
-import {QuerySchema} from '../types';
+import {Stat} from '../swagger/Stat';
+import {StatSchema} from '../swagger/data-contracts';
+
+const StatApi = new Stat(api);
 
 export const createStat = async (statData: StatSchema): Promise<void> => {
   /**
@@ -16,11 +18,7 @@ export const createStat = async (statData: StatSchema): Promise<void> => {
    * await createStat(statData);
    */
   try {
-    const response: AxiosResponse<void> = await api.post(
-      '/stat/create',
-      statData,
-    );
-
+    const response: AxiosResponse<void> = await StatApi.createCreate(statData);
     if (response.status === 204) {
       return Promise.resolve();
     } else {
@@ -68,11 +66,11 @@ export const deleteStat = async (statId: number): Promise<void> => {
   }
 };
 
-export const getStats = async (statQuery: QuerySchema): Promise<void> => {
+export const getStats = async (statQuery: any): Promise<void> => {
   /**
    * Retrieves a list of stats based on the provided query parameters.
    *
-   * @param {QuerySchema} statQuery - The query parameters for retrieving stats.
+   * @param {any} statQuery - The query parameters for retrieving stats.
    * @returns {Promise<void>} A promise that resolves with the retrieved stats.
    * @throws {string} Throws an error with a message describing the issue if the operation fails.
    * @example

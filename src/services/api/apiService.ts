@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from 'axios';
+import {HttpClient} from './swagger/http-client';
 
 type ApiConfigMap = {
   development: string;
@@ -15,7 +15,7 @@ const API_URLS: ApiConfigMap = {
 const environment = process.env.NODE_ENV || 'development';
 const apiBaseUrl = API_URLS[environment as keyof typeof API_URLS];
 
-const api: AxiosInstance = axios.create({
+const api = new HttpClient({
   baseURL: apiBaseUrl,
   withCredentials: true, // Required to handle cookies
 });

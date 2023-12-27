@@ -1,17 +1,17 @@
 import {AxiosResponse, AxiosError} from 'axios';
 import api from '../apiService';
-import {UserCreateSchema, UserGetSchema, LoginUserSchema} from './types';
+import {UserCreateSchema, UserGetSchema} from '../swagger/data-contracts';
+import {User} from '../swagger/User';
 
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlaskLoginCookie} from '../../asyncStorage/types';
 
+const UserApi = new User(api);
+
 export const createUser = async (userData: UserCreateSchema): Promise<void> => {
   try {
-    const response: AxiosResponse<void> = await api.post(
-      '/user/create',
-      userData,
-    );
+    const response: AxiosResponse<void> = await UserApi.createCreate(userData);
 
     if (response.status === 204) {
       return Promise.resolve();
@@ -42,14 +42,12 @@ export const createUser = async (userData: UserCreateSchema): Promise<void> => {
   }
 };
 
-export const loginUser = async (
-  credentials: LoginUserSchema,
-): Promise<void> => {
+export const loginUser = async (data: {
+  email: string;
+  password: string;
+}): Promise<void> => {
   try {
-    const response: AxiosResponse<void> = await api.post(
-      '/user/login',
-      credentials,
-    );
+    const response: AxiosResponse<void> = await UserApi.loginCreate(data);
     if (response.status === 204) {
       const cookieHeader = response.headers['set-cookie'];
       if (cookieHeader) {
@@ -90,7 +88,7 @@ export const loginUser = async (
 
 export const logoutUser = async (): Promise<void> => {
   try {
-    const response: AxiosResponse<void> = await api.post('/user/logout');
+    const response: AxiosResponse<void> = await UserApi.logoutCreate();
 
     if (response.status === 204) {
       AsyncStorage.removeItem(FlaskLoginCookie);
@@ -122,7 +120,7 @@ export const logoutUser = async (): Promise<void> => {
 
 export const testAuthentication = async (): Promise<void> => {
   try {
-    const response: AxiosResponse<void> = await api.get('/user/authenticated');
+    const response: AxiosResponse<void> = await UserApi.authenticatedList();
 
     if (response.status === 200) {
       console.log('User authenticated');
@@ -155,9 +153,7 @@ export const testAuthentication = async (): Promise<void> => {
 
 export const getUserDetails = async (): Promise<UserGetSchema> => {
   try {
-    const response: AxiosResponse<UserGetSchema> = await api.get(
-      '/user/details',
-    );
+    const response: AxiosResponse<UserGetSchema> = await UserApi.detailsList();
 
     if (response.status === 200) {
       return response.data;

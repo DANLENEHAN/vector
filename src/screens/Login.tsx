@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {loginUser, createUser} from '../services/api/user/functions';
+import {loginUser, createUser} from '../services/api/blueprints/user_api';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Components
@@ -19,8 +19,15 @@ import {
 import {useTheme} from '../context/ThemeContext';
 // Types
 import {ScreenProps} from './types';
+import {
+  DateFormat,
+  Gender,
+  FitnessGoal,
+  HeightUnit,
+  WeightUnit,
+  ProfileStatus,
+} from '../services/api/swagger/data-contracts';
 
-// Note fix typing of props
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,21 +56,21 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
         password: password,
         age: 125,
         birthday: '1997-05-18',
-        date_format_pref: '%Y-%m-%d',
+        date_format_pref: DateFormat.ValueDMY,
         first_name: `${email.split('@')[0]}`,
-        gender: 'male',
-        goal: 'build_muscle',
-        height_unit_pref: 'cm',
+        gender: Gender.Male,
+        goal: FitnessGoal.BuildMuscle,
+        height_unit_pref: HeightUnit.Cm,
         language: 'en',
         last_name: 'Lenehan',
         phone_number: '+447308821533',
         premium: false,
-        status: 'active',
+        status: ProfileStatus.Active,
         username: 'danlen97',
-        weight_unit_pref: 'kg',
+        weight_unit_pref: WeightUnit.Kg,
       });
       await loginUser({email: email, password: password});
-      navigation.navigate('App');
+      navigation.navigate('App', {screen: 'Home'});
     } catch (error) {
       console.error('Account creation failed:', error);
     }

@@ -7,7 +7,7 @@ import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlaskLoginCookie} from '../services/asyncStorage/types';
-import {testAuthentication} from '../services/api/user/functions';
+import {testAuthentication} from '../services/api/blueprints/user_api';
 
 // Types
 import {ScreenProps} from './types';
@@ -18,7 +18,7 @@ const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
       const value = await AsyncStorage.getItem(FlaskLoginCookie);
       if (value !== null) {
         await testAuthentication();
-        navigation.navigate('App');
+        navigation.navigate('App', {screen: 'Home'});
       } else {
         console.log('Auth failed, login required, redirecting');
         navigation.navigate('Login');

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 // Functions
-import {logoutUser} from '../../../services/api/user/functions';
+import {logoutUser} from '../../../services/api/blueprints/user_api';
 // Components
 import SettingsOption from '../../../components/settings/SettingsOption';
 import Header from '../../../components/navbar/Header';

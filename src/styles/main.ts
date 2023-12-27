@@ -23,8 +23,6 @@ export const fontSizes = {
   title: 32,
 };
 
-// Typing required for adding fontWeight
-// to Tab.Screen options prop object
 export type FontTypes =
   | 'ultraLight'
   | 'thin'

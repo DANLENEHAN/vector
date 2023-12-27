@@ -9,7 +9,7 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 
 // Types
 import {ScreenProps} from '../types';
-import {StatType} from '../../services/api/stat/types';
+import {StatType} from '../../services/api/swagger/data-contracts';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -17,8 +17,8 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
-import {createStat} from '../../services/api/stat/functions';
-import {getUserDetails} from '../../services/api/user/functions';
+import {createStat} from '../../services/api/blueprints/stat_api';
+import {getUserDetails} from '../../services/api/blueprints/user_api';
 
 type Mood = {
   label: string;
@@ -58,6 +58,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         stat_type: StatType.Feeling,
         user_id: user.user_id,
         value: moodValue,
+        note: null,
       });
       navigation.goBack();
     } catch (error) {

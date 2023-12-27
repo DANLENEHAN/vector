@@ -11,7 +11,7 @@ import NumberInput from '../../components/inputs/NumberInput';
 
 // Types
 import {ScreenProps} from '../types';
-import {StatType, WaterUnit} from '../../services/api/stat/types';
+import {StatType} from '../../services/api/swagger/data-contracts';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -19,8 +19,20 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
-import {createStat} from '../../services/api/stat/functions';
-import {getUserDetails} from '../../services/api/user/functions';
+import {createStat} from '../../services/api/blueprints/stat_api';
+import {getUserDetails} from '../../services/api/blueprints/user_api';
+
+/*
+  This enum is currently not picked up by the Swagger codegen.
+  This is because it's not currently used in any of the Validation
+  schemas. Whereas in the 'UserCreateSchema' for example. This will be
+  solved when we degeneralise the 'Stat' model and create a separate
+  model for each stat type and thus a separate schema for each stat type.
+*/
+enum WaterUnit {
+  ML = 'ML',
+  OZ = 'OZ',
+}
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -39,6 +51,7 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
         stat_type: StatType.Water,
         user_id: user.user_id,
         value: parsedWater,
+        note: null,
       });
       navigation.goBack();
     } catch (error) {
