@@ -7,9 +7,17 @@ import {User} from '../swagger/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlaskLoginCookie} from '../../asyncStorage/types';
 
+// Functions
+import {HandleSwaggerValidationError} from '../functions';
+
+// Types
+import {SwaggerValidationError} from '../types';
+
 const UserApi = new User(api);
 
-export const createUser = async (userData: UserCreateSchema): Promise<void> => {
+export const createUser = async (
+  userData: UserCreateSchema,
+): Promise<void | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<void> = await UserApi.createCreate(userData);
 
@@ -20,25 +28,7 @@ export const createUser = async (userData: UserCreateSchema): Promise<void> => {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 400:
-          throw `User validation error: ${errorMessage}`;
-        case 409:
-          throw `User already exists: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    return HandleSwaggerValidationError(error, {400: null, 409: null});
   }
 };
 

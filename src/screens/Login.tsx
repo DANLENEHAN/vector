@@ -49,30 +49,31 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleCreateAccount = async () => {
-    try {
-      await createUser({
-        // NOTE: Remove these hard-coded values when the UI is implemented fully
-        email: email,
-        password: password,
-        age: 125,
-        birthday: '1997-05-18',
-        date_format_pref: DateFormat.ValueDMY,
-        first_name: `${email.split('@')[0]}`,
-        gender: Gender.Male,
-        goal: FitnessGoal.BuildMuscle,
-        height_unit_pref: HeightUnit.Cm,
-        language: 'en',
-        last_name: 'Lenehan',
-        phone_number: '+447308821533',
-        premium: false,
-        status: ProfileStatus.Active,
-        username: 'danlen97',
-        weight_unit_pref: WeightUnit.Kg,
-      });
+    const response = await createUser({
+      // NOTE: Remove these hard-coded values when the UI is implemented fully
+      email: email,
+      password: password,
+      age: 125,
+      birthday: '1997-05-18',
+      date_format_pref: DateFormat.ValueDMY,
+      first_name: `${email.split('@')[0]}`,
+      gender: Gender.Male,
+      goal: FitnessGoal.BuildMuscle,
+      height_unit_pref: HeightUnit.Cm,
+      language: 'en',
+      last_name: 'Lenehan',
+      phone_number: '+447308821533',
+      premium: false,
+      status: ProfileStatus.Active,
+      username: 'danlen97',
+      weight_unit_pref: WeightUnit.Kg,
+    });
+    if (response === undefined) {
+      console.log('Account creation successful, logging in.');
       await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
-    } catch (error) {
-      console.error('Account creation failed:', error);
+    } else {
+      console.error(`Error: ${response.message}`);
     }
   };
 
