@@ -35,6 +35,13 @@ Fix all linting errors in current directory.
 npx eslint --fix .
 ```
 
+## Prettier
+
+Run prettier on src directory
+```bash
+npx prettier src --write
+```
+
 ## Jest
 Jest is a JavaScript testing framework developed by Facebook, designed for simplicity and speed, enabling developers to write unit and integration tests for their applications.
 
@@ -91,4 +98,13 @@ Re-install
 ```bash
 npm install
 cd ios; pod install
+```
+
+## Swagger To Typescript
+
+[Docs](https://www.npmjs.com/package/swagger-typescript-api)
+
+Transform your swagger.json to typescript
+```bash
+npx swagger-typescript-api -p ../grau/docs/swagger.json -o ./src/services/api/swagger --sort-types --sort-routes  --enum-names-as-values --responses  --axios --modular --single-http-client  --debug
 ```
