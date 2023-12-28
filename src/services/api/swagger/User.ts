@@ -33,7 +33,7 @@ export class User<SecurityDataType = unknown> {
    * @request GET:/user/authenticated
    * @secure
    * @response `200` `void` User authenticated
-   * @response `500` `void` User not authenticated
+   * @response `401` `void` User not authenticated
    */
   authenticatedList = (params: RequestParams = {}) =>
     this.http.request<void, void>({
