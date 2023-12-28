@@ -1902,6 +1902,7 @@ export interface UserCreateSchema {
   password: string;
   /**
    * Phone Number
+   * @format phone
    * @minLength 7
    * @maxLength 64
    * @example "+447308831531"
@@ -1989,6 +1990,7 @@ export interface UserGetSchema {
   last_name: string;
   /**
    * Phone Number
+   * @format phone
    * @minLength 7
    * @maxLength 64
    * @example "+447308831531"
@@ -2103,6 +2105,7 @@ export interface UserUpdateSchema {
   last_name: string;
   /**
    * Phone Number
+   * @format phone
    * @minLength 7
    * @maxLength 64
    * @example "+447308831531"
