@@ -87,7 +87,7 @@ export const testAuthentication =
         } as SwaggerValidationError;
       }
     } catch (error) {
-      return HandleSwaggerValidationError(error, {500: null});
+      return HandleSwaggerValidationError(error, {401: null});
     }
   };
 
