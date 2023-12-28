@@ -1,11 +1,21 @@
-import {AxiosResponse, AxiosError} from 'axios';
+import {AxiosResponse} from 'axios';
 import api from '../apiService';
+
+// Functions
+import {HandleSwaggerValidationError} from '../functions';
+
+// Components
 import {Stat} from '../swagger/Stat';
+
+// Types
 import {StatSchema} from '../swagger/data-contracts';
+import {SwaggerValidationError} from '../types';
 
 const StatApi = new Stat(api);
 
-export const createStat = async (statData: StatSchema): Promise<void> => {
+export const createStat = async (
+  statData: StatSchema,
+): Promise<void | SwaggerValidationError> => {
   /**
    * Creates a new stat record using the provided data.
    *
@@ -26,23 +36,7 @@ export const createStat = async (statData: StatSchema): Promise<void> => {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 400:
-          throw `Stat validation error: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 

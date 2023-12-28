@@ -11,3 +11,5 @@ export type SwaggerValidationError = {
   data?: object;
   message: string;
 };
+
+export const unknownErrorMessage: string = 'Unknown error occurred';

@@ -11,7 +11,7 @@ import {FlaskLoginCookie} from '../../asyncStorage/types';
 import {HandleSwaggerValidationError} from '../functions';
 
 // Types
-import {SwaggerValidationError} from '../types';
+import {SwaggerValidationError, unknownErrorMessage} from '../types';
 
 const UserApi = new User(api);
 
@@ -24,8 +24,7 @@ export const createUser = async (
     if (response.status === 204) {
       return Promise.resolve();
     } else {
-      // Handle unexpected response status codes.
-      throw `Unexpected status code: ${response.status}`;
+      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null, 409: null});
@@ -51,8 +50,7 @@ export const loginUser = async (data: {
       }
       return Promise.resolve();
     } else {
-      // Handle unexpected response status codes.
-      throw `Unexpected status code: ${response.status}`;
+      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null});
@@ -67,8 +65,7 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
       AsyncStorage.removeItem(FlaskLoginCookie);
       return Promise.resolve();
     } else {
-      // Handle unexpected response status codes.
-      throw `Unexpected status code: ${response.status}`;
+      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null});
@@ -84,23 +81,26 @@ export const testAuthentication =
         console.log('User authenticated');
         return Promise.resolve();
       } else {
-        // Handle unexpected response status codes.
-        throw `Unexpected status code: ${response.status}`;
+        return {
+          message: unknownErrorMessage,
+          data: {},
+        } as SwaggerValidationError;
       }
     } catch (error) {
       return HandleSwaggerValidationError(error, {500: null});
     }
   };
 
-export const getUserDetails = async (): Promise<UserGetSchema> => {
+export const getUserDetails = async (): Promise<
+  UserGetSchema | SwaggerValidationError
+> => {
   try {
     const response: AxiosResponse<UserGetSchema> = await UserApi.detailsList();
 
     if (response.status === 200) {
       return response.data;
     } else {
-      // Handle unexpected response status codes.
-      throw `Unexpected status code: ${response.status}`;
+      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
     }
   } catch (error) {
     const validationError = HandleSwaggerValidationError(error, {500: null});

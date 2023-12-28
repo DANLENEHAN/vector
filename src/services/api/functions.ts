@@ -1,6 +1,10 @@
 // Types
 import {AxiosError} from 'axios';
-import {StatusCodeToMessage, SwaggerValidationError} from './types';
+import {
+  StatusCodeToMessage,
+  SwaggerValidationError,
+  unknownErrorMessage,
+} from './types';
 
 /**
  * A function for handling Grau's Error responses. All response codes and
@@ -17,7 +21,7 @@ import {StatusCodeToMessage, SwaggerValidationError} from './types';
 export const HandleSwaggerValidationError = (
   error: unknown,
   statusCodeToMessage: StatusCodeToMessage,
-  defaultErrorMessage: string = 'Unknown error occurred',
+  defaultErrorMessage: string = unknownErrorMessage,
 ): SwaggerValidationError => {
   const axiosError = error as AxiosError;
   if (axiosError.response) {
