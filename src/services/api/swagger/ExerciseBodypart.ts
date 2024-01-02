@@ -12,8 +12,8 @@
 import {
   ExerciseBodypartCreateSchema,
   ExerciseBodypartGetSchema,
-  ExerciseBodypartQuerySchema,
   ExerciseBodypartUpdateSchema,
+  QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
@@ -92,10 +92,7 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @response `204` `void` Exercise bodypart found successfully
    * @response `400` `void` Query validation error
    */
-  postExerciseBodypart = (
-    data: ExerciseBodypartQuerySchema,
-    params: RequestParams = {},
-  ) =>
+  postExerciseBodypart = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/exercise_bodypart/get`,
       method: 'POST',

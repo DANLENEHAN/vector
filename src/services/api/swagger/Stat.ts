@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import {StatQuerySchema, StatSchema} from './data-contracts';
+import {QuerySchema, StatSchema} from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
 export class Stat<SecurityDataType = unknown> {
@@ -88,7 +88,7 @@ export class Stat<SecurityDataType = unknown> {
    * @response `204` `void` Stats found successfully
    * @response `400` `void` Query validation error
    */
-  postStat = (data: StatQuerySchema, params: RequestParams = {}) =>
+  postStat = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/stat/get`,
       method: 'POST',
