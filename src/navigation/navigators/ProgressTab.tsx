@@ -5,12 +5,12 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 // Screens
-import WellnessProgressScreen from '@/screens/progress/WellnessProgress';
-import WorkoutProgressScreen from '@/screens/progress/WorkoutProgress';
-import NutritionProgressScreen from '@/screens/progress/NutritionProgress';
+import WellnessProgressScreen from '../../screens/progress/WellnessProgress';
+import WorkoutProgressScreen from '../../screens/progress/WorkoutProgress';
+import NutritionProgressScreen from '../../screens/progress/NutritionProgress';
 
 // Components
-import TrackNavBar from '@/components/navbar/TrackNavBar';
+import TrackNavBar from '../../components/navbar/TrackNavBar';
 
 // Navigation stacks
 const ProgressTabStack = createMaterialTopTabNavigator();
