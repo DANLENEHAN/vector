@@ -11,7 +11,7 @@ import NumberInput from '../../components/inputs/NumberInput';
 
 // Types
 import {ScreenProps} from '../types';
-import {StatType} from '../../services/api/swagger/data-contracts';
+import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -22,24 +22,12 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
 
-/*
-  This enum is currently not picked up by the Swagger codegen.
-  This is because it's not currently used in any of the Validation
-  schemas. Whereas in the 'UserCreateSchema' for example. This will be
-  solved when we degeneralise the 'Stat' model and create a separate
-  model for each stat type and thus a separate schema for each stat type.
-*/
-enum WaterUnit {
-  ML = 'ML',
-  OZ = 'OZ',
-}
-
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   // Variables to track the unit selection
-  const [activeUnit, setActiveUnit] = useState<string>(WaterUnit.ML);
+  const [activeUnit, setActiveUnit] = useState<string>(WaterUnit.Ml);
   const [waterValue, setWaterValue] = useState<string>('0');
 
   const handleSavedWater = async () => {
@@ -47,7 +35,7 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
     const user_details = await getUserDetails();
     if ('user_id' in user_details) {
       await createStat({
-        unit: activeUnit.toLowerCase(),
+        unit: activeUnit.toLowerCase() as WaterUnit,
         stat_type: StatType.Water,
         user_id: user_details.user_id,
         value: parsedWater,
