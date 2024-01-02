@@ -34,7 +34,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
     allowFloatingNumbers ? '0.0' : '0',
   );
   // Variables to track the unit selection
-  const [activeUnit, setActiveUnit] = useState<string>(WeightUnit.KG);
+  const [activeUnit, setActiveUnit] = useState<string>(WeightUnit.Kg);
 
   // Function to handle the tracking of the weight
   const handleSaveWeight = async () => {
@@ -46,19 +46,17 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       console.log('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
-
-    try {
-      const user = await getUserDetails();
+    const user_details = await getUserDetails();
+    if ('user_id' in user_details) {
       await createStat({
         unit: activeUnit.toLowerCase(),
         stat_type: StatType.Weight,
-        user_id: user.user_id,
+        user_id: user_details.user_id,
         value: parsedWeight,
       });
-      console.log('Successfully saved weight (', parsedWeight, activeUnit, ')');
       navigation.goBack();
-    } catch (error) {
-      console.log("Couldn't save weight", error);
+    } else {
+      console.error(`Error: ${user_details.message}`);
     }
   };
 
