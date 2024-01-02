@@ -85,16 +85,17 @@ export class Stat<SecurityDataType = unknown> {
    * @summary Get stats.
    * @request POST:/stat/get
    * @secure
-   * @response `204` `void` Stats found successfully
+   * @response `204` `(StatSchema)[]` Stats found successfully
    * @response `400` `void` Query validation error
    */
   postStat = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
+    this.http.request<StatSchema[], void>({
       path: `/stat/get`,
       method: 'POST',
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
       ...params,
     });
   /**
