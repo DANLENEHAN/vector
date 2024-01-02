@@ -11,28 +11,18 @@ import ClickableTile from '../../components/buttons/ClickableTile';
 import Header from '../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../types';
-
-type TileData = {
-  label: string;
-  icon: string;
-  backgroundColor?: string;
-  lastTracked?: string;
-};
+import {TileData} from '../../components/buttons/ClickableTile';
 
 const tile_data: TileData[] = [
   {
-    label: 'Sleep',
-    icon: 'bed',
-    lastTracked: '8 hours ago',
-    backgroundColor: '#F5A623',
-  },
-  {
     label: 'Weight',
     icon: 'weight-scale',
+    route: 'WeightTracking',
   },
   {
     label: 'Mood',
     icon: 'face-smile',
+    route: 'MoodTracking',
   },
 ];
 
@@ -53,7 +43,9 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
             <ClickableTile
               key={index}
               onPress={() =>
-                navigation.navigate(tile.label as 'Sleep' | 'Weight' | 'Mood')
+                navigation.navigate(
+                  tile.route as 'WeightTracking' | 'MoodTracking',
+                )
               }
               label={tile.label}
               icon={tile.icon}

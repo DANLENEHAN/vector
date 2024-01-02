@@ -21,11 +21,14 @@ export type RootStackParamList = {
   Splash: undefined;
   App: NavigatorScreenParams<HomeParamList>;
   Login: undefined;
-  Mood: undefined;
-  Sleep: undefined;
-  Weight: undefined;
-  Water: undefined;
-  Macronutrients: undefined;
+  // Tracking Screens
+  MoodTracking: undefined;
+  WeightTracking: undefined;
+  WaterTracking: undefined;
+  // Progress Screens
+  MoodProgress: undefined;
+  WeightProgress: undefined;
+  WaterProgress: undefined;
 };
 
 export type ScreenNavigationProp = NativeStackNavigationProp<

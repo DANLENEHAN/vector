@@ -51,17 +51,17 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleSaveMood = async () => {
-    try {
-      const user = await getUserDetails();
+    const user_details = await getUserDetails();
+    if ('user_id' in user_details) {
       await createStat({
         unit: 'out_of_10',
         stat_type: StatType.Feeling,
-        user_id: user.user_id,
+        user_id: user_details.user_id,
         value: moodValue,
       });
       navigation.goBack();
-    } catch (error) {
-      console.log("Couldn't save mood", error);
+    } else {
+      console.error(`Error: ${user_details.message}`);
     }
   };
 

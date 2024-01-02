@@ -17,18 +17,12 @@ import {useTheme} from '../../context/ThemeContext';
 import ClickableTile from '../../components/buttons/ClickableTile';
 // Types
 import {ScreenProps} from '../types';
+import {TileData} from '../../components/buttons/ClickableTile';
 
-const tile_data = [
-  {
-    label: 'Calorie & Macros',
-    route: 'Macronutrients',
-    icon: 'utensils',
-    lastTracked: '8 hours ago',
-    backgroundColor: '#F5A623',
-  },
+const tile_data: TileData[] = [
   {
     label: 'Water',
-    route: 'Water',
+    route: 'WaterTracking',
     icon: 'glass-water-droplet',
   },
 ];
@@ -53,9 +47,7 @@ const NutritionTracking: React.FC<ScreenProps> = ({navigation}) => {
           <ClickableTile
             style={[{marginBottom: margins.xLarge}, styles.clickableTitle]}
             key={index}
-            onPress={() =>
-              navigation.navigate(tile.route as 'Water' | 'Macronutrients')
-            }
+            onPress={() => navigation.navigate(tile.route as 'WaterTracking')}
             label={tile.label}
             icon={tile.icon}
             lastTracked={tile.lastTracked}

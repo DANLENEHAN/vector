@@ -18,8 +18,6 @@ import WaterScreen from '../screens/track/Water';
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
 
-//
-
 // Navigation stacks
 import TrackTabNavigator from './navigators/TrackTab';
 import ProgressTabNavigator from './navigators/ProgressTab';
@@ -82,19 +80,30 @@ const AuthNavigator: React.FC = () => {
           component={AppNavigator}
           options={{headerShown: false}}
         />
+        {
+          // Track Screens
+        }
         <AppStack.Screen
-          name="Weight"
+          name="WeightTracking"
           component={WeightTracking}
           options={{headerShown: false}}
         />
         <AppStack.Screen
-          name="Mood"
+          name="MoodTracking"
           component={MoodScreen}
           options={{headerShown: false}}
         />
         <AppStack.Screen
-          name="Water"
+          name="WaterTracking"
           component={WaterScreen}
+          options={{headerShown: false}}
+        />
+        {
+          // Progress Screens
+        }
+        <AppStack.Screen
+          name="WeightProgress"
+          component={WeightTracking}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>

@@ -30,6 +30,15 @@ type ClickableTileProps = {
   lastTracked?: string;
 };
 
+// Tile Data Type
+export type TileData = {
+  label: string;
+  icon: string;
+  backgroundColor?: string;
+  lastTracked?: string;
+  route: string;
+};
+
 const ClickableTile: React.FC<ClickableTileProps> = ({
   onPress,
   label,

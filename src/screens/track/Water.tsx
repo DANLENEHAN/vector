@@ -44,17 +44,17 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
-    try {
-      const user = await getUserDetails();
+    const user_details = await getUserDetails();
+    if ('user_id' in user_details) {
       await createStat({
         unit: activeUnit.toLowerCase(),
         stat_type: StatType.Water,
-        user_id: user.user_id,
+        user_id: user_details.user_id,
         value: parsedWater,
       });
       navigation.goBack();
-    } catch (error) {
-      console.log("Couldn't save water", error);
+    } else {
+      console.error(`Error: ${user_details.message}`);
     }
   };
 
