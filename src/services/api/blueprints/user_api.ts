@@ -103,7 +103,6 @@ export const getUserDetails = async (): Promise<
       return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
     }
   } catch (error) {
-    const validationError = HandleSwaggerValidationError(error, {500: null});
-    throw Error(`Error: ${validationError.message}`);
+    return HandleSwaggerValidationError(error, {500: null});
   }
 };
