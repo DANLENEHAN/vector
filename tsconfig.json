@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "esModuleInterop": true,
-    "baseUrl": "./", // Base directory to resolve non-relative module names
-    "paths": {
-      "@/components/*": ["src/*"],
-    }
+    "esModuleInterop": true
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
 }
