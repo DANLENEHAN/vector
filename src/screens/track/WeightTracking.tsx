@@ -49,7 +49,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
     const user_details = await getUserDetails();
     if ('user_id' in user_details) {
       await createStat({
-        unit: activeUnit.toLowerCase(),
+        unit: activeUnit.toLowerCase() as WeightUnit,
         stat_type: StatType.Weight,
         user_id: user_details.user_id,
         value: parsedWeight,
