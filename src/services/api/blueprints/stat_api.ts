@@ -60,12 +60,14 @@ export const deleteStat = async (statId: number): Promise<void> => {
   }
 };
 
-export const getStats = async (statQuery: any): Promise<void> => {
+export const getStats = async (
+  statQuery: any,
+): Promise<StatSchema[] | SwaggerValidationError> => {
   /**
    * Retrieves a list of stats based on the provided query parameters.
    *
    * @param {any} statQuery - The query parameters for retrieving stats.
-   * @returns {Promise<void>} A promise that resolves with the retrieved stats.
+   * @returns {Promise<StatSchema[]>} A promise that resolves with the retrieved stats.
    * @throws {string} Throws an error with a message describing the issue if the operation fails.
    * @example
    * // Example usage:
@@ -73,10 +75,18 @@ export const getStats = async (statQuery: any): Promise<void> => {
    * await getStats(statQuery);
    */
   try {
-    statQuery;
-    // Implementation for getStats
+    const response: AxiosResponse<StatSchema[]> = await StatApi.postStat(
+      statQuery,
+    );
+    if (response.status === 204) {
+      return response.data as StatSchema[];
+    } else {
+      // Handle unexpected response status codes.
+      throw `Unexpected status code: ${response.status}`;
+    }
   } catch (error) {
     // Exception handling for getStats
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 
