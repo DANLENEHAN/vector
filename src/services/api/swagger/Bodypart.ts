@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import {BodypartGetSchema, BodypartQuerySchema} from './data-contracts';
+import {BodypartGetSchema, QuerySchema} from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
 export class Bodypart<SecurityDataType = unknown> {
@@ -46,7 +46,7 @@ export class Bodypart<SecurityDataType = unknown> {
    * @response `204` `void` Bodyparts found successfully
    * @response `400` `void` Query validation error
    */
-  postBodypart = (data: BodypartQuerySchema, params: RequestParams = {}) =>
+  postBodypart = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/bodypart/get`,
       method: 'POST',

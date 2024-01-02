@@ -12,8 +12,8 @@
 import {
   PlanComponentCreateSchema,
   PlanComponentGetSchema,
-  PlanComponentQuerySchema,
   PlanComponentUpdateSchema,
+  QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
@@ -90,10 +90,7 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @response `204` `void` Plan Component found successfully
    * @response `400` `void` Query validation error
    */
-  postPlanComponent = (
-    data: PlanComponentQuerySchema,
-    params: RequestParams = {},
-  ) =>
+  postPlanComponent = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/plan_component/get`,
       method: 'POST',

@@ -12,8 +12,8 @@
 import {
   ExerciseCreateSchema,
   ExerciseGetSchema,
-  ExerciseQuerySchema,
   ExerciseUpdateSchema,
+  QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
@@ -86,7 +86,7 @@ export class Exercise<SecurityDataType = unknown> {
    * @response `204` `void` Exercise found successfully
    * @response `400` `void` Query validation error
    */
-  postExercise = (data: ExerciseQuerySchema, params: RequestParams = {}) =>
+  postExercise = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/exercise/get`,
       method: 'POST',

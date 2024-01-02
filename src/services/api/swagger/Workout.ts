@@ -10,14 +10,13 @@
  */
 
 import {
+  QuerySchema,
   WorkoutComponentCreateSchema,
   WorkoutComponentGetSchema,
-  WorkoutComponentQuerySchema,
   WorkoutComponentTreeRootCreateSchema,
   WorkoutComponentUpdateSchema,
   WorkoutCreateSchema,
   WorkoutGetSchema,
-  WorkoutQuerySchema,
   WorkoutTreeRootCreateSchema,
   WorkoutUpdateSchema,
 } from './data-contracts';
@@ -104,10 +103,7 @@ export class Workout<SecurityDataType = unknown> {
    * @response `204` `void` Workout components found successfully
    * @response `400` `void` Query validation error
    */
-  componentGetCreate = (
-    data: WorkoutComponentQuerySchema,
-    params: RequestParams = {},
-  ) =>
+  componentGetCreate = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/workout/component/get`,
       method: 'POST',
@@ -249,7 +245,7 @@ export class Workout<SecurityDataType = unknown> {
    * @response `204` `void` Workouts found successfully
    * @response `400` `void` Query validation error
    */
-  postWorkout = (data: WorkoutQuerySchema, params: RequestParams = {}) =>
+  postWorkout = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/workout/get`,
       method: 'POST',

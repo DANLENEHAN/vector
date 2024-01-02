@@ -12,8 +12,8 @@
 import {
   PlanCreateSchema,
   PlanGetSchema,
-  PlanQuerySchema,
   PlanUpdateSchema,
+  QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
@@ -87,7 +87,7 @@ export class Plan<SecurityDataType = unknown> {
    * @response `204` `void` Plan found successfully
    * @response `400` `void` Query validation error
    */
-  postPlan = (data: PlanQuerySchema, params: RequestParams = {}) =>
+  postPlan = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/plan/get`,
       method: 'POST',

@@ -48,24 +48,12 @@ export interface BodypartGetSchema {
 }
 
 /**
- * BodypartQuerySchema
- * Schema to validate the bodypart query schema
+ * CaloriesUnit
+ * Calories units.
  */
-export interface BodypartQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the bodypart
-   * @default {}
-   * @example {"bodypart_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
+export enum CaloriesUnit {
+  Kcal = 'kcal',
+  Kj = 'kj',
 }
 
 /**
@@ -212,27 +200,6 @@ export interface EquipmentGetSchema {
 }
 
 /**
- * EquipmentQuerySchema
- * Schema to validate the equipment query schema
- */
-export interface EquipmentQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the equipment
-   * @default {}
-   * @example {"equipment_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * EquipmentUpdateSchema
  * Schema for validating the equipment update schema
  */
@@ -353,27 +320,6 @@ export interface ExerciseBodypartGetSchema {
 }
 
 /**
- * ExerciseBodypartQuerySchema
- * Schema to validate the exercise bodypart query schema
- */
-export interface ExerciseBodypartQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the exercise bodypart
-   * @default {}
-   * @example {"exercise_bodypart_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * ExerciseBodypartUpdateSchema
  * ExerciseBodypart update schema
  */
@@ -483,27 +429,6 @@ export interface ExerciseEquipmentGetSchema {
 }
 
 /**
- * ExerciseEquipmentQuerySchema
- * Schema to validate the exercise equipment query schema
- */
-export interface ExerciseEquipmentQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the exercise equipment
-   * @default {}
-   * @example {"exercise_equipment_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * ExerciseEquipmentUpdateSchema
  * ExerciseEquipmentGetSchema update schema
  */
@@ -579,27 +504,6 @@ export interface ExerciseGetSchema {
 }
 
 /**
- * ExerciseQuerySchema
- * Schema to validate the exercise query schema
- */
-export interface ExerciseQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the exercise
-   * @default {}
-   * @example {"exercise_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * ExerciseUpdateSchema
  * Schema for validating the full exercise schema
  */
@@ -634,6 +538,12 @@ export interface ExerciseUpdateSchema {
    */
   name: string;
 }
+
+/**
+ * FeelingUnit
+ * Feeling units.
+ */
+export type FeelingUnit = 'out_of_10';
 
 /**
  * FitnessGoal
@@ -759,27 +669,6 @@ export interface PlanComponentGetSchema {
 }
 
 /**
- * PlanComponentQuerySchema
- * Schema to validate the plan component query schema
- */
-export interface PlanComponentQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the plan component
-   * @default {}
-   * @example {"plan_component_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * PlanComponentUpdateSchema
  * Validation schema for the Plan Component model.
  */
@@ -893,27 +782,6 @@ export interface PlanGetSchema {
    * @example 1
    */
   plan_id: number;
-}
-
-/**
- * PlanQuerySchema
- * Schema to validate the plan query schema
- */
-export interface PlanQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the plan
-   * @default {}
-   * @example {"plan_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
 }
 
 /**
@@ -1192,27 +1060,6 @@ export interface SetComponentGetSchema {
   weight: number;
   /** Weight units. */
   weight_metric: WeightUnit;
-}
-
-/**
- * SetComponentQuerySchema
- * Schema to validate the set query schema
- */
-export interface SetComponentQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the set component
-   * @default {}
-   * @example {"set_component_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
 }
 
 /**
@@ -1514,27 +1361,6 @@ export interface SetGetSchema {
 }
 
 /**
- * SetQuerySchema
- * Schema to validate the set query schema
- */
-export interface SetQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the set
-   * @default {}
-   * @example {"set_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * SetTreeCreateSchema
  * A tree version of the SetCreateSchema where
  * all child components are included nested within the set.
@@ -1686,27 +1512,6 @@ export enum SeverityLevel {
 }
 
 /**
- * StatQuerySchema
- * Validate queries for stats
- */
-export interface StatQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the stats
-   * @default {}
-   * @example {"stat_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * StatSchema
  * Validation schema for the Stat model.
  */
@@ -1729,7 +1534,13 @@ export interface StatSchema {
    * @maxLength 50
    * @example "kg"
    */
-  unit: string;
+  unit:
+    | CaloriesUnit
+    | FeelingUnit
+    | HeightUnit
+    | StepsUnit
+    | WaterUnit
+    | WeightUnit;
   /**
    * User Id
    * The user_id of the stat
@@ -1757,6 +1568,12 @@ export enum StatType {
   Calories = 'calories',
   Steps = 'steps',
 }
+
+/**
+ * StepsUnit
+ * Steps units.
+ */
+export type StepsUnit = 'steps';
 
 /**
  * SubMuscleGroup
@@ -2027,27 +1844,6 @@ export interface UserGetSchema {
 }
 
 /**
- * UserQuerySchema
- * Schema to validate the user query schema
- */
-export interface UserQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the user
-   * @default {}
-   * @example {"user_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
-}
-
-/**
  * UserUpdateSchema
  * Schema for validating user details excluding password
  */
@@ -2128,6 +1924,16 @@ export interface UserUpdateSchema {
   username: string;
   /** Weight units. */
   weight_unit_pref: WeightUnit;
+}
+
+/**
+ * WaterUnit
+ * Water units.
+ */
+export enum WaterUnit {
+  Ml = 'ml',
+  FlOz = 'fl oz',
+  Cups = 'cups',
 }
 
 /**
@@ -2258,27 +2064,6 @@ export interface WorkoutComponentGetSchema {
    * @example 1
    */
   workout_id: number;
-}
-
-/**
- * WorkoutComponentQuerySchema
- * Schema to validate the workout component query schema
- */
-export interface WorkoutComponentQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the workout component
-   * @default {}
-   * @example {"workout_component_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
 }
 
 /**
@@ -2580,27 +2365,6 @@ export interface WorkoutGetSchema {
    * @example 1
    */
   workout_id: number;
-}
-
-/**
- * WorkoutQuerySchema
- * Schema to validate the workout query schema
- */
-export interface WorkoutQuerySchema {
-  /**
-   * Filters
-   * The filters to apply to the workout
-   * @default {}
-   * @example {"workout_id":{"eq":1}}
-   */
-  filters?: object;
-  /**
-   * Sort
-   * The sort to apply to the query
-   * @default ["created_at:desc"]
-   * @example ["created_at:desc"]
-   */
-  sort?: any[];
 }
 
 /**

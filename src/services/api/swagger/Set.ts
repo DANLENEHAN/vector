@@ -10,13 +10,12 @@
  */
 
 import {
+  QuerySchema,
   SetComponentCreateSchema,
   SetComponentGetSchema,
-  SetComponentQuerySchema,
   SetComponentUpdateSchema,
   SetCreateSchema,
   SetGetSchema,
-  SetQuerySchema,
   SetTreeRootCreateSchema,
   SetUpdateSchema,
 } from './data-contracts';
@@ -81,10 +80,7 @@ export class Set<SecurityDataType = unknown> {
    * @response `204` `void` Set Component found successfully
    * @response `400` `void` Query validation error
    */
-  componentGetCreate = (
-    data: SetComponentQuerySchema,
-    params: RequestParams = {},
-  ) =>
+  componentGetCreate = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/set/component/get`,
       method: 'POST',
@@ -216,7 +212,7 @@ export class Set<SecurityDataType = unknown> {
    * @response `204` `void` Set found successfully
    * @response `400` `void` Query validation error
    */
-  postSet = (data: SetQuerySchema, params: RequestParams = {}) =>
+  postSet = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/set/get`,
       method: 'POST',

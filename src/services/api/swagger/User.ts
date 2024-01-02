@@ -10,9 +10,9 @@
  */
 
 import {
+  QuerySchema,
   UserCreateSchema,
   UserGetSchema,
-  UserQuerySchema,
   UserUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
@@ -153,7 +153,7 @@ export class User<SecurityDataType = unknown> {
    * @response `204` `void` Users found successfully
    * @response `400` `void` Query validation error
    */
-  postUser = (data: UserQuerySchema, params: RequestParams = {}) =>
+  postUser = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/user/get`,
       method: 'POST',
