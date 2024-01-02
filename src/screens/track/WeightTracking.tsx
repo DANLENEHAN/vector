@@ -18,10 +18,10 @@ import UnitSelector from '../../components/buttons/UnitSelector';
 import NumberInput from '../../components/inputs/NumberInput';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Services
-import {createStat} from '../../services/api/stat/functions';
-import {getUserDetails} from '../../services/api/user/functions';
+import {createStat} from '../../services/api/blueprints/stat_api';
+import {getUserDetails} from '../../services/api/blueprints/user_api';
 // Types
-import {StatType, WeightUnit} from '../../services/api/stat/types';
+import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {

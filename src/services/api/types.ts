@@ -1,6 +1,15 @@
-export type QuerySchema = {};
+export type StatusCodeToMessage = {
+  /**
+   * Object of Valid Status codes and messages
+   * assoicated with them. Can be null to allow
+   * use of api reponse message.
+   */
+  [statusCode: number]: string | null;
+};
 
-export enum SortOrder {
-  Ascending = 'asc',
-  Descending = 'desc',
-}
+export type SwaggerValidationError = {
+  data?: object;
+  message: string;
+};
+
+export const unknownErrorMessage: string = 'Unknown error occurred';

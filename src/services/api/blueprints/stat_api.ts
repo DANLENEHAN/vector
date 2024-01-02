@@ -1,9 +1,21 @@
-import {AxiosResponse, AxiosError} from 'axios';
+import {AxiosResponse} from 'axios';
 import api from '../apiService';
-import {StatSchema} from './types';
-import {QuerySchema} from '../types';
 
-export const createStat = async (statData: StatSchema): Promise<void> => {
+// Functions
+import {HandleSwaggerValidationError} from '../functions';
+
+// Components
+import {Stat} from '../swagger/Stat';
+
+// Types
+import {StatSchema} from '../swagger/data-contracts';
+import {SwaggerValidationError} from '../types';
+
+const StatApi = new Stat(api);
+
+export const createStat = async (
+  statData: StatSchema,
+): Promise<void | SwaggerValidationError> => {
   /**
    * Creates a new stat record using the provided data.
    *
@@ -16,11 +28,7 @@ export const createStat = async (statData: StatSchema): Promise<void> => {
    * await createStat(statData);
    */
   try {
-    const response: AxiosResponse<void> = await api.post(
-      '/stat/create',
-      statData,
-    );
-
+    const response: AxiosResponse<void> = await StatApi.createCreate(statData);
     if (response.status === 204) {
       return Promise.resolve();
     } else {
@@ -28,23 +36,7 @@ export const createStat = async (statData: StatSchema): Promise<void> => {
       throw `Unexpected status code: ${response.status}`;
     }
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      const statusCode = axiosError.response.status;
-      const errorMessage =
-        (axiosError.response?.data as {message?: string})?.message ||
-        'Unknown error occurred';
-
-      switch (statusCode) {
-        case 400:
-          throw `Stat validation error: ${errorMessage}`;
-        default:
-          throw `Unexpected status code: ${statusCode}`;
-      }
-    } else {
-      // Handle network or other errors.
-      throw axiosError.message || 'Unknown error occurred';
-    }
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 
@@ -68,11 +60,11 @@ export const deleteStat = async (statId: number): Promise<void> => {
   }
 };
 
-export const getStats = async (statQuery: QuerySchema): Promise<void> => {
+export const getStats = async (statQuery: any): Promise<void> => {
   /**
    * Retrieves a list of stats based on the provided query parameters.
    *
-   * @param {QuerySchema} statQuery - The query parameters for retrieving stats.
+   * @param {any} statQuery - The query parameters for retrieving stats.
    * @returns {Promise<void>} A promise that resolves with the retrieved stats.
    * @throws {string} Throws an error with a message describing the issue if the operation fails.
    * @example

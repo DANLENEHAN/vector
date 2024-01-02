@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 // Functions
-import {logoutUser} from '../../../services/api/user/functions';
+import {logoutUser} from '../../../services/api/blueprints/user_api';
 // Components
 import SettingsOption from '../../../components/settings/SettingsOption';
 import Header from '../../../components/navbar/Header';
@@ -12,13 +12,12 @@ import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 import {useTheme} from '../../../context/ThemeContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
-  // Function to handle logout
   const handleLogout = async () => {
-    try {
-      await logoutUser();
+    const response = await logoutUser();
+    if (response === undefined) {
       navigation.navigate('Login');
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } else {
+      console.error(`Error: ${response.message}`);
     }
   };
 
