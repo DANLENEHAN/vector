@@ -20,10 +20,10 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
-import {isSwaggerValidationError} from '../../services/api/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
+import {SwaggerValidationError} from '../../services/api/types';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -46,7 +46,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       return; // Stop the function if the weight is invalid
     }
     const user_details = await getUserDetails();
-    if (isSwaggerValidationError(user_details)) {
+    if (user_details instanceof SwaggerValidationError) {
       console.error(`Error: ${user_details.message}`);
     } else {
       await createStat({

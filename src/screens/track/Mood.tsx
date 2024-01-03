@@ -10,6 +10,7 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '../types';
 import {StatType} from '../../services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '../../services/api/types';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -19,7 +20,6 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
-import {isSwaggerValidationError} from '../../services/api/functions';
 
 type Mood = {
   label: string;
@@ -53,7 +53,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSaveMood = async () => {
     const user_details = await getUserDetails();
-    if (isSwaggerValidationError(user_details)) {
+    if (user_details instanceof SwaggerValidationError) {
       console.error(`Error: ${user_details.message}`);
     } else {
       await createStat({

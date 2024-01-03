@@ -50,9 +50,3 @@ export const HandleSwaggerValidationError = (
     );
   }
 };
-
-export function isSwaggerValidationError(
-  object: any,
-): object is SwaggerValidationError {
-  return object && object.is_swagger_validation_error === true;
-}

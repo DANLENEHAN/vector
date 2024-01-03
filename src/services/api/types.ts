@@ -7,13 +7,17 @@ export type StatusCodeToMessage = {
   [statusCode: number]: string | null;
 };
 
-export type SwaggerValidationError = {
+export class SwaggerValidationError {
   /**
    * Data object returned when request fails.
    */
-  is_swagger_validation_error: boolean;
   data?: object;
   message: string;
-};
+
+  constructor(message: string, data?: object) {
+    this.message = message;
+    this.data = data;
+  }
+}
 
 export const unknownErrorMessage: string = 'Unknown error occurred';

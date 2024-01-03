@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 // Services
 import {loginUser, createUser} from '../services/api/blueprints/user_api';
-import {isSwaggerValidationError} from '../services/api/functions';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Components
@@ -29,6 +28,7 @@ import {
   WeightUnit,
   ProfileStatus,
 } from '../services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '../services/api/types';
 
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
@@ -43,7 +43,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleLogin = async () => {
     let response = await loginUser({email: email, password: password});
-    if (isSwaggerValidationError(response)) {
+    if (response instanceof SwaggerValidationError) {
       console.error(`Error: ${response.message}`);
     } else {
       navigation.navigate('App', {screen: 'Home'});
@@ -70,7 +70,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       username: 'danlen97',
       weight_unit_pref: WeightUnit.Kg,
     });
-    if (isSwaggerValidationError(response)) {
+    if (response instanceof SwaggerValidationError) {
       console.error(`Error: ${response.message}`);
     } else {
       console.log('Account creation successful, logging in.');

@@ -17,10 +17,10 @@ import Header from '../../components/navbar/Header';
 // Services
 import {getStats} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
-import {isSwaggerValidationError} from '../../services/api/functions';
 // Types
 import {ScreenProps} from '../types';
 import {StatSchema, StatType} from '../../services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '../../services/api/types';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   //const {theme} = useTheme();
@@ -33,7 +33,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
     const fetchData = async () => {
       //setLoading(true);
       const user_details = await getUserDetails();
-      if (isSwaggerValidationError(user_details)) {
+      if (user_details instanceof SwaggerValidationError) {
         console.error(`Error: ${user_details.message}`);
       } else {
         const response = await getStats({
@@ -43,7 +43,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
           },
           sort: ['created_at:desc'],
         });
-        if (isSwaggerValidationError(response)) {
+        if (response instanceof SwaggerValidationError) {
           //setError(response.message);
           console.error(`Error: ${response.message}`);
         } else {
