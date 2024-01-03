@@ -10,6 +10,7 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '../types';
 import {StatType} from '../../services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '../../services/api/types';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -52,7 +53,9 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSaveMood = async () => {
     const user_details = await getUserDetails();
-    if ('user_id' in user_details) {
+    if (user_details instanceof SwaggerValidationError) {
+      console.error(`Error: ${user_details.message}`);
+    } else {
       await createStat({
         unit: 'out_of_10',
         stat_type: StatType.Feeling,
@@ -60,8 +63,6 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         value: moodValue,
       });
       navigation.goBack();
-    } else {
-      console.error(`Error: ${user_details.message}`);
     }
   };
 

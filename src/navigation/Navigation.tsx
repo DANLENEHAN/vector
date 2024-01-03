@@ -7,13 +7,17 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 
-// Screens
+//// Screens
+// Generic Screens
 import LoginScreen from '../screens/Login';
 import Splash from '../screens/Splash';
 import Generic from '../screens/Generic';
+// Track Screens
 import WeightTracking from '../screens/track/WeightTracking';
 import MoodScreen from '../screens/track/Mood';
 import WaterScreen from '../screens/track/Water';
+// Progress Screens
+import WeightProgress from '../screens/progress/WeightProgress';
 
 // Components
 import BottomNavBar from '../components/navbar/BottomNavBar';
@@ -103,7 +107,7 @@ const AuthNavigator: React.FC = () => {
         }
         <AppStack.Screen
           name="WeightProgress"
-          component={WeightTracking}
+          component={WeightProgress}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>

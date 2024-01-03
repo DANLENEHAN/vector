@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+// Services
 import {loginUser, createUser} from '../services/api/blueprints/user_api';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
@@ -27,6 +28,7 @@ import {
   WeightUnit,
   ProfileStatus,
 } from '../services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '../services/api/types';
 
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
@@ -41,10 +43,10 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleLogin = async () => {
     let response = await loginUser({email: email, password: password});
-    if (response === undefined) {
-      navigation.navigate('App', {screen: 'Home'});
-    } else {
+    if (response instanceof SwaggerValidationError) {
       console.error(`Error: ${response.message}`);
+    } else {
+      navigation.navigate('App', {screen: 'Home'});
     }
   };
 
@@ -68,12 +70,12 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       username: 'danlen97',
       weight_unit_pref: WeightUnit.Kg,
     });
-    if (response === undefined) {
+    if (response instanceof SwaggerValidationError) {
+      console.error(`Error: ${response.message}`);
+    } else {
       console.log('Account creation successful, logging in.');
       response = await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
-    } else {
-      console.error(`Error: ${response.message}`);
     }
   };
 
