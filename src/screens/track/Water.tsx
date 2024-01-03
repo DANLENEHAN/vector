@@ -21,6 +21,7 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {isSwaggerValidationError} from '../../services/api/functions';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -33,7 +34,9 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
     const user_details = await getUserDetails();
-    if ('user_id' in user_details) {
+    if (isSwaggerValidationError(user_details)) {
+      console.error(`Error: ${user_details.message}`);
+    } else {
       await createStat({
         unit: activeUnit.toLowerCase() as WaterUnit,
         stat_type: StatType.Water,
@@ -41,8 +44,6 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
         value: parsedWater,
       });
       navigation.goBack();
-    } else {
-      console.error(`Error: ${user_details.message}`);
     }
   };
 

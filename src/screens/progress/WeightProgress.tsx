@@ -1,6 +1,6 @@
 // React imports
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Layouts
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
@@ -15,13 +15,44 @@ import {
 // Components
 import Header from '../../components/navbar/Header';
 // Services
-//import {getStats} from '../../services/api/blueprints/stat_api';
+import {getStats} from '../../services/api/blueprints/stat_api';
+import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {isSwaggerValidationError} from '../../services/api/functions';
 // Types
 import {ScreenProps} from '../types';
+import {StatSchema, StatType} from '../../services/api/swagger/data-contracts';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   //const {theme} = useTheme();
   //const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const [data, setData] = useState<StatSchema[]>([]);
+  //const [isLoading, setLoading] = useState(true);
+  //const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      //setLoading(true);
+      const user_details = await getUserDetails();
+      if (isSwaggerValidationError(user_details)) {
+        console.error(`Error: ${user_details.message}`);
+      } else {
+        const response = await getStats({
+          filters: {
+            user_id: {eq: user_details.user_id},
+            stat_type: {eq: StatType.Weight},
+          },
+          sort: ['created_at:desc'],
+        });
+        if (isSwaggerValidationError(response)) {
+          //setError(response.message);
+          console.error(`Error: ${response.message}`);
+        } else {
+          setData(response);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -31,7 +62,17 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
         includeBackArrow={true}
         includeTopMargin={true}
       />
-      <View style={styles.content} />
+      <View style={styles.content}>
+        <ScrollView>
+          {data.map(item => (
+            <View style={{marginBottom: 10}}>
+              <Text>Unit: {item.unit}</Text>
+              <Text>Created At: {item.created_at}</Text>
+              <Text>Value: {item.value}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
     </ScreenWrapper>
   );
 };

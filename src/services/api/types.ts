@@ -8,6 +8,10 @@ export type StatusCodeToMessage = {
 };
 
 export type SwaggerValidationError = {
+  /**
+   * Data object returned when request fails.
+   */
+  is_swagger_validation_error: boolean;
   data?: object;
   message: string;
 };

@@ -20,6 +20,7 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {isSwaggerValidationError} from '../../services/api/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
@@ -38,16 +39,16 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
 
   // Function to handle the tracking of the weight
   const handleSaveWeight = async () => {
-    console.log('Saving weight...');
     const parsedWeight = parseFloat(weightValue);
-    console.log('Parsed weight: ', parsedWeight);
     // Validation: Check if the weight is 0 or the string is empty
     if (isNaN(parsedWeight) || parsedWeight <= 0) {
-      console.log('Invalid weight value. Please enter a valid weight.');
+      console.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
     const user_details = await getUserDetails();
-    if ('user_id' in user_details) {
+    if (isSwaggerValidationError(user_details)) {
+      console.error(`Error: ${user_details.message}`);
+    } else {
       await createStat({
         unit: activeUnit.toLowerCase() as WeightUnit,
         stat_type: StatType.Weight,
@@ -55,8 +56,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
         value: parsedWeight,
       });
       navigation.goBack();
-    } else {
-      console.error(`Error: ${user_details.message}`);
     }
   };
 

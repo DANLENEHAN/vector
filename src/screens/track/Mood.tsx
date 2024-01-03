@@ -19,6 +19,7 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
 import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {isSwaggerValidationError} from '../../services/api/functions';
 
 type Mood = {
   label: string;
@@ -52,7 +53,9 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSaveMood = async () => {
     const user_details = await getUserDetails();
-    if ('user_id' in user_details) {
+    if (isSwaggerValidationError(user_details)) {
+      console.error(`Error: ${user_details.message}`);
+    } else {
       await createStat({
         unit: 'out_of_10',
         stat_type: StatType.Feeling,
@@ -60,8 +63,6 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
         value: moodValue,
       });
       navigation.goBack();
-    } else {
-      console.error(`Error: ${user_details.message}`);
     }
   };
 

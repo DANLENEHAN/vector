@@ -78,7 +78,7 @@ export const getStats = async (
     const response: AxiosResponse<StatSchema[]> = await StatApi.postStat(
       statQuery,
     );
-    if (response.status === 204) {
+    if (response.status === 201) {
       return response.data as StatSchema[];
     } else {
       // Handle unexpected response status codes.
