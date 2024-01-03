@@ -26,8 +26,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   //const {theme} = useTheme();
   //const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [data, setData] = useState<StatSchema[]>([]);
-  //const [isLoading, setLoading] = useState(true);
-  //const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +42,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
           sort: ['created_at:desc'],
         });
         if (response instanceof SwaggerValidationError) {
-          //setError(response.message);
           console.error(`Error: ${response.message}`);
         } else {
           setData(response);
@@ -52,7 +49,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       }
     };
     fetchData();
-  }, []);
+  });
 
   return (
     <ScreenWrapper>
