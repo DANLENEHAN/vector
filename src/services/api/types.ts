@@ -11,8 +11,8 @@ export class SwaggerValidationError {
   /**
    * Data object returned when request fails.
    */
-  data?: object;
   message: string;
+  data?: object;
 
   constructor(message: string, data?: object) {
     this.message = message;

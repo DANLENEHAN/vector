@@ -34,11 +34,7 @@ export const HandleSwaggerValidationError = (
 
     for (const [key, val] of Object.entries(statusCodeToMessage)) {
       if (Number(key) === statusCode) {
-        return {
-          is_swagger_validation_error: true,
-          data: data,
-          message: val ?? errorMessage,
-        } as SwaggerValidationError;
+        return new SwaggerValidationError(val ?? errorMessage, data);
       }
     }
     throw new Error(
