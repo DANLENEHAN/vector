@@ -23,6 +23,7 @@ const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);
   useEffect(() => {
     const getUserWater = async () => {
+      // NOTE: This is a temporary solution until we have a user profile page
       const waterUnitPref = WaterUnit.Ml;
       let user_water = await getUserStats({statType: StatType.Water});
       if (user_water == null) {

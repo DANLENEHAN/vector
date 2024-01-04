@@ -35,6 +35,7 @@ export interface TileData {
   label: string;
   icon: string;
   backgroundColor?: string;
+  // NOTE: This needs to be changed to the be subtext for the tile.
   lastTracked?: string;
   route: string;
 }
