@@ -26,7 +26,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   disabled,
   text,
   style,
-}: ButtonProps) => {
+}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
