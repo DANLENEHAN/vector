@@ -18,6 +18,17 @@ export interface CreateNewStatParams {
  * @param navigation  The navigation object.
  * @param statType  The type of stat.
  * @param unitValue  The unit of the stat.
+ * @returns {Promise<void>} A promise that resolves when the stat is successfully created.
+ * @throws {string} Throws an error with a message describing the issue if the operation fails.
+ *
+ * @example
+ * // Example usage:
+ * const value = 42;
+ * const navigation = { /* navigation object * / };
+ * const statType = 'weight';
+ * const unitValue = 'kg';
+ * await createNewStat({value: value, navigation: navigation, statType: statType, unitValue: unitValue});
+ *
  */
 export const createNewStat = async ({
   value,
