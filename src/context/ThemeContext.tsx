@@ -11,12 +11,12 @@ import {Appearance} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserThemePreference} from '../services/asyncStorage/types';
 
-type ThemeContextType = {
+interface ThemeContextType {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
   userPreferenceTheme: 'light' | 'dark' | 'system';
   setUserPreferenceTheme: (theme: 'light' | 'dark' | 'system') => void;
-};
+}
 
 const ThemeContext = createContext<ThemeContextType>(null!);
 

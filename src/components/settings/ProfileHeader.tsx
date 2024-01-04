@@ -13,11 +13,11 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type ProfileHeaderProps = {
+interface ProfileHeaderProps {
   profileImageUrl: string;
   userName: string;
   userUsername: string;
-};
+}
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImageUrl,

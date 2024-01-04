@@ -1,11 +1,11 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 
-type ClickableLinkProps = {
+interface ClickableLinkProps {
   onPress: () => void;
   text: string;
   textStyle: object;
-};
+}
 
 const ClickableLink: React.FC<ClickableLinkProps> = ({
   onPress,

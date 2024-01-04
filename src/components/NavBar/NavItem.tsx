@@ -15,12 +15,12 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type NavItemProps = {
+interface NavItemProps {
   icon: string;
   label?: string;
   onPress: () => void;
   isActive?: boolean;
-};
+}
 
 const NavItem: React.FC<NavItemProps> = ({
   icon,

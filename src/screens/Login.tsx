@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 // Services
-import {loginUser, createUser} from '../services/api/blueprints/user_api';
+import {loginUser, createUser} from '../services/api/blueprints/user/api';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Components

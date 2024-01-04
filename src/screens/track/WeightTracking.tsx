@@ -18,12 +18,10 @@ import UnitSelector from '../../components/buttons/UnitSelector';
 import NumberInput from '../../components/inputs/NumberInput';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Services
-import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {createNewStat} from '../../services/api/blueprints/stat/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
-import {SwaggerValidationError} from '../../services/api/types';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -45,18 +43,12 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       console.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
-    const user_details = await getUserDetails();
-    if (user_details instanceof SwaggerValidationError) {
-      console.error(`Error: ${user_details.message}`);
-    } else {
-      await createStat({
-        unit: activeUnit.toLowerCase() as WeightUnit,
-        stat_type: StatType.Weight,
-        user_id: user_details.user_id,
-        value: parsedWeight,
-      });
-      navigation.goBack();
-    }
+    createNewStat({
+      value: parsedWeight,
+      unitValue: activeUnit.toLowerCase() as WeightUnit,
+      navigation: navigation,
+      statType: StatType.Weight,
+    });
   };
 
   return (

@@ -15,8 +15,8 @@ import {
 // Components
 import Header from '../../components/navbar/Header';
 // Services
-import {getStats} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {getStats} from '../../services/api/blueprints/stat/api';
+import {getUserDetails} from '../../services/api/blueprints/user/api';
 // Types
 import {ScreenProps} from '../types';
 import {StatSchema, StatType} from '../../services/api/swagger/data-contracts';

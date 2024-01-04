@@ -1,15 +1,15 @@
 import {AxiosResponse} from 'axios';
-import api from '../apiService';
+import api from '../../apiService';
 
 // Functions
-import {HandleSwaggerValidationError} from '../functions';
+import {HandleSwaggerValidationError} from '../../functions';
 
 // Components
-import {Stat} from '../swagger/Stat';
+import {Stat} from '../../swagger/Stat';
 
 // Types
-import {StatSchema} from '../swagger/data-contracts';
-import {SwaggerValidationError} from '../types';
+import {StatSchema} from '../../swagger/data-contracts';
+import {SwaggerValidationError} from '../../types';
 
 const StatApi = new Stat(api);
 

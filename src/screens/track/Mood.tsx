@@ -10,7 +10,6 @@ import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '../types';
 import {StatType} from '../../services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '../../services/api/types';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -18,18 +17,17 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
-import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {createNewStat} from '../../services/api/blueprints/stat/functions';
 
-type Mood = {
+interface Mood {
   label: string;
   icon: string;
   color: string;
-};
+}
 
-type MoodsDictionary = {
+interface MoodsDictionary {
   [key: number]: Mood;
-};
+}
 
 const moods: MoodsDictionary = {
   0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
@@ -52,18 +50,12 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleSaveMood = async () => {
-    const user_details = await getUserDetails();
-    if (user_details instanceof SwaggerValidationError) {
-      console.error(`Error: ${user_details.message}`);
-    } else {
-      await createStat({
-        unit: 'out_of_10',
-        stat_type: StatType.Feeling,
-        user_id: user_details.user_id,
-        value: moodValue,
-      });
-      navigation.goBack();
-    }
+    createNewStat({
+      value: moodValue,
+      unitValue: 'out_of_10',
+      navigation: navigation,
+      statType: StatType.Feeling,
+    });
   };
 
   const mood = moods[moodValue];

@@ -1,8 +1,8 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import ProgressTabNavigator from '@/navigation/navigators/ProgressTab';
+import ProgressTabNavigator from '../../../src/navigation/navigators/ProgressTab';
 import {NavigationContainer} from '@react-navigation/native';
-import {useTheme} from '@/context/ThemeContext';
+import {useTheme} from '../../../src/context/ThemeContext';
 
 jest.mock('../../../src/context/ThemeContext', () => ({
   useTheme: jest.fn(),
