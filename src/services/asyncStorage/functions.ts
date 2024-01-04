@@ -26,6 +26,6 @@ export async function getUserDetails(field_name: string): Promise<any> {
       throw 'User details not found in AsyncStorage';
     }
   } catch (error) {
-    throw `Error retrieving user details: ${error}`;
+    return Promise.reject(new Error(`Error retrieving user details: ${error}`));
   }
 }

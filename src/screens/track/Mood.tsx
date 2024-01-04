@@ -17,8 +17,7 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
-import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/asyncStorage/functions';
+import {createNewStat} from '../../services/api/blueprints/stat/functions';
 
 type Mood = {
   label: string;
@@ -51,18 +50,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleSaveMood = async () => {
-    try {
-      const user_id = await getUserDetails('user_id');
-      await createStat({
-        unit: 'out_of_10',
-        stat_type: StatType.Feeling,
-        user_id: user_id,
-        value: moodValue,
-      });
-      navigation.goBack();
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
+    createNewStat(moodValue, navigation, StatType.Feeling, 'out_of_10');
   };
 
   const mood = moods[moodValue];

@@ -18,8 +18,7 @@ import UnitSelector from '../../components/buttons/UnitSelector';
 import NumberInput from '../../components/inputs/NumberInput';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 // Services
-import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/asyncStorage/functions';
+import {createNewStat} from '../../services/api/blueprints/stat/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
@@ -44,18 +43,12 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       console.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
-    try {
-      const user_id = await getUserDetails('user_id');
-      await createStat({
-        unit: activeUnit.toLowerCase() as WeightUnit,
-        stat_type: StatType.Weight,
-        user_id: user_id,
-        value: parsedWeight,
-      });
-      navigation.goBack();
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
+    createNewStat(
+      parsedWeight,
+      navigation,
+      StatType.Weight,
+      activeUnit.toLowerCase() as WeightUnit,
+    );
   };
 
   return (

@@ -19,8 +19,7 @@ import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
-import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/asyncStorage/functions';
+import {createNewStat} from '../../services/api/blueprints/stat/functions';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -32,18 +31,12 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
-    try {
-      const user_id = await getUserDetails('user_id');
-      await createStat({
-        unit: activeUnit.toLowerCase() as WaterUnit,
-        stat_type: StatType.Water,
-        user_id: user_id,
-        value: parsedWater,
-      });
-      navigation.goBack();
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
+    createNewStat(
+      parsedWater,
+      navigation,
+      StatType.Water,
+      activeUnit.toLowerCase() as WaterUnit,
+    );
   };
 
   return (
