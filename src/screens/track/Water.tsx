@@ -12,7 +12,6 @@ import NumberInput from '../../components/inputs/NumberInput';
 // Types
 import {ScreenProps} from '../types';
 import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '../../services/api/types';
 
 // Styling
 import {useTheme} from '../../context/ThemeContext';
@@ -21,7 +20,7 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
 import {createStat} from '../../services/api/blueprints/stat_api';
-import {getUserDetails} from '../../services/api/blueprints/user_api';
+import {getUserDetails} from '../../services/asyncStorage/functions';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useTheme();
@@ -33,17 +32,17 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
-    const user_details = await getUserDetails();
-    if (user_details instanceof SwaggerValidationError) {
-      console.error(`Error: ${user_details.message}`);
-    } else {
+    try {
+      const user_id = await getUserDetails('user_id');
       await createStat({
         unit: activeUnit.toLowerCase() as WaterUnit,
         stat_type: StatType.Water,
-        user_id: user_details.user_id,
+        user_id: user_id,
         value: parsedWater,
       });
       navigation.goBack();
+    } catch (error) {
+      console.error(`Error: ${error}`);
     }
   };
 

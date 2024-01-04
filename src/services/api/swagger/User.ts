@@ -99,15 +99,22 @@ export class User<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Logs in and returns the authentication cookie
-   *
-   * @tags Users
-   * @name LoginCreate
-   * @summary Login a user
-   * @request POST:/user/login
-   * @response `204` `void` Login successful Note: The below doesn't actually work but is important for understanding how the login/logout and session management system works. See issue here: https://github.com/swagger-api/swagger-ui/issues/5596 The session ID is returned in the Response headers `Set-Cookie` headers `session` key. You need to include this cookie in subsequent requests. If using Swagger UI, you can find the cookie in the network tab of the developer tools. Add the cookie to the request headers by clicking the Lock/Authorize button in the UI at the top of page for global authorization or on a per request basis at the endpoint level.
-   * @response `401` `void` Login failed
-   */
+ * @description Logs in and returns the authentication cookie
+ *
+ * @tags Users
+ * @name LoginCreate
+ * @summary Login a user
+ * @request POST:/user/login
+ * @response `201` `{
+  \**
+   * Unique user identifier.
+   * @example 123
+   *\
+    user_id?: number,
+
+}` Login successful Note: The below doesn't actually work but is important for understanding how the login/logout and session management system works. See issue here: https://github.com/swagger-api/swagger-ui/issues/5596 The session ID is returned in the Response headers `Set-Cookie` headers `session` key. You need to include this cookie in subsequent requests. If using Swagger UI, you can find the cookie in the network tab of the developer tools. Add the cookie to the request headers by clicking the Lock/Authorize button in the UI at the top of page for global authorization or on a per request basis at the endpoint level.
+ * @response `401` `void` Login failed
+ */
   loginCreate = (
     data: {
       /** @example "dan@gmail.com" */
@@ -117,11 +124,21 @@ export class User<SecurityDataType = unknown> {
     },
     params: RequestParams = {},
   ) =>
-    this.http.request<void, void>({
+    this.http.request<
+      {
+        /**
+         * Unique user identifier.
+         * @example 123
+         */
+        user_id?: number;
+      },
+      void
+    >({
       path: `/user/login`,
       method: 'POST',
       body: data,
       type: ContentType.Json,
+      format: 'json',
       ...params,
     });
   /**

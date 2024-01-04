@@ -5,7 +5,7 @@ import {User} from '../swagger/User';
 
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie} from '../../asyncStorage/types';
+import {FlaskLoginCookie, UserDetails} from '../../asyncStorage/types';
 
 // Functions
 import {HandleSwaggerValidationError} from '../functions';
@@ -36,8 +36,8 @@ export const loginUser = async (data: {
   password: string;
 }): Promise<void | SwaggerValidationError> => {
   try {
-    const response: AxiosResponse<void> = await UserApi.loginCreate(data);
-    if (response.status === 204) {
+    const response: AxiosResponse<object> = await UserApi.loginCreate(data);
+    if (response.status === 201) {
       const cookieHeader = response.headers['set-cookie'];
       if (cookieHeader) {
         const targetCookie = cookieHeader.find(cookie =>
@@ -48,6 +48,16 @@ export const loginUser = async (data: {
           AsyncStorage.setItem(FlaskLoginCookie, cookieValue);
         }
       }
+      const response_data = response.data;
+      // If data is null, return an error.
+      if (!response_data) {
+        return {
+          message: unknownErrorMessage,
+          data: {},
+        } as SwaggerValidationError;
+      }
+      // Save the user ID to AsyncStorage and return a resolved promise.
+      AsyncStorage.setItem(UserDetails, JSON.stringify(response_data));
       return Promise.resolve();
     } else {
       return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
