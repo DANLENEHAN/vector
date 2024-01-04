@@ -49,7 +49,7 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
           <ClickableTile
             style={[{marginBottom: margins.xLarge}, styles.clickableTitle]}
             key={index}
-            onPress={() => navigation.navigate(tile.route as 'WaterTracking')}
+            onPress={() => navigation.navigate(tile.route as 'WaterProgress')}
             label={tile.label}
             icon={tile.icon}
             lastTracked={tile.lastTracked}
