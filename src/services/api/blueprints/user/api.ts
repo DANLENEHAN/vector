@@ -11,7 +11,7 @@ import {FlaskLoginCookie, UserDetails} from '../../../asyncStorage/types';
 import {HandleSwaggerValidationError} from '../../functions';
 
 // Types
-import {SwaggerValidationError, unknownErrorMessage} from '../../types';
+import {SwaggerValidationError} from '../../types';
 
 const UserApi = new User(api);
 
@@ -24,7 +24,7 @@ export const createUser = async (
     if (response.status === 204) {
       return Promise.resolve();
     } else {
-      return new SwaggerValidationError(unknownErrorMessage, {});
+      return new SwaggerValidationError();
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null, 409: null});
