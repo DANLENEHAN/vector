@@ -4,51 +4,37 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Layouts
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
-import {
-  fontSizes,
-  //lightThemeColors,
-  //darkThemeColors,
-  fontWeights,
-  margins,
-} from '../../styles/main';
-//import {useTheme} from '../../context/ThemeContext';
+import {fontSizes} from '../../styles/main';
 // Components
 import Header from '../../components/navbar/Header';
 // Services
-import {getStats} from '../../services/api/blueprints/stat/api';
-import {getUserDetails} from '../../services/api/blueprints/user/api';
+import {getUserStats} from '../../services/api/blueprints/stat/functions';
+// Utils
+import {convertStats} from '../../utils/conversion';
 // Types
 import {ScreenProps} from '../types';
-import {StatSchema, StatType} from '../../services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '../../services/api/types';
+import {
+  StatSchema,
+  StatType,
+  WeightUnit,
+} from '../../services/api/swagger/data-contracts';
 
-const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
-  //const {theme} = useTheme();
-  //const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);
-
+  const weightUnitPref = WeightUnit.Stone;
   useEffect(() => {
-    const fetchData = async () => {
-      //setLoading(true);
-      const user_details = await getUserDetails();
-      if (user_details instanceof SwaggerValidationError) {
-        console.error(`Error: ${user_details.message}`);
-      } else {
-        const response = await getStats({
-          filters: {
-            user_id: {eq: user_details.user_id},
-            stat_type: {eq: StatType.Weight},
-          },
-          sort: ['created_at:desc'],
-        });
-        if (response instanceof SwaggerValidationError) {
-          console.error(`Error: ${response.message}`);
-        } else {
-          setData(response);
-        }
+    const getUserWeights = async () => {
+      let user_weights = await getUserStats({statType: StatType.Weight});
+      if (user_weights == null) {
+        console.log('No user weights found');
       }
+      user_weights = convertStats({
+        stats: user_weights,
+        targetUnit: weightUnitPref,
+      });
+      setData(user_weights ?? []);
     };
-    fetchData();
+    getUserWeights();
   });
 
   return (
@@ -75,23 +61,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: fontSizes.xLarge,
-    fontWeight: fontWeights.bold,
-  },
-  titleContainer: {
-    flex: 2,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  trackContainer: {
-    flex: 8,
-    width: '100%',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
-  },
   content: {
     flex: 1,
     width: '100%',
@@ -99,9 +68,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: fontSizes.xLarge,
   },
-  numberInput: {
-    margin: margins.small,
-  },
 });
 
-export default WeightTracking;
+export default WeightProgress;
