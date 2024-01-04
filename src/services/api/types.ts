@@ -12,11 +12,11 @@ export class SwaggerValidationError {
    * Data object returned when request fails.
    */
   message: string;
-  data?: object;
+  data: object;
 
-  constructor(message: string, data?: object) {
-    this.message = message;
-    this.data = data;
+  constructor(message?: string, data?: object) {
+    this.message = message ?? unknownErrorMessage;
+    this.data = data ?? {};
   }
 }
 

@@ -24,7 +24,7 @@ export const createUser = async (
     if (response.status === 204) {
       return Promise.resolve();
     } else {
-      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
+      return new SwaggerValidationError(unknownErrorMessage, {});
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null, 409: null});
@@ -51,16 +51,13 @@ export const loginUser = async (data: {
       const response_data = response.data;
       // If data is null, return an error.
       if (!response_data) {
-        return {
-          message: unknownErrorMessage,
-          data: {},
-        } as SwaggerValidationError;
+        return new SwaggerValidationError();
       }
       // Save the user ID to AsyncStorage and return a resolved promise.
       AsyncStorage.setItem(UserDetails, JSON.stringify(response_data));
       return Promise.resolve();
     } else {
-      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
+      return new SwaggerValidationError();
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null});
@@ -75,7 +72,7 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
       AsyncStorage.removeItem(FlaskLoginCookie);
       return Promise.resolve();
     } else {
-      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
+      return new SwaggerValidationError();
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {400: null});
@@ -91,10 +88,7 @@ export const testAuthentication =
         console.log('User authenticated');
         return Promise.resolve();
       } else {
-        return {
-          message: unknownErrorMessage,
-          data: {},
-        } as SwaggerValidationError;
+        return new SwaggerValidationError();
       }
     } catch (error) {
       return HandleSwaggerValidationError(error, {401: null});
@@ -110,7 +104,7 @@ export const getUserDetails = async (): Promise<
     if (response.status === 200) {
       return response.data;
     } else {
-      return {message: unknownErrorMessage, data: {}} as SwaggerValidationError;
+      return new SwaggerValidationError();
     }
   } catch (error) {
     return HandleSwaggerValidationError(error, {500: null});
