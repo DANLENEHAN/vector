@@ -7,7 +7,7 @@ import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlaskLoginCookie} from '../services/asyncStorage/types';
-import {testAuthentication} from '../services/api/blueprints/user_api';
+import {testAuthentication} from '../services/api/blueprints/user/api';
 
 // Types
 import {ScreenProps} from './types';

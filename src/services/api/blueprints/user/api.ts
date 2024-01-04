@@ -1,17 +1,17 @@
 import {AxiosResponse} from 'axios';
-import api from '../apiService';
-import {UserCreateSchema, UserGetSchema} from '../swagger/data-contracts';
-import {User} from '../swagger/User';
+import api from '../../apiService';
+import {UserCreateSchema, UserGetSchema} from '../../swagger/data-contracts';
+import {User} from '../../swagger/User';
 
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie, UserDetails} from '../../asyncStorage/types';
+import {FlaskLoginCookie, UserDetails} from '../../../asyncStorage/types';
 
 // Functions
-import {HandleSwaggerValidationError} from '../functions';
+import {HandleSwaggerValidationError} from '../../functions';
 
 // Types
-import {SwaggerValidationError, unknownErrorMessage} from '../types';
+import {SwaggerValidationError, unknownErrorMessage} from '../../types';
 
 const UserApi = new User(api);
 
