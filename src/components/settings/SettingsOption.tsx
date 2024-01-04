@@ -13,14 +13,14 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type SettingsOptionProps = {
+interface SettingsOptionProps {
   icon: string;
   label: string;
   onPress: () => void;
   fontColor?: string;
   caret?: boolean;
   logo_circle_color?: string;
-};
+}
 
 const SettingsOption: React.FC<SettingsOptionProps> = ({
   icon,

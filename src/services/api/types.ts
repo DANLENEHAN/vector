@@ -1,11 +1,11 @@
-export type StatusCodeToMessage = {
+export interface StatusCodeToMessage {
   /**
    * Object of Valid Status codes and messages
    * assoicated with them. Can be null to allow
    * use of api reponse message.
    */
   [statusCode: number]: string | null;
-};
+}
 
 export class SwaggerValidationError {
   /**

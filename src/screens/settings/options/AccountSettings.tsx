@@ -7,6 +7,7 @@ import SettingsOption from '../../../components/settings/SettingsOption';
 import Header from '../../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../../types';
+import {SwaggerValidationError} from '../../../services/api/types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 import {useTheme} from '../../../context/ThemeContext';
@@ -14,10 +15,10 @@ import {useTheme} from '../../../context/ThemeContext';
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {
     const response = await logoutUser();
-    if (response === undefined) {
-      navigation.navigate('Login');
-    } else {
+    if (response instanceof SwaggerValidationError) {
       console.error(`Error: ${response.message}`);
+    } else {
+      navigation.navigate('Login');
     }
   };
 

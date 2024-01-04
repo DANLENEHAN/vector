@@ -16,7 +16,7 @@ import HeaderBackButton from '../buttons/HeaderBackButton';
 // Navigation
 import {ScreenNavigationProp} from '../../navigation/types';
 
-type HeaderProps = {
+interface HeaderProps {
   // Navigation prop for the screen
   navigation: ScreenNavigationProp;
   // Label for the header
@@ -25,7 +25,7 @@ type HeaderProps = {
   includeBackArrow: boolean;
   // Whether or not to include top margin (If the header is the first item on the screen)
   includeTopMargin: boolean;
-};
+}
 
 const Header: React.FC<HeaderProps> = ({
   navigation,

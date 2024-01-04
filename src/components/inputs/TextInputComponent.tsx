@@ -14,14 +14,14 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type TextInputProps = {
+interface TextInputProps {
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
-};
+}
 
 const TextInputComponent: React.FC<TextInputProps> = ({
   placeholder,

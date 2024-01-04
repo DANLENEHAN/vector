@@ -43,12 +43,12 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       console.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
-    createNewStat(
-      parsedWeight,
-      navigation,
-      StatType.Weight,
-      activeUnit.toLowerCase() as WeightUnit,
-    );
+    createNewStat({
+      value: parsedWeight,
+      unitValue: activeUnit.toLowerCase() as WeightUnit,
+      navigation: navigation,
+      statType: StatType.Weight,
+    });
   };
 
   return (

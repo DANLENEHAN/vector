@@ -12,12 +12,12 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type UnitSelectorProps = {
+interface UnitSelectorProps {
   units: string[];
   activeUnit: string;
   setActiveUnit: React.Dispatch<React.SetStateAction<string>>;
   style?: object;
-};
+}
 
 const UnitSelector: React.FC<UnitSelectorProps> = ({
   units,

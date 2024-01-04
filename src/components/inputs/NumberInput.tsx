@@ -9,12 +9,12 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type NumberInputProps = {
+interface NumberInputProps {
   allowFloat: boolean;
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   style?: object;
-};
+}
 
 const NumberInput: React.FC<NumberInputProps> = ({
   allowFloat,

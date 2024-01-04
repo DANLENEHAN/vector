@@ -19,15 +19,15 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 // Services
 import {createNewStat} from '../../services/api/blueprints/stat/functions';
 
-type Mood = {
+interface Mood {
   label: string;
   icon: string;
   color: string;
-};
+}
 
-type MoodsDictionary = {
+interface MoodsDictionary {
   [key: number]: Mood;
-};
+}
 
 const moods: MoodsDictionary = {
   0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
@@ -50,7 +50,12 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleSaveMood = async () => {
-    createNewStat(moodValue, navigation, StatType.Feeling, 'out_of_10');
+    createNewStat({
+      value: moodValue,
+      unitValue: 'out_of_10',
+      navigation: navigation,
+      statType: StatType.Feeling,
+    });
   };
 
   const mood = moods[moodValue];

@@ -1,6 +1,6 @@
 // Navigation
 import {ScreenNavigationProp} from '../navigation/types';
 
-export type ScreenProps = {
+export interface ScreenProps {
   navigation: ScreenNavigationProp;
-};
+}

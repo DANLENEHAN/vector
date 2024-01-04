@@ -4,6 +4,13 @@ import {createStat} from './api';
 // Types
 import {StatType, StatSchema} from '../../swagger/data-contracts';
 
+export interface CreateNewStatParams {
+  value: number;
+  navigation: any;
+  statType: StatType;
+  unitValue: StatSchema['unit'];
+}
+
 /**
  * @description Create a new stat.
  *
@@ -12,12 +19,12 @@ import {StatType, StatSchema} from '../../swagger/data-contracts';
  * @param statType  The type of stat.
  * @param unitValue  The unit of the stat.
  */
-export const createNewStat = async (
-  value: number,
-  navigation: any,
-  statType: StatType,
-  unitValue: StatSchema['unit'],
-) => {
+export const createNewStat = async ({
+  value,
+  navigation,
+  statType,
+  unitValue,
+}: CreateNewStatParams) => {
   try {
     const user_id = await getUserDetails('user_id');
     await createStat({

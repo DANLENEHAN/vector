@@ -14,16 +14,16 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
-type Option = {
+interface Option {
   value: string | number;
   label: string;
-};
+}
 
-type OptionGroupProps = {
+interface OptionGroupProps {
   options: Option[];
   selectedOption?: number | null;
   onOptionPress?: (index: number) => void;
-};
+}
 
 const OptionGroup: React.FC<OptionGroupProps> = ({
   options,

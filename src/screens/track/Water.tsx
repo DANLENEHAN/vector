@@ -31,12 +31,12 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
-    createNewStat(
-      parsedWater,
-      navigation,
-      StatType.Water,
-      activeUnit.toLowerCase() as WaterUnit,
-    );
+    createNewStat({
+      value: parsedWater,
+      unitValue: activeUnit.toLowerCase() as WaterUnit,
+      navigation: navigation,
+      statType: StatType.Water,
+    });
   };
 
   return (
