@@ -17,7 +17,11 @@ export async function getUserDetails(field_name: string): Promise<any> {
     const user_details = await AsyncStorage.getItem('user-details-key');
     if (user_details) {
       const user_details_json = JSON.parse(user_details);
-      return user_details_json[field_name];
+      if (field_name in user_details_json) {
+        return user_details_json[field_name];
+      } else {
+        throw `Field ${field_name} not found in user details`;
+      }
     } else {
       throw 'User details not found in AsyncStorage';
     }
