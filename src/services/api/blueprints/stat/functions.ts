@@ -1,8 +1,10 @@
 // Services
 import {getUserDetails} from '../../../asyncStorage/functions';
-import {createStat} from './api';
+import {createStat, getStats} from './api';
+
 // Types
 import {StatType, StatSchema} from '../../swagger/data-contracts';
+import {SwaggerValidationError} from '../../types';
 
 export interface CreateNewStatParams {
   value: number;
@@ -48,4 +50,40 @@ export const createNewStat = async ({
   } catch (error) {
     console.error(`Error: ${error}`);
   }
+};
+
+export interface GetUserStatsParams {
+  statType: StatType;
+}
+/**
+ * @description Get the stats.
+ *
+ * @returns {Promise<StatSchema[] | undefined>} A promise that resolves with the stats.
+ * @throws {string} Throws an error with a message describing the issue if the operation fails.
+ *
+ * @example
+ * // Example usage:
+ * await getStat();
+ *
+ */
+
+export const getUserStats = async ({statType}: GetUserStatsParams) => {
+  try {
+    const user_id = await getUserDetails('user_id');
+    const response = await getStats({
+      filters: {
+        user_id: {eq: user_id},
+        stat_type: {eq: statType},
+      },
+      sort: ['created_at:desc'],
+    });
+    if (response instanceof SwaggerValidationError) {
+      console.error(`Error: ${response.message}`);
+    } else {
+      return response;
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+  return undefined;
 };

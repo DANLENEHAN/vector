@@ -16,32 +16,30 @@ import {ScreenProps} from '../types';
 import {
   StatSchema,
   StatType,
-  WeightUnit,
+  WaterUnit,
 } from '../../services/api/swagger/data-contracts';
 
-const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
+const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);
-  // NOTE: This is a temporary solution until we have a user profile page
-  const weightUnitPref = WeightUnit.Stone;
   useEffect(() => {
-    const getUserWeights = async () => {
-      let user_weights = await getUserStats({statType: StatType.Weight});
-      if (user_weights == null) {
-        console.log('No user weights found');
+    const getUserWater = async () => {
+      // NOTE: This is a temporary solution until we have a user profile page
+      const waterUnitPref = WaterUnit.Ml;
+      let user_water = await getUserStats({statType: StatType.Water});
+      if (user_water == null) {
+        console.log('No user water found');
       }
-      user_weights = convertStats({
-        stats: user_weights,
-        targetUnit: weightUnitPref,
-      });
-      setData(user_weights ?? []);
+      setData(
+        convertStats({stats: user_water, targetUnit: waterUnitPref}) ?? [],
+      );
     };
-    getUserWeights();
+    getUserWater();
   });
 
   return (
     <ScreenWrapper>
       <Header
-        label="Weight"
+        label="Water"
         navigation={navigation}
         includeBackArrow={true}
         includeTopMargin={true}
@@ -71,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightProgress;
+export default WaterProgress;

@@ -9,39 +9,27 @@ import {fontSizes} from '../../styles/main';
 import Header from '../../components/navbar/Header';
 // Services
 import {getUserStats} from '../../services/api/blueprints/stat/functions';
-// Utils
-import {convertStats} from '../../utils/conversion';
 // Types
 import {ScreenProps} from '../types';
-import {
-  StatSchema,
-  StatType,
-  WeightUnit,
-} from '../../services/api/swagger/data-contracts';
+import {StatSchema, StatType} from '../../services/api/swagger/data-contracts';
 
-const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
+const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);
-  // NOTE: This is a temporary solution until we have a user profile page
-  const weightUnitPref = WeightUnit.Stone;
   useEffect(() => {
-    const getUserWeights = async () => {
-      let user_weights = await getUserStats({statType: StatType.Weight});
-      if (user_weights == null) {
-        console.log('No user weights found');
+    const getUserMoods = async () => {
+      let user_mood = await getUserStats({statType: StatType.Feeling});
+      if (user_mood == null) {
+        console.log('No user moods found');
       }
-      user_weights = convertStats({
-        stats: user_weights,
-        targetUnit: weightUnitPref,
-      });
-      setData(user_weights ?? []);
+      setData(user_mood ?? []);
     };
-    getUserWeights();
+    getUserMoods();
   });
 
   return (
     <ScreenWrapper>
       <Header
-        label="Weight"
+        label="Mood"
         navigation={navigation}
         includeBackArrow={true}
         includeTopMargin={true}
@@ -71,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeightProgress;
+export default MoodProgress;
