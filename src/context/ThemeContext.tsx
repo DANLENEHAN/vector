@@ -41,6 +41,7 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
           setTheme(value as 'light' | 'dark');
         }
       }
+      console.log('Theme change');
     });
 
     // Create system theme subscription
