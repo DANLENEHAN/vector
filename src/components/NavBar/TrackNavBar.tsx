@@ -12,7 +12,6 @@ import {
   paddings,
   borderWidth,
 } from '../../styles/main';
-
 //Services
 import {useTheme} from '../../context/ThemeContext';
 

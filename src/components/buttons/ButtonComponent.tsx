@@ -14,12 +14,12 @@ import {
 } from '../../styles/main';
 import {useTheme} from '../../context/ThemeContext';
 
-type ButtonProps = {
+interface ButtonProps {
   onPress: () => void;
   disabled: boolean;
   text: string;
   style?: object;
-};
+}
 
 const ButtonComponent: React.FC<ButtonProps> = ({
   onPress,

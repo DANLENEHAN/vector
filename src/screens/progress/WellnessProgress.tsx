@@ -39,7 +39,7 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
         includeTopMargin={false}
       />
       <ScrollView style={styles.scrollView}>
-        <View style={styles.content}>
+        <View style={styles.content} testID="wellness-progress-screen">
           {tile_data.map((tile, index) => (
             <ClickableTile
               key={index}

@@ -15,7 +15,7 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 
 // Props for a clickable tile component.
-type ClickableTileProps = {
+interface ClickableTileProps {
   // Callback function to be called when the tile is pressed.
   onPress: () => void;
   //The label text for the tile.
@@ -28,16 +28,17 @@ type ClickableTileProps = {
   backgroundColor: string;
   // The last tracked date for the tile. (Optional)
   lastTracked?: string;
-};
+}
 
 // Tile Data Type
-export type TileData = {
+export interface TileData {
   label: string;
   icon: string;
   backgroundColor?: string;
+  // NOTE: This needs to be changed to the be subtext for the tile.
   lastTracked?: string;
   route: string;
-};
+}
 
 const ClickableTile: React.FC<ClickableTileProps> = ({
   onPress,

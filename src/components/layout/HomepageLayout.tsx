@@ -8,10 +8,10 @@ import {HomeParamList, RootStackParamList} from '../../navigation/types';
 // Layouts
 import ScreenWrapper from './ScreenWrapper';
 
-type HomepageLayoutProps = {
+interface HomepageLayoutProps {
   children: React.ReactNode;
   navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
-};
+}
 
 const HomepageLayout: React.FC<HomepageLayoutProps> = ({
   children,
