@@ -108,3 +108,12 @@ Transform your swagger.json to typescript
 ```bash
 npx swagger-typescript-api -p ../grau/docs/swagger.json -o ./src/services/api/swagger --sort-types --sort-routes  --enum-names-as-values --responses  --axios --modular --single-http-client  --debug
 ```
+
+## sqlLite
+
+Returns queries to delete all tables
+```sql
+SELECT 'DROP TABLE IF EXISTS ' || name || ';'
+FROM sqlite_master
+WHERE type = 'table' AND name != 'android_metadata';
+```
