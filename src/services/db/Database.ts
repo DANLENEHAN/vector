@@ -1,5 +1,8 @@
-import {Transaction, ResultSet} from 'react-native-sqlite-storage';
-import SQLite, {SQLiteDatabase} from 'react-native-sqlite-storage';
+import SQLite, {
+  SQLiteDatabase,
+  Transaction,
+  ResultSet,
+} from 'react-native-sqlite-storage';
 
 import {revisionObject} from './vectorRevisions';
 import {alembicTable, RevisionCallback} from './types';
