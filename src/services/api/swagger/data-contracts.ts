@@ -89,6 +89,12 @@ export interface EquipmentCreateSchema {
    */
   brand?: string | null;
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @example "A pair of 10lb dumbbells"
    */
@@ -128,6 +134,12 @@ export interface EquipmentCreateSchema {
    * @example "Dumbbell"
    */
   type?: string | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -143,7 +155,8 @@ export interface EquipmentGetSchema {
   brand?: string | null;
   /**
    * Created At
-   * @example "2021-05-18T20:00:00"
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
    */
   created_at: string;
   /**
@@ -194,7 +207,8 @@ export interface EquipmentGetSchema {
   type?: string | null;
   /**
    * Updated At
-   * @example "2021-05-18T20:00:00"
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
    */
   updated_at: string;
 }
@@ -210,6 +224,12 @@ export interface EquipmentUpdateSchema {
    * @example "Rogue"
    */
   brand?: string | null;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * @example "A pair of 10lb dumbbells"
@@ -256,6 +276,12 @@ export interface EquipmentUpdateSchema {
    * @example "Dumbbell"
    */
   type?: string | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -291,12 +317,6 @@ export interface ExerciseBodypartGetSchema {
    */
   bodypart_id: number;
   /**
-   * Created At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  created_at: string;
-  /**
    * Exercise Bodypart Id
    * @example 1
    */
@@ -311,12 +331,6 @@ export interface ExerciseBodypartGetSchema {
    * could do number of sets divided by the severity level
    */
   severity: SeverityLevel;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  updated_at: string;
 }
 
 /**
@@ -357,6 +371,12 @@ export interface ExerciseCreateSchema {
    */
   category: string;
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @example "This exercise is a compound exercise"
    */
@@ -375,6 +395,12 @@ export interface ExerciseCreateSchema {
    * @example "Dan's Workout"
    */
   name: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -400,12 +426,6 @@ export interface ExerciseEquipmentCreateSchema {
  */
 export interface ExerciseEquipmentGetSchema {
   /**
-   * Created At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  created_at: string;
-  /**
    * Equipment Id
    * @example 1
    */
@@ -420,12 +440,6 @@ export interface ExerciseEquipmentGetSchema {
    * @example 1
    */
   exercise_id: number;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  updated_at: string;
 }
 
 /**
@@ -463,7 +477,7 @@ export interface ExerciseGetSchema {
   /**
    * Created At
    * @format date-time
-   * @example "2021-05-18T20:00:00"
+   * @example "2021-05-18T12:00:00.000Z"
    */
   created_at: string;
   /**
@@ -498,7 +512,7 @@ export interface ExerciseGetSchema {
   /**
    * Updated At
    * @format date-time
-   * @example "2021-05-18T20:00:00"
+   * @example "2021-05-18T12:00:00.000Z"
    */
   updated_at: string;
 }
@@ -513,6 +527,12 @@ export interface ExerciseUpdateSchema {
    * @example "Compound"
    */
   category: string;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * @example "This exercise is a compound exercise"
@@ -537,6 +557,12 @@ export interface ExerciseUpdateSchema {
    * @example "Dan's Workout"
    */
   name: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -611,6 +637,12 @@ export enum MuscleGroup {
  */
 export interface PlanComponentCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * The description of the plan component
    * @default null
@@ -631,6 +663,12 @@ export interface PlanComponentCreateSchema {
    * @example 1
    */
   plan_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -638,6 +676,12 @@ export interface PlanComponentCreateSchema {
  * Validation schema for the Plan Component model.
  */
 export interface PlanComponentGetSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * The description of the plan component
@@ -666,6 +710,12 @@ export interface PlanComponentGetSchema {
    * @example 1
    */
   plan_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -673,6 +723,12 @@ export interface PlanComponentGetSchema {
  * Validation schema for the Plan Component model.
  */
 export interface PlanComponentUpdateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * The description of the plan component
@@ -701,6 +757,12 @@ export interface PlanComponentUpdateSchema {
    * @example 1
    */
   plan_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -709,6 +771,12 @@ export interface PlanComponentUpdateSchema {
  */
 export interface PlanCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Created By
    * The user_id of the user who created the plan
    * @min 0
@@ -738,6 +806,12 @@ export interface PlanCreateSchema {
    * @example "My plan"
    */
   name: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -746,6 +820,12 @@ export interface PlanCreateSchema {
  */
 export interface PlanGetSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Created By
    * The user_id of the user who created the plan
    * @min 0
@@ -782,6 +862,12 @@ export interface PlanGetSchema {
    * @example 1
    */
   plan_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -790,6 +876,12 @@ export interface PlanGetSchema {
  */
 export interface PlanUpdateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Created By
    * The user_id of the user who created the plan
    * @min 0
@@ -826,6 +918,12 @@ export interface PlanUpdateSchema {
    * @example 1
    */
   plan_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -866,6 +964,12 @@ export interface QuerySchema {
  */
 export interface SetComponentCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "Leave nothing in the tank here"
@@ -949,6 +1053,12 @@ export interface SetComponentCreateSchema {
    */
   tempo?: string | null;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Weight
    * @min 0
    * @example 100
@@ -963,6 +1073,12 @@ export interface SetComponentCreateSchema {
  * Schema to validate the set component get response schema
  */
 export interface SetComponentGetSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * @default null
@@ -1052,6 +1168,12 @@ export interface SetComponentGetSchema {
    * @example "2-0-1-1"
    */
   tempo?: string | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Weight
    * @min 0
@@ -1070,6 +1192,12 @@ export interface SetComponentGetSchema {
  */
 export interface SetComponentTreeCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "Leave nothing in the tank here"
@@ -1147,6 +1275,12 @@ export interface SetComponentTreeCreateSchema {
    */
   tempo?: string | null;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Weight
    * @min 0
    * @example 100
@@ -1161,6 +1295,12 @@ export interface SetComponentTreeCreateSchema {
  * Schema to validate the set component update schema
  */
 export interface SetComponentUpdateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * @default null
@@ -1245,6 +1385,12 @@ export interface SetComponentUpdateSchema {
    */
   tempo?: string | null;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Weight
    * @min 0
    * @example 100
@@ -1259,6 +1405,12 @@ export interface SetComponentUpdateSchema {
  * Schema for validating the full set schema
  */
 export interface SetCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * End Time
    * @format date-time
@@ -1294,6 +1446,12 @@ export interface SetCreateSchema {
    */
   start_time: string;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Workout Component Id
    * @min 0
    * @example 1
@@ -1306,6 +1464,12 @@ export interface SetCreateSchema {
  * Schema to validate the set get schema
  */
 export interface SetGetSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Duration
    * @min 0
@@ -1353,6 +1517,12 @@ export interface SetGetSchema {
    */
   start_time: string;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Workout Component Id
    * @min 0
    * @example 1
@@ -1369,6 +1539,12 @@ export interface SetGetSchema {
  */
 export interface SetTreeCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * End Time
    * @format date-time
    * @example "2021-05-18T02:00:00"
@@ -1404,6 +1580,12 @@ export interface SetTreeCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -1416,6 +1598,12 @@ export interface SetTreeCreateSchema {
  */
 export interface SetTreeRootCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * End Time
    * @format date-time
    * @example "2021-05-18T02:00:00"
@@ -1451,6 +1639,12 @@ export interface SetTreeRootCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Workout Component Id
    * @min 0
@@ -1464,6 +1658,12 @@ export interface SetTreeRootCreateSchema {
  * Schema to validate the set update schema
  */
 export interface SetUpdateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Name
    * @example "Dan's straight set"
@@ -1492,6 +1692,12 @@ export interface SetUpdateSchema {
    * @example 1
    */
   set_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Workout Component Id
    * @min 0
@@ -1517,6 +1723,12 @@ export enum SeverityLevel {
  */
 export interface StatSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Note
    * The note of the stat
    * @default null
@@ -1541,6 +1753,12 @@ export interface StatSchema {
     | StepsUnit
     | WaterUnit
     | WeightUnit;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * User Id
    * The user_id of the stat
@@ -1978,6 +2196,12 @@ export enum WeightUnit {
  */
 export interface WorkoutComponentCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "An exercise circuit for my legs"
@@ -2019,6 +2243,12 @@ export interface WorkoutComponentCreateSchema {
    */
   start_time: string;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Workout Id
    * @min 0
    * @example 1
@@ -2031,6 +2261,12 @@ export interface WorkoutComponentCreateSchema {
  * Schema to validate the workout get response schema
  */
 export interface WorkoutComponentGetSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Description
    * @default null
@@ -2078,6 +2314,12 @@ export interface WorkoutComponentGetSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Workout Component Id
    * @min 0
@@ -2101,6 +2343,12 @@ export interface WorkoutComponentGetSchema {
  */
 export interface WorkoutComponentTreeCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "An exercise circuit for my legs"
@@ -2143,6 +2391,12 @@ export interface WorkoutComponentTreeCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -2155,6 +2409,12 @@ export interface WorkoutComponentTreeCreateSchema {
  */
 export interface WorkoutComponentTreeRootCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "An exercise circuit for my legs"
@@ -2197,6 +2457,12 @@ export interface WorkoutComponentTreeRootCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Workout Id
    * @min 0
@@ -2211,6 +2477,12 @@ export interface WorkoutComponentTreeRootCreateSchema {
  */
 export interface WorkoutComponentUpdateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Description
    * @default null
    * @example "An exercise circuit for my legs"
@@ -2252,6 +2524,12 @@ export interface WorkoutComponentUpdateSchema {
    */
   start_time: string;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Workout Component Id
    * @min 0
    * @example 1
@@ -2264,6 +2542,12 @@ export interface WorkoutComponentUpdateSchema {
  * Schema for validating the full workout schema
  */
 export interface WorkoutCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2318,6 +2602,12 @@ export interface WorkoutCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -2325,6 +2615,12 @@ export interface WorkoutCreateSchema {
  * Schema to validate the workout get response schema
  */
 export interface WorkoutGetSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2386,6 +2682,12 @@ export interface WorkoutGetSchema {
    */
   start_time: string;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Workout Id
    * @min 0
    * @example 1
@@ -2402,6 +2704,12 @@ export interface WorkoutGetSchema {
  */
 export interface WorkoutTreeCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Created By
    * @min 0
    * @example 1
@@ -2449,6 +2757,12 @@ export interface WorkoutTreeCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /** Workout Components */
   workout_components: WorkoutComponentTreeCreateSchema[];
 }
@@ -2463,6 +2777,12 @@ export interface WorkoutTreeCreateSchema {
  */
 export interface WorkoutTreeRootCreateSchema {
   /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
    * Created By
    * @min 0
    * @example 1
@@ -2516,6 +2836,12 @@ export interface WorkoutTreeRootCreateSchema {
    * @example "2021-05-18T12:00:00"
    */
   start_time: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /** Workout Components */
   workout_components: WorkoutComponentTreeCreateSchema[];
 }
@@ -2525,6 +2851,12 @@ export interface WorkoutTreeRootCreateSchema {
  * Schema to validate the workout update schema
  */
 export interface WorkoutUpdateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2561,6 +2893,12 @@ export interface WorkoutUpdateSchema {
    * @example 1
    */
   plan_component_id?: number | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Workout Id
    * @min 0
