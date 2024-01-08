@@ -2,7 +2,7 @@
 import React from 'react';
 // Styling
 import Montserrat from '../../../assets/fonts/Montserrat-SemiBold.ttf';
-import MontserratBold from '../../../assets/fonts/Montserrat-Bold.ttf';
+// import MontserratBold from '../../../assets/fonts/Montserrat-Bold.ttf';
 import {fontSizes, lightThemeColors, darkThemeColors} from '../../styles/main';
 //Services
 import {useTheme} from '../../context/ThemeContext';
@@ -14,8 +14,12 @@ import {
   Scatter,
 } from 'victory-native';
 // Utils
-import {useFont, Circle, vec, Text} from '@shopify/react-native-skia';
-import {Line as SkiaLine} from '@shopify/react-native-skia';
+import {
+  useFont,
+  Circle,
+  //vec, Text
+} from '@shopify/react-native-skia';
+//mport {Line as SkiaLine} from '@shopify/react-native-skia';
 import {format} from 'date-fns';
 // Types
 import type {SharedValue} from 'react-native-reanimated';
@@ -34,40 +38,40 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const font = useFont(Montserrat, fontSizes.small);
-  const labelFont = useFont(MontserratBold, fontSizes.medium);
+  //const labelFont = useFont(MontserratBold, fontSizes.medium);
 
   const {state: firstPress, isActive: isFirstPressActive} =
     useChartPressState(INIT_STATE);
 
-  function ToolTip({x, y}: {x: SharedValue<number>; y: SharedValue<number>}) {
-    return (
-      <SkiaLine
-        p1={vec(x.value, 0)}
-        p2={vec(x.value, y.value + 50)}
-        color="lightblue"
-        style="stroke"
-        strokeWidth={4}
-      />
-    );
-  }
-  function ToolTipText({
-    x,
-    y,
-  }: {
-    x: SharedValue<number>;
-    y: SharedValue<number>;
-  }) {
-    console.log(x.value, y.value);
-    return (
-      <Text
-        x={x}
-        y={y.value + 50}
-        text={y.value.toFixed(2)}
-        font={labelFont}
-        color={currentTheme.lightText}
-      />
-    );
-  }
+  // function ToolTip({x, y}: {x: SharedValue<number>; y: SharedValue<number>}) {
+  //   return (
+  //     <SkiaLine
+  //       p1={vec(x.value, 0)}
+  //       p2={vec(x.value, y.value + 50)}
+  //       color="lightblue"
+  //       style="stroke"
+  //       strokeWidth={4}
+  //     />
+  //   );
+  // }
+  // function ToolTipText({
+  //   x,
+  //   y,
+  // }: {
+  //   x: SharedValue<number>;
+  //   y: SharedValue<number>;
+  // }) {
+  //   console.log(x.value, y.value);
+  //   return (
+  //     <Text
+  //       x={x}
+  //       y={y.value + 50}
+  //       text={y.value.toFixed(2)}
+  //       font={labelFont}
+  //       color={currentTheme.lightText}
+  //     />
+  //   );
+  // }
   function ToolTipCircle({
     x,
     y,
@@ -75,8 +79,10 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
     x: SharedValue<number>;
     y: SharedValue<number>;
   }) {
+    console.log(x.value, y.value);
     return <Circle cx={x} cy={y} r={10} color={currentTheme.secondary} />;
   }
+  console.log(data);
 
   return (
     <CartesianChart
@@ -91,16 +97,17 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
         font: font,
         lineColor: currentTheme.borders,
         labelColor: {x: currentTheme.lightText, y: currentTheme.lightText},
-        formatXLabel: ms => format(new Date(ms), 'dd/MM'),
+        formatXLabel: ms => format(new Date(ms), 'd MMM'),
       }}>
       {({points}) => (
         <>
           <Line
+            connectMissingData
             points={points.value}
             color={currentTheme.primary}
             strokeWidth={3}
             animate={{type: 'timing', duration: 300}}
-            curveType="cardinal"
+            //curveType="cardinal"
           />
           <Scatter
             points={points.value}
@@ -117,18 +124,18 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
           />
           {isFirstPressActive && (
             <>
-              <ToolTip
+              {/* <ToolTip
                 x={firstPress.x.position}
                 y={firstPress.y.value.position}
-              />
+              /> */}
               <ToolTipCircle
                 x={firstPress.x.position}
                 y={firstPress.y.value.position}
               />
-              <ToolTipText
+              {/* <ToolTipText
                 x={firstPress.x.position}
                 y={firstPress.y.value.position}
-              />
+              /> */}
             </>
           )}
         </>
