@@ -6,6 +6,7 @@ import SQLite, {
 
 import {revisionObject} from './vectorRevisions';
 import {alembicTable, RevisionCallback} from './types';
+import {revisionID} from '../db/revisions/05012024144706670337_5f3ef40a3082';
 
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: 'your_database_name.db'},
@@ -77,6 +78,8 @@ export const getCurrentRevision = (callback: RevisionCallback) => {
       },
       (tx: Transaction, error: Error) => {
         console.error(`Unable to retrieve revision id. Error: ${error}`);
+        console.log(`Using intial revision id: ${revisionID}`);
+        callback(revisionID);
       },
     );
   });
