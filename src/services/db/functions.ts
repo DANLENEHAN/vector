@@ -6,7 +6,7 @@ import SQLite, {
 
 import {revisionObject} from './vectorRevisions';
 import {alembicTable, RevisionCallback} from './types';
-import {revisionID} from '../db/revisions/05012024144706670337_5f3ef40a3082';
+import {getAllTables} from './queries/other';
 
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: 'your_database_name.db'},
@@ -22,12 +22,12 @@ export const getKeyValuesStartingFrom = (
   let startKeyFound = false;
   console.log(`Looking for revisions after id '${startKey}'`);
   return Object.entries(revisionObject).reduce((result, [key, value]) => {
-    if (startKeyFound) {
-      result[key] = value;
+    if (key.includes(startKey) || startKey === null) {
+      startKeyFound = true;
     }
 
-    if (key.includes(startKey)) {
-      startKeyFound = true;
+    if (startKeyFound) {
+      result[key] = value;
     }
 
     return result;
@@ -40,15 +40,15 @@ export const runMigrations = (revisionId: string) => {
     if (Object.keys(revisionsToProcess).length === 0) {
       console.log('No revisions to process. Moving on...');
     }
-    for (const revisionID in revisionsToProcess) {
-      const sqlCommands = revisionObject[revisionID];
+    for (const revisionID_ in revisionsToProcess) {
+      const sqlCommands = revisionObject[revisionID_];
       db.transaction((tx: any) => {
         sqlCommands.forEach(sqlCommand => {
           tx.executeSql(
             sqlCommand,
             [],
             () => {
-              console.log(`Migration for ${revisionID} applied successfully`);
+              console.log(`Migration for ${revisionID_} applied successfully`);
             },
             (_: any, error: any) => {
               console.error(`Error executing SQL for ${sqlCommand}:`, error);
@@ -67,7 +67,7 @@ export const getCurrentRevision = (callback: RevisionCallback) => {
     tx.executeSql(
       `SELECT version_num FROM ${alembicTable};`,
       [],
-      (tx: Transaction, result: ResultSet) => {
+      (_: Transaction, result: ResultSet) => {
         if (result.rows.length > 0) {
           const revision_id: string = result.rows.item(0).version_num;
           console.log(`Retrieved revision id: ${revision_id}`);
@@ -76,10 +76,37 @@ export const getCurrentRevision = (callback: RevisionCallback) => {
           console.error('No revision id found.');
         }
       },
-      (tx: Transaction, error: Error) => {
-        console.error(`Unable to retrieve revision id. Error: ${error}`);
-        console.log(`Using intial revision id: ${revisionID}`);
-        callback(revisionID);
+      (_: Transaction, error: Error) => {
+        console.log(`Unable to retrieve revision id. Error: ${error}`);
+        console.log('Starting from stratch...');
+        callback(null);
+      },
+    );
+  });
+};
+
+export const deleteDB = () => {
+  console.log('Deleting DB tables. Hold on tight!');
+  db.transaction((tx: Transaction) => {
+    tx.executeSql(
+      getAllTables,
+      [],
+      (_: Transaction, result: ResultSet) => {
+        const rows = result.rows;
+        for (let i = 0; i < rows.length; i++) {
+          const dropSql = Object.values(rows.item(i))[0];
+          tx.executeSql(
+            dropSql,
+            [],
+            () => {
+              console.log('Result');
+            },
+            () => {},
+          );
+        }
+      },
+      (_: Transaction, error: Error) => {
+        console.log('Error: ', error);
       },
     );
   });

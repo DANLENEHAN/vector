@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import AuthNavigator from './src/navigation/Navigation';
 import {ThemeProvider} from './src/context/ThemeContext';
-import {getCurrentRevision, runMigrations} from './src/services/db/Database';
+import {getCurrentRevision, runMigrations} from './src/services/db/functions';
 
 function App(): JSX.Element {
   useEffect(() => {
     console.log('Running Migrations?');
     getCurrentRevision(runMigrations);
-  });
+  }, []);
 
   return (
     <ThemeProvider>

@@ -51,6 +51,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleCreateAccount = async () => {
+    const currentTimestamp: number = new Date().getTime();
     let response = await createUser({
       // NOTE: Remove these hard-coded values when the UI is implemented fully
       email: email,
@@ -69,6 +70,8 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       status: ProfileStatus.Active,
       username: 'danlen97',
       weight_unit_pref: WeightUnit.Kg,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
     });
     if (response instanceof SwaggerValidationError) {
       console.error(`Error: ${response.message}`);
