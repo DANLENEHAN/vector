@@ -2,6 +2,7 @@
 import React from 'react';
 // Styling
 import Montserrat from '../../../assets/fonts/Montserrat-SemiBold.ttf';
+import MontserratBold from '../../../assets/fonts/Montserrat-Bold.ttf';
 import {fontSizes, lightThemeColors, darkThemeColors} from '../../styles/main';
 //Services
 import {useTheme} from '../../context/ThemeContext';
@@ -33,6 +34,7 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
   const {theme} = useTheme();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const font = useFont(Montserrat, fontSizes.small);
+  const labelFont = useFont(MontserratBold, fontSizes.medium);
 
   const {state: firstPress, isActive: isFirstPressActive} =
     useChartPressState(INIT_STATE);
@@ -40,8 +42,8 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
   function ToolTip({x, y}: {x: SharedValue<number>; y: SharedValue<number>}) {
     return (
       <SkiaLine
-        p1={vec(x.value, y.value + 10)}
-        p2={vec(x.value, y.value - 10)}
+        p1={vec(x.value, 0)}
+        p2={vec(x.value, y.value + 50)}
         color="lightblue"
         style="stroke"
         strokeWidth={4}
@@ -55,13 +57,14 @@ const LineGraph: React.FC<LineGraphProps> = ({data}) => {
     x: SharedValue<number>;
     y: SharedValue<number>;
   }) {
+    console.log(x.value, y.value);
     return (
       <Text
         x={x}
         y={y.value + 50}
-        text="Hello World"
-        // Font is optional
-        font={font}
+        text={y.value.toFixed(2)}
+        font={labelFont}
+        color={currentTheme.lightText}
       />
     );
   }

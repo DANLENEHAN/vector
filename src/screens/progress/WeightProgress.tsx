@@ -13,13 +13,14 @@ import LineGraph from '../../components/graphs/LineGraph';
 import {getUserStats} from '../../services/api/blueprints/stat/functions';
 // Utils
 import {convertStats} from '../../utils/conversion';
+import {parse} from 'date-fns';
 // Types
 import {ScreenProps} from '../types';
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 
 type graphData = {
   date: number;
-  value: number;
+  value: Date;
 };
 
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
@@ -40,10 +41,25 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
         });
         // Inside your useEffect
         if (user_weights) {
-          const graphData = user_weights.map(d => ({
-            date: new Date(d.created_at).valueOf(),
+          // const graphData = user_weights.map(d => ({
+          //   date: new Date(d.created_at).valueOf(),
+          //   value: d.value,
+          // })) as graphData[];
+
+          const tempGraphData = [
+            {created_at: '2023-01-01', value: 50},
+            {created_at: '2023-01-02', value: 60},
+            {created_at: '2023-01-03', value: 70},
+            {created_at: '2023-01-04', value: 60},
+            {created_at: '2023-01-05', value: 70},
+            {created_at: '2023-01-06', value: 60},
+          ];
+          const graphData = tempGraphData.map(d => ({
+            date: parse(d.created_at, 'yyyy-MM-dd', new Date()),
             value: d.value,
           })) as graphData[];
+          console.log('Here: ', graphData);
+
           console.log('Here: ', graphData.length);
           setData(graphData);
         }
