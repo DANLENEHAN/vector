@@ -17,24 +17,24 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
 );
 
 export const getKeyValuesStartingFrom = (
-  startKey: string,
-): {[key: string]: string[]} => {
+  startKey: string | null,
+): {[key: string]: string} => {
   let startKeyFound = false;
   console.log(`Looking for revisions after id '${startKey}'`);
   return Object.entries(revisionObject).reduce((result, [key, value]) => {
-    if (key.includes(startKey) || startKey === null) {
-      startKeyFound = true;
+    if (startKeyFound || startKey === null) {
+      result[key] = value;
     }
 
-    if (startKeyFound) {
-      result[key] = value;
+    if (startKey && key.includes(startKey)) {
+      startKeyFound = true;
     }
 
     return result;
   }, {});
 };
 
-export const runMigrations = (revisionId: string) => {
+export const runMigrations = (revisionId: string | null) => {
   try {
     const revisionsToProcess = getKeyValuesStartingFrom(revisionId);
     if (Object.keys(revisionsToProcess).length === 0) {
@@ -43,13 +43,12 @@ export const runMigrations = (revisionId: string) => {
     for (const revisionID_ in revisionsToProcess) {
       const sqlCommands = revisionObject[revisionID_];
       db.transaction((tx: any) => {
+        console.log(`Migration for ${revisionID_} applied successfully`);
         sqlCommands.forEach(sqlCommand => {
           tx.executeSql(
             sqlCommand,
             [],
-            () => {
-              console.log(`Migration for ${revisionID_} applied successfully`);
-            },
+            () => {},
             (_: any, error: any) => {
               console.error(`Error executing SQL for ${sqlCommand}:`, error);
             },
