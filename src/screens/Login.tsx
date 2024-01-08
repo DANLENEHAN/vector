@@ -51,7 +51,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleCreateAccount = async () => {
-    const currentTimestamp: number = new Date().getTime();
+    const currentTimestamp: string = new Date().getTime().toString();
     let response = await createUser({
       // NOTE: Remove these hard-coded values when the UI is implemented fully
       email: email,

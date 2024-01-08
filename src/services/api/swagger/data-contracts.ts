@@ -1670,6 +1670,12 @@ export interface UserCreateSchema {
    * @example "1997-05-18"
    */
   birthday: string;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /** Accepted date formats. */
   date_format_pref: DateFormat;
   /**
@@ -1733,6 +1739,12 @@ export interface UserCreateSchema {
   /** @default "active" */
   status?: ProfileStatus;
   /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
+  /**
    * Username
    * @minLength 8
    * @maxLength 100
@@ -1763,6 +1775,7 @@ export interface UserGetSchema {
   birthday: string;
   /**
    * Created At
+   * @format date-time
    * @example "2021-05-18T12:00:00.000Z"
    */
   created_at: string;
@@ -1822,6 +1835,7 @@ export interface UserGetSchema {
   status?: ProfileStatus;
   /**
    * Updated At
+   * @format date-time
    * @example "2021-05-18T12:00:00.000Z"
    */
   updated_at: string;
@@ -1860,6 +1874,12 @@ export interface UserUpdateSchema {
    * @example "1997-05-18"
    */
   birthday: string;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  created_at: string;
   /** Accepted date formats. */
   date_format_pref: DateFormat;
   /**
@@ -1914,6 +1934,12 @@ export interface UserUpdateSchema {
   premium?: boolean;
   /** @default "active" */
   status?: ProfileStatus;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2021-05-18T12:00:00.000Z"
+   */
+  updated_at: string;
   /**
    * Username
    * @minLength 8
