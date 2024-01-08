@@ -2,6 +2,7 @@ import SQLite, {
   SQLiteDatabase,
   Transaction,
   ResultSet,
+  SQLError,
 } from 'react-native-sqlite-storage';
 
 import {revisionObject} from './vectorRevisions';
@@ -11,14 +12,14 @@ import {getAllTables} from './queries/other';
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: 'your_database_name.db'},
   () => {},
-  (_: any, error: any) => {
+  (error: SQLError) => {
     console.error('Error opening database:', error);
   },
 );
 
 export const getKeyValuesStartingFrom = (
   startKey: string | null,
-): {[key: string]: string} => {
+): {[key: string]: string[]} => {
   let startKeyFound = false;
   console.log(`Looking for revisions after id '${startKey}'`);
   return Object.entries(revisionObject).reduce((result, [key, value]) => {
@@ -31,7 +32,7 @@ export const getKeyValuesStartingFrom = (
     }
 
     return result;
-  }, {});
+  }, {} as {[key: string]: string[]});
 };
 
 export const runMigrations = (revisionId: string | null) => {
@@ -75,7 +76,7 @@ export const getCurrentRevision = (callback: RevisionCallback) => {
           console.error('No revision id found.');
         }
       },
-      (_: Transaction, error: Error) => {
+      (_: Transaction, error: SQLError) => {
         console.log(`Unable to retrieve revision id. Error: ${error}`);
         console.log('Starting from stratch...');
         callback(null);
@@ -95,7 +96,7 @@ export const deleteDB = () => {
         for (let i = 0; i < rows.length; i++) {
           const dropSql = Object.values(rows.item(i))[0];
           tx.executeSql(
-            dropSql,
+            dropSql as string,
             [],
             () => {
               console.log('Result');
@@ -104,7 +105,7 @@ export const deleteDB = () => {
           );
         }
       },
-      (_: Transaction, error: Error) => {
+      (_: Transaction, error: SQLError) => {
         console.log('Error: ', error);
       },
     );
