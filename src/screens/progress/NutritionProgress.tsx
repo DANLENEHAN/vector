@@ -13,7 +13,7 @@ import {
   margins,
 } from '../../styles/main';
 //Services
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Types
 import {TileData} from '../../components/buttons/ClickableTile';
 import {ScreenProps} from '../types';
@@ -29,7 +29,7 @@ const tile_data: TileData[] = [
 ];
 
 const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

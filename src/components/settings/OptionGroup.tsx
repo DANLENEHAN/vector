@@ -11,7 +11,7 @@ import {
   borderWidth,
   iconSizes,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 interface Option {
@@ -30,7 +30,7 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
   selectedOption,
   onOptionPress,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleOptionPress = (index: number) => {

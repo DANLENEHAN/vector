@@ -10,7 +10,7 @@ import {
   lightThemeColors,
   fonts,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface UnitSelectorProps {
   units: string[];
@@ -25,7 +25,7 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
   setActiveUnit,
   style,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

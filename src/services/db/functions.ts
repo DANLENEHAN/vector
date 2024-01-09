@@ -21,7 +21,6 @@ export const getKeyValuesStartingFrom = (
   startKey: string | null,
 ): {[key: string]: string[]} => {
   let startKeyFound = false;
-  console.log(`Looking for revisions after id '${startKey}'`);
   return Object.entries(revisionObject).reduce((result, [key, value]) => {
     if (startKeyFound || startKey === null) {
       result[key] = value;
@@ -70,7 +69,6 @@ export const getCurrentRevision = (callback: RevisionCallback) => {
       (_: Transaction, result: ResultSet) => {
         if (result.rows.length > 0) {
           const revision_id: string = result.rows.item(0).version_num;
-          console.log(`Retrieved revision id: ${revision_id}`);
           callback(revision_id);
         } else {
           console.error('No revision id found.');

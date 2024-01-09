@@ -26,12 +26,11 @@ const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
       // NOTE: This is a temporary solution until we have a user profile page
       const waterUnitPref = WaterUnit.Ml;
       let user_water = await getUserStats({statType: StatType.Water});
-      if (user_water == null) {
-        console.log('No user water found');
+      let stats: any[] = [];
+      if (user_water !== undefined) {
+        stats = convertStats({stats: user_water, targetUnit: waterUnitPref});
       }
-      setData(
-        convertStats({stats: user_water, targetUnit: waterUnitPref}) ?? [],
-      );
+      setData(stats ?? []);
     };
     getUserWater();
   });

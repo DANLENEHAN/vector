@@ -11,7 +11,7 @@ import {
   fontWeights,
   margins,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Components
 import Header from '../../components/navbar/Header';
 import UnitSelector from '../../components/buttons/UnitSelector';
@@ -24,7 +24,7 @@ import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   // Variables to track the weight input

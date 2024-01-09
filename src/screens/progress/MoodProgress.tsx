@@ -18,9 +18,6 @@ const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
   useEffect(() => {
     const getUserMoods = async () => {
       let user_mood = await getUserStats({statType: StatType.Feeling});
-      if (user_mood == null) {
-        console.log('No user moods found');
-      }
       setData(user_mood ?? []);
     };
     getUserMoods();

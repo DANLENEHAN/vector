@@ -7,13 +7,13 @@ import OptionGroup from '../../../components/settings/OptionGroup';
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 
 // Styling
-import {useTheme} from '../../../context/ThemeContext';
+import {useSystem} from '../../../context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserThemePreference} from '../../../services/asyncStorage/types';
 
 const ThemeScreen: React.FC<any> = ({navigation}) => {
   const {theme, setTheme, userPreferenceTheme, setUserPreferenceTheme} =
-    useTheme();
+    useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const options = [

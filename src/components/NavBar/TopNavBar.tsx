@@ -12,14 +12,14 @@ import {
   borderWidth,
   iconSizes,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Typing
 import {NavBarProps} from './types';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

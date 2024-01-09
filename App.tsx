@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import AuthNavigator from './src/navigation/Navigation';
-import {ThemeProvider} from './src/context/ThemeContext';
+import {SystemProvider} from './src/context/SystemContext';
 import {getCurrentRevision, runMigrations} from './src/services/db/functions';
 
 function App(): JSX.Element {
@@ -10,9 +10,9 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <ThemeProvider>
+    <SystemProvider>
       <AuthNavigator />
-    </ThemeProvider>
+    </SystemProvider>
   );
 }
 

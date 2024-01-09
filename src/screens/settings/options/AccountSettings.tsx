@@ -10,7 +10,7 @@ import {ScreenProps} from '../../types';
 import {SwaggerValidationError} from '../../../services/api/types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
-import {useTheme} from '../../../context/ThemeContext';
+import {useSystem} from '../../../context/SystemContext';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {
@@ -22,7 +22,7 @@ const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
     }
   };
 
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>

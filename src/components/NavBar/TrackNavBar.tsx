@@ -13,14 +13,14 @@ import {
   borderWidth,
 } from '../../styles/main';
 //Services
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 const TrackNavBar: React.FC<TopBarProps> = ({
   navigation,
   state,
   descriptors,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View

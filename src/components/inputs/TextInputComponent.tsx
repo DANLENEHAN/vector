@@ -12,7 +12,7 @@ import {
   lightThemeColors,
   iconSizes,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface TextInputProps {
   placeholder: string;
@@ -31,7 +31,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   secureTextEntry = false,
   autoCapitalize = false,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

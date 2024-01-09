@@ -12,7 +12,7 @@ import {
   iconSizes,
   fonts,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 // Props for a clickable tile component.
 interface ClickableTileProps {
@@ -48,7 +48,7 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
   backgroundColor,
   lastTracked,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const subText = lastTracked ? lastTracked : 'Start Tracking!';

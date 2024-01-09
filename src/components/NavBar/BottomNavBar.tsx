@@ -10,7 +10,7 @@ import {
   paddings,
   borderWidth,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 const routeMapping: any = {
   Home: {label: 'Home', icon: 'house'},
@@ -22,7 +22,7 @@ const routeMapping: any = {
 const hiddenRoutes = ['Settings', 'Search'];
 
 const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View
