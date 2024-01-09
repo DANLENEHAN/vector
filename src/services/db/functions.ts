@@ -99,7 +99,7 @@ export const deleteDB = () => {
             dropSql as string,
             [],
             () => {
-              console.log('Result');
+              console.log(`Query '${dropSql}' successfull`);
             },
             () => {},
           );
