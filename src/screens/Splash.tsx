@@ -13,7 +13,7 @@ import {useSystem} from '../context/SystemContext';
 // Types
 import {ScreenProps} from './types';
 
-const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
+const Splash: React.FC<ScreenProps> = ({navigation}) => {
   const {isConnected, systemVarsLoaded} = useSystem();
 
   const getData = useCallback(async () => {
@@ -56,4 +56,4 @@ const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Spalsh;
+export default Splash;
