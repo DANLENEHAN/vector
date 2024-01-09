@@ -37,7 +37,7 @@ const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
       }
     } else {
       // If user has cookie but isn't connected we allow them through
-      navigation.navigate('Login');
+      navigation.navigate('App', {screen: 'Home'});
     }
   }, [isConnected, navigation]);
 

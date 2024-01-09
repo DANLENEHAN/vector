@@ -40,6 +40,13 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
   // Run once on mount
   useEffect(() => {
+    // Setup subscription to network status
+    const networkSubscription: NetInfoSubscription = addEventListener(
+      (state: NetInfoState) => {
+        setIsConnected(state.isConnected || false);
+      },
+    );
+
     // Set theme from cache if it exists otherwise use systems
     AsyncStorage.getItem(UserThemePreference)
       .then(value => {
@@ -53,16 +60,8 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
         }
       })
       .finally(() => {
-        setIsLoaded(true); // Mark loading as false once AsyncStorage operations are completed
+        setIsLoaded(true);
       });
-
-    const networkSubscription: NetInfoSubscription = addEventListener(
-      (state: NetInfoState) => {
-        setIsConnected(
-          (state.isConnected && state.isInternetReachable) || false,
-        );
-      },
-    );
 
     // Create system theme subscription
     const subscription = Appearance.addChangeListener(({colorScheme}) => {

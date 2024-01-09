@@ -375,6 +375,8 @@ PODS:
   - React-jsinspector (0.72.7)
   - React-logger (0.72.7):
     - glog
+  - react-native-netinfo (11.2.1):
+    - React-Core
   - react-native-pager-view (6.2.3):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -554,6 +556,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -641,6 +644,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -726,6 +731,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c49502e5d02112247ee4526bc3ccfc891ae3eb9b
   React-jsinspector: 8baadae51f01d867c3921213a25ab78ab4fbcd91
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
+  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-safe-area-context: d1c8161a1e9560f7066e8926a7d825eb57c5dab5
   react-native-slider: cc89964e1432fa31aa9db7a0fa9b21e26b5d5152
