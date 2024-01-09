@@ -10,7 +10,7 @@ import {
   margins,
   fontWeights,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Components
 import HeaderBackButton from '../buttons/HeaderBackButton';
 // Navigation
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({
   includeBackArrow,
   includeTopMargin,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 100,
+    marginTop: margins.xxLarge,
   },
   logoText: {
     fontSize: fontSizes.xLarge,

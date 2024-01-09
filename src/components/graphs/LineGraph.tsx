@@ -2,6 +2,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 // Styling
+// @ts-ignore
 import Montserrat from '../../../assets/fonts/Montserrat-SemiBold.ttf';
 import {
   fontSizes,
@@ -11,7 +12,7 @@ import {
   margins,
 } from '../../styles/main';
 //Services
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Components
 import {
   CartesianChart,
@@ -106,7 +107,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
   unit,
 }) => {
   const INIT_STATE = {x: 0, y: {value: 0}} as const;
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const font = useFont(Montserrat, fontSizes.small);
   //const labelFont = useFont(MontserratBold, fontSizes.medium);

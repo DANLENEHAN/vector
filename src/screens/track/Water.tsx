@@ -14,7 +14,7 @@ import {ScreenProps} from '../types';
 import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
 
 // Styling
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
@@ -22,7 +22,7 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 import {createNewStat} from '../../services/api/blueprints/stat/functions';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   // Variables to track the unit selection

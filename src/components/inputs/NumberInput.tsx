@@ -7,7 +7,7 @@ import {
   fontSizes,
   fonts,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface NumberInputProps {
   allowFloat: boolean;
@@ -23,7 +23,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   style,
 }) => {
   //const [inputValue, setInputValue] = useState(allowFloat ? '0.0' : '0');
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const handleChange = (text: string) => {
     let validatedText = text;

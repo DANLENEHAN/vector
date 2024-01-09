@@ -18,7 +18,7 @@ import LineGraph from '../../components/graphs/LineGraph';
 import UnitSelector from '../../components/buttons/UnitSelector';
 // Services
 import {getUserStats} from '../../services/api/blueprints/stat/functions';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Utils
 import {convertStats} from '../../utils/conversion';
 import {parse, format} from 'date-fns';
@@ -65,7 +65,7 @@ class GraphPlotData {
 
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});
-  const {theme} = useTheme();
+  const {theme} = useSystem();
 
   const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);

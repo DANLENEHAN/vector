@@ -5,10 +5,10 @@ import {View, StyleSheet, Text} from 'react-native';
 import HomepageLayout from '../components/layout/HomepageLayout';
 // Styling
 import {fontSizes, lightThemeColors, darkThemeColors} from '../styles/main';
-import {useTheme} from '../context/ThemeContext';
+import {useSystem} from '../context/SystemContext';
 
 const Generic: React.FC<any> = ({navigation, route}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const {name} = route.params;
   return (

@@ -5,7 +5,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Components
 import ClickableTile from '../../components/buttons/ClickableTile';
 import Header from '../../components/navbar/Header';
@@ -27,7 +27,7 @@ const tile_data: TileData[] = [
 ];
 
 const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <ScreenWrapper>

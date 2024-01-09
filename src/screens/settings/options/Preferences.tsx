@@ -10,10 +10,10 @@ import {ScreenProps} from '../../types';
 
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
-import {useTheme} from '../../../context/ThemeContext';
+import {useSystem} from '../../../context/SystemContext';
 
 const Preferences: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>

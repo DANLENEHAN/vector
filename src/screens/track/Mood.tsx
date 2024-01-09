@@ -12,7 +12,7 @@ import {ScreenProps} from '../types';
 import {StatType} from '../../services/api/swagger/data-contracts';
 
 // Styling
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
@@ -42,7 +42,7 @@ const moods: MoodsDictionary = {
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [moodValue, setMoodValue] = useState<number>(3);
 
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleSliderChange = (newValue: number) => {

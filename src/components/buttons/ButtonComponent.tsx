@@ -12,7 +12,7 @@ import {
   buttonHeight,
   buttonWidth,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface ButtonProps {
   onPress: () => void;
@@ -27,7 +27,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   text,
   style,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
