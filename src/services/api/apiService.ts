@@ -1,5 +1,4 @@
 import {HttpClient} from './swagger/http-client';
-import NetInfo from '@react-native-community/netinfo';
 
 type ApiConfigMap = {
   development: string;
@@ -19,15 +18,6 @@ const apiBaseUrl = API_URLS[environment as keyof typeof API_URLS];
 const api = new HttpClient({
   baseURL: apiBaseUrl,
   withCredentials: true, // Required to handle cookies
-});
-
-// Initialize NetInfo
-NetInfo.configure({
-  reachabilityUrl: apiBaseUrl,
-  reachabilityTest: async response => response.status === 200,
-  reachabilityLongTimeout: 60 * 1000, // 60s
-  reachabilityShortTimeout: 5 * 1000, // 5s
-  reachabilityRequestTimeout: 15 * 1000, // 15s
 });
 
 export default api;

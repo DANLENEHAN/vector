@@ -58,7 +58,9 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     const networkSubscription: NetInfoSubscription = addEventListener(
       (state: NetInfoState) => {
-        setIsConnected(state.isConnected || false);
+        setIsConnected(
+          (state.isConnected && state.isInternetReachable) || false,
+        );
       },
     );
 
