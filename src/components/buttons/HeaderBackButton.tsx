@@ -5,7 +5,7 @@ import {ScreenNavigationProp} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Styling
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 import {
   lightThemeColors,
   darkThemeColors,
@@ -20,7 +20,7 @@ interface HeaderBackButtonProps {
 
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
   //Setup theme for the component
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <TouchableOpacity

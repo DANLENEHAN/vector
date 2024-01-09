@@ -11,7 +11,7 @@ import {
   paddings,
   borderRadius,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface ProfileHeaderProps {
   profileImageUrl: string;
@@ -24,7 +24,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   userName,
   userUsername,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

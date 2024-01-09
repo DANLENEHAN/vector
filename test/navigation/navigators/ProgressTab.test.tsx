@@ -2,16 +2,16 @@ import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import ProgressTabNavigator from '../../../src/navigation/navigators/ProgressTab';
 import {NavigationContainer} from '@react-navigation/native';
-import {useTheme} from '../../../src/context/ThemeContext';
+import {useSystem} from '../../../src/context/SystemContext';
 
 jest.mock('../../../src/context/ThemeContext', () => ({
-  useTheme: jest.fn(),
+  useSystem: jest.fn(),
 }));
 
 describe('ProgressTabNavigator Tests', () => {
   beforeEach(() => {
     // Set up the mock return value before each test
-    (useTheme as jest.Mock).mockReturnValue({
+    (useSystem as jest.Mock).mockReturnValue({
       theme: 'light', // or 'dark', depending on what you want to test
       setTheme: jest.fn(),
       userPreferenceTheme: 'system',

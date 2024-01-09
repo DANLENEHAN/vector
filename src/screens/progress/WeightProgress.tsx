@@ -26,14 +26,11 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   useEffect(() => {
     const getUserWeights = async () => {
       let user_weights = await getUserStats({statType: StatType.Weight});
-      if (user_weights == null) {
-        console.log('No user weights found');
+      let stats: any[] = [];
+      if (user_weights !== undefined) {
+        stats = convertStats({stats: user_weights, targetUnit: weightUnitPref});
       }
-      user_weights = convertStats({
-        stats: user_weights,
-        targetUnit: weightUnitPref,
-      });
-      setData(user_weights ?? []);
+      setData(stats ?? []);
     };
     getUserWeights();
   });

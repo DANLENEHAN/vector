@@ -13,7 +13,7 @@ import {
   iconSizes,
   fontWeights,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface NavItemProps {
   icon: string;
@@ -29,7 +29,7 @@ const NavItem: React.FC<NavItemProps> = ({
   isActive = false,
 }) => {
   //Setup theme for the component
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

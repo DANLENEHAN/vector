@@ -12,7 +12,7 @@ import {
   fontWeights,
   fonts,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 // Components
 import ClickableTile from '../../components/buttons/ClickableTile';
 // Types
@@ -28,7 +28,7 @@ const tile_data: TileData[] = [
 ];
 
 const NutritionTracking: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <ScreenWrapper>

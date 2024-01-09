@@ -11,7 +11,7 @@ import {
   borderRadius,
   borderWidth,
 } from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 interface SettingsOptionProps {
   icon: string;
@@ -30,7 +30,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
   caret,
   logo_circle_color,
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

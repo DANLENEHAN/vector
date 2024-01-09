@@ -9,10 +9,10 @@ import ScreenWrapper from '../../components/layout/ScreenWrapper';
 import {fontSizes, lightThemeColors, darkThemeColors} from '../../styles/main';
 
 //Services
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 const WorkoutScreen: React.FC<any> = ({route}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (

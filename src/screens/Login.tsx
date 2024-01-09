@@ -17,7 +17,7 @@ import {
   paddings,
   margins,
 } from '../styles/main';
-import {useTheme} from '../context/ThemeContext';
+import {useSystem} from '../context/SystemContext';
 // Types
 import {ScreenProps} from './types';
 import {
@@ -38,7 +38,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleLogin = async () => {

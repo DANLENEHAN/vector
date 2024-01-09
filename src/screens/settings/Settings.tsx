@@ -7,10 +7,10 @@ import ProfileHeader from '../../components/settings/ProfileHeader';
 import {ScreenProps} from '../types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useTheme} from '../../context/ThemeContext';
+import {useSystem} from '../../context/SystemContext';
 
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
-  const {theme} = useTheme();
+  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
