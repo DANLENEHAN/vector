@@ -21,23 +21,23 @@ const Spalsh: React.FC<ScreenProps> = ({navigation}) => {
     if (value === null) {
       console.log('Auth failed, login required, redirecting');
       navigation.navigate('Login');
-    }
-
-    // If the user has a session cookie and is connected we validate
-    if (isConnected === true) {
-      const response = await testAuthentication();
-      if (response === undefined) {
-        navigation.navigate('App', {screen: 'Home'});
-      } else {
-        console.log(
-          `Trouble logging in with key ${FlaskLoginCookie} value ${value}. Deleting...`,
-        );
-        AsyncStorage.removeItem(FlaskLoginCookie);
-        navigation.navigate('Login');
-      }
     } else {
-      // If user has cookie but isn't connected we allow them through
-      navigation.navigate('App', {screen: 'Home'});
+      // If the user has a session cookie and is connected we validate
+      if (isConnected === true) {
+        const response = await testAuthentication();
+        if (response === undefined) {
+          navigation.navigate('App', {screen: 'Home'});
+        } else {
+          console.log(
+            `Trouble logging in with key ${FlaskLoginCookie} value ${value}. Deleting...`,
+          );
+          AsyncStorage.removeItem(FlaskLoginCookie);
+          navigation.navigate('Login');
+        }
+      } else {
+        // If user has cookie but isn't connected we allow them through
+        navigation.navigate('App', {screen: 'Home'});
+      }
     }
   }, [isConnected, navigation]);
 
