@@ -40,11 +40,14 @@ export const createNewStat = async ({
 }: CreateNewStatParams) => {
   try {
     const user_id = await getUserDetails('user_id');
+    const currentTimestamp: string = new Date().getTime().toString();
     await createStat({
       unit: unitValue,
       stat_type: statType,
       user_id: user_id,
       value: value,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
     });
     navigation.goBack();
   } catch (error) {
