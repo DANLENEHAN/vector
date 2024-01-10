@@ -5,6 +5,7 @@ import {createStat, getStats} from './api';
 // Types
 import {StatType, StatSchema} from '../../swagger/data-contracts';
 import {SwaggerValidationError} from '../../types';
+import {insertStat} from '../../../db/stat/functions';
 
 export interface CreateNewStatParams {
   value: number;
@@ -49,6 +50,16 @@ export const createNewStat = async ({
       created_at: currentTimestamp,
       updated_at: currentTimestamp,
     });
+    await insertStat([
+      {
+        unit: unitValue,
+        stat_type: statType,
+        user_id: user_id,
+        value: value,
+        created_at: currentTimestamp,
+        updated_at: currentTimestamp,
+      },
+    ]);
     navigation.goBack();
   } catch (error) {
     console.error(`Error: ${error}`);

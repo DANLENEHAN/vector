@@ -4,14 +4,28 @@ import SQLite, {
   ResultSet,
   SQLError,
 } from 'react-native-sqlite-storage';
+import RNFS from 'react-native-fs';
 
-import {revisionObject} from './vectorRevisions';
+// Types
 import {alembicTable, RevisionCallback} from './types';
+import {DB_NAME, RowData} from './types';
+
+// Fucntions
+import {revisionObject} from './vectorRevisions';
 import {getAllTables} from './queries/other';
 
+const getDocumentDirectoryPath = () => {
+  try {
+    const documentDirectoryPath = RNFS.DocumentDirectoryPath;
+    console.log('Document Directory Path:', documentDirectoryPath);
+  } catch (error) {
+    console.error('Error getting document directory path:', error);
+  }
+};
+
 export const db: SQLiteDatabase = SQLite.openDatabase(
-  {name: 'your_database_name.db'},
-  () => {},
+  {name: DB_NAME},
+  getDocumentDirectoryPath,
   (error: SQLError) => {
     console.error('Error opening database:', error);
   },
@@ -105,6 +119,35 @@ export const deleteDB = () => {
       },
       (_: Transaction, error: SQLError) => {
         console.log('Error: ', error);
+      },
+    );
+  });
+};
+
+export const insertRows = async (tableName: string, data: RowData[]) => {
+  if (data.length === 0) {
+    console.warn('No data to insert.');
+    return;
+  }
+
+  const schema = Object.keys(data[0]);
+
+  db.transaction((tx: Transaction) => {
+    const columns = schema.join(', ');
+    const placeholders = schema.map(() => '?').join(', ');
+
+    const insertValues = data.map(item => schema.map(col => item[col])).flat();
+
+    tx.executeSql(
+      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`,
+      insertValues,
+      () => {
+        // Success callback
+        console.log('Insert successful');
+      },
+      (_, error: SQLError) => {
+        // Error callback
+        console.error('Error executing SQL:', error);
       },
     );
   });
