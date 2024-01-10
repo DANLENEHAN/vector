@@ -1,6 +1,12 @@
 // React imports
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // Layouts
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
@@ -59,33 +65,38 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
         includeBackArrow={true}
         includeTopMargin={true}
       />
-      <View style={styles.content}>
-        <View style={styles.titleContainer}>
-          <Text style={[styles.title, {color: currentTheme.text}]}>
-            What is your current weight?
-          </Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.content}>
+          <View style={styles.titleContainer}>
+            <Text style={[styles.title, {color: currentTheme.text}]}>
+              What is your current weight?
+            </Text>
+          </View>
+
+          <View style={styles.trackContainer}>
+            <NumberInput
+              style={styles.numberInput}
+              allowFloat={true}
+              inputValue={weightValue}
+              setInputValue={setWeightValue}
+            />
+            <UnitSelector
+              units={Object.values(WeightUnit)}
+              activeUnit={activeUnit}
+              setActiveUnit={setActiveUnit}
+            />
+            <ButtonComponent
+              text="Track"
+              disabled={
+                weightValue === '0' ||
+                weightValue === '' ||
+                weightValue === '0.0'
+              }
+              onPress={handleSaveWeight}
+            />
+          </View>
         </View>
-        <View style={styles.trackContainer}>
-          <NumberInput
-            style={styles.numberInput}
-            allowFloat={true}
-            inputValue={weightValue}
-            setInputValue={setWeightValue}
-          />
-          <UnitSelector
-            units={Object.values(WeightUnit)}
-            activeUnit={activeUnit}
-            setActiveUnit={setActiveUnit}
-          />
-          <ButtonComponent
-            text="Track"
-            disabled={
-              weightValue === '0' || weightValue === '' || weightValue === '0.0'
-            }
-            onPress={handleSaveWeight}
-          />
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     </ScreenWrapper>
   );
 };
