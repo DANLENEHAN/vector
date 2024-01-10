@@ -14,54 +14,18 @@ import {
 } from '../../styles/main';
 // Components
 import Header from '../../components/navbar/Header';
-import LineGraph from '../../components/graphs/LineGraph';
+import LineGraph from '../../components/graphs/Line/Graph';
 import UnitSelector from '../../components/buttons/UnitSelector';
 // Services
 import {getUserStats} from '../../services/api/blueprints/stat/functions';
 import {useSystem} from '../../context/SystemContext';
 // Utils
 import {convertStats} from '../../utils/conversion';
-import {parse, format} from 'date-fns';
+import {parse} from 'date-fns';
 // Types
 import {ScreenProps} from '../types';
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
-
-interface graphDataPoint {
-  date: number;
-  value: number;
-}
-
-class GraphPlotData {
-  data: graphDataPoint[];
-  unit: string;
-  averageValue: number;
-  averageLabel: string;
-
-  getAverageValue() {
-    let sum = 0;
-    let count = 0;
-    for (let i = 0; i < this.data.length; i++) {
-      if (this.data[i].value != null) {
-        sum += this.data[i].value;
-        count++;
-      }
-    }
-    return sum / count;
-  }
-
-  getAverageLabel() {
-    const firstDate = this.data[0].date;
-    const lastDate = this.data[this.data.length - 1].date;
-    return `${format(firstDate, 'd MMM')} - ${format(lastDate, 'd MMM yyyy')}`;
-  }
-
-  constructor(data: graphDataPoint[], unit: string) {
-    this.unit = unit;
-    this.data = data;
-    this.averageValue = this.getAverageValue();
-    this.averageLabel = this.getAverageLabel();
-  }
-}
+import {GraphPlotData} from '../../components/graphs/Line/types';
 
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});
@@ -183,7 +147,23 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
               ],
               weightUnitPref,
             ),
-            W: tempData,
+            W: new GraphPlotData(
+              [
+                {
+                  date: parse('2023-01-01', 'yyyy-MM-dd', new Date()).valueOf(),
+                  value: null,
+                },
+                {
+                  date: parse('2023-01-02', 'yyyy-MM-dd', new Date()).valueOf(),
+                  value: null,
+                },
+                {
+                  date: parse('2023-01-03', 'yyyy-MM-dd', new Date()).valueOf(),
+                  value: null,
+                },
+              ],
+              weightUnitPref,
+            ),
             M: tempData,
             '6M': tempData,
             Y: tempData,
@@ -225,7 +205,7 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
             {data && activePeriod && data[activePeriod] && (
               <LineGraph
                 data={data[activePeriod].data}
-                averageLabel={data[activePeriod].averageLabel}
+                averageLabel={data[activePeriod].averagePeriodLabel}
                 averageValue={data[activePeriod].averageValue}
                 unit={data[activePeriod].unit}
               />
@@ -247,7 +227,7 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     width: '100%',
-    height: 250,
+    height: 300,
   },
   averageWeightContainer: {
     width: '90%',
