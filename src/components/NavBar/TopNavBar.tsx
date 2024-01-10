@@ -8,7 +8,6 @@ import {
   fontWeights,
   lightThemeColors,
   darkThemeColors,
-  margins,
   borderWidth,
   iconSizes,
 } from '../../styles/main';
@@ -68,11 +67,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 60,
     borderBottomWidth: borderWidth.small,
-    marginTop: margins.xxLarge,
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 2,
     shadowOpacity: 1.0,
     elevation: 5,
+    backgroundColor: 'red',
   },
   iconContainer: {
     flex: 2,

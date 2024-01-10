@@ -10,7 +10,7 @@ import WorkoutProgressScreen from '../../screens/progress/WorkoutProgress';
 import NutritionProgressScreen from '../../screens/progress/NutritionProgress';
 
 // Components
-import TrackNavBar from '../../components/navbar/TrackNavBar';
+import TopTabNavBar from '../../components/navbar/TopTabNavBar';
 
 // Navigation stacks
 const ProgressTabStack = createMaterialTopTabNavigator();
@@ -18,7 +18,7 @@ const ProgressTabStack = createMaterialTopTabNavigator();
 // Navigation for the Progress page
 const ProgressTabNavigator: React.FC = () => {
   return (
-    <ProgressTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
+    <ProgressTabStack.Navigator tabBar={props => <TopTabNavBar {...props} />}>
       <ProgressTabStack.Screen
         name="WorkoutProgress"
         component={WorkoutProgressScreen}

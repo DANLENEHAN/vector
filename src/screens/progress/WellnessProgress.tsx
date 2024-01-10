@@ -1,8 +1,6 @@
 // React imports
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-// Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 //Services
@@ -31,7 +29,7 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <ScreenWrapper>
+    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
       <Header
         label="Health & Wellness"
         navigation={navigation}
@@ -56,11 +54,14 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
           ))}
         </View>
       </ScrollView>
-    </ScreenWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   content: {
     flexDirection: 'row',
     flexWrap: 'wrap',

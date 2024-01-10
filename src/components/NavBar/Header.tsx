@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-
 // Theme
 import {
   fonts,
@@ -31,18 +30,15 @@ const Header: React.FC<HeaderProps> = ({
   navigation,
   label,
   includeBackArrow,
-  includeTopMargin,
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
   return (
     <View
       style={[
         styles.header,
         {
           backgroundColor: currentTheme.background,
-          marginTop: includeTopMargin ? margins.xxLarge : undefined,
         },
       ]}>
       {
@@ -66,8 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 100,
-    marginTop: margins.xxLarge,
+    height: 60,
   },
   logoText: {
     fontSize: fontSizes.xLarge,

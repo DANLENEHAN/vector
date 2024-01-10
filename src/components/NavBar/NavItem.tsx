@@ -39,7 +39,7 @@ const NavItem: React.FC<NavItemProps> = ({
       <Icon
         name={icon}
         solid
-        size={iconSizes.medium}
+        size={iconSizes.small}
         color={currentTheme.text}
         style={isActive && {color: currentTheme.primary}}
       />
@@ -62,14 +62,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: paddings.xSmall,
-    paddingBottom: paddings.medium,
+    paddingBottom: paddings.xSmall,
     marginLeft: margins.xSmall,
     marginRight: margins.xSmall,
   },
   navLabel: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    marginTop: margins.small,
+    marginTop: margins.xSmall,
     fontWeight: fontWeights.semiBold,
   },
 });

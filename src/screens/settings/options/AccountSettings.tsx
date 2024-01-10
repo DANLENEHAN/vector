@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    //No background color
   },
   headerSection: {
     flex: 2,

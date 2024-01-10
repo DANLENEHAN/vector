@@ -79,7 +79,9 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
           />
           <ButtonComponent
             text="Track"
-            disabled={false}
+            disabled={
+              weightValue === '0' || weightValue === '' || weightValue === '0.0'
+            }
             onPress={handleSaveWeight}
           />
         </View>

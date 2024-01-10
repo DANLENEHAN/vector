@@ -4,11 +4,10 @@ import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Components
-import HeaderBackButton from '../../components/buttons/HeaderBackButton';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 import UnitSelector from '../../components/buttons/UnitSelector';
 import NumberInput from '../../components/inputs/NumberInput';
-
+import Header from '../../components/navbar/Header';
 // Types
 import {ScreenProps} from '../types';
 import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
@@ -20,6 +19,7 @@ import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
 
 // Services
 import {createNewStat} from '../../services/api/blueprints/stat/functions';
+import ScreenWrapper from '../../components/layout/ScreenWrapper';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
@@ -31,6 +31,11 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   const handleSavedWater = async () => {
     const parsedWater = parseFloat(waterValue);
+    // Validation: Check if the weight is 0 or the string is empty
+    if (isNaN(parsedWater) || parsedWater <= 0) {
+      console.error('Invalid water value. Please enter a valid water value.');
+      return; // Stop the function if the weight is invalid
+    }
     createNewStat({
       value: parsedWater,
       unitValue: activeUnit.toLowerCase() as WaterUnit,
@@ -40,10 +45,13 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   return (
-    <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
-      <View style={styles.headerSection}>
-        <HeaderBackButton navigation={navigation} />
-      </View>
+    <ScreenWrapper>
+      <Header
+        label=""
+        navigation={navigation}
+        includeBackArrow={true}
+        includeTopMargin={true}
+      />
       <View style={styles.contentSection}>
         <Text
           style={[
@@ -75,18 +83,15 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
         />
         <ButtonComponent
           text="Track"
-          disabled={waterValue === '0'}
+          disabled={waterValue === '0' || waterValue === ''}
           onPress={handleSavedWater}
         />
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
   headerSection: {
     flex: 1,
     marginTop: margins.large,
@@ -94,6 +99,7 @@ const styles = StyleSheet.create({
   contentSection: {
     flex: 9,
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   title: {
     fontSize: fontSizes.xLarge,
