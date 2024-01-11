@@ -9,30 +9,34 @@ import Header from '../../../components/navbar/Header';
 import {ScreenProps} from '../../types';
 
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+import {lightThemeColors, darkThemeColors, margins} from '../../../styles/main';
 import {useSystem} from '../../../context/SystemContext';
+import ScreenWrapper from '../../../components/layout/ScreenWrapper';
 
 const Preferences: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <Header
-        label="Preferences"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
-      <View style={styles.settingsSection}>
-        <SettingsOption
-          icon={'circle-half-stroke'}
-          onPress={() => navigation.navigate('Settings', {screen: 'Theme'})}
-          label="Theme"
-          logo_circle_color={currentTheme.primary}
-          caret={true}
+    <ScreenWrapper>
+      <View
+        style={[styles.content, {backgroundColor: currentTheme.background}]}>
+        <Header
+          label="Preferences"
+          navigation={navigation}
+          includeBackArrow={true}
+          includeTopMargin={true}
         />
+        <View style={styles.settingsSection}>
+          <SettingsOption
+            icon={'circle-half-stroke'}
+            onPress={() => navigation.navigate('Settings', {screen: 'Theme'})}
+            label="Theme"
+            logo_circle_color={currentTheme.primary}
+            caret={true}
+          />
+        </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
@@ -43,7 +47,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsSection: {
-    flex: 7,
+    marginTop: margins.xxLarge,
+    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

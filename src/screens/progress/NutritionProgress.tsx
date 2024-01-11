@@ -1,17 +1,8 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-// Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import {View, StyleSheet, ScrollView} from 'react-native';
 // Styling
-import {
-  fontSizes,
-  lightThemeColors,
-  darkThemeColors,
-  fonts,
-  fontWeights,
-  margins,
-} from '../../styles/main';
+import {lightThemeColors, darkThemeColors} from '../../styles/main';
 //Services
 import {useSystem} from '../../context/SystemContext';
 // Types
@@ -19,6 +10,7 @@ import {TileData} from '../../components/buttons/ClickableTile';
 import {ScreenProps} from '../types';
 // Components
 import ClickableTile from '../../components/buttons/ClickableTile';
+import Header from '../../components/navbar/Header';
 
 const tile_data: TileData[] = [
   {
@@ -33,50 +25,45 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <ScreenWrapper>
-      <View style={styles.content} testID="nutrition-progress-screen">
-        <Text
-          style={[
-            styles.title,
-            {
-              marginBottom: margins.xxLarge,
-              color: currentTheme.text,
-            },
-          ]}>
-          Fuel your body!
-        </Text>
-        {tile_data.map((tile, index) => (
-          <ClickableTile
-            style={[{marginBottom: margins.xLarge}, styles.clickableTitle]}
-            key={index}
-            onPress={() => navigation.navigate(tile.route as 'WaterProgress')}
-            label={tile.label}
-            icon={tile.icon}
-            lastTracked={tile.lastTracked}
-            backgroundColor={tile.backgroundColor ?? currentTheme.primary}
-          />
-        ))}
-      </View>
-    </ScreenWrapper>
+    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
+      <Header
+        label="Nutrition"
+        navigation={navigation}
+        includeBackArrow={false}
+        includeTopMargin={false}
+      />
+
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.content}>
+          {tile_data.map((tile, index) => (
+            <ClickableTile
+              key={index}
+              onPress={() => navigation.navigate(tile.route as 'WaterProgress')}
+              label={tile.label}
+              icon={tile.icon}
+              lastTracked={tile.lastTracked}
+              backgroundColor={tile.backgroundColor ?? currentTheme.primary}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  wrapper: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+  content: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
   },
-  clickableTitle: {
-    minWidth: '60%',
+  scrollView: {
+    flex: 1,
+    width: '100%',
   },
 });
 

@@ -4,8 +4,9 @@ import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Components
-import HeaderBackButton from '../../components/buttons/HeaderBackButton';
 import ButtonComponent from '../../components/buttons/ButtonComponent';
+import Header from '../../components/navbar/Header';
+import ScreenWrapper from '../../components/layout/ScreenWrapper';
 
 // Types
 import {ScreenProps} from '../types';
@@ -61,10 +62,13 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const mood = moods[moodValue];
 
   return (
-    <View style={[styles.page, {backgroundColor: currentTheme.background}]}>
-      <View style={styles.headerSection}>
-        <HeaderBackButton navigation={navigation} />
-      </View>
+    <ScreenWrapper>
+      <Header
+        label=""
+        navigation={navigation}
+        includeBackArrow={true}
+        includeTopMargin={true}
+      />
       <View style={styles.contentSection}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
           What's your mood?
@@ -100,7 +104,7 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
           onPress={handleSaveMood}
         />
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
@@ -115,6 +119,7 @@ const styles = StyleSheet.create({
   contentSection: {
     flex: 9,
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   title: {
     fontSize: fontSizes.xLarge,

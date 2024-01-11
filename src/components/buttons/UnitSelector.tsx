@@ -31,8 +31,8 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
   return (
     <View
       style={[
-        style,
         styles.unitSelector,
+        style,
         {
           backgroundColor: currentTheme.disabledButton,
           shadowColor: currentTheme.shadow,
@@ -49,7 +49,9 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
             index === units.length - 1 && styles.lastUnit,
           ]}
           onPress={() => setActiveUnit(unit)}>
-          <Text style={styles.unitText}>{unit}</Text>
+          <Text style={[styles.unitText, {color: currentTheme.lightText}]}>
+            {unit}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
   },
   unitText: {
     fontSize: fontSizes.medium,
-    fontWeight: fontWeights.normal,
+    fontWeight: fontWeights.bold,
     fontFamily: fonts.primary,
   },
   firstUnit: {

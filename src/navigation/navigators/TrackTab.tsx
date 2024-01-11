@@ -10,7 +10,7 @@ import Nutrition from '../../screens/track/NutritionTracking';
 import WellnessTracking from '../../screens/track/WellnessTracking';
 
 // Components
-import TrackNavBar from '../../components/navbar/TrackNavBar';
+import TopTabNavBar from '../../components/navbar/TopTabNavBar';
 
 // Navigation stacks
 const TrackTabStack = createMaterialTopTabNavigator();
@@ -18,7 +18,7 @@ const TrackTabStack = createMaterialTopTabNavigator();
 // Navigation for the Tracking page
 const TrackTabNavigator: React.FC = () => {
   return (
-    <TrackTabStack.Navigator tabBar={props => <TrackNavBar {...props} />}>
+    <TrackTabStack.Navigator tabBar={props => <TopTabNavBar {...props} />}>
       <TrackTabStack.Screen
         name="Workout"
         component={Workout}

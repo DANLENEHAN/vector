@@ -4,17 +4,16 @@ import React from 'react';
 import {Appearance, View, StyleSheet} from 'react-native';
 import Header from '../../../components/navbar/Header';
 import OptionGroup from '../../../components/settings/OptionGroup';
-import {lightThemeColors, darkThemeColors} from '../../../styles/main';
+import {margins} from '../../../styles/main';
 
 // Styling
 import {useSystem} from '../../../context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserThemePreference} from '../../../services/asyncStorage/types';
+import ScreenWrapper from '../../../components/layout/ScreenWrapper';
 
 const ThemeScreen: React.FC<any> = ({navigation}) => {
-  const {theme, setTheme, userPreferenceTheme, setUserPreferenceTheme} =
-    useSystem();
-  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const {setTheme, userPreferenceTheme, setUserPreferenceTheme} = useSystem();
 
   const options = [
     {value: 'system', label: 'System Preferences'},
@@ -38,15 +37,14 @@ const ThemeScreen: React.FC<any> = ({navigation}) => {
     AsyncStorage.setItem(UserThemePreference, selectedTheme);
   };
   return (
-    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
-      <View style={styles.headerSection}>
-        <Header
-          label="Theme"
-          navigation={navigation}
-          includeBackArrow={true}
-          includeTopMargin={true}
-        />
-      </View>
+    <ScreenWrapper>
+      <Header
+        label="Theme"
+        navigation={navigation}
+        includeBackArrow={true}
+        includeTopMargin={true}
+      />
+
       <View style={styles.settingsSection}>
         <OptionGroup
           options={options}
@@ -54,19 +52,20 @@ const ThemeScreen: React.FC<any> = ({navigation}) => {
           onOptionPress={handleOptionPress}
         />
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-  },
-  headerSection: {
-    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   settingsSection: {
-    flex: 8,
+    marginTop: margins.xxLarge,
+    flex: 1,
+    width: '100%',
   },
 });
 

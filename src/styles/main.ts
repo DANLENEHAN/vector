@@ -79,7 +79,7 @@ export const darkThemeColors = {
   disabledButton: gray,
   buttonText: black,
   icon: white,
-  borders: '#CCCCCC',
+  borders: '#4d4d4d',
   text: white,
   primary: blue,
   secondary: purple,

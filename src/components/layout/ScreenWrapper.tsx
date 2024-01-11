@@ -1,8 +1,14 @@
+// React Import
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-
+import {StyleSheet} from 'react-native';
+// Theme
 import {darkThemeColors, lightThemeColors} from '../../styles/main';
 import {useSystem} from '../../context/SystemContext';
+//
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 interface ScreenWrapperProps {
   children: React.ReactNode;
@@ -11,17 +17,23 @@ interface ScreenWrapperProps {
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({children}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const insets = useSafeAreaInsets();
 
   return (
-    <View
+    <SafeAreaProvider
       style={[
         styles.screenWrapper,
         {
           backgroundColor: currentTheme.background,
+          // Paddings to handle safe area
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
         },
       ]}>
       {children}
-    </View>
+    </SafeAreaProvider>
   );
 };
 

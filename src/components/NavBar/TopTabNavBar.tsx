@@ -8,20 +8,21 @@ import {
   fontWeights,
   lightThemeColors,
   darkThemeColors,
-  margins,
   paddings,
   borderWidth,
 } from '../../styles/main';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
 import {useSystem} from '../../context/SystemContext';
 
-const TrackNavBar: React.FC<TopBarProps> = ({
+const TopTabNavBar: React.FC<TopBarProps> = ({
   navigation,
   state,
   descriptors,
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const insets = useSafeAreaInsets();
   return (
     <View
       style={[
@@ -29,6 +30,7 @@ const TrackNavBar: React.FC<TopBarProps> = ({
         {
           backgroundColor: currentTheme.background,
           shadowColor: currentTheme.shadow,
+          paddingTop: insets.top,
         },
       ]}>
       <View
@@ -89,7 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 60,
     borderBottomWidth: borderWidth.small,
-    marginTop: margins.xxLarge,
   },
   label: {
     fontSize: fontSizes.medium,
@@ -99,4 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrackNavBar;
+export default TopTabNavBar;

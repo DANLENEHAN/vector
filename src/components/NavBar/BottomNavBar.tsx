@@ -10,6 +10,8 @@ import {
   paddings,
   borderWidth,
 } from '../../styles/main';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {useSystem} from '../../context/SystemContext';
 
 const routeMapping: any = {
@@ -24,6 +26,7 @@ const hiddenRoutes = ['Settings', 'Search'];
 const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const insets = useSafeAreaInsets();
   return (
     <View
       style={[
@@ -32,6 +35,10 @@ const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
           backgroundColor: currentTheme.background,
           shadowColor: currentTheme.shadow,
           borderTopColor: currentTheme.borders,
+          paddingBottom: insets.bottom,
+          paddingLeft: paddings.xSmall,
+          paddingRight: paddings.xSmall,
+          height: 55 + insets.bottom,
         },
       ]}>
       {state.routes.map((route: any, index: number) => {
@@ -73,8 +80,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 65,
-    paddingTop: paddings.small,
     // Added shadow
     borderTopWidth: borderWidth.small,
     shadowOffset: {width: 0, height: -2},
