@@ -11,12 +11,14 @@ import {SwaggerValidationError} from '../../../services/api/types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../../styles/main';
 import {useSystem} from '../../../context/SystemContext';
+// Logger
+import logger from '../../../utils/logger';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {
     const response = await logoutUser();
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
       navigation.navigate('Login');
     }

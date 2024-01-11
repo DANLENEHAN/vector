@@ -28,6 +28,8 @@ import {createNewStat} from '../../services/api/blueprints/stat/functions';
 // Types
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {ScreenProps} from '../types';
+// Logger
+import logger from '../../utils/logger';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
@@ -46,7 +48,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
     const parsedWeight = parseFloat(weightValue);
     // Validation: Check if the weight is 0 or the string is empty
     if (isNaN(parsedWeight) || parsedWeight <= 0) {
-      console.error('Invalid weight value. Please enter a valid weight.');
+      logger.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
     createNewStat({

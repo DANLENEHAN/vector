@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Keyboard} from 'react-native';
 // Services
 import {loginUser, createUser} from '../services/api/blueprints/user/api';
+//Utils
+import logger from '../utils/logger';
 //Layouts
 import ScreenWrapper from '../components/layout/ScreenWrapper';
 // Components
@@ -42,10 +44,13 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleLogin = async () => {
+    logger.info('Logging in.');
+    Keyboard.dismiss();
     let response = await loginUser({email: email, password: password});
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
+      logger.info('Login successful, navigating to home screen.');
       navigation.navigate('App', {screen: 'Home'});
     }
   };
@@ -74,9 +79,9 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       updated_at: currentTimestamp,
     });
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
-      console.log('Account creation successful, logging in.');
+      logger.info('Account creation successful, logging in.');
       response = await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
     }

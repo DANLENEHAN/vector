@@ -2,16 +2,15 @@ import {AxiosResponse} from 'axios';
 import api from '../../apiService';
 import {UserCreateSchema, UserGetSchema} from '../../swagger/data-contracts';
 import {User} from '../../swagger/User';
-
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlaskLoginCookie, UserDetails} from '../../../asyncStorage/types';
-
 // Functions
 import {HandleSwaggerValidationError} from '../../functions';
-
 // Types
 import {SwaggerValidationError} from '../../types';
+// Logger
+import logger from '../../../../utils/logger';
 
 const UserApi = new User(api);
 
@@ -85,7 +84,7 @@ export const testAuthentication =
       const response: AxiosResponse<void> = await UserApi.authenticatedList();
 
       if (response.status === 200) {
-        console.log('User authenticated');
+        logger.info('User authenticated');
         return Promise.resolve();
       } else {
         return new SwaggerValidationError();

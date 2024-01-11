@@ -1,11 +1,12 @@
 // Services
 import {getUserDetails} from '../../../asyncStorage/functions';
 import {getStats} from './api';
-
 // Types
 import {StatType, StatSchema} from '../../swagger/data-contracts';
 import {SwaggerValidationError} from '../../types';
 import {insertStat} from '../../../db/stat/functions';
+// Logger
+import logger from '../../../../utils/logger';
 
 export interface CreateNewStatParams {
   value: number;
@@ -54,7 +55,7 @@ export const createNewStat = async ({
     ]);
     navigation.goBack();
   } catch (error) {
-    console.error(`Error: ${error}`);
+    logger.error(`Error: ${error}`);
   }
 };
 
@@ -84,12 +85,12 @@ export const getUserStats = async ({statType}: GetUserStatsParams) => {
       sort: ['created_at:desc'],
     });
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
       return response;
     }
   } catch (error) {
-    console.error(`Error: ${error}`);
+    logger.error(`Error: ${error}`);
   }
   return undefined;
 };

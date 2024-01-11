@@ -25,6 +25,8 @@ import {parse} from 'date-fns';
 import {ScreenProps} from '../types';
 import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
 import {GraphPlotData} from '../../components/graphs/Line/types';
+// Logger
+import logger from '../../utils/logger';
 
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});
@@ -42,7 +44,7 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
         const weightUnitPref = WeightUnit.Kg;
         let user_weights = await getUserStats({statType: StatType.Weight});
         if (user_weights == null) {
-          console.log('No user weights found');
+          logger.info('No user weights found');
         }
         user_weights = convertStats({
           stats: user_weights,

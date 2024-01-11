@@ -38,7 +38,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
   };
 
   const handleFocus = () => {
-    console.log('Removing 0');
     if (inputValue === '0' || inputValue === '0.0') {
       setInputValue('');
     }

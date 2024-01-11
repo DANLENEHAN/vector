@@ -15,6 +15,8 @@ import {
   NetInfoSubscription,
   addEventListener,
 } from '@react-native-community/netinfo';
+// Logger
+import logger from '../utils/logger';
 
 interface SystemContextType {
   theme: 'light' | 'dark';
@@ -75,7 +77,7 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     // Cleaning up the listener when the component unmounts
     return () => {
-      console.log('Removing System subscriptions');
+      logger.info('Removing System subscriptions');
       subscription.remove();
       networkSubscription();
     };

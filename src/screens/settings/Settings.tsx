@@ -9,6 +9,8 @@ import {ScreenProps} from '../types';
 // Theme
 import {lightThemeColors, darkThemeColors} from '../../styles/main';
 import {useSystem} from '../../context/SystemContext';
+// Logger
+import logger from '../../utils/logger';
 
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
@@ -44,7 +46,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
           />
           <SettingsOption
             icon="question"
-            onPress={() => console.log('Pressed Support')}
+            onPress={() => logger.log('Pressed Support')}
             label="Support"
             caret={true}
           />

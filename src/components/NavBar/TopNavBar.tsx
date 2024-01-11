@@ -16,6 +16,8 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Typing
 import {NavBarProps} from './types';
+// Logging
+import logger from '../../utils/logger';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useSystem();
@@ -37,7 +39,7 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
           solid
           size={iconSizes.large}
           color={currentTheme.text}
-          onPress={() => console.log('Pressed Search')}
+          onPress={() => logger.info('Pressed Search')}
         />
       </View>
       <View style={styles.logoContainer}>
