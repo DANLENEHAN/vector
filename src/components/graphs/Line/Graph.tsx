@@ -36,31 +36,18 @@ interface LineGraphProps {
 }
 
 // Functions necessary for the parsing of the date when the graph is clicked
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-const formatDate = (ms: number) => {
-  // Needed to run within an animation
+const formatDate = (ms: number): string => {
   'worklet';
 
-  // Format the date into a string
-  // d MMM yyyy format
   const date = new Date(ms);
-  const M = MONTHS[date.getMonth()];
-  const D = date.getDate();
-  const Y = date.getFullYear();
-  return `${D} ${M} ${Y}`;
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  };
+  const dateFormatter = new Intl.DateTimeFormat('en-GB', options);
+
+  return dateFormatter.format(date);
 };
 
 const LineGraph: React.FC<LineGraphProps> = ({
