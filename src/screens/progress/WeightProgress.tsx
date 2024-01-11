@@ -7,7 +7,6 @@ import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
-  fontWeights,
   lightThemeColors,
   darkThemeColors,
   margins,
@@ -228,19 +227,6 @@ const styles = StyleSheet.create({
   chartContainer: {
     width: '100%',
     height: 300,
-  },
-  averageWeightContainer: {
-    width: '90%',
-    height: 100,
-    //backgroundColor: 'red',
-  },
-  averageWeightLabel: {
-    fontSize: fontSizes.medium,
-  },
-  averageWeightValue: {
-    fontSize: fontSizes.xLarge,
-    fontWeight: fontWeights.extraBold,
-    color: 'black',
   },
 });
 
