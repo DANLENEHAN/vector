@@ -12,7 +12,7 @@ import {
 } from '../../styles/main';
 // Components
 import Header from '../../components/navbar/Header';
-import {BarChart} from 'react-native-gifted-charts';
+import LineGraph from '../../components/graphs/Line/Graph';
 import UnitSelector from '../../components/buttons/UnitSelector';
 // Services
 import {getUserStats} from '../../services/api/blueprints/stat/functions';
@@ -30,21 +30,13 @@ const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
 
   const fakeData = [
-    {value: 4, label: '1 Jan'},
-    {value: 3, label: '2 Jan'},
-    {value: 3, label: '3 Jan'},
-    {value: 2, label: '4 Jan'},
-    {value: 1, label: '5 Jan'},
-    {value: 3, label: '6 Jan'},
+    {value: 4, date: new Date('2021-01-01').valueOf()},
+    {value: 3, date: new Date('2021-01-02').valueOf()},
+    {value: 3, date: new Date('2021-01-03').valueOf()},
+    {value: 2, date: new Date('2021-01-04').valueOf()},
+    {value: 1, date: new Date('2021-01-05').valueOf()},
+    {value: 3, date: new Date('2021-01-06').valueOf()},
   ];
-
-  const moodValues = {
-    0: 'Awful',
-    1: 'Bad',
-    2: 'Neutral',
-    3: 'Okay',
-    4: 'Good',
-  };
 
   useEffect(() => {
     const getUserMoods = async () => {
@@ -68,24 +60,20 @@ const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
           units={Object.values(dateOptions)}
           activeUnit={activePeriod}
           setActiveUnit={setActivePeriod}
-          style={{
-            height: 25,
-            width: '90%',
-            color: currentTheme.text,
-            marginTop: margins.xSmall,
-            marginBottom: margins.medium,
-          }}
+          style={[
+            styles.unitSelector,
+            {
+              color: currentTheme.text,
+            },
+          ]}
         />
 
         <View style={styles.chartContainer}>
-          <BarChart
+          <LineGraph
             data={fakeData}
-            formatYLabel={yValue => moodValues[yValue]}
-            width={300}
-            roundedBottom
-            roundedTop
-            noOfSections={5}
-            maxValue={4}
+            averageLabel={'test'}
+            averageValue={5}
+            unit={''}
           />
         </View>
       </View>
@@ -107,6 +95,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     height: 300,
+  },
+  unitSelector: {
+    height: 25,
+    width: '90%',
+    marginTop: margins.xSmall,
+    marginBottom: margins.medium,
   },
 });
 

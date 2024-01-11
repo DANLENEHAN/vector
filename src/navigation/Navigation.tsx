@@ -27,11 +27,13 @@ import SettingsStackNavigator from './navigators/SettingsStack';
 const AppStack = createNativeStackNavigator<RootStackParamList>();
 const AppHomeTabStack = createBottomTabNavigator();
 
+const BottomTabBar = props => <BottomNavBar {...props} />;
+
 const AppNavigator: React.FC = () => {
   return (
     <AppHomeTabStack.Navigator
       screenOptions={{headerShown: false}}
-      tabBar={props => <BottomNavBar {...props} />}
+      tabBar={BottomTabBar}
       backBehavior="history">
       <AppHomeTabStack.Screen
         name="Home"

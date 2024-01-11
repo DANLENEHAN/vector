@@ -15,10 +15,13 @@ import TopTabNavBar from '../../components/navbar/TopTabNavBar';
 // Navigation stacks
 const TrackTabStack = createMaterialTopTabNavigator();
 
+//NavBar
+const TrackTabBar = props => <TopTabNavBar {...props} />;
+
 // Navigation for the Tracking page
 const TrackTabNavigator: React.FC = () => {
   return (
-    <TrackTabStack.Navigator tabBar={props => <TopTabNavBar {...props} />}>
+    <TrackTabStack.Navigator tabBar={TrackTabBar}>
       <TrackTabStack.Screen
         name="Workout"
         component={Workout}

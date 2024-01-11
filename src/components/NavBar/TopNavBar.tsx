@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 1.0,
     elevation: 5,
-    backgroundColor: 'red',
   },
   iconContainer: {
     flex: 2,

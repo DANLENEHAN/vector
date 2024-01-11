@@ -49,12 +49,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
         ]}>
         Average:
       </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: margins.small,
-        }}>
+      <View style={styles.averageWeightAndUnitContainer}>
         <AnimatedText
           text={currentValue}
           style={[
@@ -109,6 +104,11 @@ const styles = StyleSheet.create({
   },
   averageWeightLabel: {
     fontSize: fontSizes.medium,
+  },
+  averageWeightAndUnitContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: margins.small,
   },
   averageValue: {
     fontSize: fontSizes.title,

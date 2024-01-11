@@ -100,7 +100,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           placeholder="Enter your email"
           value={email}
           onChangeText={text => setUsername(text)}
-          iconName="person"
+          iconName="envelope"
         />
         <TextInputComponent
           placeholder="Enter your password"

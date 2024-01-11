@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 // Styling
 // @ts-ignore
 import Montserrat from '../../../../assets/fonts/Montserrat-SemiBold.ttf';
@@ -73,7 +73,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
     // If graph clicked
     if (isFirstPressActive) {
       const value = firstPress.y.value.value.value.toFixed(2);
-      if (value === undefined || value === null || value == 'NaN') {
+      if (value === undefined || value === null || value === 'NaN') {
         return '-';
       }
       return value;
@@ -108,14 +108,14 @@ const LineGraph: React.FC<LineGraphProps> = ({
    *  */
   return (
     <>
-      <View style={{alignItems: 'center', height: 90}}>
+      <View style={styles.AverageValueTextContainer}>
         <AverageValueText
           currentValue={currentValue}
           currentDate={currentDate}
           unit={unit}
         />
       </View>
-      <View style={{flex: 8}}>
+      <View style={styles.ChartContainer}>
         <CartesianChart
           data={data}
           xKey="date"
@@ -201,3 +201,15 @@ const LineGraph: React.FC<LineGraphProps> = ({
 };
 
 export default LineGraph;
+
+const styles = StyleSheet.create({
+  AverageValueTextContainer: {
+    alignItems: 'center',
+    height: 90,
+  },
+  ChartContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

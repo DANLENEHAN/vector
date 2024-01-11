@@ -189,18 +189,16 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
           units={Object.values(dateOptions)}
           activeUnit={activePeriod}
           setActiveUnit={setActivePeriod}
-          style={{
-            height: 25,
-            width: '90%',
-            color: currentTheme.text,
-            marginTop: margins.xSmall,
-            marginBottom: margins.medium,
-          }}
+          style={[
+            styles.unitSelector,
+            {
+              color: currentTheme.text,
+            },
+          ]}
         />
 
-        <View style={styles.chartContainer}>
-          <View
-            style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+        <View style={styles.chartContainerContainer}>
+          <View style={styles.chartContainer}>
             {data && activePeriod && data[activePeriod] && (
               <LineGraph
                 data={data[activePeriod].data}
@@ -224,9 +222,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: fontSizes.xLarge,
   },
-  chartContainer: {
+  chartContainerContainer: {
     width: '100%',
     height: 300,
+  },
+  chartContainer: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  unitSelector: {
+    height: 25,
+    width: '90%',
+    marginTop: margins.xSmall,
+    marginBottom: margins.medium,
   },
 });
 

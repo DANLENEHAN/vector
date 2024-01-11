@@ -4,7 +4,7 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Layouts
 import ScreenWrapper from '../../components/layout/ScreenWrapper';
 // Styling
-import {fontSizes} from '../../styles/main';
+import {fontSizes, margins} from '../../styles/main';
 // Components
 import Header from '../../components/navbar/Header';
 // Services
@@ -46,7 +46,7 @@ const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
       <View style={styles.content}>
         <ScrollView>
           {data.map(item => (
-            <View style={{marginBottom: 10}}>
+            <View style={styles.statItem}>
               <Text>Unit: {item.unit}</Text>
               <Text>Created At: {item.created_at}</Text>
               <Text>Value: {item.value}</Text>
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: fontSizes.xLarge,
+  },
+  statItem: {
+    marginBottom: margins.small,
   },
 });
 

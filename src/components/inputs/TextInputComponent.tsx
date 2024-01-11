@@ -1,5 +1,11 @@
-import React from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Styling
@@ -11,6 +17,7 @@ import {
   darkThemeColors,
   lightThemeColors,
   iconSizes,
+  fonts,
 } from '../../styles/main';
 import {useSystem} from '../../context/SystemContext';
 
@@ -33,9 +40,16 @@ const TextInputComponent: React.FC<TextInputProps> = ({
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+  const [isSecureEntry, setIsSecureEntry] = useState<boolean>(secureTextEntry);
 
   return (
     <View style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
+      <Icon
+        name={iconName}
+        size={iconSizes.xLarge}
+        color={currentTheme.icon}
+        solid
+      />
       <TextInput
         style={[
           styles.input,
@@ -44,12 +58,20 @@ const TextInputComponent: React.FC<TextInputProps> = ({
           },
         ]}
         placeholder={placeholder}
+        placeholderTextColor={currentTheme.lightText}
         value={value}
         onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={isSecureEntry}
         autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
       />
-      <Icon name={iconName} size={iconSizes.xLarge} color={currentTheme.icon} />
+      {secureTextEntry === true && value.length > 0 && (
+        <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
+          <Text
+            style={[styles.showHideButton, {color: currentTheme.lightText}]}>
+            {isSecureEntry ? 'Show' : 'Hide'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -66,6 +88,15 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: margins.small,
+    fontFamily: fonts.primary,
+  },
+  showHideButton: {
+    paddingRight: paddings.small,
+    fontFamily: fonts.primary,
+  },
+  icon: {
+    paddingRight: paddings.small,
+    paddingLeft: paddings.small,
   },
 });
 

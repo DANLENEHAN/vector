@@ -14,11 +14,12 @@ import TopTabNavBar from '../../components/navbar/TopTabNavBar';
 
 // Navigation stacks
 const ProgressTabStack = createMaterialTopTabNavigator();
-
+// NavBar
+const ProgressTabBar = props => <TopTabNavBar {...props} />;
 // Navigation for the Progress page
 const ProgressTabNavigator: React.FC = () => {
   return (
-    <ProgressTabStack.Navigator tabBar={props => <TopTabNavBar {...props} />}>
+    <ProgressTabStack.Navigator tabBar={ProgressTabBar}>
       <ProgressTabStack.Screen
         name="WorkoutProgress"
         component={WorkoutProgressScreen}
