@@ -1,6 +1,6 @@
 // Services
 import {getUserDetails} from '../../../asyncStorage/functions';
-import {createStat, getStats} from './api';
+import {getStats} from './api';
 
 // Types
 import {StatType, StatSchema} from '../../swagger/data-contracts';
@@ -42,14 +42,6 @@ export const createNewStat = async ({
   try {
     const user_id = await getUserDetails('user_id');
     const currentTimestamp: string = new Date().getTime().toString();
-    await createStat({
-      unit: unitValue,
-      stat_type: statType,
-      user_id: user_id,
-      value: value,
-      created_at: currentTimestamp,
-      updated_at: currentTimestamp,
-    });
     await insertStat([
       {
         unit: unitValue,

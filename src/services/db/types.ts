@@ -1,4 +1,4 @@
-export const DB_NAME = 'vector.db';
+export const dbName = 'vector.db';
 
 export const alembicTable: string = 'alembic_version';
 
