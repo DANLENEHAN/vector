@@ -8,7 +8,7 @@ import {TileData} from '@components/buttons/ClickableTile';
 import {ScreenProps} from '@screens/types';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
-import Header from '@components/navbar/Header';
+//import Header from '@components/navbar/Header';
 import {View, StyleSheet, ScrollView} from 'react-native';
 
 const tile_data: TileData[] = [
@@ -27,12 +27,12 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
     <View
       style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
       testID="nutrition-progress-screen">
-      <Header
+      {/* <Header
         label="Nutrition"
         navigation={navigation}
         includeBackArrow={false}
         includeTopMargin={false}
-      />
+      /> */}
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
