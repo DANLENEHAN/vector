@@ -208,8 +208,6 @@ const styles = StyleSheet.create({
     height: 90,
   },
   ChartContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 8,
   },
 });

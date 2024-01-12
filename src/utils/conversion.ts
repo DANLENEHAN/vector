@@ -3,6 +3,7 @@
  *  @description Conversion utilities for converting between different units.
  */
 // Types
+import {Unit} from 'convert-units';
 import {
   StatSchema,
   WaterUnit,
@@ -29,7 +30,7 @@ interface convertUnitParams {
  * convertUnit(unit);
  * // Returns the converted unit.
  */
-const convertUnit = ({unit}: convertUnitParams): string => {
+const convertUnit = ({unit}: convertUnitParams): Unit => {
   switch (unit) {
     // Any unit that need conversion should be handled here
     case WeightUnit.Lbs:
@@ -40,7 +41,7 @@ const convertUnit = ({unit}: convertUnitParams): string => {
       return 'cup';
     // Add other units as needed
     default:
-      return unit.toLowerCase() as string;
+      return unit.toLowerCase() as Unit;
   }
 };
 
