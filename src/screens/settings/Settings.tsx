@@ -32,7 +32,8 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <View
-        style={[styles.content, {backgroundColor: currentTheme.background}]}>
+        style={[styles.content, {backgroundColor: currentTheme.background}]}
+        testID="settings-screen">
         <View style={styles.profileSection}>
           <ProfileHeader
             userName="Dan Lenehan"

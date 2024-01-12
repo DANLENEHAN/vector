@@ -38,7 +38,9 @@ const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
+      testID="wellness-tracking-screen">
       <Header
         label="Health & Wellness"
         navigation={navigation}

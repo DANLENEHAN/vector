@@ -31,14 +31,20 @@ const TrackTabNavigator: React.FC = () => {
   return (
     <TrackTabStack.Navigator tabBar={TrackTabBar}>
       <TrackTabStack.Screen
-        name="Workout"
+        name="WorkoutTracking"
         component={Workout}
         initialParams={{name: 'Workout'}}
+        options={{
+          tabBarLabel: 'Workout',
+        }}
       />
       <TrackTabStack.Screen
-        name="Nutrition"
+        name="NutritionTracking"
         component={Nutrition}
         initialParams={{name: 'Nutrition'}}
+        options={{
+          tabBarLabel: 'Nutrition',
+        }}
       />
       <TrackTabStack.Screen
         name="WellnessTracking"
