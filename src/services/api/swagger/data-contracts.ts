@@ -1736,6 +1736,13 @@ export interface StatSchema {
    */
   note?: string | null;
   /**
+   * Stat Id
+   * Unique uuid for a stat entry
+   * @format uuid
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  stat_id: string;
+  /**
    * The type of the stat
    * @example "weight"
    */
