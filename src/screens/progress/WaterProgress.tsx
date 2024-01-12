@@ -19,6 +19,17 @@ import {
   WaterUnit,
 } from '@services/api/swagger/data-contracts';
 
+/**
+ *  Water progress screen
+ *
+ * @component WaterProgress
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the water progress screen component
+ *
+ * @example
+ * <WaterProgress navigation={navigation}/>
+ */
 const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);
   useEffect(() => {

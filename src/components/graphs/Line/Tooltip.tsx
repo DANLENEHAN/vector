@@ -4,15 +4,44 @@ import React from 'react';
 import {useDerivedValue, type SharedValue} from 'react-native-reanimated';
 import {Circle, vec, Line as SkiaLine} from '@shopify/react-native-skia';
 
+/**
+ * Interface for the ToolTip component
+ *
+ * @interface ToolTipProps
+ *
+ * @param {SharedValue<number>} xPosition - Location of the tooltip on the x-axis
+ * @param {SharedValue<number>} yPosition - Location of the tooltip on the y-axis
+ * @param {number} bottom - Bottom of the graph
+ * @param {number} top - Top of the graph
+ * @param {string} lineColor - Color of the line
+ * @param {string} indicatorColor - Color of the indicator
+ */
 interface ToolTipProps {
-  xPosition: SharedValue<number>; // xPosition: Location of the tooltip on the x-axis
-  yPosition: SharedValue<number>; // yPosition: Location of the tooltip on the y-axis
-  bottom: number; // bottom: Bottom of the graph
-  top: number; // top: Top of the graph
-  lineColor: string; // lineColor: Color of the line
-  indicatorColor: string; // indicatorColor: Color of the indicator
+  xPosition: SharedValue<number>;
+  yPosition: SharedValue<number>;
+  bottom: number;
+  top: number;
+  lineColor: string;
+  indicatorColor: string;
 }
 
+/**
+ * ToolTip Component
+ *
+ * @component ToolTip
+ * @example
+ * <ToolTip
+ *   xPosition={xPosition}
+ *   yPosition={yPosition}
+ *   bottom={bottom}
+ *   top={top}
+ *   lineColor={lineColor}
+ *   indicatorColor={indicatorColor}
+ * />
+ *
+ * @param {Object} props - Component ToolTip Props
+ * @returns {React.FC<ToolTipProps>} - React Component
+ */
 const ToolTip: React.FC<ToolTipProps> = ({
   xPosition,
   yPosition,

@@ -19,6 +19,16 @@ import {NavBarProps} from '@components/navbar/types';
 // Logging
 import logger from '@utils/logger';
 
+/**
+ * TopNavBar Component
+ *
+ * @component TopNavBar
+ * @example
+ * <TopNavBar navigation={navigation} />
+ *
+ * @param {Object} props - Component TopNavBar Props
+ * @returns {React.FC<NavBarProps>} - React Component
+ */
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

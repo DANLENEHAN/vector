@@ -16,7 +16,17 @@ const TrackTabStack = createMaterialTopTabNavigator();
 //NavBar
 const TrackTabBar = (props: TopBarProps) => <TopTabNavBar {...props} />;
 
-// Navigation for the Tracking page
+/**
+ * TrackTabNavigator Component
+ *
+ * @component TrackTabNavigator
+ * @example
+ * return (
+ *   <TrackTabNavigator />
+ * )
+ *
+ * @returns {React.FC} - React Component
+ */
 const TrackTabNavigator: React.FC = () => {
   return (
     <TrackTabStack.Navigator tabBar={TrackTabBar}>

@@ -10,7 +10,7 @@ import {alembicTable, RevisionCallback} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
-import {getAllTables} from '@services/db/queries/other';
+import {generateDeletionQuery} from '@services/db/queries/other';
 // Logger
 import logger from '@utils/logger';
 
@@ -171,7 +171,7 @@ export const deleteDB = (): void => {
   logger.info('Deleting DB tables. Hold on tight!');
   db.transaction((tx: Transaction) => {
     tx.executeSql(
-      getAllTables,
+      generateDeletionQuery,
       [],
       (_: Transaction, result: ResultSet) => {
         const rows = result.rows;

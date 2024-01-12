@@ -22,6 +22,18 @@ import {
 } from '@styles/main';
 import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the TextInput Component
+ *
+ * @interface TextInputProps
+ *
+ * @param {string} placeholder - The placeholder text for the input
+ * @param {string} value - The value of the input
+ * @param {(text: string) => void} onChangeText - Function to be called when the text changes
+ * @param {boolean} secureTextEntry - Boolean to hide the text (optional)
+ * @param {boolean} autoCapitalize - Boolean to capitalize the text (optional)
+ * @param {string} iconName - The name of the icon to be displayed
+ */
 interface TextInputProps {
   placeholder: string;
   value: string;
@@ -31,6 +43,23 @@ interface TextInputProps {
   iconName: string;
 }
 
+/**
+ * TextInput Component
+ *
+ * @component TextInputComponent
+ * @example
+ * <TextInputComponent
+ *     placeholder={'Placeholder Text'}
+ *     value={inputValue}
+ *     onChangeText={setInputValue}
+ *     secureTextEntry={true}
+ *     autoCapitalize={true}
+ *     iconName={'lock'}
+ * />
+ *
+ * @param {Object} props - Component TextInput Props
+ * @returns {React.FC<TextInputProps>} - React Component
+ */
 const TextInputComponent: React.FC<TextInputProps> = ({
   placeholder,
   value,

@@ -31,6 +31,17 @@ import {ScreenProps} from '@screens/types';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ *  Weight tracking screen
+ *
+ * @component WeightTracking
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the weight tracking screen component
+ *
+ * @example
+ * <WeightTracking navigation={navigation}/>
+ */
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

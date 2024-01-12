@@ -33,6 +33,15 @@ const AppHomeTabStack = createBottomTabNavigator();
 // NavBar
 const BottomTabBar = (props: BottomBarProps) => <BottomNavBar {...props} />;
 
+/**
+ * Navigation for the entire app
+ *
+ * @component AppNavigator
+ * @example
+ * <AppNavigator />
+ *
+ * @returns {React.FC} - React Component
+ */
 const AppNavigator: React.FC = () => {
   return (
     <AppHomeTabStack.Navigator
@@ -67,7 +76,15 @@ const AppNavigator: React.FC = () => {
   );
 };
 
-// Navigation for the entire app
+/**
+ * Navigation for the entire app
+ *
+ * @component AuthNavigator
+ * @example
+ * <AuthNavigator />
+ *
+ * @returns {React.FC} - React Component
+ */
 const AuthNavigator: React.FC = () => {
   return (
     <NavigationContainer>

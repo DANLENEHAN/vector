@@ -17,16 +17,34 @@ import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
 // Services
 import {createNewStat} from '@services/api/blueprints/stat/functions';
 
+/**
+ * Interface for the mood object
+ *
+ * @interface Mood
+ *
+ * @param {string} label - The label for the mood
+ * @param {string} icon - The icon for the mood
+ * @param {string} color - The color for the mood
+ */
 interface Mood {
   label: string;
   icon: string;
   color: string;
 }
 
+/**
+ * Interface for the mood dictionary
+ *
+ * @interface MoodsDictionary
+ *
+ * @param {number} key - The key for the mood
+ * @param {Mood} value - The value for the mood
+ */
 interface MoodsDictionary {
   [key: number]: Mood;
 }
 
+// Dictionary for the moods
 const moods: MoodsDictionary = {
   0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
   1: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
@@ -37,6 +55,17 @@ const moods: MoodsDictionary = {
   6: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
 };
 
+/**
+ *  Mood tracking screen
+ *
+ * @component MoodScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the mood tracking screen component
+ *
+ * @example
+ * <MoodScreen navigation={navigation}/>
+ */
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [moodValue, setMoodValue] = useState<number>(3);
 

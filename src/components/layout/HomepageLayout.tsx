@@ -9,11 +9,34 @@ import {HomeParamList, RootStackParamList} from '@navigation/types';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 
+/**
+ * HomepageLayout
+ * @interface HomepageLayoutProps
+ *
+ * @param {React.ReactNode} children - The children to render
+ * @param {NativeStackNavigationProp<RootStackParamList & HomeParamList>} navigation - The navigation prop
+ */
 interface HomepageLayoutProps {
   children: React.ReactNode;
   navigation: NativeStackNavigationProp<RootStackParamList & HomeParamList>;
 }
 
+/**
+ * HomepageLayout
+ *
+ * @component HomepageLayout
+ * @example
+ * <HomepageLayout
+ *    navigation={navigation}
+ * >
+ *    <View>
+ *      <Text>Example</Text>
+ *    </View>
+ * </HomepageLayout>
+ *
+ * @param {Object} props - Component Props
+ * @returns {React.FC<HomepageLayoutProps>} - React Component
+ */
 const HomepageLayout: React.FC<HomepageLayoutProps> = ({
   children,
   navigation,

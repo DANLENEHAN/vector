@@ -13,6 +13,18 @@ import {useSystem} from '@context/SystemContext';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ * Settings Screen
+ *
+ * @component SettingsScreen
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Settings Screen Component
+ *
+ * @example
+ * <SettingsScreen navigation={navigation}/>
+ */
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

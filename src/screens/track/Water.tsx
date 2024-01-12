@@ -26,6 +26,17 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ *  Water tracking screen
+ *
+ * @component WaterScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the water tracking screen component
+ *
+ * @example
+ * <WaterScreen navigation={navigation}/>
+ */
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

@@ -11,6 +11,7 @@ import ClickableTile from '@components/buttons/ClickableTile';
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, ScrollView} from 'react-native';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Water',
@@ -19,6 +20,18 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Nutrition Progress Screen
+ *
+ * @component NutritionProgressScreen
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Nutrition Progress Screen Component
+ *
+ * @example
+ * <NutritionProgressScreen navigation={navigation}/>
+ */
 const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

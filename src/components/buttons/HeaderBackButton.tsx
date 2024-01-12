@@ -15,10 +15,27 @@ import {
   iconSizes,
 } from '@styles/main';
 
+/**
+ * Interface for the Header Back Button Component
+ *
+ * @interface HeaderBackButtonProps
+ *
+ * @param {ScreenNavigationProp} navigation - Navigation prop for the screen
+ */
 interface HeaderBackButtonProps {
   navigation: ScreenNavigationProp;
 }
 
+/**
+ * Header Back Button Component
+ *
+ * @component HeaderBackButton
+ * @example
+ * <HeaderBackButton navigation={navigation} />
+ *
+ * @param {Object} props - Component props
+ * @returns {React.FC<HeaderBackButtonProps>} - React Component
+ */
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
   //Setup theme for the component
   const {theme} = useSystem();

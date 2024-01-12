@@ -9,6 +9,17 @@ import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/main';
 //Services
 import {useSystem} from '@context/SystemContext';
 
+/**
+ *  Workout Progress screen
+ *
+ * @component WorkoutProgress
+ * @param {any} route - Route object for the screen
+ *
+ * @returns {React.FC} - Returns the workout progress screen component
+ *
+ * @example
+ * <WorkoutProgress route={route}/>
+ */
 const WokroutProgressScreen: React.FC<any> = ({route}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

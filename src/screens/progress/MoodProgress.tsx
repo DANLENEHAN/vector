@@ -21,6 +21,17 @@ import {useSystem} from '@context/SystemContext';
 import {ScreenProps} from '@screens/types';
 import {StatType} from '@services/api/swagger/data-contracts';
 
+/**
+ *  Weight progress screen
+ *
+ * @component WeightProgress
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the weight progress screen component
+ *
+ * @example
+ * <WeightProgress navigation={navigation}/>
+ */
 const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [setData] = useState<any>({});
   const {theme} = useSystem();

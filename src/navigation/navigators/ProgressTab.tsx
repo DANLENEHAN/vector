@@ -16,7 +16,15 @@ const ProgressTabStack = createMaterialTopTabNavigator();
 // NavBar
 const ProgressTabBar = (props: TopBarProps) => <TopTabNavBar {...props} />;
 
-// Navigation for the Progress page
+/**
+ * ProgressTabNavigator Component
+ *
+ * @component ProgressTabNavigator
+ * @example
+ * <ProgressTabNavigator />
+ *
+ * @returns {React.FC} - React Component
+ */
 const ProgressTabNavigator: React.FC = () => {
   return (
     <ProgressTabStack.Navigator tabBar={ProgressTabBar}>

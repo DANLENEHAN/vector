@@ -14,12 +14,35 @@ import {
 } from '@styles/main';
 import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the ProfileHeader Component
+ *
+ * @interface ProfileHeaderProps
+ *
+ * @param {string} profileImageUrl - The url for the profile image
+ * @param {string} userName - The name of the user
+ * @param {string} userUsername - The username of the user
+ */
 interface ProfileHeaderProps {
   profileImageUrl: string;
   userName: string;
   userUsername: string;
 }
 
+/**
+ * Profile Header Component
+ *
+ * @component ProfileHeader
+ * @example
+ * <ProfileHeader
+ *     profileImageUrl={'https://picsum.photos/200'}
+ *     userName={'John Smith'}
+ *     userUsername={'@johnsmith'}
+ * />
+ *
+ * @param {Object} props - Component ProfileHeader Props
+ * @returns {React.FC<ProfileHeaderProps>} - React Component
+ */
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImageUrl,
   userName,

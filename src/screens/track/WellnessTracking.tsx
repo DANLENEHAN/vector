@@ -11,6 +11,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {ScreenProps} from '@screens/types';
 import {TileData} from '@components/buttons/ClickableTile';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Weight',
@@ -24,6 +25,15 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Home screen for the wellness tracking section
+ *
+ * @param {ScreenProps} props - Navigation object for the screen
+ * @returns {React.FC} - Returns the wellness tracking screen component
+ *
+ * @example
+ * <WellnessTracking navigation={navigation}/>
+ */
 const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

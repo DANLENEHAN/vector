@@ -11,6 +11,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {ScreenProps} from '@screens/types';
 import {TileData} from '@components/buttons/ClickableTile';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Water',
@@ -19,6 +20,18 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Nutrition Tracking Screen
+ *
+ * @component NutritionTracking
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Nutrition Tracking Screen Component
+ *
+ * @example
+ * <NutritionTracking navigation={navigation}/>
+ */
 const NutritionTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

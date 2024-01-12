@@ -1,5 +1,5 @@
+// React import
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Keyboard} from 'react-native';
 // Services
 import {loginUser, createUser} from '@services/api/blueprints/user/api';
 //Utils
@@ -10,6 +10,7 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import TextInputComponent from '@components/inputs/TextInputComponent';
 import ClickableLink from '@components/buttons/ClickableLink';
+import {View, Text, StyleSheet, Keyboard} from 'react-native';
 // Styling
 import {
   fontSizes,
@@ -32,6 +33,17 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/types';
 
+/**
+ *  Login screen
+ *
+ * @component LoginScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the login screen component
+ *
+ * @example
+ * <LoginScreen navigation={navigation}/>
+ */
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');

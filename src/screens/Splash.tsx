@@ -22,6 +22,21 @@ import {ScreenProps} from '@screens/types';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ * Splash screen that checks if the user is logged in or not
+ *
+ * If the user is logged in, it will redirect them to the home screen
+ * If the user is not logged in, it will redirect them to the login screen
+ *
+ * @component Splash
+ *
+ * @param {ScreenProps} props - navigation object to allow for redirection
+ *
+ * @returns {React.FC<ScreenProps>} - React Component
+ *
+ * @example
+ * <Splash navigation={navigation} />
+ */
 const Splash: React.FC<ScreenProps> = ({navigation}) => {
   const {isConnected, systemVarsLoaded, theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

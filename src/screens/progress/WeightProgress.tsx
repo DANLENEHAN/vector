@@ -28,6 +28,17 @@ import {GraphPlotData} from '@components/graphs/Line/types';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ *  Weight progress screen
+ *
+ * @component WeightProgress
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the weight progress screen component
+ *
+ * @example
+ * <WeightProgress navigation={navigation}/>
+ */
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});
   const {theme} = useSystem();

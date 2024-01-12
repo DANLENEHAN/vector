@@ -11,6 +11,7 @@ import {ScreenProps} from '@screens/types';
 import {TileData} from '@components/buttons/ClickableTile';
 import {View, StyleSheet, ScrollView} from 'react-native';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Weight',
@@ -24,6 +25,18 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Wellness Progress Screen
+ *
+ * @component WellnessProgressScreen
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Wellness Progress Screen Component
+ *
+ * @example
+ * <WellnessProgressScreen navigation={navigation}/>
+ */
 const WellnessProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

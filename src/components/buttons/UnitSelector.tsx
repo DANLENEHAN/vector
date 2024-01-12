@@ -13,6 +13,16 @@ import {
 } from '@styles/main';
 import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the Unit Selector Component
+ *
+ * @interface UnitSelectorProps
+ *
+ * @param {string[]} units - The units to be displayed in the selector
+ * @param {string} activeUnit - The currently active unit
+ * @param {React.Dispatch<React.SetStateAction<string>>} setActiveUnit - Function to set the active unit
+ * @param {object} style - Additional styles for the unit selector (optional)
+ */
 interface UnitSelectorProps {
   units: string[];
   activeUnit: string;
@@ -20,6 +30,21 @@ interface UnitSelectorProps {
   style?: object;
 }
 
+/**
+ * Unit Selector Component
+ *
+ * @component UnitSelector
+ * @example
+ * <UnitSelector
+ *     units={['lbs', 'kg']}
+ *     activeUnit={'lbs'}
+ *     setActiveUnit={(unit) => console.log(unit)}
+ *     style={{backgroundColor: 'red'}}
+ * />
+ *
+ * @param {Object} props - Component Unit Selector Props
+ * @returns {React.FC<UnitSelectorProps>} - React Component
+ */
 const UnitSelector: React.FC<UnitSelectorProps> = ({
   units,
   activeUnit,

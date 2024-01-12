@@ -28,6 +28,16 @@ import {format} from 'date-fns';
 import {useDerivedValue} from 'react-native-reanimated';
 import {graphDataPoint} from '@components/graphs/Line/types';
 
+/**
+ * Interface for the LineGraph component
+ *
+ * @interface LineGraphProps
+ *
+ * @param {graphDataPoint[]} data - The data to be displayed on the graph
+ * @param {number} averageValue - The average value of the data
+ * @param {string} averageLabel - The label for the average value
+ * @param {string} unit - The unit for the average value
+ */
 interface LineGraphProps {
   data: graphDataPoint[]; // The data to be displayed on the graph
   averageValue: number; // The average value of the data
@@ -35,7 +45,17 @@ interface LineGraphProps {
   unit: string; // The unit for the average value
 }
 
-// Functions necessary for the parsing of the date when the graph is clicked
+/**
+ * Function to format the date for the tooltip
+ *
+ * @function formatDate
+ * @example
+ * const date = formatDate(1620000000000);
+ * console.log(date); // 1 Jan 2021
+ *
+ * @param {number}  ms - The date in milliseconds
+ * @returns  {string} - The formatted date string
+ */
 const formatDate = (ms: number): string => {
   'worklet';
 
@@ -50,6 +70,21 @@ const formatDate = (ms: number): string => {
   return dateFormatter.format(date);
 };
 
+/**
+ *  Line Graph Component
+ *
+ * @component LineGraph
+ * @example
+ * <LineGraph
+ *   data={data}
+ *   averageValue={averageValue}
+ *   averageLabel={averageLabel}
+ *   unit={unit}
+ * />
+ *
+ * @param {Object} props - Component Line Graph Props
+ * @returns {React.FC<LineGraphProps>} - React Component
+ */
 const LineGraph: React.FC<LineGraphProps> = ({
   data,
   averageLabel,

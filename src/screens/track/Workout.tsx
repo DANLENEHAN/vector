@@ -9,6 +9,13 @@ import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/main';
 //Services
 import {useSystem} from '@context/SystemContext';
 
+/**
+ * WorkoutScreen Component
+ *
+ * @component WorkoutScreen
+ * @param {Object} props - Component props
+ * @returns {React.FC} - React Component
+ */
 const WorkoutScreen: React.FC<any> = ({route}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

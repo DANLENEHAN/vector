@@ -11,7 +11,16 @@ import Preferences from '@screens/settings/options/Preferences';
 // Navigation stacks
 const SettingsStack = createNativeStackNavigator();
 
-// Navigation for the Settings page
+/**
+ *  SettingsStackNavigator
+ *
+ * @component SettingsStackNavigator
+ * @description A stack navigator for the settings screens
+ * @example
+ * <SettingsStackNavigator />
+ *
+ * @returns {React.FC} A stack navigator for the settings screens
+ */
 const SettingsStackNavigator: React.FC = () => {
   return (
     <SettingsStack.Navigator>

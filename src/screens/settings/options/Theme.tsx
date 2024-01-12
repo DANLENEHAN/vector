@@ -11,6 +11,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserThemePreference} from '@services/asyncStorage/types';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 
+/**
+ * Theme Screen
+ *
+ * @component ThemeScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the theme screen component
+ *
+ * @example
+ * <ThemeScreen navigation={navigation}/>
+ */
 const ThemeScreen: React.FC<any> = ({navigation}) => {
   const {setTheme, userPreferenceTheme, setUserPreferenceTheme} = useSystem();
 

@@ -7,6 +7,17 @@ import HomepageLayout from '@components/layout/HomepageLayout';
 // Types
 import {ScreenProps} from '@screens/types';
 
+/**
+ *  Home screen
+ *
+ * @component HomeScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the home screen component
+ *
+ * @example
+ * <HomeScreen navigation={navigation}/>
+ */
 const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <HomepageLayout navigation={navigation}>

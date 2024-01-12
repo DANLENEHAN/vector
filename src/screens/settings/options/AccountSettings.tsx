@@ -15,6 +15,17 @@ import {useSystem} from '@context/SystemContext';
 // Logger
 import logger from '@utils/logger';
 
+/**
+ * Account Settings Screen
+ *
+ * @component AccountSettings
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the account settings screen component
+ *
+ * @example
+ * <AccountSettings navigation={navigation}/>
+ */
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {
     const response = await logoutUser();

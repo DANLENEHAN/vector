@@ -17,6 +17,18 @@ import logger from '@utils/logger';
 
 const UserApi = new User(api);
 
+/**
+ * Function to create a new user.
+ *
+ * @function createUser
+ * @param {UserCreateSchema} userData  The data for creating the user.
+ * @returns {Promise<void>} A promise that resolves when the user is successfully created.
+ *
+ * @example
+ * // Example usage:
+ * const userData = { /* user data object * / };
+ * await createUser(userData);
+ */
 export const createUser = async (
   userData: UserCreateSchema,
 ): Promise<void | SwaggerValidationError> => {
@@ -33,6 +45,17 @@ export const createUser = async (
   }
 };
 
+/**
+ * Function to login a user.
+ *
+ * @function loginUser
+ *
+ * @param {Object} data  The data for logging in the user.
+ * @param {string} data.email  The email of the user.
+ * @param {string} data.password  The password of the user.
+ *
+ * @returns {Promise<void>} A promise that resolves when the user is successfully logged in.
+ */
 export const loginUser = async (data: {
   email: string;
   password: string;
@@ -66,6 +89,17 @@ export const loginUser = async (data: {
   }
 };
 
+/**
+ * Function to logout a user.
+ *
+ * @function logoutUser
+ *
+ * @returns {Promise<void>} A promise that resolves when the user is successfully logged out.
+ *
+ * @example
+ * // Example usage:
+ * await logoutUser();
+ */
 export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<void> = await UserApi.logoutCreate();
@@ -81,6 +115,17 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
   }
 };
 
+/**
+ * Function to test if a user is authenticated.
+ *
+ * @function testAuthentication
+ *
+ * @returns {Promise<void>} A promise that resolves when the user is successfully authenticated.
+ *
+ * @example
+ * // Example usage:
+ * await testAuthentication();
+ */
 export const testAuthentication =
   async (): Promise<void | SwaggerValidationError> => {
     try {
@@ -97,6 +142,18 @@ export const testAuthentication =
     }
   };
 
+/**
+ * Function to get the details of a user.
+ *
+ * @function getUserDetails
+ *
+ * @returns {Promise<UserGetSchema>} A promise that resolves with the user details.
+ *
+ * @example
+ * // Example usage:
+ * await getUserDetails();
+ * // Returns the user details.
+ */
 export const getUserDetails = async (): Promise<
   UserGetSchema | SwaggerValidationError
 > => {
