@@ -9,22 +9,22 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import ButtonComponent from '../../components/buttons/ButtonComponent';
-import UnitSelector from '../../components/buttons/UnitSelector';
-import NumberInput from '../../components/inputs/NumberInput';
-import Header from '../../components/navbar/Header';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import UnitSelector from '@components/buttons/UnitSelector';
+import NumberInput from '@components/inputs/NumberInput';
+import Header from '@components/navbar/Header';
 // Types
-import {ScreenProps} from '../types';
-import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
+import {ScreenProps} from '@screens/types';
+import {StatType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
-import {useSystem} from '../../context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
+import {useSystem} from '@context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Logger
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
 
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();

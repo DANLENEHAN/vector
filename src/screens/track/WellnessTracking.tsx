@@ -8,7 +8,7 @@ import ClickableTile from '@components/buttons/ClickableTile';
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, ScrollView} from 'react-native';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '@screens/types';
 import {TileData} from '@components/buttons/ClickableTile';
 
 const tile_data: TileData[] = [

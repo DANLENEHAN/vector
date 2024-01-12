@@ -12,8 +12,8 @@ import {
   iconSizes,
   borderRadius,
   borderWidth,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface SettingsOptionProps {
   icon: string;

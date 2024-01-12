@@ -29,8 +29,8 @@ import {
   HeightUnit,
   WeightUnit,
   ProfileStatus,
-} from '../services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '../services/api/types';
+} from '@services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '@services/api/types';
 
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');

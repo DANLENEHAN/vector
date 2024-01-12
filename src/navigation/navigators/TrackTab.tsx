@@ -3,11 +3,11 @@ import React from 'react';
 // Navigation
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 // Screens
-import Workout from '../../screens/track/Workout';
-import Nutrition from '../../screens/track/NutritionTracking';
-import WellnessTracking from '../../screens/track/WellnessTracking';
+import Workout from '@screens/track/Workout';
+import Nutrition from '@screens/track/NutritionTracking';
+import WellnessTracking from '@screens/track/WellnessTracking';
 // Components
-import TopTabNavBar from '../../components/navbar/TopTabNavBar';
+import TopTabNavBar from '@components/navbar/TopTabNavBar';
 // Types
 import {TopBarProps} from '@components/navbar/types';
 
