@@ -1,14 +1,14 @@
+// React Import
 import React, {useEffect, useCallback} from 'react';
+// Components
 import {View, Text, StyleSheet} from 'react-native';
-
 //Layouts
-import ScreenWrapper from '../components/layout/ScreenWrapper';
-
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie} from '../services/asyncStorage/types';
-import {testAuthentication} from '../services/api/blueprints/user/api';
-import {useSystem} from '../context/SystemContext';
+import {FlaskLoginCookie} from '@services/asyncStorage/types';
+import {testAuthentication} from '@services/api/blueprints/user/api';
+import {useSystem} from '@context/SystemContext';
 //Theme
 import {
   lightThemeColors,
@@ -16,11 +16,11 @@ import {
   fontSizes,
   fonts,
   fontWeights,
-} from '../styles/main';
+} from '@styles/main';
 // Types
-import {ScreenProps} from './types';
+import {ScreenProps} from '@screens/types';
 // Logger
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 const Splash: React.FC<ScreenProps> = ({navigation}) => {
   const {isConnected, systemVarsLoaded, theme} = useSystem();

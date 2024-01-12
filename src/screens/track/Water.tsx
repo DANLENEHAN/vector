@@ -1,4 +1,6 @@
+// React imports
 import React, {useState} from 'react';
+// Components
 import {
   View,
   Text,
@@ -7,7 +9,6 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-// Components
 import ButtonComponent from '../../components/buttons/ButtonComponent';
 import UnitSelector from '../../components/buttons/UnitSelector';
 import NumberInput from '../../components/inputs/NumberInput';

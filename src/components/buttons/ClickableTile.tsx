@@ -1,6 +1,9 @@
+// React Import
 import React from 'react';
+// Components
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+// Styling
 import {
   fontSizes,
   fontWeights,
@@ -11,8 +14,8 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 // Props for a clickable tile component.
 interface ClickableTileProps {

@@ -1,14 +1,7 @@
 // React imports
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
@@ -16,20 +9,27 @@ import {
   darkThemeColors,
   fontWeights,
   margins,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import Header from '../../components/navbar/Header';
-import UnitSelector from '../../components/buttons/UnitSelector';
-import NumberInput from '../../components/inputs/NumberInput';
-import ButtonComponent from '../../components/buttons/ButtonComponent';
+import Header from '@components/navbar/Header';
+import UnitSelector from '@components/buttons/UnitSelector';
+import NumberInput from '@components/inputs/NumberInput';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
 // Types
-import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
-import {ScreenProps} from '../types';
+import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {ScreenProps} from '@screens/types';
 // Logger
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
 
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();

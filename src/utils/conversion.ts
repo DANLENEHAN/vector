@@ -7,7 +7,8 @@ import {
   StatSchema,
   WaterUnit,
   WeightUnit,
-} from '../services/api/swagger/data-contracts';
+} from '@services/api/swagger/data-contracts';
+// Functions
 import convert from 'convert-units';
 
 // Constants for bespoke conversions

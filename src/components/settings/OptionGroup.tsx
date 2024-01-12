@@ -1,6 +1,5 @@
+// React Import
 import React from 'react';
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
-
 // Styling
 import {
   fonts,
@@ -10,9 +9,11 @@ import {
   paddings,
   borderWidth,
   iconSizes,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
+// Components
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
 
 interface Option {
   value: string | number;

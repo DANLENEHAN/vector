@@ -1,18 +1,19 @@
+// React Import
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 // Functions
-import {logoutUser} from '../../../services/api/blueprints/user/api';
+import {logoutUser} from '@services/api/blueprints/user/api';
 // Components
-import SettingsOption from '../../../components/settings/SettingsOption';
-import Header from '../../../components/navbar/Header';
+import SettingsOption from '@components/settings/SettingsOption';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet} from 'react-native';
 // Types
-import {ScreenProps} from '../../types';
-import {SwaggerValidationError} from '../../../services/api/types';
+import {ScreenProps} from '@screens/types';
+import {SwaggerValidationError} from '@services/api/types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../../styles/main';
-import {useSystem} from '../../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Logger
-import logger from '../../../utils/logger';
+import logger from '@utils/logger';
 
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {

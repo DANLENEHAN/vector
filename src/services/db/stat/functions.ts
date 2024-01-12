@@ -1,7 +1,8 @@
-import {StatSchema} from '../../api/swagger/data-contracts';
-
-import {statTable} from './types';
-import {insertRows} from '../functions';
+// Typing
+import {StatSchema} from '@services/api/swagger/data-contracts';
+import {statTable} from '@services/db/stat/types';
+// Functions
+import {insertRows} from '@services/db/functions';
 
 /**
  * @description Inserts an array of stats into the stat table.

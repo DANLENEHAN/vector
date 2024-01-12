@@ -1,3 +1,4 @@
+// React Import
 import React, {
   createContext,
   useState,
@@ -6,17 +7,16 @@ import React, {
   ReactNode,
 } from 'react';
 import {Appearance} from 'react-native';
-
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '../services/asyncStorage/types';
+import {UserThemePreference} from '@services/asyncStorage/types';
 import {
   NetInfoState,
   NetInfoSubscription,
   addEventListener,
 } from '@react-native-community/netinfo';
 // Logger
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 interface SystemContextType {
   theme: 'light' | 'dark';

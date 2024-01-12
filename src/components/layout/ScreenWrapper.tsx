@@ -1,10 +1,11 @@
 // React Import
 import React from 'react';
+// Components
 import {StyleSheet} from 'react-native';
 // Theme
-import {darkThemeColors, lightThemeColors} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
-//
+import {darkThemeColors, lightThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
+// Layout
 import {
   SafeAreaProvider,
   useSafeAreaInsets,

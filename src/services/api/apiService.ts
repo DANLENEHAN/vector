@@ -1,4 +1,4 @@
-import {HttpClient} from './swagger/http-client';
+import {HttpClient} from '@services/api/swagger/http-client';
 
 type ApiConfigMap = {
   development: string;

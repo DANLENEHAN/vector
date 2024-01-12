@@ -1,6 +1,7 @@
+// React Import
 import React from 'react';
+// Components
 import {View, StyleSheet, Text} from 'react-native';
-
 // Styling
 import {
   fonts,
@@ -10,14 +11,13 @@ import {
   darkThemeColors,
   borderWidth,
   iconSizes,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
 // Typing
-import {NavBarProps} from './types';
+import {NavBarProps} from '@components/navbar/types';
 // Logging
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
 
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useSystem();

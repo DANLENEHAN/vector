@@ -1,23 +1,23 @@
 // React imports
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, margins} from '../../styles/main';
+import {fontSizes, margins} from '@styles/main';
 // Components
-import Header from '../../components/navbar/Header';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Services
-import {getUserStats} from '../../services/api/blueprints/stat/functions';
+import {getUserStats} from '@services/api/blueprints/stat/functions';
 // Utils
-import {convertStats} from '../../utils/conversion';
+import {convertStats} from '@utils/conversion';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '@screens/types';
 import {
   StatSchema,
   StatType,
   WaterUnit,
-} from '../../services/api/swagger/data-contracts';
+} from '@services/api/swagger/data-contracts';
 
 const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<StatSchema[]>([]);

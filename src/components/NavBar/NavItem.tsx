@@ -1,7 +1,8 @@
+// React Import
 import React from 'react';
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
+// Components
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
   fonts,
@@ -12,8 +13,8 @@ import {
   darkThemeColors,
   iconSizes,
   fontWeights,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface NavItemProps {
   icon: string;

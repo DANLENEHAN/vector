@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Keyboard} from 'react-native';
 // Services
-import {loginUser, createUser} from '../services/api/blueprints/user/api';
+import {loginUser, createUser} from '@services/api/blueprints/user/api';
 //Utils
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 //Layouts
-import ScreenWrapper from '../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
-import ButtonComponent from '../components/buttons/ButtonComponent';
-import TextInputComponent from '../components/inputs/TextInputComponent';
-import ClickableLink from '../components/buttons/ClickableLink';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import TextInputComponent from '@components/inputs/TextInputComponent';
+import ClickableLink from '@components/buttons/ClickableLink';
 // Styling
 import {
   fontSizes,
@@ -18,10 +18,10 @@ import {
   lightThemeColors,
   paddings,
   margins,
-} from '../styles/main';
-import {useSystem} from '../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Types
-import {ScreenProps} from './types';
+import {ScreenProps} from '@screens/types';
 import {
   DateFormat,
   Gender,

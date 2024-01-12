@@ -1,32 +1,32 @@
 // React imports
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native'; // Import useFocusEffect
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '../../styles/main';
+} from '@styles/main';
 // Components
-import Header from '../../components/navbar/Header';
-import LineGraph from '../../components/graphs/Line/Graph';
-import UnitSelector from '../../components/buttons/UnitSelector';
+import Header from '@components/navbar/Header';
+import LineGraph from '@components/graphs/Line/Graph';
+import UnitSelector from '@components/buttons/UnitSelector';
+import {View, StyleSheet} from 'react-native';
 // Services
-import {getUserStats} from '../../services/api/blueprints/stat/functions';
-import {useSystem} from '../../context/SystemContext';
+import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {useSystem} from '@context/SystemContext';
 // Utils
-import {convertStats} from '../../utils/conversion';
+import {convertStats} from '@utils/conversion';
 import {parse} from 'date-fns';
 // Types
-import {ScreenProps} from '../types';
-import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
-import {GraphPlotData} from '../../components/graphs/Line/types';
+import {ScreenProps} from '@screens/types';
+import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {GraphPlotData} from '@components/graphs/Line/types';
 // Logger
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
 
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});

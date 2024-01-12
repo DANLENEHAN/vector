@@ -1,4 +1,6 @@
+// React Imports
 import React from 'react';
+// Components
 import {TouchableOpacity, Text} from 'react-native';
 
 interface ClickableLinkProps {

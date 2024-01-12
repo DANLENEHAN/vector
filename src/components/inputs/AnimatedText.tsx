@@ -1,5 +1,8 @@
+// React Native Import
 import * as React from 'react';
+// Components
 import {TextInput, type TextInputProps} from 'react-native';
+// Types
 import Reanimated, {
   useAnimatedProps,
   type SharedValue,

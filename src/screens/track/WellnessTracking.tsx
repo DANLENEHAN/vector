@@ -1,15 +1,15 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
 // Styling
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import ClickableTile from '../../components/buttons/ClickableTile';
-import Header from '../../components/navbar/Header';
+import ClickableTile from '@components/buttons/ClickableTile';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet, ScrollView} from 'react-native';
 // Types
 import {ScreenProps} from '../types';
-import {TileData} from '../../components/buttons/ClickableTile';
+import {TileData} from '@components/buttons/ClickableTile';
 
 const tile_data: TileData[] = [
   {

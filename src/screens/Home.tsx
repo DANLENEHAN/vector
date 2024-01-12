@@ -1,10 +1,11 @@
 // React imports
 import React from 'react';
+// Components
 import {View, StyleSheet, Text} from 'react-native';
 // Layouts
-import HomepageLayout from '../components/layout/HomepageLayout';
+import HomepageLayout from '@components/layout/HomepageLayout';
 // Types
-import {ScreenProps} from './types';
+import {ScreenProps} from '@screens/types';
 
 const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (

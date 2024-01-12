@@ -1,25 +1,25 @@
 // React imports
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '../../styles/main';
+} from '@styles/main';
 // Components
-import Header from '../../components/navbar/Header';
-import LineGraph from '../../components/graphs/Line/Graph';
-import UnitSelector from '../../components/buttons/UnitSelector';
+import {View, StyleSheet} from 'react-native';
+import Header from '@components/navbar/Header';
+import LineGraph from '@components/graphs/Line/Graph';
+import UnitSelector from '@components/buttons/UnitSelector';
 // Services
-import {getUserStats} from '../../services/api/blueprints/stat/functions';
-import {useSystem} from '../../context/SystemContext';
+import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {useSystem} from '@context/SystemContext';
 // Types
-import {ScreenProps} from '../types';
-import {StatType} from '../../services/api/swagger/data-contracts';
+import {ScreenProps} from '@screens/types';
+import {StatType} from '@services/api/swagger/data-contracts';
 
 const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [setData] = useState<any>({});

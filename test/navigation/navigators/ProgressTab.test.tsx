@@ -1,11 +1,15 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import ProgressTabNavigator from '../../../src/navigation/navigators/ProgressTab';
+import ProgressTabNavigator from '@navigation/navigators/ProgressTab';
 import {NavigationContainer} from '@react-navigation/native';
-import {useSystem} from '../../../src/context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 
-jest.mock('../../../src/context/ThemeContext', () => ({
+jest.mock('@context/SystemContext', () => ({
   useSystem: jest.fn(),
+}));
+// Mock useSafeAreaInsets hook
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: jest.fn().mockReturnValue({top: 0, bottom: 0}),
 }));
 
 describe('ProgressTabNavigator Tests', () => {

@@ -1,4 +1,6 @@
+// React Import
 import React, {useState} from 'react';
+// Components
 import {
   View,
   TextInput,
@@ -7,7 +9,6 @@ import {
   Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
 // Styling
 import {
   paddings,
@@ -18,8 +19,8 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface TextInputProps {
   placeholder: string;

@@ -1,5 +1,6 @@
-// React Native imports
+// React Import
 import React from 'react';
+// Components
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
@@ -9,8 +10,8 @@ import {
   darkThemeColors,
   lightThemeColors,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface UnitSelectorProps {
   units: string[];

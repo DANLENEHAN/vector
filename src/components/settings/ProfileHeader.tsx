@@ -1,6 +1,7 @@
+// React Native Import
 import React from 'react';
+// Components
 import {View, StyleSheet, Text, Image} from 'react-native';
-
 // Styling
 import {
   fonts,
@@ -10,8 +11,8 @@ import {
   margins,
   paddings,
   borderRadius,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface ProfileHeaderProps {
   profileImageUrl: string;

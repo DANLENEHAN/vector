@@ -1,5 +1,5 @@
+// React Import
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
 // Theme
 import {
   fonts,
@@ -8,12 +8,13 @@ import {
   darkThemeColors,
   margins,
   fontWeights,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import HeaderBackButton from '../buttons/HeaderBackButton';
+import HeaderBackButton from '@components/buttons/HeaderBackButton';
+import {View, StyleSheet, Text} from 'react-native';
 // Navigation
-import {ScreenNavigationProp} from '../../navigation/types';
+import {ScreenNavigationProp} from '@navigation/types';
 
 interface HeaderProps {
   // Navigation prop for the screen

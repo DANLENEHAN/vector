@@ -1,5 +1,4 @@
 // Type definitions for graph data
-
 // Utils
 import {format} from 'date-fns';
 

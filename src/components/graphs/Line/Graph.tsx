@@ -1,6 +1,5 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 // Styling
 // @ts-ignore
 import Montserrat from '../../../../assets/fonts/Montserrat-SemiBold.ttf';
@@ -9,24 +8,25 @@ import {
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '../../../styles/main';
+} from '@styles/main';
 //Services
-import {useSystem} from '../../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 // Components
+import {View, StyleSheet} from 'react-native';
 import {
   CartesianChart,
   Line,
   useChartPressState,
   Scatter,
 } from 'victory-native';
-import ToolTip from './Tooltip';
-import {AverageValueText} from './AverageValue';
+import ToolTip from '@components/graphs/Line/Tooltip';
+import {AverageValueText} from '@components/graphs/Line/AverageValue';
 // Utils
 import {useFont} from '@shopify/react-native-skia';
 import {format} from 'date-fns';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
-import {graphDataPoint} from './types';
+import {graphDataPoint} from '@components/graphs/Line/types';
 
 interface LineGraphProps {
   data: graphDataPoint[]; // The data to be displayed on the graph

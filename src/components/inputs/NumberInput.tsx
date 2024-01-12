@@ -1,4 +1,6 @@
+// React Import
 import React from 'react';
+// Components
 import {TextInput, StyleSheet} from 'react-native';
 // Styling
 import {
@@ -6,8 +8,8 @@ import {
   lightThemeColors,
   fontSizes,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface NumberInputProps {
   allowFloat: boolean;

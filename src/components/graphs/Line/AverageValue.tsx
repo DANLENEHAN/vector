@@ -1,6 +1,5 @@
 // React Import
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
 // Theme
 import {
   darkThemeColors,
@@ -8,10 +7,11 @@ import {
   margins,
   fontSizes,
   fontWeights,
-} from '../../../styles/main';
-import {useSystem} from '../../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import {AnimatedText} from '../../inputs/AnimatedText';
+import {AnimatedText} from '@components/inputs/AnimatedText';
+import {StyleSheet, View, Text} from 'react-native';
 // Typing
 import {type SharedValue} from 'react-native-reanimated';
 

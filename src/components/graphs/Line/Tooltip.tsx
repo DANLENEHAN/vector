@@ -1,6 +1,5 @@
 // React Imports
 import React from 'react';
-
 // Types
 import {useDerivedValue, type SharedValue} from 'react-native-reanimated';
 import {Circle, vec, Line as SkiaLine} from '@shopify/react-native-skia';

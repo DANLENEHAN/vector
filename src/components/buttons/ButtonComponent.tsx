@@ -1,6 +1,8 @@
+// React Imports
 import React from 'react';
+// Components
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
-
+// Styling
 import {
   fontSizes,
   fontWeights,
@@ -11,8 +13,8 @@ import {
   lightThemeColors,
   buttonHeight,
   buttonWidth,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 interface ButtonProps {
   onPress: () => void;

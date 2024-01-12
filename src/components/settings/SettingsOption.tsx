@@ -1,7 +1,9 @@
+// React Native Import
 import React from 'react';
+// Components
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome6';
+// Styling
 import {
   fonts,
   fontSizes,

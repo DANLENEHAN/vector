@@ -1,12 +1,12 @@
 // Services
-import {getUserDetails} from '../../../asyncStorage/functions';
-import {getStats} from './api';
+import {getUserDetails} from '@services/asyncStorage/functions';
+import {getStats} from '@services/api/blueprints/stat/api';
 // Types
-import {StatType, StatSchema} from '../../swagger/data-contracts';
-import {SwaggerValidationError} from '../../types';
-import {insertStat} from '../../../db/stat/functions';
+import {StatType, StatSchema} from '@services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '@services/api/types';
+import {insertStat} from '@services/db/stat/functions';
 // Logger
-import logger from '../../../../utils/logger';
+import logger from '@utils/logger';
 
 export interface CreateNewStatParams {
   value: number;

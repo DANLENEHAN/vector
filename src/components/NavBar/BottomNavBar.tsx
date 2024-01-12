@@ -1,18 +1,18 @@
+// React Imports
 import React from 'react';
+// Components
+import NavItem from '@components/navbar/NavItem';
 import {View, StyleSheet} from 'react-native';
-import NavItem from './NavItem';
-import {BottomBarProps} from './types';
-
+import {BottomBarProps} from '@components/navbar/types';
 // Styling
 import {
   lightThemeColors,
   darkThemeColors,
   paddings,
   borderWidth,
-} from '../../styles/main';
+} from '@styles/main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
-import {useSystem} from '../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 
 const routeMapping: any = {
   Home: {label: 'Home', icon: 'house'},

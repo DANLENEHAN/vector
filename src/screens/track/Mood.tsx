@@ -1,24 +1,21 @@
+// React imports
 import React, {useState} from 'react';
+// Components
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import Header from '@components/navbar/Header';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 import {View, Text, StyleSheet} from 'react-native';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
-// Components
-import ButtonComponent from '../../components/buttons/ButtonComponent';
-import Header from '../../components/navbar/Header';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
-
 // Types
-import {ScreenProps} from '../types';
-import {StatType} from '../../services/api/swagger/data-contracts';
-
+import {ScreenProps} from '@screens/types';
+import {StatType} from '@services/api/swagger/data-contracts';
 // Styling
-import {useSystem} from '../../context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
-
+import {useSystem} from '@context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
 
 interface Mood {
   label: string;

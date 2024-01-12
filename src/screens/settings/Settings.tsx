@@ -1,16 +1,17 @@
+// React imports
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 // Components
-import SettingsOption from '../../components/settings/SettingsOption';
-import ProfileHeader from '../../components/settings/ProfileHeader';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import {View, StyleSheet} from 'react-native';
+import SettingsOption from '@components/settings/SettingsOption';
+import ProfileHeader from '@components/settings/ProfileHeader';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '@screens/types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Logger
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
 
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();

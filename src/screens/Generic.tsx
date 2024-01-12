@@ -1,11 +1,12 @@
 // React imports
 import React from 'react';
+// Components
 import {View, StyleSheet, Text} from 'react-native';
 // Layouts
-import HomepageLayout from '../components/layout/HomepageLayout';
+import HomepageLayout from '@components/layout/HomepageLayout';
 // Styling
-import {fontSizes, lightThemeColors, darkThemeColors} from '../styles/main';
-import {useSystem} from '../context/SystemContext';
+import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
 const Generic: React.FC<any> = ({navigation, route}) => {
   const {theme} = useSystem();

@@ -1,18 +1,19 @@
+// React Import
 import React from 'react';
+// Components
 import {TouchableOpacity, StyleSheet} from 'react-native';
-// Navigation
-import {ScreenNavigationProp} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
+// Navigation
+import {ScreenNavigationProp} from '@navigation/types';
 // Styling
-import {useSystem} from '../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 import {
   lightThemeColors,
   darkThemeColors,
   margins,
   paddings,
   iconSizes,
-} from '../../styles/main';
+} from '@styles/main';
 
 interface HeaderBackButtonProps {
   navigation: ScreenNavigationProp;
