@@ -221,7 +221,7 @@ export const insertRows = async (
   }
 
   if (insert_uuid === true) {
-    data = data.map(obj => ({...obj, [`${tableName}_uuid`]: uuidv4()}));
+    data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
 
   const schema = Object.keys(data[0]);
