@@ -1,24 +1,33 @@
 // React imports
 import React from 'react';
-
 // Navigation
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-
 // Screens
-import WellnessProgressScreen from '../../screens/progress/WellnessProgress';
-import WorkoutProgressScreen from '../../screens/progress/WorkoutProgress';
-import NutritionProgressScreen from '../../screens/progress/NutritionProgress';
-
+import WellnessProgressScreen from '@screens/progress/WellnessProgress';
+import WorkoutProgressScreen from '@screens/progress/WorkoutProgress';
+import NutritionProgressScreen from '@screens/progress/NutritionProgress';
 // Components
-import TopTabNavBar from '../../components/navbar/TopTabNavBar';
+import TopTabNavBar from '@components/navbar/TopTabNavBar';
+// Types
+import {TopBarProps} from '@components/navbar/types';
 
 // Navigation stacks
 const ProgressTabStack = createMaterialTopTabNavigator();
+// NavBar
+const ProgressTabBar = (props: TopBarProps) => <TopTabNavBar {...props} />;
 
-// Navigation for the Progress page
+/**
+ * ProgressTabNavigator Component
+ *
+ * @component ProgressTabNavigator
+ * @example
+ * <ProgressTabNavigator />
+ *
+ * @returns {React.FC} - React Component
+ */
 const ProgressTabNavigator: React.FC = () => {
   return (
-    <ProgressTabStack.Navigator tabBar={props => <TopTabNavBar {...props} />}>
+    <ProgressTabStack.Navigator tabBar={ProgressTabBar}>
       <ProgressTabStack.Screen
         name="WorkoutProgress"
         component={WorkoutProgressScreen}

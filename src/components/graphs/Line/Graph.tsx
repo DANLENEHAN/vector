@@ -1,6 +1,5 @@
 // React imports
 import React from 'react';
-import {View} from 'react-native';
 // Styling
 // @ts-ignore
 import Montserrat from '../../../../assets/fonts/Montserrat-SemiBold.ttf';
@@ -9,25 +8,36 @@ import {
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '../../../styles/main';
+} from '@styles/main';
 //Services
-import {useSystem} from '../../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 // Components
+import {View, StyleSheet} from 'react-native';
 import {
   CartesianChart,
   Line,
   useChartPressState,
   Scatter,
 } from 'victory-native';
-import ToolTip from './Tooltip';
-import {AverageValueText} from './AverageValue';
+import ToolTip from '@components/graphs/Line/Tooltip';
+import {AverageValueText} from '@components/graphs/Line/AverageValue';
 // Utils
 import {useFont} from '@shopify/react-native-skia';
 import {format} from 'date-fns';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
-import {graphDataPoint} from './types';
+import {graphDataPoint} from '@components/graphs/Line/types';
 
+/**
+ * Interface for the LineGraph component
+ *
+ * @interface LineGraphProps
+ *
+ * @param {graphDataPoint[]} data - The data to be displayed on the graph
+ * @param {number} averageValue - The average value of the data
+ * @param {string} averageLabel - The label for the average value
+ * @param {string} unit - The unit for the average value
+ */
 interface LineGraphProps {
   data: graphDataPoint[]; // The data to be displayed on the graph
   averageValue: number; // The average value of the data
@@ -35,7 +45,17 @@ interface LineGraphProps {
   unit: string; // The unit for the average value
 }
 
-// Functions necessary for the parsing of the date when the graph is clicked
+/**
+ * Function to format the date for the tooltip
+ *
+ * @function formatDate
+ * @example
+ * const date = formatDate(1620000000000);
+ * console.log(date); // 1 Jan 2021
+ *
+ * @param {number}  ms - The date in milliseconds
+ * @returns  {string} - The formatted date string
+ */
 const formatDate = (ms: number): string => {
   'worklet';
 
@@ -50,6 +70,21 @@ const formatDate = (ms: number): string => {
   return dateFormatter.format(date);
 };
 
+/**
+ *  Line Graph Component
+ *
+ * @component LineGraph
+ * @example
+ * <LineGraph
+ *   data={data}
+ *   averageValue={averageValue}
+ *   averageLabel={averageLabel}
+ *   unit={unit}
+ * />
+ *
+ * @param {Object} props - Component Line Graph Props
+ * @returns {React.FC<LineGraphProps>} - React Component
+ */
 const LineGraph: React.FC<LineGraphProps> = ({
   data,
   averageLabel,
@@ -73,7 +108,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
     // If graph clicked
     if (isFirstPressActive) {
       const value = firstPress.y.value.value.value.toFixed(2);
-      if (value === undefined || value === null || value == 'NaN') {
+      if (value === undefined || value === null || value === 'NaN') {
         return '-';
       }
       return value;
@@ -108,14 +143,14 @@ const LineGraph: React.FC<LineGraphProps> = ({
    *  */
   return (
     <>
-      <View style={{alignItems: 'center', height: 90}}>
+      <View style={styles.AverageValueTextContainer}>
         <AverageValueText
           currentValue={currentValue}
           currentDate={currentDate}
           unit={unit}
         />
       </View>
-      <View style={{flex: 8}}>
+      <View style={styles.ChartContainer}>
         <CartesianChart
           data={data}
           xKey="date"
@@ -201,3 +236,13 @@ const LineGraph: React.FC<LineGraphProps> = ({
 };
 
 export default LineGraph;
+
+const styles = StyleSheet.create({
+  AverageValueTextContainer: {
+    alignItems: 'center',
+    height: 90,
+  },
+  ChartContainer: {
+    flex: 8,
+  },
+});

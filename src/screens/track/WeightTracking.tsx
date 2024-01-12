@@ -1,14 +1,7 @@
 // React imports
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
@@ -16,19 +9,39 @@ import {
   darkThemeColors,
   fontWeights,
   margins,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import Header from '../../components/navbar/Header';
-import UnitSelector from '../../components/buttons/UnitSelector';
-import NumberInput from '../../components/inputs/NumberInput';
-import ButtonComponent from '../../components/buttons/ButtonComponent';
+import Header from '@components/navbar/Header';
+import UnitSelector from '@components/buttons/UnitSelector';
+import NumberInput from '@components/inputs/NumberInput';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
 // Types
-import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
-import {ScreenProps} from '../types';
+import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {ScreenProps} from '@screens/types';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ *  Weight tracking screen
+ *
+ * @component WeightTracking
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the weight tracking screen component
+ *
+ * @example
+ * <WeightTracking navigation={navigation}/>
+ */
 const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -46,7 +59,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
     const parsedWeight = parseFloat(weightValue);
     // Validation: Check if the weight is 0 or the string is empty
     if (isNaN(parsedWeight) || parsedWeight <= 0) {
-      console.error('Invalid weight value. Please enter a valid weight.');
+      logger.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
     createNewStat({

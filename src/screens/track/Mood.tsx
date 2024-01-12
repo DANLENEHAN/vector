@@ -1,35 +1,50 @@
+// React imports
 import React, {useState} from 'react';
+// Components
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import Header from '@components/navbar/Header';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 import {View, Text, StyleSheet} from 'react-native';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
-// Components
-import ButtonComponent from '../../components/buttons/ButtonComponent';
-import Header from '../../components/navbar/Header';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
-
 // Types
-import {ScreenProps} from '../types';
-import {StatType} from '../../services/api/swagger/data-contracts';
-
+import {ScreenProps} from '@screens/types';
+import {StatType} from '@services/api/swagger/data-contracts';
 // Styling
-import {useSystem} from '../../context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
-
+import {useSystem} from '@context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
 
+/**
+ * Interface for the mood object
+ *
+ * @interface Mood
+ *
+ * @param {string} label - The label for the mood
+ * @param {string} icon - The icon for the mood
+ * @param {string} color - The color for the mood
+ */
 interface Mood {
   label: string;
   icon: string;
   color: string;
 }
 
+/**
+ * Interface for the mood dictionary
+ *
+ * @interface MoodsDictionary
+ *
+ * @param {number} key - The key for the mood
+ * @param {Mood} value - The value for the mood
+ */
 interface MoodsDictionary {
   [key: number]: Mood;
 }
 
+// Dictionary for the moods
 const moods: MoodsDictionary = {
   0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
   1: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
@@ -40,6 +55,17 @@ const moods: MoodsDictionary = {
   6: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
 };
 
+/**
+ *  Mood tracking screen
+ *
+ * @component MoodScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the mood tracking screen component
+ *
+ * @example
+ * <MoodScreen navigation={navigation}/>
+ */
 const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [moodValue, setMoodValue] = useState<number>(3);
 

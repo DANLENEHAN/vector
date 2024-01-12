@@ -1,4 +1,6 @@
+// React Import
 import React from 'react';
+// Components
 import {TextInput, StyleSheet} from 'react-native';
 // Styling
 import {
@@ -6,9 +8,19 @@ import {
   lightThemeColors,
   fontSizes,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the Number Input Component
+ *
+ * @interface NumberInputProps
+ *
+ * @param {boolean} allowFloat - Boolean to allow float values
+ * @param {string} inputValue - The current value of the input
+ * @param {React.Dispatch<React.SetStateAction<string>>} setInputValue - Function to set the input value
+ * @param {object} style - Style object to be applied to the input (optional)
+ */
 interface NumberInputProps {
   allowFloat: boolean;
   inputValue: string;
@@ -16,13 +28,27 @@ interface NumberInputProps {
   style?: object;
 }
 
+/**
+ * Number Input Component
+ *
+ * @component NumberInput
+ * @example
+ * <NumberInput
+ *     allowFloat={true}
+ *     inputValue={inputValue}
+ *     setInputValue={setInputValue}
+ *     style={{color: 'red'}}
+ * />
+ *
+ * @param {Object} props - Component Number Input Props
+ * @returns {React.FC<NumberInputProps>} - React Component
+ */
 const NumberInput: React.FC<NumberInputProps> = ({
   allowFloat,
   inputValue,
   setInputValue,
   style,
 }) => {
-  //const [inputValue, setInputValue] = useState(allowFloat ? '0.0' : '0');
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const handleChange = (text: string) => {
@@ -38,7 +64,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
   };
 
   const handleFocus = () => {
-    console.log('Removing 0');
     if (inputValue === '0' || inputValue === '0.0') {
       setInputValue('');
     }

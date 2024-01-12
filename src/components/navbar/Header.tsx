@@ -1,5 +1,5 @@
+// React Import
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
 // Theme
 import {
   fonts,
@@ -8,24 +8,46 @@ import {
   darkThemeColors,
   margins,
   fontWeights,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import HeaderBackButton from '../buttons/HeaderBackButton';
+import HeaderBackButton from '@components/buttons/HeaderBackButton';
+import {View, StyleSheet, Text} from 'react-native';
 // Navigation
-import {ScreenNavigationProp} from '../../navigation/types';
+import {ScreenNavigationProp} from '@navigation/types';
 
+/**
+ * Interface for the Header component
+ *
+ * @interface HeaderProps
+ *
+ * @param {ScreenNavigationProp} navigation - Navigation prop for the screen
+ * @param {string} label - Label for the header
+ * @param {boolean} includeBackArrow - Whether or not to include the back arrow
+ * @param {boolean} includeTopMargin - Whether or not to include top margin (If the header is the first item on the screen)
+ */
 interface HeaderProps {
-  // Navigation prop for the screen
   navigation: ScreenNavigationProp;
-  // Label for the header
   label: string;
-  // Whether or not to include the back arrow
   includeBackArrow: boolean;
-  // Whether or not to include top margin (If the header is the first item on the screen)
   includeTopMargin: boolean;
 }
 
+/**
+ * Header Component
+ *
+ * @component Header
+ * @example
+ * <Header
+ *    label={'Preferences'}
+ *    navigation={navigation}
+ *    includeBackArrow={true}
+ *    includeTopMargin={true}
+ * />
+ *
+ * @param {Object} props - Component Header Props
+ * @returns {React.FC<HeaderProps>} - React Component
+ */
 const Header: React.FC<HeaderProps> = ({
   navigation,
   label,

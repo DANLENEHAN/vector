@@ -4,17 +4,17 @@ import {
   StatusCodeToMessage,
   SwaggerValidationError,
   unknownErrorMessage,
-} from './types';
+} from '@services/api/types';
 
 /**
  * A function for handling Grau's Error responses. All response codes and
  * bodies are defined in 'src/services/api/swagger'.
- * @param {unknown} error - The AxiosError to handle.
- * @param {StatusCodeToMessage} statusCodeToMessage - object of status codes to error message pairs.
- * @param {string} defaultErrorMessage - Default error message to return if none found.
+ * @param {Object} props - The props object.
  * @returns {SwaggerValidationError} - Swagger Validation Object containing a message and maybe data.
+ *
  * @throws {Error} - Error thrown if the status code received is not one of the expected ones.
  * @throws {Error} - Error thrown if the Requests suffers from a Network specific error.
+ *
  * @example
  * const validationError: SwaggerValidationError = HandleSwaggerValidationError(error, {400: 'Bad Request'});
  */

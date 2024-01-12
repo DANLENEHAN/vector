@@ -1,15 +1,30 @@
+// React imports
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 // Components
-import SettingsOption from '../../components/settings/SettingsOption';
-import ProfileHeader from '../../components/settings/ProfileHeader';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import {View, StyleSheet} from 'react-native';
+import SettingsOption from '@components/settings/SettingsOption';
+import ProfileHeader from '@components/settings/ProfileHeader';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Types
-import {ScreenProps} from '../types';
+import {ScreenProps} from '@screens/types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ * Settings Screen
+ *
+ * @component SettingsScreen
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Settings Screen Component
+ *
+ * @example
+ * <SettingsScreen navigation={navigation}/>
+ */
 const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -17,7 +32,8 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <View
-        style={[styles.content, {backgroundColor: currentTheme.background}]}>
+        style={[styles.content, {backgroundColor: currentTheme.background}]}
+        testID="settings-screen">
         <View style={styles.profileSection}>
           <ProfileHeader
             userName="Dan Lenehan"
@@ -44,7 +60,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
           />
           <SettingsOption
             icon="question"
-            onPress={() => console.log('Pressed Support')}
+            onPress={() => logger.log('Pressed Support')}
             label="Support"
             caret={true}
           />

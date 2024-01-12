@@ -1,19 +1,26 @@
 // React imports
 import React from 'react';
-
 // Navigation
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 // Screens
-import SettingsScreen from '../../screens/settings/Settings';
-import AccountSettings from '../../screens/settings/options/AccountSettings';
-import ThemeScreen from '../../screens/settings/options/Theme';
-import Preferences from '../../screens/settings/options/Preferences';
+import SettingsScreen from '@screens/settings/Settings';
+import AccountSettings from '@screens/settings/options/AccountSettings';
+import ThemeScreen from '@screens/settings/options/Theme';
+import Preferences from '@screens/settings/options/Preferences';
 
 // Navigation stacks
 const SettingsStack = createNativeStackNavigator();
 
-// Navigation for the Settings page
+/**
+ *  SettingsStackNavigator
+ *
+ * @component SettingsStackNavigator
+ * @description A stack navigator for the settings screens
+ * @example
+ * <SettingsStackNavigator />
+ *
+ * @returns {React.FC} A stack navigator for the settings screens
+ */
 const SettingsStackNavigator: React.FC = () => {
   return (
     <SettingsStack.Navigator>

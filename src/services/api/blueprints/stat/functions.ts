@@ -1,12 +1,21 @@
 // Services
-import {getUserDetails} from '../../../asyncStorage/functions';
-import {getStats} from './api';
-
+import {getUserDetails} from '@services/asyncStorage/functions';
+import {getStats} from '@services/api/blueprints/stat/api';
 // Types
-import {StatType, StatSchema} from '../../swagger/data-contracts';
-import {SwaggerValidationError} from '../../types';
-import {insertStat} from '../../../db/stat/functions';
+import {StatType, StatSchema} from '@services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '@services/api/types';
+import {insertStat} from '@services/db/stat/functions';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ * Interface for the createNewStat function.
+ *
+ * @param value  The value of the stat.
+ * @param navigation  The navigation object.
+ * @param statType  The type of stat.
+ * @param unitValue  The unit of the stat.
+ */
 export interface CreateNewStatParams {
   value: number;
   navigation: any;
@@ -17,10 +26,7 @@ export interface CreateNewStatParams {
 /**
  * @description Create a new stat.
  *
- * @param value  The value of the stat.
- * @param navigation  The navigation object.
- * @param statType  The type of stat.
- * @param unitValue  The unit of the stat.
+ * @param {Object} CreateNewStatParams  The interface parameters.
  * @returns {Promise<void>} A promise that resolves when the stat is successfully created.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  *
@@ -54,16 +60,22 @@ export const createNewStat = async ({
     ]);
     navigation.goBack();
   } catch (error) {
-    console.error(`Error: ${error}`);
+    logger.error(`Error: ${error}`);
   }
 };
 
+/**
+ * Interface for the getUserStats function.
+ *
+ * @param statType  The type of stat.
+ */
 export interface GetUserStatsParams {
   statType: StatType;
 }
 /**
  * @description Get the stats.
  *
+ * @param {Object} GetUserStatsParams  The interface parameters.
  * @returns {Promise<StatSchema[] | undefined>} A promise that resolves with the stats.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  *
@@ -84,12 +96,12 @@ export const getUserStats = async ({statType}: GetUserStatsParams) => {
       sort: ['created_at:desc'],
     });
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
       return response;
     }
   } catch (error) {
-    console.error(`Error: ${error}`);
+    logger.error(`Error: ${error}`);
   }
   return undefined;
 };

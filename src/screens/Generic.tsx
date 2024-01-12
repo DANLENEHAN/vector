@@ -1,12 +1,23 @@
 // React imports
 import React from 'react';
+// Components
 import {View, StyleSheet, Text} from 'react-native';
 // Layouts
-import HomepageLayout from '../components/layout/HomepageLayout';
+import HomepageLayout from '@components/layout/HomepageLayout';
 // Styling
-import {fontSizes, lightThemeColors, darkThemeColors} from '../styles/main';
-import {useSystem} from '../context/SystemContext';
+import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * Generic Screen
+ *
+ * @component Generic
+ * @example
+ * <Generic navigation={navigation} route={route} />
+ *
+ * @param {Object} props - Component props
+ * @returns {React.FC<any>} - React Component
+ */
 const Generic: React.FC<any> = ({navigation, route}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

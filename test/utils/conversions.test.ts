@@ -1,9 +1,9 @@
-import {convertStats} from '../../src/utils/conversion';
+import {convertStats} from '@utils/conversion';
 import {
   StatSchema,
   StatType,
   WeightUnit,
-} from '../../src/services/api/swagger/data-contracts';
+} from '@services/api/swagger/data-contracts';
 
 describe('convertStats', () => {
   it('Converts stats to the target unit', () => {

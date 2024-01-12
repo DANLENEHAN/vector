@@ -1,6 +1,9 @@
+// React Import
 import React from 'react';
+// Components
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {TopBarProps} from './types';
+// Types
+import {TopBarProps} from '@components/navbar/types';
 // Styling
 import {
   fonts,
@@ -10,11 +13,21 @@ import {
   darkThemeColors,
   paddings,
   borderWidth,
-} from '../../styles/main';
+} from '@styles/main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
-import {useSystem} from '../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * TopTabNavBar Component
+ *
+ * @component TopTabNavBar
+ * @example
+ * <TopTabNavBar navigation={navigation} />
+ *
+ * @param {Object} props - Component TopTabNavBar Props
+ * @returns {React.FC<TopBarProps>} - React Component
+ */
 const TopTabNavBar: React.FC<TopBarProps> = ({
   navigation,
   state,

@@ -1,17 +1,17 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
 // Styling
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-//Services
-import {useSystem} from '../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Types
-import {TileData} from '../../components/buttons/ClickableTile';
-import {ScreenProps} from '../types';
+import {TileData} from '@components/buttons/ClickableTile';
+import {ScreenProps} from '@screens/types';
 // Components
-import ClickableTile from '../../components/buttons/ClickableTile';
-import Header from '../../components/navbar/Header';
+import ClickableTile from '@components/buttons/ClickableTile';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet, ScrollView} from 'react-native';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Water',
@@ -20,12 +20,26 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Nutrition Progress Screen
+ *
+ * @component NutritionProgressScreen
+ *
+ * @param {ScreenProps} navigation - Stack Navigation
+ *
+ * @returns {React.FC} - Nutrition Progress Screen Component
+ *
+ * @example
+ * <NutritionProgressScreen navigation={navigation}/>
+ */
 const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
+      testID="nutrition-progress-screen">
       <Header
         label="Nutrition"
         navigation={navigation}

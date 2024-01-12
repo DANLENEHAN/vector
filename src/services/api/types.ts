@@ -1,16 +1,28 @@
+/**
+ * Object of Valid Status codes and messages
+ * assoicated with them. Can be null to allow
+ * use of api reponse message.
+ *
+ * @interface StatusCodeToMessage
+ *
+ * @property {string} [statusCode]  The status code, key of the object.
+ * @property {string} [message]  The message, value of the object.
+ */
 export interface StatusCodeToMessage {
-  /**
-   * Object of Valid Status codes and messages
-   * assoicated with them. Can be null to allow
-   * use of api reponse message.
-   */
   [statusCode: number]: string | null;
 }
 
+/**
+ * Swagger Validation Error Object
+ *
+ * @description Object returned when request fails.
+ *
+ * @class SwaggerValidationError
+ *
+ * @property {string} [message]  The message of the error.
+ * @property {object} [data]  The data object of the error.
+ */
 export class SwaggerValidationError {
-  /**
-   * Data object returned when request fails.
-   */
   message: string;
   data: object;
 

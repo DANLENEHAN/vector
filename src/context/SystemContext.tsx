@@ -1,3 +1,4 @@
+// React Import
 import React, {
   createContext,
   useState,
@@ -6,16 +7,31 @@ import React, {
   ReactNode,
 } from 'react';
 import {Appearance} from 'react-native';
-
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '../services/asyncStorage/types';
+import {UserThemePreference} from '@services/asyncStorage/types';
 import {
   NetInfoState,
   NetInfoSubscription,
   addEventListener,
 } from '@react-native-community/netinfo';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ * System Context
+ * This context is used to store system wide variables
+ * such as the theme, network status, etc.
+ *
+ * @interface SystemContextType
+ *
+ * @param {string} theme - The current theme of the app {light | dark}
+ * @param {function} setTheme - Function to set the theme
+ * @param {string} userPreferenceTheme - The user preference theme {light | dark | system}
+ * @param {function} setUserPreferenceTheme - Function to set the user preference theme
+ * @param {boolean} isConnected - Boolean to indicate if the device is connected to the internet
+ * @param {boolean} systemVarsLoaded - Boolean to indicate if the system variables have been loaded
+ */
 interface SystemContextType {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
@@ -26,9 +42,22 @@ interface SystemContextType {
 }
 
 const SystemContext = createContext<SystemContextType>(null!);
-
 export const useSystem = () => useContext(SystemContext);
 
+/**
+ * System Provider
+ * This provider is used to store system wide variables
+ * such as the theme, network status, etc.
+ *
+ * @component SystemProvider
+ * @example
+ * <SystemProvider>
+ *    <App />
+ * </SystemProvider>
+ *
+ * @param {ReactNode} children - The children components to be wrapped by the provider
+ * @returns {React.FC<{children: ReactNode}>} - React Component
+ */
 export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
   // useState will not reset the variables on re-render
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -75,7 +104,7 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     // Cleaning up the listener when the component unmounts
     return () => {
-      console.log('Removing System subscriptions');
+      logger.info('Removing System subscriptions');
       subscription.remove();
       networkSubscription();
     };

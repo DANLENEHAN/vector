@@ -1,27 +1,30 @@
 // Type definitions for graph data
-
 // Utils
 import {format} from 'date-fns';
 
+/**
+ * @description A class that represents a single point of data for a graph.
+ * It contains a date and a value.
+ * @param {number} date The date of the data point.
+ * @param {number | null} value The value of the data point.
+ */
 export type graphDataPoint = {
-  /*
-   * graphDataPoint is a class that represents a single point of data for a graph.
-   * It contains a date and a value.
-   */
   date: number;
   value: number | null;
 };
 
+/**
+ * @description A class that represents a single point of data for a graph.
+ * It contains a date and a value.
+ *
+ * @class GraphPlotData
+ *
+ * @property {graphDataPoint[]} data: an array of graphDataPoints
+ * @property {string} unit: the unit of the data
+ * @property {number} averageValue: the average value of the data
+ * @property {string} averagePeriodLabel; the average period label of the data
+ */
 export class GraphPlotData {
-  /*
-   * GraphPlotData is a class that takes in an array of graphDataPoints and
-   * calculates the average value and period label for the data.
-   *
-   * @param data an array of graphDataPoints
-   * @param unit the unit of the data
-   * @param averageValue the average value of the data
-   * @param averagePeriodLabel the average period label of the data
-   */
   data: graphDataPoint[];
   unit: string;
   averageValue: number;
@@ -83,6 +86,20 @@ export class GraphPlotData {
     return `${format(firstDate, 'd MMM')} - ${format(lastDate, 'd MMM yyyy')}`;
   }
 
+  /**
+   * @description The constructor for the GraphPlotData class.
+   * @param {graphDataPoint[]} data An array of graphDataPoints.
+   * @param {string} unit The unit of the data.
+   *
+   * @example
+   * // Example usage:
+   * const data = [
+   *  { date: new Date(2020, 0, 1), value: 1 },
+   *  { date: new Date(2020, 12, 31), value: 2 }
+   * ];
+   * const unit = 'kg';
+   * const graphPlotData = new GraphPlotData(data, unit);
+   */
   constructor(data: graphDataPoint[], unit: string) {
     this.unit = unit;
     this.data = data;

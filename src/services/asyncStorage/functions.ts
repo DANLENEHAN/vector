@@ -3,20 +3,19 @@
 */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+/**
+ * Gets the user details from AsyncStorage.
+ *
+ * @param {string} field_name - The name of the field to retrieve.
+ * @returns {Promise<string>} A promise that resolves with the value of the field.
+ * @throws {string} Throws an error with a message describing the issue if the operation fails.
+ * @example
+ * // Example usage:
+ * const field_name = 'username';
+ * await getUserDetails(field_name);
+ * // Returns the value of the username field.
+ **/
 export async function getUserDetails(field_name: string): Promise<any> {
-  /**
-   * Gets the user details from AsyncStorage.
-   *
-   * @param {string} field_name - The name of the field to retrieve.
-   * @returns {Promise<string>} A promise that resolves with the value of the field.
-   * @throws {string} Throws an error with a message describing the issue if the operation fails.
-   * @example
-   * // Example usage:
-   * const field_name = 'username';
-   * await getUserDetails(field_name);
-   * // Returns the value of the username field.
-   **/
-
   try {
     const user_details = await AsyncStorage.getItem('user-details-key');
     if (user_details) {

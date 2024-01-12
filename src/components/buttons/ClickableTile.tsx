@@ -1,6 +1,9 @@
+// React Import
 import React from 'react';
+// Components
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+// Styling
 import {
   fontSizes,
   fontWeights,
@@ -11,26 +14,41 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
-// Props for a clickable tile component.
+/**
+ * Interface for the Clickable Tile Component
+ *
+ * @interface ClickableTileProps
+ *
+ * @param {() => void} onPress - Function to be called when the tile is pressed
+ * @param {string} label - The label text for the tile
+ * @param {object} style - Additional styles for the tile (optional)
+ * @param {string} icon - The icon for the tile
+ * @param {string} backgroundColor - The background color of the tile
+ * @param {string} lastTracked - The last tracked date for the tile (optional)
+ */
 interface ClickableTileProps {
-  // Callback function to be called when the tile is pressed.
   onPress: () => void;
-  //The label text for the tile.
   label: string;
-  // Additional styles for the tile. (Optional)
   style?: object;
-  // The icon for the tile.
   icon: string;
-  // The background color of the tile.
   backgroundColor: string;
-  // The last tracked date for the tile. (Optional)
   lastTracked?: string;
 }
 
-// Tile Data Type
+/**
+ * Clickable Tile Data Interface
+ *
+ * @interface TileData
+ *
+ * @param {string} label - The label text for the tile
+ * @param {string} icon - The icon for the tile
+ * @param {string} backgroundColor - The background color of the tile
+ * @param {string} lastTracked - The last tracked date for the tile (optional)
+ * @param {string} route - The route to navigate to when the tile is pressed
+ */
 export interface TileData {
   label: string;
   icon: string;
@@ -40,6 +58,22 @@ export interface TileData {
   route: string;
 }
 
+/**
+ *  Clickable Tile Component
+ *
+ * @component ClickableTile
+ * @example
+ * <ClickableTile
+ *   onPress={() => console.log('Tile Pressed')}
+ *   label={'Tile Label'}
+ *   icon={'tile-icon'}
+ *   backgroundColor={'red'}
+ *   lastTracked={'Last Tracked'}
+ * />
+ *
+ * @param {Object} props - Component ClickableTile Props
+ * @returns {React.FC<ClickableTileProps>} - React Component
+ */
 const ClickableTile: React.FC<ClickableTileProps> = ({
   onPress,
   label,

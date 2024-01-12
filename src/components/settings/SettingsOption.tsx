@@ -1,7 +1,9 @@
+// React Native Import
 import React from 'react';
+// Components
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome6';
+// Styling
 import {
   fonts,
   fontSizes,
@@ -10,9 +12,21 @@ import {
   iconSizes,
   borderRadius,
   borderWidth,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the SettingsOption Component
+ *
+ * @interface SettingsOptionProps
+ *
+ * @param {string} icon - The icon for the settings option
+ * @param {string} label - The label for the settings option
+ * @param {() => void} onPress - Function to be called when the settings option is pressed
+ * @param {string} fontColor - The font color for the settings option (optional)
+ * @param {boolean} caret - Boolean to determine if the settings option should have a caret (optional)
+ * @param {string} logo_circle_color - The color for the logo circle (optional)
+ */
 interface SettingsOptionProps {
   icon: string;
   label: string;
@@ -22,6 +36,23 @@ interface SettingsOptionProps {
   logo_circle_color?: string;
 }
 
+/**
+ * Settings Option Component
+ *
+ * @component SettingsOption
+ * @example
+ * <SettingsOption
+ *     icon={'home'}
+ *     label={'Home'}
+ *     onPress={() => console.log('SettingsOption Pressed')}
+ *     fontColor={'red'}
+ *     caret={true}
+ *     logo_circle_color={'blue'}
+ * />
+ *
+ * @param {Object} props - Component SettingsOption Props
+ * @returns {React.FC<SettingsOptionProps>} - React Component
+ */
 const SettingsOption: React.FC<SettingsOptionProps> = ({
   icon,
   label,

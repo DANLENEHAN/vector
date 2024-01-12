@@ -1,22 +1,36 @@
+// React Import
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 // Functions
-import {logoutUser} from '../../../services/api/blueprints/user/api';
+import {logoutUser} from '@services/api/blueprints/user/api';
 // Components
-import SettingsOption from '../../../components/settings/SettingsOption';
-import Header from '../../../components/navbar/Header';
+import SettingsOption from '@components/settings/SettingsOption';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet} from 'react-native';
 // Types
-import {ScreenProps} from '../../types';
-import {SwaggerValidationError} from '../../../services/api/types';
+import {ScreenProps} from '@screens/types';
+import {SwaggerValidationError} from '@services/api/types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '../../../styles/main';
-import {useSystem} from '../../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ * Account Settings Screen
+ *
+ * @component AccountSettings
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the account settings screen component
+ *
+ * @example
+ * <AccountSettings navigation={navigation}/>
+ */
 const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
   const handleLogout = async () => {
     const response = await logoutUser();
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
       navigation.navigate('Login');
     }

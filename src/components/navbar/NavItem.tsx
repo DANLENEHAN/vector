@@ -1,7 +1,8 @@
+// React Import
 import React from 'react';
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
+// Components
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
   fonts,
@@ -12,9 +13,19 @@ import {
   darkThemeColors,
   iconSizes,
   fontWeights,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the NavItem Component
+ *
+ * @interface NavItemProps
+ *
+ * @param {string} icon - The icon for the nav item
+ * @param {string} label - The label for the nav item (optional)
+ * @param {() => void} onPress - Function to be called when the nav item is pressed
+ * @param {boolean} isActive - Boolean to determine if the nav item is active (optional)
+ */
 interface NavItemProps {
   icon: string;
   label?: string;
@@ -22,6 +33,21 @@ interface NavItemProps {
   isActive?: boolean;
 }
 
+/**
+ * NavItem Component
+ *
+ * @component NavItem
+ * @example
+ * <NavItem
+ *     icon={'home'}
+ *     label={'Home'}
+ *     onPress={() => console.log('NavItem Pressed')}
+ *     isActive={true}
+ * />
+ *
+ * @param {Object} props - Component NavItem Props
+ * @returns {React.FC<NavItemProps>} - React Component
+ */
 const NavItem: React.FC<NavItemProps> = ({
   icon,
   label,

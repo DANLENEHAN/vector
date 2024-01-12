@@ -1,4 +1,6 @@
+// React imports
 import React, {useState} from 'react';
+// Components
 import {
   View,
   Text,
@@ -6,27 +8,35 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
-// Components
-import ButtonComponent from '../../components/buttons/ButtonComponent';
-import UnitSelector from '../../components/buttons/UnitSelector';
-import NumberInput from '../../components/inputs/NumberInput';
-import Header from '../../components/navbar/Header';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import UnitSelector from '@components/buttons/UnitSelector';
+import NumberInput from '@components/inputs/NumberInput';
+import Header from '@components/navbar/Header';
 // Types
-import {ScreenProps} from '../types';
-import {StatType, WaterUnit} from '../../services/api/swagger/data-contracts';
-
+import {ScreenProps} from '@screens/types';
+import {StatType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
-import {useSystem} from '../../context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '../../styles/main';
-
+import {useSystem} from '@context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
 // Services
-import {createNewStat} from '../../services/api/blueprints/stat/functions';
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import {createNewStat} from '@services/api/blueprints/stat/functions';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ *  Water tracking screen
+ *
+ * @component WaterScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the water tracking screen component
+ *
+ * @example
+ * <WaterScreen navigation={navigation}/>
+ */
 const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -39,7 +49,7 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
     const parsedWater = parseFloat(waterValue);
     // Validation: Check if the weight is 0 or the string is empty
     if (isNaN(parsedWater) || parsedWater <= 0) {
-      console.error('Invalid water value. Please enter a valid water value.');
+      logger.error('Invalid water value. Please enter a valid water value.');
       return; // Stop the function if the weight is invalid
     }
     createNewStat({
