@@ -24,7 +24,9 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
+      testID="nutrition-progress-screen">
       <Header
         label="Nutrition"
         navigation={navigation}
