@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import AuthNavigator from './src/navigation/Navigation';
-import {SystemProvider} from './src/context/SystemContext';
-import {getCurrentRevision, runMigrations} from './src/services/db/functions';
+import AuthNavigator from '@navigation/Navigation';
+import {SystemProvider} from '@context/SystemContext';
+import {getCurrentRevision, runMigrations} from '@services/db/functions';
 // Logger
-import logger from './src/utils/logger';
+import logger from '@utils/logger';
 
 function App(): JSX.Element {
   useEffect(() => {
