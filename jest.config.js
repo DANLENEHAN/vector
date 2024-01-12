@@ -3,6 +3,7 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(@react-native|react-native|react-native-vector-icons)/)',
   ],
+  moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
     '@components/(.*)$': '<rootDir>/src/components/$1',
     '@context/(.*)$': '<rootDir>/src/context/$1',
