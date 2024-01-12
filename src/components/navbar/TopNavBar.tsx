@@ -1,6 +1,7 @@
+// React Import
 import React from 'react';
+// Components
 import {View, StyleSheet, Text} from 'react-native';
-
 // Styling
 import {
   fonts,
@@ -10,13 +11,24 @@ import {
   darkThemeColors,
   borderWidth,
   iconSizes,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-
 // Typing
-import {NavBarProps} from './types';
+import {NavBarProps} from '@components/navbar/types';
+// Logging
+import logger from '@utils/logger';
 
+/**
+ * TopNavBar Component
+ *
+ * @component TopNavBar
+ * @example
+ * <TopNavBar navigation={navigation} />
+ *
+ * @param {Object} props - Component TopNavBar Props
+ * @returns {React.FC<NavBarProps>} - React Component
+ */
 const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -37,7 +49,7 @@ const TopNavBar: React.FC<NavBarProps> = ({navigation}) => {
           solid
           size={iconSizes.large}
           color={currentTheme.text}
-          onPress={() => console.log('Pressed Search')}
+          onPress={() => logger.info('Pressed Search')}
         />
       </View>
       <View style={styles.logoContainer}>
@@ -71,7 +83,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 1.0,
     elevation: 5,
-    backgroundColor: 'red',
   },
   iconContainer: {
     flex: 2,

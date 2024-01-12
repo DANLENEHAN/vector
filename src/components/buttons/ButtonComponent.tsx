@@ -1,6 +1,8 @@
+// React Imports
 import React from 'react';
+// Components
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
-
+// Styling
 import {
   fontSizes,
   fontWeights,
@@ -11,9 +13,19 @@ import {
   lightThemeColors,
   buttonHeight,
   buttonWidth,
-} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the Button Component
+ *
+ * @interface ButtonProps
+ *
+ * @param {() => void} onPress - Function to be called when the button is pressed
+ * @param {boolean} disabled - Boolean to disable the button
+ * @param {string} text - Text to be displayed on the button
+ * @param {object} style - Style object to be applied to the button (optional)
+ */
 interface ButtonProps {
   onPress: () => void;
   disabled: boolean;
@@ -21,6 +33,21 @@ interface ButtonProps {
   style?: object;
 }
 
+/**
+ * Button Component
+ *
+ * @component ButtonComponent
+ * @example
+ * <ButtonComponent
+ *     onPress={() => console.log('Button Pressed')}
+ *     disabled={false}
+ *     text={'Button Text'}
+ *     style={{backgroundColor: 'red'}}
+ * />
+ *
+ * @param {Object} props - Component Button Props
+ * @returns {React.FC<ButtonProps>} - React Component
+ */
 const ButtonComponent: React.FC<ButtonProps> = ({
   onPress,
   disabled,

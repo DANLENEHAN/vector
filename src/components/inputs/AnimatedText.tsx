@@ -1,5 +1,8 @@
+// React Native Import
 import * as React from 'react';
+// Components
 import {TextInput, type TextInputProps} from 'react-native';
+// Types
 import Reanimated, {
   useAnimatedProps,
   type SharedValue,
@@ -13,6 +16,19 @@ type AnimatedTextProps = Omit<TextInputProps, 'editable' | 'value'> & {
   style?: React.ComponentProps<typeof AnimText>['style'];
 };
 
+/**
+ * Animated Text Component
+ *
+ * @component AnimatedText
+ * @example
+ * <AnimatedText
+ *   text={text}
+ *   style={{color: 'red'}}
+ * />
+ *
+ * @param {Object} props - Component Animated Text Props
+ * @returns {React.FC<AnimatedTextProps>} - React Component
+ */
 export function AnimatedText({text, ...rest}: AnimatedTextProps) {
   const animProps = useAnimatedProps(() => {
     return {

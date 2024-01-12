@@ -1,18 +1,27 @@
+// React Native imports
 import React from 'react';
-
 // Components
 import {View, StyleSheet} from 'react-native';
-import SettingsOption from '../../../components/settings/SettingsOption';
-import Header from '../../../components/navbar/Header';
-
+import SettingsOption from '@components/settings/SettingsOption';
+import Header from '@components/navbar/Header';
 // Types
-import {ScreenProps} from '../../types';
-
+import {ScreenProps} from '@screens/types';
 // Theme
-import {lightThemeColors, darkThemeColors, margins} from '../../../styles/main';
-import {useSystem} from '../../../context/SystemContext';
-import ScreenWrapper from '../../../components/layout/ScreenWrapper';
+import {lightThemeColors, darkThemeColors, margins} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 
+/**
+ * Preferences Screen
+ *
+ * @component Preferences
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the preferences screen component
+ *
+ * @example
+ * <Preferences navigation={navigation}/>
+ */
 const Preferences: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

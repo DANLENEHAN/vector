@@ -5,16 +5,16 @@ import SQLite, {
   SQLError,
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
-
 // Types
-import {alembicTable, RevisionCallback} from './types';
-import {dbName, RowData} from './types';
-
-// Fucntions
-import {revisionObject} from './vectorRevisions';
-import {getAllTables} from './queries/other';
+import {alembicTable, RevisionCallback} from '@services/db/types';
+import {dbName, RowData} from '@services/db/types';
+// Functions
+import {revisionObject} from '@services/db/vectorRevisions';
+import {generateDeletionQuery} from '@services/db/queries/other';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
+// Logger
+import logger from '@utils/logger';
 
 /**
  * @description Retrieves the document directory path using React Native File System (RNFS).
@@ -28,9 +28,9 @@ import {v4 as uuidv4} from 'uuid';
 const getDocumentDirectoryPath = (): void => {
   try {
     const documentDirectoryPath = RNFS.DocumentDirectoryPath;
-    console.log('Document Directory Path:', documentDirectoryPath);
+    logger.info('Document Directory Path:', documentDirectoryPath);
   } catch (error) {
-    console.error('Error getting document directory path:', error);
+    logger.error('Error getting document directory path:', error);
   }
 };
 
@@ -50,7 +50,7 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: dbName},
   getDocumentDirectoryPath,
   (error: SQLError) => {
-    console.error('Error opening database:', error);
+    logger.error('Error opening database:', error);
   },
 );
 
@@ -98,12 +98,12 @@ export const runMigrations = (revisionId: string | null): void => {
   try {
     const revisionsToProcess = getKeyValuesStartingFrom(revisionId);
     if (Object.keys(revisionsToProcess).length === 0) {
-      console.log('No revisions to process. Moving on...');
+      logger.info('No revisions to process. Moving on...');
     }
     for (const revisionID_ in revisionsToProcess) {
       const sqlCommands = revisionObject[revisionID_];
       db.transaction((tx: any) => {
-        console.log(`Migration for ${revisionID_} applied successfully`);
+        logger.info(`Migration for ${revisionID_} applied successfully`);
         sqlCommands.forEach(sqlCommand => {
           tx.executeSql(
             sqlCommand,
@@ -117,7 +117,7 @@ export const runMigrations = (revisionId: string | null): void => {
       });
     }
   } catch (error) {
-    console.error('Error applying migrations:', error);
+    logger.error('Error applying migrations:', error);
   }
 };
 
@@ -131,9 +131,9 @@ export const runMigrations = (revisionId: string | null): void => {
  * // Example usage:
  * getCurrentRevision((revisionId) => {
  *   if (revisionId) {
- *     console.log('Current revision ID:', revisionId);
+ *     logger.info('Current revision ID:', revisionId);
  *   } else {
- *     console.log('No revision ID found. Starting from scratch...');
+ *     logger.info('No revision ID found. Starting from scratch...');
  *   }
  * });
  */
@@ -147,7 +147,7 @@ export const getCurrentRevision = (callback: RevisionCallback): void => {
           const revision_id: string = result.rows.item(0).version_num;
           callback(revision_id);
         } else {
-          console.error('No revision id found.');
+          logger.error('No revision id found.');
         }
       },
       (error: Transaction) => {
@@ -170,10 +170,10 @@ export const getCurrentRevision = (callback: RevisionCallback): void => {
  * deleteDB();
  */
 export const deleteDB = (): void => {
-  console.log('Deleting DB tables. Hold on tight!');
+  logger.info('Deleting DB tables. Hold on tight!');
   db.transaction((tx: Transaction) => {
     tx.executeSql(
-      getAllTables,
+      generateDeletionQuery,
       [],
       (_: Transaction, result: ResultSet) => {
         const rows = result.rows;
@@ -183,14 +183,14 @@ export const deleteDB = (): void => {
             dropSql as string,
             [],
             () => {
-              console.log(`Query '${dropSql}' successfull`);
+              logger.info(`Query '${dropSql}' successfull`);
             },
             () => {},
           );
         }
       },
       (_: Transaction, error: SQLError) => {
-        console.log('Error: ', error);
+        logger.info('Error: ', error);
       },
     );
   });
@@ -242,7 +242,7 @@ export const insertRows = async (
       `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
       insertValues,
       () => {
-        console.log(
+        logger.info(
           `Successfulling inserted ${data.length} row${
             data.length > 1 ? 's' : ''
           } in '${tableName}'.`,

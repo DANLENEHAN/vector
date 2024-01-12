@@ -1,6 +1,5 @@
 // React Import
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
 // Theme
 import {
   darkThemeColors,
@@ -8,19 +7,43 @@ import {
   margins,
   fontSizes,
   fontWeights,
-} from '../../../styles/main';
-import {useSystem} from '../../../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import {AnimatedText} from '../../inputs/AnimatedText';
+import {AnimatedText} from '@components/inputs/AnimatedText';
+import {StyleSheet, View, Text} from 'react-native';
 // Typing
 import {type SharedValue} from 'react-native-reanimated';
 
+/**
+ * Interface for the AverageValueText component
+ *
+ * @interface AverageValueText
+ *
+ * @param {string} unit - The unit for the average value
+ * @param {SharedValue<string>} currentValue - The current value of the graph
+ * @param {SharedValue<string>} currentDate - The current date of the graph
+ */
 interface AverageValueText {
   unit: string; // The unit for the average value
   currentValue: SharedValue<string>; // The current value of the graph
   currentDate: SharedValue<string>; // The current date of the graph
 }
 
+/**
+ * Average Value Text Component
+ *
+ * @component AverageValueText
+ * @example
+ * <AverageValueText
+ *    unit={'lbs'}
+ *    currentValue={currentValue}
+ *    currentDate={currentDate}
+ * />
+ *
+ * @param {Object} props - Component Average Value Text Props
+ * @returns {React.FC<AverageValueText>} - React Component
+ */
 export const AverageValueText: React.FC<AverageValueText> = ({
   currentValue,
   currentDate,
@@ -49,12 +72,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
         ]}>
         Average:
       </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: margins.small,
-        }}>
+      <View style={styles.averageWeightAndUnitContainer}>
         <AnimatedText
           text={currentValue}
           style={[
@@ -109,6 +127,11 @@ const styles = StyleSheet.create({
   },
   averageWeightLabel: {
     fontSize: fontSizes.medium,
+  },
+  averageWeightAndUnitContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: margins.small,
   },
   averageValue: {
     fontSize: fontSizes.title,

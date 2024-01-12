@@ -1,32 +1,44 @@
 // React imports
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native'; // Import useFocusEffect
 // Layouts
-import ScreenWrapper from '../../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
   fontSizes,
-  fontWeights,
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '../../styles/main';
+} from '@styles/main';
 // Components
-import Header from '../../components/navbar/Header';
-import LineGraph from '../../components/graphs/Line/Graph';
-import UnitSelector from '../../components/buttons/UnitSelector';
+import Header from '@components/navbar/Header';
+import LineGraph from '@components/graphs/Line/Graph';
+import UnitSelector from '@components/buttons/UnitSelector';
+import {View, StyleSheet} from 'react-native';
 // Services
-import {getUserStats} from '../../services/api/blueprints/stat/functions';
-import {useSystem} from '../../context/SystemContext';
+import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {useSystem} from '@context/SystemContext';
 // Utils
-import {convertStats} from '../../utils/conversion';
+import {convertStats} from '@utils/conversion';
 import {parse} from 'date-fns';
 // Types
-import {ScreenProps} from '../types';
-import {StatType, WeightUnit} from '../../services/api/swagger/data-contracts';
-import {GraphPlotData} from '../../components/graphs/Line/types';
+import {ScreenProps} from '@screens/types';
+import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {GraphPlotData} from '@components/graphs/Line/types';
+// Logger
+import logger from '@utils/logger';
 
+/**
+ *  Weight progress screen
+ *
+ * @component WeightProgress
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the weight progress screen component
+ *
+ * @example
+ * <WeightProgress navigation={navigation}/>
+ */
 const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
   const [data, setData] = useState<any>({});
   const {theme} = useSystem();
@@ -43,7 +55,8 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
         const weightUnitPref = WeightUnit.Kg;
         let user_weights = await getUserStats({statType: StatType.Weight});
         if (user_weights == null) {
-          console.log('No user weights found');
+          logger.info('No user weights found');
+          return;
         }
         user_weights = convertStats({
           stats: user_weights,
@@ -190,18 +203,16 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
           units={Object.values(dateOptions)}
           activeUnit={activePeriod}
           setActiveUnit={setActivePeriod}
-          style={{
-            height: 25,
-            width: '90%',
-            color: currentTheme.text,
-            marginTop: margins.xSmall,
-            marginBottom: margins.medium,
-          }}
+          style={[
+            styles.unitSelector,
+            {
+              color: currentTheme.text,
+            },
+          ]}
         />
 
-        <View style={styles.chartContainer}>
-          <View
-            style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+        <View style={styles.chartContainerContainer}>
+          <View style={styles.chartContainer}>
             {data && activePeriod && data[activePeriod] && (
               <LineGraph
                 data={data[activePeriod].data}
@@ -225,22 +236,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: fontSizes.xLarge,
   },
-  chartContainer: {
+  chartContainerContainer: {
     width: '100%',
     height: 300,
   },
-  averageWeightContainer: {
+  chartContainer: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  unitSelector: {
+    height: 25,
     width: '90%',
-    height: 100,
-    //backgroundColor: 'red',
-  },
-  averageWeightLabel: {
-    fontSize: fontSizes.medium,
-  },
-  averageWeightValue: {
-    fontSize: fontSizes.xLarge,
-    fontWeight: fontWeights.extraBold,
-    color: 'black',
+    marginTop: margins.xSmall,
+    marginBottom: margins.medium,
   },
 });
 

@@ -1,13 +1,16 @@
+// React import
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
 // Services
-import {loginUser, createUser} from '../services/api/blueprints/user/api';
+import {loginUser, createUser} from '@services/api/blueprints/user/api';
+//Utils
+import logger from '@utils/logger';
 //Layouts
-import ScreenWrapper from '../components/layout/ScreenWrapper';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
-import ButtonComponent from '../components/buttons/ButtonComponent';
-import TextInputComponent from '../components/inputs/TextInputComponent';
-import ClickableLink from '../components/buttons/ClickableLink';
+import ButtonComponent from '@components/buttons/ButtonComponent';
+import TextInputComponent from '@components/inputs/TextInputComponent';
+import ClickableLink from '@components/buttons/ClickableLink';
+import {View, Text, StyleSheet, Keyboard} from 'react-native';
 // Styling
 import {
   fontSizes,
@@ -16,10 +19,10 @@ import {
   lightThemeColors,
   paddings,
   margins,
-} from '../styles/main';
-import {useSystem} from '../context/SystemContext';
+} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Types
-import {ScreenProps} from './types';
+import {ScreenProps} from '@screens/types';
 import {
   DateFormat,
   Gender,
@@ -27,9 +30,20 @@ import {
   HeightUnit,
   WeightUnit,
   ProfileStatus,
-} from '../services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '../services/api/types';
+} from '@services/api/swagger/data-contracts';
+import {SwaggerValidationError} from '@services/api/types';
 
+/**
+ *  Login screen
+ *
+ * @component LoginScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the login screen component
+ *
+ * @example
+ * <LoginScreen navigation={navigation}/>
+ */
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -42,10 +56,13 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const handleLogin = async () => {
+    logger.info('Logging in.');
+    Keyboard.dismiss();
     let response = await loginUser({email: email, password: password});
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
+      logger.info('Login successful, navigating to home screen.');
       navigation.navigate('App', {screen: 'Home'});
     }
   };
@@ -74,9 +91,9 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       updated_at: currentTimestamp,
     });
     if (response instanceof SwaggerValidationError) {
-      console.error(`Error: ${response.message}`);
+      logger.error(`Error: ${response.message}`);
     } else {
-      console.log('Account creation successful, logging in.');
+      logger.info('Account creation successful, logging in.');
       response = await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
     }
@@ -100,7 +117,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           placeholder="Enter your email"
           value={email}
           onChangeText={text => setUsername(text)}
-          iconName="person"
+          iconName="envelope"
         />
         <TextInputComponent
           placeholder="Enter your password"

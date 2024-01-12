@@ -1,19 +1,20 @@
+// React Imports
 import React from 'react';
+// Components
+import NavItem from '@components/navbar/NavItem';
 import {View, StyleSheet} from 'react-native';
-import NavItem from './NavItem';
-import {BottomBarProps} from './types';
-
+import {BottomBarProps} from '@components/navbar/types';
 // Styling
 import {
   lightThemeColors,
   darkThemeColors,
   paddings,
   borderWidth,
-} from '../../styles/main';
+} from '@styles/main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSystem} from '@context/SystemContext';
 
-import {useSystem} from '../../context/SystemContext';
-
+// Mapping of routes to icons and labels
 const routeMapping: any = {
   Home: {label: 'Home', icon: 'house'},
   Track: {label: 'Track', icon: 'plus'},
@@ -21,8 +22,22 @@ const routeMapping: any = {
   Social: {label: 'Social', icon: 'users'},
   Progress: {label: 'Progress', icon: 'calendar-check'},
 };
+// Routes that should not be displayed in the bottom nav bar
 const hiddenRoutes = ['Settings', 'Search'];
 
+/**
+ *  BottomNavBar
+ *
+ * @component BottomNavBar
+ * @example
+ *  <BottomNavBar
+ *   navigation={navigation}
+ *   state={state}
+ * />
+ *
+ * @param {Object} props - Component Props
+ * @returns {React.FC<BottomBarProps>} - React Component
+ */
 const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -48,7 +63,7 @@ const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
         }
 
         const isFocused = state.index === index;
-
+        // On press function
         const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',

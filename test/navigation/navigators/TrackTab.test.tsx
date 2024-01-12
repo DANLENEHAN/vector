@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import ProgressTabNavigator from '@navigation/navigators/ProgressTab';
+import TrackTabNavigator from '@navigation/navigators/TrackTab';
 import {NavigationContainer} from '@react-navigation/native';
 import {useSystem} from '@context/SystemContext';
 
@@ -13,7 +13,7 @@ jest.mock('react-native-safe-area-context', () => ({
   SafeAreaProvider: jest.fn().mockImplementation(({children}) => children),
 }));
 
-describe('ProgressTabNavigator Tests', () => {
+describe('TrackTabNavigator Tests', () => {
   beforeEach(() => {
     // Set up the mock return value before each test
     (useSystem as jest.Mock).mockReturnValue({
@@ -28,18 +28,18 @@ describe('ProgressTabNavigator Tests', () => {
   it('should render the navigator', () => {
     const {getByTestId} = render(
       <NavigationContainer>
-        <ProgressTabNavigator />
+        <TrackTabNavigator />
       </NavigationContainer>,
     );
 
     // Test the tab labels are correct
-    const workoutTabLabel = getByTestId('tab-label-workoutprogress');
+    const workoutTabLabel = getByTestId('tab-label-workouttracking');
     expect(workoutTabLabel.props.children).toBe('Workout');
 
-    const nutritionTabLabel = getByTestId('tab-label-nutritionprogress');
+    const nutritionTabLabel = getByTestId('tab-label-nutritiontracking');
     expect(nutritionTabLabel.props.children).toBe('Nutrition');
 
-    const wellnessTabLabel = getByTestId('tab-label-wellnessprogress');
+    const wellnessTabLabel = getByTestId('tab-label-wellnesstracking');
     expect(wellnessTabLabel.props.children).toBe('Wellness');
   });
 
@@ -47,20 +47,20 @@ describe('ProgressTabNavigator Tests', () => {
   it('should show correct content for each tab', () => {
     const {getByTestId} = render(
       <NavigationContainer>
-        <ProgressTabNavigator />
+        <TrackTabNavigator />
       </NavigationContainer>,
     );
 
     // Simulate pressing the Workout tab
-    fireEvent.press(getByTestId('tab-label-workoutprogress'));
-    expect(getByTestId('workout-progress-screen')).toBeTruthy();
+    fireEvent.press(getByTestId('tab-label-workouttracking'));
+    expect(getByTestId('workout-tracking-screen')).toBeTruthy();
 
     // Simulate pressing the Nutrition tab
-    fireEvent.press(getByTestId('tab-label-nutritionprogress'));
-    expect(getByTestId('nutrition-progress-screen')).toBeTruthy();
+    fireEvent.press(getByTestId('tab-label-nutritiontracking'));
+    expect(getByTestId('nutrition-tracking-screen')).toBeTruthy();
 
     // Simulate pressing the Wellness tab
-    fireEvent.press(getByTestId('tab-label-wellnessprogress'));
-    expect(getByTestId('wellness-progress-screen')).toBeTruthy();
+    fireEvent.press(getByTestId('tab-label-wellnesstracking'));
+    expect(getByTestId('wellness-tracking-screen')).toBeTruthy();
   });
 });

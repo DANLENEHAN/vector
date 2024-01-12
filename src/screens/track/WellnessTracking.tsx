@@ -1,16 +1,17 @@
 // React imports
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
 // Styling
-import {lightThemeColors, darkThemeColors} from '../../styles/main';
-import {useSystem} from '../../context/SystemContext';
+import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {useSystem} from '@context/SystemContext';
 // Components
-import ClickableTile from '../../components/buttons/ClickableTile';
-import Header from '../../components/navbar/Header';
+import ClickableTile from '@components/buttons/ClickableTile';
+import Header from '@components/navbar/Header';
+import {View, StyleSheet, ScrollView} from 'react-native';
 // Types
-import {ScreenProps} from '../types';
-import {TileData} from '../../components/buttons/ClickableTile';
+import {ScreenProps} from '@screens/types';
+import {TileData} from '@components/buttons/ClickableTile';
 
+// Data
 const tile_data: TileData[] = [
   {
     label: 'Weight',
@@ -24,11 +25,22 @@ const tile_data: TileData[] = [
   },
 ];
 
+/**
+ * Home screen for the wellness tracking section
+ *
+ * @param {ScreenProps} props - Navigation object for the screen
+ * @returns {React.FC} - Returns the wellness tracking screen component
+ *
+ * @example
+ * <WellnessTracking navigation={navigation}/>
+ */
 const WellnessTracking: React.FC<ScreenProps> = ({navigation}) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
+    <View
+      style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
+      testID="wellness-tracking-screen">
       <Header
         label="Health & Wellness"
         navigation={navigation}

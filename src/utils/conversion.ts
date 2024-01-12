@@ -1,34 +1,40 @@
-/**
- *  @fileOverview Conversion utilities.
- *  @description Conversion utilities for converting between different units.
- */
 // Types
+import {Unit} from 'convert-units';
 import {
   StatSchema,
   WaterUnit,
   WeightUnit,
-} from '../services/api/swagger/data-contracts';
+} from '@services/api/swagger/data-contracts';
+// Functions
 import convert from 'convert-units';
 
 // Constants for bespoke conversions
 const STONE_TO_POUNDS = 14;
 
+/**
+ * Interface for the convertUnit function.
+ *
+ * @interface convertUnitParams
+ *
+ * @property {StatSchema['unit']} unit  The unit to be converted.
+ */
 interface convertUnitParams {
   unit: StatSchema['unit'];
 }
+
 /**
- * @description Convert the unit to a format that can be used by the convert-units package.
+ * @description Convert the unit to a format that the convert-units package can understand.
  *
- * @param unit  The unit to be converted.
- * @returns {string} The converted unit.
+ * @param {convertUnitParams} unit  The unit to be converted.
+ * @returns {Unit} The converted unit.
  *
  * @example
  * // Example usage:
  * const unit = 'kg';
- * convertUnit(unit);
+ * convertUnit({unit: unit});
  * // Returns the converted unit.
  */
-const convertUnit = ({unit}: convertUnitParams): string => {
+const convertUnit = ({unit}: convertUnitParams): Unit => {
   switch (unit) {
     // Any unit that need conversion should be handled here
     case WeightUnit.Lbs:
@@ -39,10 +45,19 @@ const convertUnit = ({unit}: convertUnitParams): string => {
       return 'cup';
     // Add other units as needed
     default:
-      return unit.toLowerCase() as string;
+      return unit.toLowerCase() as Unit;
   }
 };
 
+/**
+ * Interface for the convertValue function.
+ *
+ * @interface convertValueParams
+ *
+ * @property {number} value  The value to be converted.
+ * @property {StatSchema['unit']} fromUnit  The unit of the value.
+ * @property {StatSchema['unit']} toUnit  The target unit.
+ */
 interface convertValueParams {
   value: number;
   fromUnit: StatSchema['unit'];
@@ -50,17 +65,14 @@ interface convertValueParams {
 }
 
 /**
- * @description Convert the value from the fromUnit to the toUnit.
+ * @description Convert the value to the target unit.
  *
- * @param value  The value to be converted.
- * @param fromUnit  The unit of the value.
- * @param toUnit  The target unit.
+ * @param {convertValueParams} {value, fromUnit, toUnit}  The value to be converted, the unit of the value, and the target unit.
  * @returns {number} The converted value.
- * @throws {string} Throws an error with a message describing the issue if the operation fails.
  *
  * @example
  * // Example usage:
- * const value = 42;
+ * const value = 1;
  * const fromUnit = 'kg';
  * const toUnit = 'lbs';
  * convertValue({value: value, fromUnit: fromUnit, toUnit: toUnit});
@@ -106,25 +118,37 @@ const convertValue = ({
     .to(convertUnit({unit: toUnit}));
 };
 
+/**
+ * Interface for the convertStats function.
+ *
+ * @interface unitConversion
+ *
+ * @property {StatSchema[]} stats  The stats to be converted.
+ * @property {StatSchema['unit']} targetUnit  The target unit.
+ */
 interface unitConversion {
   stats: StatSchema[];
   targetUnit: StatSchema['unit'];
 }
 
 /**
- * @description Convert the stats to the target unit.
+ * Convert the stats to the target unit.
  *
- * @param stats  The stats to be converted.
- * @param targetUnit  The target unit.
- * @returns {StatSchema[]} The converted stats.
- * @throws {string} Throws an error with a message describing the issue if the operation fails.
- *
+ * @function convertStats
  * @example
- * // Example usage:
- * const stats = [ /* stats * / ];
- * const targetUnit = 'kg';
- * convertStats({stats: stats, targetUnit: targetUnit});
+ * const stats = [
+ *  {
+ *   stat_type: StatType.Weight,
+ *   unit: WeightUnit.Kg,
+ *   user_id: 1,
+ *   value: 1,
+ *  } as StatSchema,
+ * ];
+ * convertStats({stats: stats, targetUnit: WeightUnit.Lbs});
  * // Returns the converted stats.
+ *
+ * @param {unitConversion} {stats, targetUnit} The stats to be converted and the target unit.
+ * @returns {StatSchema[]} The converted stats.
  */
 export const convertStats = ({
   stats,

@@ -1,17 +1,27 @@
+// React imports
 import React from 'react';
-
 // Components
 import {Appearance, View, StyleSheet} from 'react-native';
-import Header from '../../../components/navbar/Header';
-import OptionGroup from '../../../components/settings/OptionGroup';
-import {margins} from '../../../styles/main';
-
+import Header from '@components/navbar/Header';
+import OptionGroup from '@components/settings/OptionGroup';
+import {margins} from '@styles/main';
 // Styling
-import {useSystem} from '../../../context/SystemContext';
+import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '../../../services/asyncStorage/types';
-import ScreenWrapper from '../../../components/layout/ScreenWrapper';
+import {UserThemePreference} from '@services/asyncStorage/types';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 
+/**
+ * Theme Screen
+ *
+ * @component ThemeScreen
+ * @param {ScreenProps} navigation - Navigation object for the screen
+ *
+ * @returns {React.FC} - Returns the theme screen component
+ *
+ * @example
+ * <ThemeScreen navigation={navigation}/>
+ */
 const ThemeScreen: React.FC<any> = ({navigation}) => {
   const {setTheme, userPreferenceTheme, setUserPreferenceTheme} = useSystem();
 
