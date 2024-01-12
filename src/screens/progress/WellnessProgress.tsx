@@ -6,7 +6,7 @@ import {lightThemeColors, darkThemeColors} from '@styles/main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
-import Header from '@components/navbar/Header';
+//import Header from '@components/navbar/Header';
 import {ScreenProps} from '@screens/types';
 import {TileData} from '@components/buttons/ClickableTile';
 import {View, StyleSheet, ScrollView} from 'react-native';
@@ -30,12 +30,12 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
 
   return (
     <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
-      <Header
+      {/* <Header
         label="Health & Wellness"
         navigation={navigation}
         includeBackArrow={false}
         includeTopMargin={false}
-      />
+      /> */}
       <ScrollView style={styles.scrollView}>
         <View style={styles.content} testID="wellness-progress-screen">
           {tile_data.map((tile, index) => (
