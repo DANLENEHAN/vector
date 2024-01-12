@@ -13,6 +13,8 @@ import {dbName, RowData} from './types';
 // Fucntions
 import {revisionObject} from './vectorRevisions';
 import {getAllTables} from './queries/other';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 /**
  * @description Retrieves the document directory path using React Native File System (RNFS).
@@ -107,7 +109,7 @@ export const runMigrations = (revisionId: string | null): void => {
             sqlCommand,
             [],
             () => {},
-            (_: any, error: any) => {
+            (error: Transaction) => {
               console.error(`Error executing SQL for ${sqlCommand}:`, error);
             },
           );
@@ -148,7 +150,7 @@ export const getCurrentRevision = (callback: RevisionCallback): void => {
           console.error('No revision id found.');
         }
       },
-      (_: Transaction, error: SQLError) => {
+      (error: Transaction) => {
         console.log(`Unable to retrieve revision id. Error: ${error}`);
         console.log('Starting from stratch...');
         callback(null);
@@ -212,9 +214,14 @@ export const deleteDB = (): void => {
 export const insertRows = async (
   tableName: string,
   data: RowData[],
+  insert_uuid: boolean = true,
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
+  }
+
+  if (insert_uuid === true) {
+    data = data.map(obj => ({...obj, [`${tableName}_uuid`]: uuidv4()}));
   }
 
   const schema = Object.keys(data[0]);
@@ -241,7 +248,8 @@ export const insertRows = async (
           } in '${tableName}'.`,
         );
       },
-      (_, error: SQLError) => {
+      (error: Transaction) => {
+        console.log('error: ', error);
         throw error;
       },
     );

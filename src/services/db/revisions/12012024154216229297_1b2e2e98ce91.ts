@@ -1,6 +1,6 @@
-export const revisionID = 'c56326237362';
+export const revisionID = '1b2e2e98ce91';
 
-export const sqlCommands_08012024171010522885_c56326237362: string[] = [
+export const sqlCommands_12012024154216229297_1b2e2e98ce91: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL, 
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -24,6 +24,12 @@ export const sqlCommands_08012024171010522885_c56326237362: string[] = [
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP NOT NULL, 
 	    PRIMARY KEY (equipment_id)
+	);`,
+  `CREATE TABLE sync_table (
+	    table_name VARCHAR(100) NOT NULL, 
+	    last_synced TIMESTAMP NOT NULL, 
+	    sync_type VARCHAR(50) NOT NULL, 
+	    PRIMARY KEY (table_name)
 	);`,
   `CREATE TABLE user_account (
 	    user_id INTEGER NOT NULL, 
@@ -77,8 +83,9 @@ export const sqlCommands_08012024171010522885_c56326237362: string[] = [
 	    PRIMARY KEY (plan_id), 
 	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
 	);`,
-  `CREATE TABLE stats (
-	    stat_id INTEGER NOT NULL, 
+  `CREATE TABLE stat (
+	    stat_uuid VARCHAR(36) NOT NULL, 
+	    deleted BOOLEAN DEFAULT false NOT NULL, 
 	    user_id INTEGER NOT NULL, 
 	    value FLOAT NOT NULL, 
 	    unit VARCHAR(25) NOT NULL, 
@@ -86,7 +93,7 @@ export const sqlCommands_08012024171010522885_c56326237362: string[] = [
 	    stat_type VARCHAR(50) NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP NOT NULL, 
-	    PRIMARY KEY (stat_id), 
+	    PRIMARY KEY (stat_uuid), 
 	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
 	);`,
   `CREATE TABLE exercise_bodypart (
@@ -192,5 +199,5 @@ export const sqlCommands_08012024171010522885_c56326237362: string[] = [
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id), 
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('c56326237362');",
+  "INSERT INTO alembic_version (version_num) VALUES ('1b2e2e98ce91');",
 ];

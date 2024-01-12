@@ -1,1 +1,1 @@
-export const statTable: string = 'stats';
+export const statTable: string = 'stat';
