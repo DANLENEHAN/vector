@@ -10,7 +10,7 @@ import {alembicTable, RevisionCallback} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
-import {generateDeletionQuery} from '@services/db/queries/other';
+import {generateDeletionQuery} from '@services/db/queries';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 // Logger
