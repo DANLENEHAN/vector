@@ -1,7 +1,7 @@
 import {AxiosResponse} from 'axios';
-import {SyncOperation, SyncType} from 'src/shared/enums';
-import {dbTables} from 'src/shared/contants';
-import {StatSchema} from '../../api/swagger/data-contracts';
+import {SyncOperation, SyncType} from '@shared/enums';
+import {dbTables} from '@shared/contants';
+import {StatSchema} from '@services/api/swagger/data-contracts';
 
 /**
  * Represents a schema for data that can be synchronized during a create operation.

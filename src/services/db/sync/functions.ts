@@ -55,7 +55,6 @@ export const getLastSyncedForTable = async (
           resolve(result.rows.item(0)?.last_synced);
         },
         (error: Transaction) => {
-          console.log(error);
           reject(error);
         },
       );
@@ -91,7 +90,6 @@ export const getRowsToSync = async (
           );
         },
         (error: Transaction) => {
-          logger.info(error);
           reject(error);
         },
       );
