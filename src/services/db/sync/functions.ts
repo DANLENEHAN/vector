@@ -117,9 +117,7 @@ export const insertSyncUpdate = (syncUpdate: SyncTable): Promise<void> => {
       tx.executeSql(
         `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
         Object.values(syncUpdate),
-        () => {
-          logger.info('Sync Table Insert successful');
-        },
+        () => {},
         (error: Transaction) => {
           console.error(error);
         },
@@ -201,19 +199,30 @@ export const processSyncPushOperation = async (
 export const processSyncPush = async (): Promise<void> => {
   try {
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
+      logger.info(`Processing synchronization push for table: '${tableName}'`);
+
       await processSyncPushOperation(
         tableName as keyof typeof dbTables,
         tableFunctions,
         SyncType.Push,
         SyncOperation.Creates,
       );
+      logger.info(
+        `Successfully processed synchronization push for ${SyncOperation.Creates} on table: '${tableName}'`,
+      );
+
       await processSyncPushOperation(
         tableName as keyof typeof dbTables,
         tableFunctions,
         SyncType.Push,
         SyncOperation.Updates,
       );
+      logger.info(
+        `Successfully processed synchronization push for ${SyncOperation.Updates} on table: '${tableName}'`,
+      );
     }
+
+    logger.info('Synchronization push completed successfully for all tables.');
   } catch (error) {
     console.error('Error processing synchronization push:', error);
     throw error;
