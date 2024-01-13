@@ -1,36 +1,51 @@
 import {AxiosResponse} from 'axios';
-
 import {Transaction, ResultSet} from 'react-native-sqlite-storage';
 
-import {ApiFunctions, SyncTable, syncTable} from './types';
-import {statTable} from '../stat/types';
-
-import api from '../../api/apiService';
-import {Stat} from '../../api/swagger/Stat';
-import {StatSchema} from '../../api/swagger/data-contracts';
+import {
+  SyncApiFunctions,
+  SyncTable,
+  SyncTableFunctions,
+  SyncCreateSchemas,
+  SyncUpdateSchemas,
+} from './types';
+import {SyncOperation, SyncType} from '@shared/enums';
+import {dbTables} from '@shared/contants';
 import {db} from '../functions';
-import {getSyncInfoForTableQuery, getRowsToSyncQuery} from './queries';
-import {RowData} from '../types';
+
+import api from '@services/api/apiService';
+import {Stat} from '@services/api/swagger/Stat';
+import {StatSchema} from '@services/api/swagger/data-contracts';
+import {getLastSyncedForTableQuery, getRowsToSyncQuery} from './queries';
+
+// Logger
+import logger from '@utils/logger';
 
 const StatApi = new Stat(api);
 
-const apiFunctions: ApiFunctions = {
-  [statTable]: (data: StatSchema): Promise<AxiosResponse> =>
-    StatApi.createCreate(data),
+const apiFunctions: SyncApiFunctions = {
+  [dbTables.statTable]: {
+    [SyncOperation.Creates]: (data: StatSchema): Promise<AxiosResponse> =>
+      StatApi.createCreate(data),
+    [SyncOperation.Updates]: (data: StatSchema): Promise<AxiosResponse> =>
+      StatApi.updateUpdate(data),
+  },
 };
 
-export const getSyncInfoForTable = async (
+export const getLastSyncedForTable = async (
   tableName: string,
+  syncType: SyncType,
+  syncOperation: SyncOperation,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     db.transaction((tx: Transaction) => {
       tx.executeSql(
-        getSyncInfoForTableQuery(tableName),
+        getLastSyncedForTableQuery(tableName, syncType, syncOperation),
         [],
         (_, result: ResultSet) => {
           resolve(result.rows.item(0)?.last_synced);
         },
         (error: Transaction) => {
+          console.log(error);
           reject(error);
         },
       );
@@ -40,12 +55,13 @@ export const getSyncInfoForTable = async (
 
 export const getRowsToSync = async (
   tableName: string,
+  syncOperation: SyncOperation,
   lastSyncTime?: string,
-): Promise<RowData[]> => {
+): Promise<(SyncCreateSchemas | SyncUpdateSchemas)[]> => {
   return new Promise((resolve, reject) => {
     db.transaction((tx: Transaction) => {
       tx.executeSql(
-        getRowsToSyncQuery(tableName, lastSyncTime),
+        getRowsToSyncQuery(tableName, syncOperation, lastSyncTime),
         [],
         (_, result: ResultSet) => {
           resolve(
@@ -55,7 +71,7 @@ export const getRowsToSync = async (
           );
         },
         (error: Transaction) => {
-          console.log(error);
+          logger.info(error);
           reject(error);
         },
       );
@@ -74,10 +90,10 @@ export const insertSyncUpdate = (syncUpdate: SyncTable): Promise<void> => {
   return new Promise(() => {
     db.transaction((tx: Transaction) => {
       tx.executeSql(
-        `INSERT OR REPLACE INTO ${syncTable} ${columns} VALUES ${insertValues};`,
+        `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
         Object.values(syncUpdate),
         () => {
-          console.log('Sync Table Insert successful');
+          logger.info('Sync Table Insert successful');
         },
         (error: Transaction) => {
           console.error(error);
@@ -87,35 +103,65 @@ export const insertSyncUpdate = (syncUpdate: SyncTable): Promise<void> => {
   });
 };
 
-export const syncPush = async () => {
-  for (const [tableName, createFunction] of Object.entries(apiFunctions)) {
-    const last_synced: string = await getSyncInfoForTable(tableName);
+export const processSyncPushOperation = async (
+  tableName: keyof typeof dbTables,
+  tableFunctions: SyncTableFunctions,
+  syncType: SyncType,
+  syncOperation: SyncOperation,
+) => {
+  const last_synced: string = await getLastSyncedForTable(
+    tableName,
+    syncType,
+    syncOperation,
+  );
+  const rowsToSync: (SyncCreateSchemas | SyncUpdateSchemas)[] =
+    await getRowsToSync(tableName, syncOperation, last_synced);
 
-    const rowsToSync: RowData[] = await getRowsToSync(tableName, last_synced);
+  if (rowsToSync.length === 0) {
+    logger.info(
+      `No rows to sync for table '${tableName} sync type '${syncType}' sync operation '${syncOperation}'.`,
+    );
+  } else {
+    // Get the last row in this ascending ordered batch
+    const lastRow: SyncCreateSchemas | SyncUpdateSchemas =
+      rowsToSync.slice(-1)[0];
 
-    if (rowsToSync.length === 0) {
-      console.log(`No rows to sync for table ${tableName} continuing...`);
-    } else {
-      const lastRow: RowData = rowsToSync.slice(-1)[0];
-
-      for (const row of rowsToSync) {
-        try {
-          const response: AxiosResponse<void> = await createFunction(row);
-
-          if (response.status === 204) {
-            console.log('Creating sync table entery');
-            insertSyncUpdate({
-              table_name: tableName,
-              last_synced: lastRow.created_at,
-              sync_type: 'push',
-            });
-          } else {
-            console.error('Unexpected response status code: ', response.status);
-          }
-        } catch (error) {
-          console.error('Error sending request:', error);
+    // Pushing a single row at a time to the backend
+    for (const row of rowsToSync) {
+      try {
+        const response: AxiosResponse<void> = await tableFunctions[
+          syncOperation
+        ](row);
+        if (response.status === 204) {
+          insertSyncUpdate({
+            table_name: tableName,
+            last_synced: lastRow.created_at,
+            sync_type: syncType,
+            sync_operation: syncOperation,
+          });
+        } else {
+          console.error('Unexpected response status code: ', response.status);
         }
+      } catch (error) {
+        console.error('Error sending request:', error);
       }
     }
+  }
+};
+
+export const processSyncPush = async () => {
+  for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
+    await processSyncPushOperation(
+      tableName as keyof typeof dbTables,
+      tableFunctions,
+      SyncType.Push,
+      SyncOperation.Creates,
+    );
+    await processSyncPushOperation(
+      tableName as keyof typeof dbTables,
+      tableFunctions,
+      SyncType.Push,
+      SyncOperation.Updates,
+    );
   }
 };

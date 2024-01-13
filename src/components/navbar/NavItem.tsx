@@ -41,7 +41,7 @@ interface NavItemProps {
  * <NavItem
  *     icon={'home'}
  *     label={'Home'}
- *     onPress={() => console.log('NavItem Pressed')}
+ *     onPress={() => logger.info('NavItem Pressed')}
  *     isActive={true}
  * />
  *

@@ -151,8 +151,8 @@ export const getCurrentRevision = (callback: RevisionCallback): void => {
         }
       },
       (error: Transaction) => {
-        console.log(`Unable to retrieve revision id. Error: ${error}`);
-        console.log('Starting from stratch...');
+        logger.info(`Unable to retrieve revision id. Error: ${error}`);
+        logger.info('Starting from stratch...');
         callback(null);
       },
     );
@@ -249,7 +249,7 @@ export const insertRows = async (
         );
       },
       (error: Transaction) => {
-        console.log('error: ', error);
+        logger.info('error: ', error);
         throw error;
       },
     );

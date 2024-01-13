@@ -51,7 +51,7 @@ interface LineGraphProps {
  * @function formatDate
  * @example
  * const date = formatDate(1620000000000);
- * console.log(date); // 1 Jan 2021
+ * logger.info(date); // 1 Jan 2021
  *
  * @param {number}  ms - The date in milliseconds
  * @returns  {string} - The formatted date string

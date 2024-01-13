@@ -38,7 +38,7 @@ interface UnitSelectorProps {
  * <UnitSelector
  *     units={['lbs', 'kg']}
  *     activeUnit={'lbs'}
- *     setActiveUnit={(unit) => console.log(unit)}
+ *     setActiveUnit={(unit) => logger.info(unit)}
  *     style={{backgroundColor: 'red'}}
  * />
  *

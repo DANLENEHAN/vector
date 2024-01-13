@@ -55,7 +55,7 @@ interface OptionGroupProps {
  *         {value: 'option3', label: 'Option 3'},
  *     ]}
  *     selectedOption={0}
- *     onOptionPress={(index) => console.log(index)}
+ *     onOptionPress={(index) => logger.info(index)}
  * />
  *
  * @param {Object} props - Component OptionGroup Props

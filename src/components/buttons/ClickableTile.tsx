@@ -64,7 +64,7 @@ export interface TileData {
  * @component ClickableTile
  * @example
  * <ClickableTile
- *   onPress={() => console.log('Tile Pressed')}
+ *   onPress={() => logger.info('Tile Pressed')}
  *   label={'Tile Label'}
  *   icon={'tile-icon'}
  *   backgroundColor={'red'}

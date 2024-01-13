@@ -44,7 +44,7 @@ interface SettingsOptionProps {
  * <SettingsOption
  *     icon={'home'}
  *     label={'Home'}
- *     onPress={() => console.log('SettingsOption Pressed')}
+ *     onPress={() => logger.info('SettingsOption Pressed')}
  *     fontColor={'red'}
  *     caret={true}
  *     logo_circle_color={'blue'}

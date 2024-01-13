@@ -24,7 +24,7 @@ interface ClickableLinkProps {
  * @component ClickableLink
  * @example
  * <ClickableLink
- *    onPress={() => console.log('Link Pressed')}
+ *    onPress={() => logger.info('Link Pressed')}
  *    text={'Link Text'}
  *    textStyle={{color: 'red'}}
  * />
