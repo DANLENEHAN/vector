@@ -1,6 +1,6 @@
 export const revisionID = '3d966cf7fd45';
 
-export const sqlCommands_13012024095954542949_3d966cf7fd45: string[] = [
+export const sqlCommands_13012024202737278387_3d966cf7fd45: string[] = [
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Clavicular Head)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Sternal Head)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Abdominal Head)');",
@@ -72,5 +72,5 @@ export const sqlCommands_13012024095954542949_3d966cf7fd45: string[] = [
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Traps', 'Trapezius (Upper)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Traps', 'Trapezius (Middle)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Traps', 'Trapezius (Lower)');",
-  "UPDATE alembic_version SET version_num='3d966cf7fd45' WHERE alembic_version.version_num = '8f9740b9152e';",
+  "UPDATE alembic_version SET version_num='3d966cf7fd45' WHERE alembic_version.version_num = 'd439349e101a';",
 ];

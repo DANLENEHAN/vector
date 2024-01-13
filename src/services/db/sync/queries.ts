@@ -48,6 +48,6 @@ export const getRowsToSyncQuery = (
     query += `WHERE ${timestampField} IS NOT NULL `;
   }
 
-  query += ` ORDER BY created_at ASC, updated_at ASC LIMIT ${syncBatchLimit};`;
+  query += ` ORDER BY ${timestampField} ASC LIMIT ${syncBatchLimit};`;
   return query;
 };

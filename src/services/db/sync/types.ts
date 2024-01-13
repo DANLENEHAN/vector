@@ -57,7 +57,7 @@ export interface SyncApiFunctions {
  */
 export interface SyncTable {
   table_name: string;
-  last_synced: string;
+  last_synced?: string | null;
   sync_type: SyncType;
   sync_operation: SyncOperation;
 }

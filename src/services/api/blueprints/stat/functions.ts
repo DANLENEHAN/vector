@@ -55,7 +55,6 @@ export const createNewStat = async ({
         user_id: user_id,
         value: value,
         created_at: currentTimestamp,
-        updated_at: currentTimestamp,
       },
     ]);
     navigation.goBack();

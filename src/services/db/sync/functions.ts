@@ -86,7 +86,7 @@ export const getRowsToSync = async (
           resolve(
             Array.from({length: result.rows.length}, (_, i) =>
               result.rows.item(i),
-            ),
+            ) || [],
           );
         },
         (error: Transaction) => {
@@ -104,7 +104,9 @@ export const getRowsToSync = async (
  * @returns {Promise<void>} A promise that resolves when the insertion or replacement is successful.
  * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
  */
-export const insertSyncUpdate = (syncUpdate: SyncTable): Promise<void> => {
+export const insertSyncUpdate = async (
+  syncUpdate: SyncTable,
+): Promise<void> => {
   const columns = `(${Object.keys(syncUpdate)
     .map(key => `'${key}'`)
     .join(', ')})`;
@@ -112,14 +114,19 @@ export const insertSyncUpdate = (syncUpdate: SyncTable): Promise<void> => {
     .map(() => '?')
     .join(', ')})`;
 
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     db.transaction((tx: Transaction) => {
       tx.executeSql(
         `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
         Object.values(syncUpdate),
-        () => {},
+        (_, resultSet: ResultSet) => {
+          // Check if the operation was successful (you might need to adjust this condition based on your logic)
+          if (resultSet.rowsAffected > 0) {
+            resolve(); // Resolve the Promise on success
+          }
+        },
         (error: Transaction) => {
-          console.error(error);
+          reject(error);
         },
       );
     });
@@ -167,23 +174,23 @@ export const processSyncPushOperation = async (
             syncOperation
           ](row);
 
-          if (response.status === 204) {
+          if (response.status === 201) {
             await insertSyncUpdate({
               table_name: tableName,
-              last_synced: lastRow.created_at,
+              last_synced: lastRow.created_at, // or updated at depending
               sync_type: syncType,
               sync_operation: syncOperation,
             });
           } else {
-            console.error('Unexpected response status code: ', response.status);
+            logger.error('Unexpected response status code: ', response.status);
           }
         } catch (error) {
-          console.error('Error sending request:', error);
+          logger.error('Error sending request:', error);
         }
       }
     }
   } catch (error) {
-    console.error('Error processing synchronization push operation:', error);
+    logger.error('Error processing synchronization push operation:', error);
     throw error;
   }
 };
@@ -208,7 +215,7 @@ export const processSyncPush = async (): Promise<void> => {
         SyncOperation.Creates,
       );
       logger.info(
-        `Successfully processed synchronization push for ${SyncOperation.Creates} on table: '${tableName}'`,
+        `Successfully processed synchronization push for '${SyncOperation.Creates}' on table: '${tableName}'`,
       );
 
       await processSyncPushOperation(
@@ -218,13 +225,13 @@ export const processSyncPush = async (): Promise<void> => {
         SyncOperation.Updates,
       );
       logger.info(
-        `Successfully processed synchronization push for ${SyncOperation.Updates} on table: '${tableName}'`,
+        `Successfully processed synchronization push for '${SyncOperation.Updates}' on table: '${tableName}'`,
       );
     }
 
     logger.info('Synchronization push completed successfully for all tables.');
   } catch (error) {
-    console.error('Error processing synchronization push:', error);
+    logger.error('Error processing synchronization push:', error);
     throw error;
   }
 };

@@ -110,7 +110,7 @@ export const runMigrations = (revisionId: string | null): void => {
             [],
             () => {},
             (error: Transaction) => {
-              console.error(`Error executing SQL for ${sqlCommand}:`, error);
+              logger.error(`Error executing SQL for ${sqlCommand}:`, error);
             },
           );
         });
