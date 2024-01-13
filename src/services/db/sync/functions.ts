@@ -177,7 +177,10 @@ export const processSyncPushOperation = async (
           if (response.status === 201) {
             await insertSyncUpdate({
               table_name: tableName,
-              last_synced: lastRow.created_at, // or updated at depending
+              last_synced:
+                syncOperation == SyncOperation.Creates
+                  ? lastRow.created_at
+                  : lastRow.updated_at,
               sync_type: syncType,
               sync_operation: syncOperation,
             });
