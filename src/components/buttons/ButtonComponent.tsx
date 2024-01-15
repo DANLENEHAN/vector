@@ -39,7 +39,7 @@ interface ButtonProps {
  * @component ButtonComponent
  * @example
  * <ButtonComponent
- *     onPress={() => console.log('Button Pressed')}
+ *     onPress={() => logger.info('Button Pressed')}
  *     disabled={false}
  *     text={'Button Text'}
  *     style={{backgroundColor: 'red'}}

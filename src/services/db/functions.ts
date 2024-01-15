@@ -10,7 +10,9 @@ import {alembicTable, RevisionCallback} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
-import {generateDeletionQuery} from '@services/db/queries/other';
+import {generateDeletionQuery} from '@services/db/queries';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 // Logger
 import logger from '@utils/logger';
 
@@ -107,7 +109,7 @@ export const runMigrations = (revisionId: string | null): void => {
             sqlCommand,
             [],
             () => {},
-            (_: any, error: any) => {
+            (error: Transaction) => {
               logger.error(`Error executing SQL for ${sqlCommand}:`, error);
             },
           );
@@ -148,7 +150,7 @@ export const getCurrentRevision = (callback: RevisionCallback): void => {
           logger.error('No revision id found.');
         }
       },
-      (_: Transaction, error: SQLError) => {
+      (error: Transaction) => {
         logger.info(`Unable to retrieve revision id. Error: ${error}`);
         logger.info('Starting from stratch...');
         callback(null);
@@ -212,9 +214,14 @@ export const deleteDB = (): void => {
 export const insertRows = async (
   tableName: string,
   data: RowData[],
+  insert_uuid: boolean = true,
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
+  }
+
+  if (insert_uuid === true) {
+    data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
 
   const schema = Object.keys(data[0]);
@@ -241,7 +248,8 @@ export const insertRows = async (
           } in '${tableName}'.`,
         );
       },
-      (_, error: SQLError) => {
+      (error: Transaction) => {
+        logger.info('error: ', error);
         throw error;
       },
     );

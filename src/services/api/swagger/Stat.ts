@@ -43,17 +43,17 @@ export class Stat<SecurityDataType = unknown> {
    * @description Delete a stat.
    *
    * @tags Stat
-   * @name DeleteDelete
+   * @name DeleteStringStatIdDelete
    * @summary Delete a stat.
-   * @request DELETE:/stat/delete/{stat_id}
+   * @request DELETE:/stat/delete/{string:stat_id}
    * @secure
    * @response `204` `void` Stat deleted successfully
    * @response `400` `void` Stat ID is required to delete a stat
    * @response `404` `void` Stat not found
    */
-  deleteDelete = (statId: number, params: RequestParams = {}) =>
+  deleteStringStatIdDelete = (statId: number, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/stat/delete/${statId}`,
+      path: `/stat/delete/{string${statId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
