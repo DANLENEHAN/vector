@@ -9,7 +9,7 @@
  * @example
  * // Example usage:
  * const tableName: dbTables = dbTables.syncTable;
- * console.log(`Selected table: ${tableName}`);
+ * logger.info(`Selected table: ${tableName}`);
  */
 export enum dbTables {
   syncTable = 'sync_table',
@@ -26,7 +26,7 @@ export enum dbTables {
  * @example
  * // Example usage:
  * const batchSize: number = syncBatchLimit;
- * console.log(`Synchronization batch size: ${batchSize}`);
+ * logger.info(`Synchronization batch size: ${batchSize}`);
  */
 export const syncBatchLimit: number = 100;
 
@@ -41,7 +41,7 @@ export const syncBatchLimit: number = 100;
  * @example
  * // Example usage:
  * const timestampField: timestampFields = timestampFields.updatedAt;
- * console.log(`Selected timestamp field: ${timestampField}`);
+ * logger.info(`Selected timestamp field: ${timestampField}`);
  */
 export enum timestampFields {
   createdAt = 'created_at',

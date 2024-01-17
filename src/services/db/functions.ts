@@ -199,17 +199,24 @@ export const deleteDB = (): void => {
 };
 
 /**
- * @description Inserts rows into the specified table using the provided data.
+ * Inserts rows into the specified table using the provided data.
  *
- * @param tableName The name of the table where the rows will be inserted.
- * @param data An array of RowData representing the rows to be inserted.
+ * @param {dbTables} tableName - The name of the table where the rows will be inserted.
+ * @param {RowData[]} data - An array of RowData representing the rows to be inserted.
+ * @param {boolean} [insert_uuid=true] - Optional parameter to insert UUIDs for each row. Defaults to true.
  * @returns {Promise<void>} A promise that resolves when the rows are successfully inserted.
  * @throws {Error} Throws an error with a message if no data is provided for insertion.
  * @throws {SQLError} Throws an error with details if the SQL execution encounters an issue.
  *
+ * @description
+ * This function inserts rows into the specified database table using the provided data.
+ * Optionally, it can insert UUIDs for each row if the `insert_uuid` parameter is true (default).
+ * The function throws an error if no data is provided for insertion or if there is an issue
+ * with the SQL execution, providing detailed information in the SQLError.
+ *
  * @example
  * // Example usage:
- * const tableName = 'my_table';
+ * const tableName = dbTables.myTable;
  * const data: RowData[] = [...]; // An array of RowData representing rows
  * await insertRows(tableName, data);
  */
@@ -222,6 +229,7 @@ export const insertRows = async (
     throw Error('No data to insert.');
   }
 
+  // Optionally insert UUIDs for each row.
   if (insert_uuid === true) {
     data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
@@ -245,13 +253,13 @@ export const insertRows = async (
       insertValues,
       () => {
         logger.info(
-          `Successfulling inserted ${data.length} row${
-            data.length > 1 ? 's' : ''
+          `Successfully inserted ${data.length} row${
+            data.length !== 1 ? 's' : ''
           } in '${tableName}'.`,
         );
       },
       (error: Transaction) => {
-        logger.info('error: ', error);
+        logger.error('Error during insertion: ', error);
         throw error;
       },
     );
@@ -261,11 +269,18 @@ export const insertRows = async (
 /**
  * Retrieve the timestamp for a specific row in the specified table.
  *
- * @param tableName - The name of the table.
- * @param timestampField - The timestamp field to retrieve ('created_at' or 'updated_at').
- * @param uuid - The UUID of the row.
+ * @param {dbTables} tableName - The name of the table.
+ * @param {timestampFields} timestampField - The timestamp field to retrieve ('created_at' or 'updated_at').
+ * @param {string} uuid - The UUID of the row.
  * @returns {Promise<string | null>} A promise that resolves with the timestamp or null if the row is not found.
  * @throws {Error} Throws an error if there is an issue fetching the timestamp.
+ *
+ * @description
+ * This function retrieves the timestamp for a specific row in the specified database table.
+ * It uses the provided UUID to identify the row and the timestampField to determine which
+ * timestamp to retrieve ('created_at' or 'updated_at'). The function returns the timestamp
+ * if the row is found, otherwise, it resolves with null. It throws an error if there is an issue
+ * fetching the timestamp from the database.
  *
  * @example
  * // Example usage:
@@ -289,10 +304,12 @@ const getTimestampForRow = async (
             const timestamp: string = result.rows.item(0)[timestampField];
             resolve(timestamp);
           } else {
+            // If the row is not found, resolve with null.
             resolve(null);
           }
         },
         (error: Transaction) => {
+          // If there is an issue fetching the timestamp, reject with an error.
           logger.error('Error fetching timestamp: ', error);
           reject(error);
         },
@@ -304,10 +321,15 @@ const getTimestampForRow = async (
 /**
  * Updates rows in the specified table based on the provided data.
  *
- * @param tableName - The name of the table.
- * @param data - An array of RowData representing the rows to be updated.
+ * @param {dbTables} tableName - The name of the table.
+ * @param {RowData[]} data - An array of RowData representing the rows to be updated.
  * @returns {Promise<void>} A promise that resolves when the rows are successfully updated.
  * @throws {Error} Throws an error if there is an issue updating the rows.
+ *
+ * @description
+ * This function updates rows in the specified database table based on the provided data.
+ * It determines whether to replace a row or skip it based on the timestamp comparison
+ * with the existing row in the database.
  *
  * @example
  * // Example usage:
@@ -359,13 +381,13 @@ export const updateRows = async (
                 resolve();
               },
               (error: Transaction) => {
-                logger.info('Error: ', error);
+                logger.error('Error updating rows: ', error);
                 reject(error);
               },
             );
           } else {
             logger.info(
-              `Current row with ${rowIdColumn} = '${rowId}' more up to date than pulled row... skipping.`,
+              `Current row with ${rowIdColumn} = '${rowId}' is more up-to-date than the pulled row... skipping.`,
             );
             resolve();
           }
@@ -378,7 +400,7 @@ export const updateRows = async (
 
   logger.info(
     `Successfully replaced ${replaceCount} row${
-      replaceCount > 1 ? 's' : ''
-    } in '${tableName}' out the ${data.length} pulled in the sync.`,
+      replaceCount !== 1 ? 's' : ''
+    } in '${tableName}' out of the ${data.length} pulled in the sync.`,
   );
 };
