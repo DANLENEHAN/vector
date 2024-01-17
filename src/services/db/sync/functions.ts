@@ -8,12 +8,12 @@ import {
   SyncCreateSchemas,
   SyncUpdateSchemas,
 } from './types';
-import {StatSchema} from '@services/api/swagger/data-contracts';
+import {StatSchema, QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@shared/enums';
-import {dbTables} from '@shared/contants';
+import {dbTables, timestampFields} from '@shared/contants';
 
 // Functions
-import {db} from '../functions';
+import {db, updateRows, insertRows} from '../functions';
 import api from '@services/api/apiService';
 import {Stat} from '@services/api/swagger/Stat';
 import {getLastSyncedForTableQuery, getRowsToSyncQuery} from './queries';
@@ -29,6 +29,8 @@ const apiFunctions: SyncApiFunctions = {
       StatApi.createCreate(data),
     [SyncOperation.Updates]: (data: StatSchema): Promise<AxiosResponse> =>
       StatApi.updateUpdate(data),
+    [SyncOperation.Gets]: (data: QuerySchema): Promise<AxiosResponse> =>
+      StatApi.postStat(data),
   },
 };
 
@@ -42,7 +44,7 @@ const apiFunctions: SyncApiFunctions = {
  * @throws {Error} If there is an issue with the database transaction or SQL execution.
  */
 export const getLastSyncedForTable = async (
-  tableName: string,
+  tableName: dbTables,
   syncType: SyncType,
   syncOperation: SyncOperation,
 ): Promise<string> => {
@@ -73,7 +75,7 @@ export const getLastSyncedForTable = async (
  * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
  */
 export const getRowsToSync = async (
-  tableName: string,
+  tableName: dbTables,
   syncOperation: SyncOperation,
   lastSyncTime?: string,
 ): Promise<(SyncCreateSchemas | SyncUpdateSchemas)[]> => {
@@ -143,15 +145,14 @@ export const insertSyncUpdate = async (
  * @throws {Error} If there are issues with retrieving data, sending requests, or updating the sync table.
  */
 export const processSyncPushOperation = async (
-  tableName: keyof typeof dbTables,
+  tableName: dbTables,
   tableFunctions: SyncTableFunctions,
-  syncType: SyncType,
   syncOperation: SyncOperation,
 ): Promise<void> => {
   try {
     const lastSynced: string = await getLastSyncedForTable(
       tableName,
-      syncType,
+      SyncType.Push,
       syncOperation,
     );
 
@@ -160,7 +161,7 @@ export const processSyncPushOperation = async (
 
     if (rowsToSync.length === 0) {
       logger.info(
-        `No rows to sync for table '${tableName}' sync type '${syncType}' sync operation '${syncOperation}'.`,
+        `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${syncOperation}'.`,
       );
     } else {
       // Get the last row in this ascending ordered batch
@@ -179,9 +180,9 @@ export const processSyncPushOperation = async (
               table_name: tableName,
               last_synced:
                 syncOperation == SyncOperation.Creates
-                  ? lastRow.created_at
-                  : lastRow.updated_at,
-              sync_type: syncType,
+                  ? lastRow[timestampFields.createdAt]
+                  : lastRow[timestampFields.createdAt],
+              sync_type: SyncType.Push,
               sync_operation: syncOperation,
             });
           } else {
@@ -191,6 +192,9 @@ export const processSyncPushOperation = async (
           logger.error('Error sending request:', error);
         }
       }
+      logger.info(
+        `Successfully processed synchronization ${SyncType.Push} for '${syncOperation}' on table: '${tableName}'`,
+      );
     }
   } catch (error) {
     logger.error('Error processing synchronization push operation:', error);
@@ -209,32 +213,159 @@ export const processSyncPushOperation = async (
 export const processSyncPush = async (): Promise<void> => {
   try {
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
-      logger.info(`Processing synchronization push for table: '${tableName}'`);
-
+      logger.info(
+        `Processing synchronization ${SyncType.Push} for table: '${tableName}'`,
+      );
       await processSyncPushOperation(
-        tableName as keyof typeof dbTables,
+        tableName as dbTables,
         tableFunctions,
-        SyncType.Push,
         SyncOperation.Creates,
       );
-      logger.info(
-        `Successfully processed synchronization push for '${SyncOperation.Creates}' on table: '${tableName}'`,
-      );
 
       await processSyncPushOperation(
-        tableName as keyof typeof dbTables,
+        tableName as dbTables,
         tableFunctions,
-        SyncType.Push,
         SyncOperation.Updates,
-      );
-      logger.info(
-        `Successfully processed synchronization push for '${SyncOperation.Updates}' on table: '${tableName}'`,
       );
     }
 
-    logger.info('Synchronization push completed successfully for all tables.');
+    logger.info(
+      `Synchronization ${SyncType.Push} completed successfully for all tables.`,
+    );
   } catch (error) {
-    logger.error('Error processing synchronization push:', error);
+    logger.error(`Error processing synchronization ${SyncType.Push}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Generate a query object for synchronizing a table based on the last synchronization time.
+ *
+ * @param {string} tableName - The name of the table for which to generate the query.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @returns {Promise<QuerySchema>} A promise that resolves with the generated query schema.
+ *
+ * @throws {Error} Throws an error if there is an issue fetching the last synchronization time.
+ *
+ * @example
+ * // Example usage:
+ * const tableName = 'statTable';
+ * const syncOperation = SyncOperation.Creates;
+ * const queryObj = await getQueryObjForTable(tableName, syncOperation);
+ */
+const getQueryObjForTable = async (
+  tableName: dbTables,
+  syncOperation: SyncOperation,
+): Promise<QuerySchema> => {
+  const lastSynced: string = await getLastSyncedForTable(
+    tableName,
+    SyncType.Pull,
+    syncOperation,
+  );
+
+  const timstampField = `${
+    syncOperation === 'creates'
+      ? timestampFields.createdAt
+      : timestampFields.updatedAt
+  }`;
+  const condition = lastSynced === undefined ? {ne: null} : {gt: lastSynced};
+
+  return {
+    filters: {
+      [timstampField]: condition,
+    },
+    sort: [`${timstampField}:asc`],
+  } as QuerySchema;
+};
+
+/**
+ * Process a synchronization pull operation for a specific table.
+ *
+ * @param {keyof typeof dbTables} tableName - The name of the table to sync.
+ * @param {SyncTableFunctions} tableFunctions - Object containing sync functions for the table.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @returns {Promise<void>} A promise that resolves when the synchronization pull operation is completed.
+ *
+ * @throws {Error} Throws an error if there is an issue with the synchronization process.
+ *
+ * @example
+ * // Example usage:
+ * const tableName = 'statTable';
+ * const tableFunctions = { Gets: yourGetFunction };
+ * const syncOperation = SyncOperation.Creates;
+ * await processSyncPullOperation(tableName, tableFunctions, syncOperation);
+ */
+const processSyncPullOperation = async (
+  tableName: dbTables,
+  tableFunctions: SyncTableFunctions,
+  syncOperation: SyncOperation,
+): Promise<void> => {
+  const tableQuerySchema: QuerySchema = await getQueryObjForTable(
+    tableName,
+    syncOperation,
+  );
+
+  const response: AxiosResponse<SyncCreateSchemas[]> = await tableFunctions[
+    SyncOperation.Gets
+  ](tableQuerySchema);
+
+  const rowsToSync = response.data;
+  if (rowsToSync.length === 0) {
+    logger.info(
+      `No rows to sync for table '${tableName}' sync type '${SyncType.Pull}' sync operation '${syncOperation}'.`,
+    );
+  } else {
+    if (syncOperation == SyncOperation.Creates) {
+      await insertRows(tableName, rowsToSync);
+    } else {
+      await updateRows(tableName, rowsToSync);
+    }
+    await insertSyncUpdate({
+      table_name: tableName,
+      last_synced:
+        syncOperation == SyncOperation.Creates
+          ? rowsToSync.slice(-1)[0][timestampFields.createdAt]
+          : rowsToSync.slice(-1)[0][timestampFields.updatedAt],
+      sync_type: SyncType.Pull,
+      sync_operation: syncOperation,
+    });
+    logger.info(
+      `Successfully processed synchronization ${SyncType.Pull} for '${syncOperation}' on table: '${tableName}'`,
+    );
+  }
+};
+
+/**
+ * Process synchronization pull for all tables.
+ *
+ * Iterates through the tables defined in the `apiFunctions` object and performs synchronization
+ * pull operations for both create and update operations.
+ *
+ * @throws {Error} If there are issues with processing synchronization pull operations for any table.
+ */
+export const processSyncPull = async (): Promise<void> => {
+  try {
+    for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
+      logger.info(
+        `Processing synchronization ${SyncType.Pull} for table: '${tableName}'`,
+      );
+      await processSyncPullOperation(
+        tableName as dbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
+
+      await processSyncPullOperation(
+        tableName as dbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
+    }
+    logger.info(
+      `Synchronization ${SyncType.Pull} completed successfully for all tables.`,
+    );
+  } catch (error) {
+    logger.error(`Error processing synchronization ${SyncType.Pull}:`, error);
     throw error;
   }
 };

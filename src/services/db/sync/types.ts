@@ -1,7 +1,7 @@
 import {AxiosResponse} from 'axios';
 import {SyncOperation, SyncType} from '@shared/enums';
 import {dbTables} from '@shared/contants';
-import {StatSchema} from '@services/api/swagger/data-contracts';
+import {StatSchema, QuerySchema} from '@services/api/swagger/data-contracts';
 
 /**
  * Represents a schema for data that can be synchronized during a create operation.
@@ -28,10 +28,14 @@ export type SyncUpdateSchemas = StatSchema;
  *
  * @property {function(data: SyncCreateSchemas): Promise<AxiosResponse>} Creates - Function for creating records.
  * @property {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} Updates - Function for updating records.
+ * @property {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} Get - Function for getting records.
  */
 export interface SyncTableFunctions {
   [SyncOperation.Creates]: (data: SyncCreateSchemas) => Promise<AxiosResponse>;
   [SyncOperation.Updates]: (data: SyncUpdateSchemas) => Promise<AxiosResponse>;
+  [SyncOperation.Gets]: (
+    data: QuerySchema,
+  ) => Promise<AxiosResponse<SyncCreateSchemas[]>>;
 }
 
 /**

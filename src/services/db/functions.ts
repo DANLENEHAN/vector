@@ -8,9 +8,11 @@ import RNFS from 'react-native-fs';
 // Types
 import {alembicTable, RevisionCallback} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
+import {dbTables, timestampFields} from '@shared/contants';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
 import {generateDeletionQuery} from '@services/db/queries';
+import {getRowByIdQuery} from './sync/queries';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 // Logger
@@ -212,7 +214,7 @@ export const deleteDB = (): void => {
  * await insertRows(tableName, data);
  */
 export const insertRows = async (
-  tableName: string,
+  tableName: dbTables,
   data: RowData[],
   insert_uuid: boolean = true,
 ): Promise<void> => {
@@ -254,4 +256,129 @@ export const insertRows = async (
       },
     );
   });
+};
+
+/**
+ * Retrieve the timestamp for a specific row in the specified table.
+ *
+ * @param tableName - The name of the table.
+ * @param timestampField - The timestamp field to retrieve ('created_at' or 'updated_at').
+ * @param uuid - The UUID of the row.
+ * @returns {Promise<string | null>} A promise that resolves with the timestamp or null if the row is not found.
+ * @throws {Error} Throws an error if there is an issue fetching the timestamp.
+ *
+ * @example
+ * // Example usage:
+ * const tableName = dbTables.statTable;
+ * const timestampField = timestampFields.updatedAt;
+ * const uuid = 'some_uuid';
+ * const timestamp: string | null = await getTimestampForRow(tableName, timestampField, uuid);
+ */
+const getTimestampForRow = async (
+  tableName: dbTables,
+  timestampField: timestampFields,
+  uuid: string,
+): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: Transaction) => {
+      tx.executeSql(
+        getRowByIdQuery(tableName, uuid),
+        [],
+        (_: Transaction, result: ResultSet) => {
+          if (result.rows.length > 0) {
+            const timestamp: string = result.rows.item(0)[timestampField];
+            resolve(timestamp);
+          } else {
+            resolve(null);
+          }
+        },
+        (error: Transaction) => {
+          logger.error('Error fetching timestamp: ', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+/**
+ * Updates rows in the specified table based on the provided data.
+ *
+ * @param tableName - The name of the table.
+ * @param data - An array of RowData representing the rows to be updated.
+ * @returns {Promise<void>} A promise that resolves when the rows are successfully updated.
+ * @throws {Error} Throws an error if there is an issue updating the rows.
+ *
+ * @example
+ * // Example usage:
+ * const tableName = dbTables.statTable;
+ * const data: RowData[] = [...]; // An array of RowData representing rows
+ * await updateRows(tableName, data);
+ */
+export const updateRows = async (
+  tableName: dbTables,
+  data: RowData[],
+): Promise<void> => {
+  if (data.length === 0) {
+    logger.warn('No data to update.');
+  }
+
+  let replaceCount = 0;
+  const schema = Object.keys(data[0]);
+
+  const columns = schema.join(', ');
+  const placeholders = `(${Object.keys(schema)
+    .map(() => '?')
+    .join(', ')})`;
+
+  const updatePromises: Promise<void>[] = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const newRowObject = data[i];
+    const rowIdColumn = `${tableName}_id`;
+    const rowId = data[i][rowIdColumn];
+
+    const currentRowTimestamp = await getTimestampForRow(
+      tableName,
+      timestampFields.updatedAt,
+      rowId,
+    );
+
+    updatePromises.push(
+      new Promise<void>((resolve, reject) => {
+        db.transaction((tx: Transaction) => {
+          if (
+            currentRowTimestamp === null ||
+            newRowObject[timestampFields.updatedAt] > currentRowTimestamp
+          ) {
+            tx.executeSql(
+              `REPLACE INTO ${tableName} (${columns}) VALUES ${placeholders}`,
+              Object.values(newRowObject),
+              () => {
+                replaceCount++;
+                resolve();
+              },
+              (error: Transaction) => {
+                logger.info('Error: ', error);
+                reject(error);
+              },
+            );
+          } else {
+            logger.info(
+              `Current row with ${rowIdColumn} = '${rowId}' more up to date than pulled row... skipping.`,
+            );
+            resolve();
+          }
+        });
+      }),
+    );
+  }
+
+  await Promise.all(updatePromises);
+
+  logger.info(
+    `Successfully replaced ${replaceCount} row${
+      replaceCount > 1 ? 's' : ''
+    } in '${tableName}' out the ${data.length} pulled in the sync.`,
+  );
 };
