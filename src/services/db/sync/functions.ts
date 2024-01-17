@@ -356,7 +356,7 @@ const processSyncPullOperation = async (
     );
   } else {
     if (syncOperation === SyncOperation.Creates) {
-      await insertRows(tableName, rowsToSync);
+      await insertRows(tableName, rowsToSync, false);
     } else {
       await updateRows(tableName, rowsToSync);
     }

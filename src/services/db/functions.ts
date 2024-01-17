@@ -234,35 +234,41 @@ export const insertRows = async (
     data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
 
-  const schema = Object.keys(data[0]);
+  return new Promise((resolve, reject) => {
+    const schema = Object.keys(data[0]);
 
-  db.transaction((tx: Transaction) => {
-    const columns = schema.join(', ');
-    const placeholders = data
-      .map(
-        () =>
-          `(${Object.keys(schema)
-            .map(() => '?')
-            .join(', ')})`,
-      )
-      .join(', ');
-    const insertValues = data.flatMap(value => Object.values(value));
+    db.transaction((tx: Transaction) => {
+      const columns = schema.join(', ');
+      const placeholders = data
+        .map(
+          () =>
+            `(${Object.keys(schema)
+              .map(() => '?')
+              .join(', ')})`,
+        )
+        .join(', ');
+      const insertValues = data.flatMap(value => Object.values(value));
 
-    tx.executeSql(
-      `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
-      insertValues,
-      () => {
-        logger.info(
-          `Successfully inserted ${data.length} row${
-            data.length !== 1 ? 's' : ''
-          } in '${tableName}'.`,
-        );
-      },
-      (error: Transaction) => {
-        logger.error('Error during insertion: ', error);
-        throw error;
-      },
-    );
+      tx.executeSql(
+        `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
+        insertValues,
+        () => {
+          // Transaction success callback
+          logger.info(
+            `Successfully inserted ${data.length} row${
+              data.length !== 1 ? 's' : ''
+            } in '${tableName}'.`,
+          );
+          resolve(); // Resolve the promise on success
+        },
+        (error: Transaction) => {
+          // Transaction error callback
+          logger.error('Error during insertion: ', error);
+          reject(error); // Reject the promise on error
+          throw error;
+        },
+      );
+    });
   });
 };
 
