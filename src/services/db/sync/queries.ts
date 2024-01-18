@@ -1,5 +1,5 @@
 import {SyncOperation, SyncType} from '@shared/enums';
-import {syncBatchLimit} from '@shared/contants';
+import {syncBatchLimit, timestampFields} from '@shared/contants';
 
 /**
  * Generate a SQL query to retrieve the last synced timestamp for a specific table, sync type, and sync operation.
@@ -38,7 +38,9 @@ export const getRowsToSyncQuery = (
   `;
 
   const timestampField =
-    syncOperation === SyncOperation.Creates ? 'created_at' : 'updated_at';
+    syncOperation === SyncOperation.Creates
+      ? timestampFields.createdAt
+      : timestampFields.updatedAt;
 
   if (lastSyncTime !== undefined) {
     query += `WHERE ${timestampField} > '${lastSyncTime}' `;
@@ -50,4 +52,31 @@ export const getRowsToSyncQuery = (
 
   query += ` ORDER BY ${timestampField} ASC LIMIT ${syncBatchLimit};`;
   return query;
+};
+
+/**
+ * Constructs a SQL query to retrieve a row by its UUID from a specified table.
+ *
+ * @param tableName - The name of the table from which to retrieve the row.
+ * @param uuid - The UUID of the row to be retrieved.
+ * @param idColumn - Optional. The column representing the UUID in the table.
+ *                   Defaults to `${tableName}_id` if not provided.
+ * @returns A SQL query string with placeholders for parameters.
+ *
+ * @example
+ * // Example usage:
+ * const tableName = 'my_table';
+ * const uuid = 'some-uuid';
+ * const query = getRowByIdQuery(tableName, uuid);
+ * // Execute the query using your database library and provide the UUID as a parameter.
+ */
+export const getRowByIdQuery = (
+  tableName: string,
+  uuid: string,
+  idColumn?: string,
+) => {
+  if (idColumn === undefined) {
+    idColumn = `${tableName}_id`;
+  }
+  return `SELECT * FROM ${tableName} WHERE ${idColumn} = '${uuid}';`;
 };

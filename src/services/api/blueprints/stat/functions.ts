@@ -5,6 +5,7 @@ import {getStats} from '@services/api/blueprints/stat/api';
 import {StatType, StatSchema} from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/types';
 import {insertStat} from '@services/db/stat/functions';
+import {timestampFields} from '@shared/contants';
 // Logger
 import logger from '@utils/logger';
 
@@ -54,7 +55,7 @@ export const createNewStat = async ({
         stat_type: statType,
         user_id: user_id,
         value: value,
-        created_at: currentTimestamp,
+        [timestampFields.createdAt]: currentTimestamp,
       },
     ]);
     navigation.goBack();
@@ -92,7 +93,7 @@ export const getUserStats = async ({statType}: GetUserStatsParams) => {
         user_id: {eq: user_id},
         stat_type: {eq: statType},
       },
-      sort: ['created_at:desc'],
+      sort: [`${timestampFields.createdAt}:desc`],
     });
     if (response instanceof SwaggerValidationError) {
       logger.error(`Error: ${response.message}`);
