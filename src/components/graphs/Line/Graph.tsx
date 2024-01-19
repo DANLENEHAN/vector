@@ -23,7 +23,6 @@ import ToolTip from '@components/graphs/Line/Tooltip';
 import {AverageValueText} from '@components/graphs/Line/AverageValue';
 // Utils
 import {useFont} from '@shopify/react-native-skia';
-import {format} from 'date-fns';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
 import {graphDataPoint} from '@components/graphs/Line/types';
@@ -53,19 +52,24 @@ interface LineGraphProps {
  * const date = formatDate(1620000000000);
  * logger.info(date); // 1 Jan 2021
  *
- * @param {number}  ms - The date in milliseconds
- * @returns  {string} - The formatted date string
+ * @param {number} ms - The date in milliseconds
+ * @param {Intl.DateTimeFormatOptions} [options] - Optional formatting options
+ * @returns {string} - The formatted date string
  */
-const formatDate = (ms: number): string => {
+const formatDate = (
+  ms: number,
+  options?: Intl.DateTimeFormatOptions,
+): string => {
   'worklet';
 
   const date = new Date(ms);
-  const options: Intl.DateTimeFormatOptions = {
+  const defaultOptions: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',
-    year: 'numeric',
   };
-  const dateFormatter = new Intl.DateTimeFormat('en-GB', options);
+
+  const mergedOptions = {...defaultOptions, ...options};
+  const dateFormatter = new Intl.DateTimeFormat('en-GB', mergedOptions);
 
   return dateFormatter.format(date);
 };
@@ -125,7 +129,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
       if (idx === undefined || idx === null) {
         return '-';
       }
-      const currDate = formatDate(idx);
+      const currDate = formatDate(idx, {year: 'numeric'});
       return currDate;
     }
     // If graph not clicked
@@ -177,7 +181,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
             lineColor: currentTheme.borders,
             labelColor: {x: currentTheme.text, y: currentTheme.text},
             // Function converts the date to a string
-            formatXLabel: ms => format(new Date(ms), 'd MMM'),
+            formatXLabel: ms => formatDate(ms),
           }}
           // Render the tooltip if the graph is clicked
           renderOutside={({chartBounds}) => (

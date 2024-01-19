@@ -14,7 +14,7 @@ import {convertStats} from '@utils/conversion';
 // Types
 import {ScreenProps} from '@screens/types';
 import {
-  StatSchema,
+  StatCreateSchema,
   StatType,
   WaterUnit,
 } from '@services/api/swagger/data-contracts';
@@ -31,7 +31,7 @@ import {
  * <WaterProgress navigation={navigation}/>
  */
 const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
-  const [data, setData] = useState<StatSchema[]>([]);
+  const [data, setData] = useState<StatCreateSchema[]>([]);
   useEffect(() => {
     const getUserWater = async () => {
       // NOTE: This is a temporary solution until we have a user profile page

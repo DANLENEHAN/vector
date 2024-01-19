@@ -1,11 +1,15 @@
-// Services
+// Functions
 import {getUserDetails} from '@services/asyncStorage/functions';
 import {getStats} from '@services/api/blueprints/stat/api';
+import {getCurrentTimestampTimezone} from '@services/date/functions';
+
 // Types
-import {StatType, StatSchema} from '@services/api/swagger/data-contracts';
+import {StatType, StatCreateSchema} from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/types';
 import {insertStat} from '@services/db/stat/functions';
 import {timestampFields} from '@shared/contants';
+import {TimestampTimezone} from '@services/date/type';
+
 // Logger
 import logger from '@utils/logger';
 
@@ -21,7 +25,7 @@ export interface CreateNewStatParams {
   value: number;
   navigation: any;
   statType: StatType;
-  unitValue: StatSchema['unit'];
+  unitValue: StatCreateSchema['unit'];
 }
 
 /**
@@ -45,17 +49,19 @@ export const createNewStat = async ({
   navigation,
   statType,
   unitValue,
-}: CreateNewStatParams) => {
+}: CreateNewStatParams): Promise<void> => {
   try {
     const user_id = await getUserDetails('user_id');
-    const currentTimestamp: string = new Date().getTime().toString();
+    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+
     await insertStat([
       {
         unit: unitValue,
         stat_type: statType,
         user_id: user_id,
         value: value,
-        [timestampFields.createdAt]: currentTimestamp,
+        [timestampFields.createdAt]: timestampTimezone.timestamp,
+        [timestampFields.timezone]: timestampTimezone.timezone,
       },
     ]);
     navigation.goBack();
@@ -76,7 +82,7 @@ export interface GetUserStatsParams {
  * @description Get the stats.
  *
  * @param {Object} GetUserStatsParams  The interface parameters.
- * @returns {Promise<StatSchema[] | undefined>} A promise that resolves with the stats.
+ * @returns {Promise<StatCreateSchema[] | undefined>} A promise that resolves with the stats.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  *
  * @example
@@ -85,7 +91,9 @@ export interface GetUserStatsParams {
  *
  */
 
-export const getUserStats = async ({statType}: GetUserStatsParams) => {
+export const getUserStats = async ({
+  statType,
+}: GetUserStatsParams): Promise<StatCreateSchema[] | undefined> => {
   try {
     const user_id = await getUserDetails('user_id');
     const response = await getStats({

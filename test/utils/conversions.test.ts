@@ -1,6 +1,6 @@
 import {convertStats} from '@utils/conversion';
 import {
-  StatSchema,
+  StatCreateSchema,
   StatType,
   WeightUnit,
 } from '@services/api/swagger/data-contracts';
@@ -14,7 +14,7 @@ describe('convertStats', () => {
         unit: WeightUnit.Kg,
         user_id: 1,
         value: 1,
-      } as StatSchema,
+      } as StatCreateSchema,
     ];
 
     // Act
@@ -30,7 +30,7 @@ describe('convertStats', () => {
         unit: WeightUnit.Lbs,
         user_id: 1,
         value: 2.2,
-      } as StatSchema,
+      } as StatCreateSchema,
     ]);
   });
   it('Converts weight from kg to stone', () => {
@@ -41,7 +41,7 @@ describe('convertStats', () => {
         unit: WeightUnit.Kg,
         user_id: 1,
         value: 1,
-      } as StatSchema,
+      } as StatCreateSchema,
     ];
 
     // Act
@@ -57,7 +57,7 @@ describe('convertStats', () => {
         unit: WeightUnit.Stone,
         user_id: 1,
         value: 0.16,
-      } as StatSchema,
+      } as StatCreateSchema,
     ]);
   });
 });

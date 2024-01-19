@@ -1,6 +1,6 @@
-export const revisionID = 'd439349e101a';
+export const revisionID = 'ea7213f41859';
 
-export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
+export const sqlCommands_19012024090310986101_ea7213f41859: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL, 
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -23,6 +23,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    type VARCHAR(50), 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (equipment_id)
 	);`,
   `CREATE TABLE sync_table (
@@ -57,6 +58,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    superuser BOOLEAN NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (user_id), 
 	    UNIQUE (email)
 	);`,
@@ -71,6 +73,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    laterality VARCHAR(50) NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (exercise_id), 
 	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
 	);`,
@@ -83,6 +86,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    goal VARCHAR(50), 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (plan_id), 
 	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
 	);`,
@@ -96,6 +100,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    stat_type VARCHAR(50) NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (stat_id), 
 	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
 	);`,
@@ -123,6 +128,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    plan_id INTEGER NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (plan_component_id), 
 	    FOREIGN KEY(plan_id) REFERENCES plan (plan_id)
 	);`,
@@ -141,6 +147,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    plan_component_id INTEGER, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (workout_id), 
 	    FOREIGN KEY(created_by) REFERENCES user_account (user_id), 
 	    FOREIGN KEY(plan_component_id) REFERENCES plan_component (plan_component_id)
@@ -158,6 +165,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    workout_id INTEGER NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (workout_component_id), 
 	    FOREIGN KEY(workout_id) REFERENCES workout (workout_id)
 	);`,
@@ -174,6 +182,7 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    workout_component_id INTEGER NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (set_id), 
 	    FOREIGN KEY(workout_component_id) REFERENCES workout_component (workout_component_id)
 	);`,
@@ -198,9 +207,10 @@ export const sqlCommands_13012024202736957311_d439349e101a: string[] = [
 	    exercise_id INTEGER NOT NULL, 
 	    created_at TIMESTAMP NOT NULL, 
 	    updated_at TIMESTAMP, 
+	    timezone VARCHAR(100) NOT NULL, 
 	    PRIMARY KEY (set_component_id), 
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id), 
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('d439349e101a');",
+  "INSERT INTO alembic_version (version_num) VALUES ('ea7213f41859');",
 ];

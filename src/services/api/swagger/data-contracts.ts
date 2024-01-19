@@ -90,10 +90,10 @@ export interface EquipmentCreateSchema {
   brand?: string | null;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @example "A pair of 10lb dumbbells"
@@ -129,6 +129,11 @@ export interface EquipmentCreateSchema {
    */
   name: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Type
    * @default null
    * @example "Dumbbell"
@@ -137,7 +142,7 @@ export interface EquipmentCreateSchema {
   /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -155,10 +160,10 @@ export interface EquipmentGetSchema {
   brand?: string | null;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @example "A pair of 10lb dumbbells"
@@ -200,6 +205,11 @@ export interface EquipmentGetSchema {
    */
   name: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Type
    * @default null
    * @example "Dumbbell"
@@ -208,7 +218,7 @@ export interface EquipmentGetSchema {
   /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -225,12 +235,6 @@ export interface EquipmentUpdateSchema {
    */
   brand?: string | null;
   /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
-  /**
    * Description
    * @example "A pair of 10lb dumbbells"
    */
@@ -278,10 +282,10 @@ export interface EquipmentUpdateSchema {
   type?: string | null;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
 }
 
 /**
@@ -372,10 +376,10 @@ export interface ExerciseCreateSchema {
   category: string;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @example "This exercise is a compound exercise"
@@ -396,9 +400,14 @@ export interface ExerciseCreateSchema {
    */
   name: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -476,10 +485,10 @@ export interface ExerciseGetSchema {
   category: string;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * @example 1
@@ -510,9 +519,14 @@ export interface ExerciseGetSchema {
    */
   name: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -527,12 +541,6 @@ export interface ExerciseUpdateSchema {
    * @example "Compound"
    */
   category: string;
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Description
    * @example "This exercise is a compound exercise"
@@ -559,10 +567,10 @@ export interface ExerciseUpdateSchema {
   name: string;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
 }
 
 /**
@@ -638,10 +646,10 @@ export enum MuscleGroup {
 export interface PlanComponentCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * The description of the plan component
@@ -664,9 +672,14 @@ export interface PlanComponentCreateSchema {
    */
   plan_id: number;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -678,10 +691,10 @@ export interface PlanComponentCreateSchema {
 export interface PlanComponentGetSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * The description of the plan component
@@ -711,9 +724,14 @@ export interface PlanComponentGetSchema {
    */
   plan_id: number;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -723,12 +741,6 @@ export interface PlanComponentGetSchema {
  * Validation schema for the Plan Component model.
  */
 export interface PlanComponentUpdateSchema {
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Description
    * The description of the plan component
@@ -759,10 +771,10 @@ export interface PlanComponentUpdateSchema {
   plan_id: number;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
 }
 
 /**
@@ -772,10 +784,10 @@ export interface PlanComponentUpdateSchema {
 export interface PlanCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * The user_id of the user who created the plan
@@ -807,9 +819,14 @@ export interface PlanCreateSchema {
    */
   name: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -821,10 +838,10 @@ export interface PlanCreateSchema {
 export interface PlanGetSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * The user_id of the user who created the plan
@@ -863,9 +880,14 @@ export interface PlanGetSchema {
    */
   plan_id: number;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -876,12 +898,6 @@ export interface PlanGetSchema {
  */
 export interface PlanUpdateSchema {
   /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
-  /**
    * Created By
    * The user_id of the user who created the plan
    * @min 0
@@ -920,10 +936,10 @@ export interface PlanUpdateSchema {
   plan_id: number;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
 }
 
 /**
@@ -965,10 +981,10 @@ export interface QuerySchema {
 export interface SetComponentCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -1053,9 +1069,14 @@ export interface SetComponentCreateSchema {
    */
   tempo?: string | null;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1073,12 +1094,6 @@ export interface SetComponentCreateSchema {
  * Schema to validate the set component get response schema
  */
 export interface SetComponentGetSchema {
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Description
    * @default null
@@ -1170,10 +1185,10 @@ export interface SetComponentGetSchema {
   tempo?: string | null;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Weight
    * @min 0
@@ -1193,10 +1208,10 @@ export interface SetComponentGetSchema {
 export interface SetComponentTreeCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -1275,9 +1290,14 @@ export interface SetComponentTreeCreateSchema {
    */
   tempo?: string | null;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1295,12 +1315,6 @@ export interface SetComponentTreeCreateSchema {
  * Schema to validate the set component update schema
  */
 export interface SetComponentUpdateSchema {
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Description
    * @default null
@@ -1386,10 +1400,10 @@ export interface SetComponentUpdateSchema {
   tempo?: string | null;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Weight
    * @min 0
@@ -1407,10 +1421,10 @@ export interface SetComponentUpdateSchema {
 export interface SetCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * End Time
    * @format date-time
@@ -1446,9 +1460,14 @@ export interface SetCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1466,10 +1485,10 @@ export interface SetCreateSchema {
 export interface SetGetSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Duration
    * @min 0
@@ -1517,9 +1536,14 @@ export interface SetGetSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1540,10 +1564,10 @@ export interface SetGetSchema {
 export interface SetTreeCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * End Time
    * @format date-time
@@ -1581,9 +1605,14 @@ export interface SetTreeCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -1599,10 +1628,10 @@ export interface SetTreeCreateSchema {
 export interface SetTreeRootCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * End Time
    * @format date-time
@@ -1640,9 +1669,14 @@ export interface SetTreeRootCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1658,12 +1692,6 @@ export interface SetTreeRootCreateSchema {
  * Schema to validate the set update schema
  */
 export interface SetUpdateSchema {
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Name
    * @example "Dan's straight set"
@@ -1694,10 +1722,10 @@ export interface SetUpdateSchema {
   set_id: number;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Workout Component Id
    * @min 0
@@ -1718,16 +1746,92 @@ export enum SeverityLevel {
 }
 
 /**
- * StatSchema
+ * StatCreateSchema
  * Validation schema for the Stat model.
  */
-export interface StatSchema {
+export interface StatCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
+  /**
+   * Note
+   * The note of the stat
+   * @default null
+   * @example "I feel great!"
+   */
+  note?: string | null;
+  /**
+   * Stat Id
+   * Unique uuid for a stat entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  stat_id?: string | null;
+  /**
+   * The type of the stat
+   * @example "weight"
+   */
+  stat_type: StatType;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Unit
+   * The unit of the stat
+   * @maxLength 50
+   * @example "kg"
+   */
+  unit:
+    | CaloriesUnit
+    | FeelingUnit
+    | HeightUnit
+    | StepsUnit
+    | WaterUnit
+    | WeightUnit;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the stat
+   * @min 0
+   * @example 1
+   */
+  value: number;
+}
+
+/**
+ * StatType
+ * Stat types.
+ */
+export enum StatType {
+  Height = 'height',
+  Weight = 'weight',
+  Feeling = 'feeling',
+  Water = 'water',
+  Calories = 'calories',
+  Steps = 'steps',
+}
+
+/**
+ * StatUpdateSchema
+ * A class representing the schema for updating statistics,
+ * inheriting from StatCreateSchema and SyncUpdateModel.
+ */
+export interface StatUpdateSchema {
   /**
    * Note
    * The note of the stat
@@ -1761,10 +1865,10 @@ export interface StatSchema {
     | WeightUnit;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * User Id
    * The user_id of the stat
@@ -1778,19 +1882,6 @@ export interface StatSchema {
    * @example 1
    */
   value: number;
-}
-
-/**
- * StatType
- * Stat types.
- */
-export enum StatType {
-  Height = 'height',
-  Weight = 'weight',
-  Feeling = 'feeling',
-  Water = 'water',
-  Calories = 'calories',
-  Steps = 'steps',
 }
 
 /**
@@ -1896,10 +1987,10 @@ export interface UserCreateSchema {
   birthday: string;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /** Accepted date formats. */
   date_format_pref: DateFormat;
   /**
@@ -1963,9 +2054,14 @@ export interface UserCreateSchema {
   /** @default "active" */
   status?: ProfileStatus;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -1999,10 +2095,10 @@ export interface UserGetSchema {
   birthday: string;
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /** Accepted date formats. */
   date_format_pref: DateFormat;
   /**
@@ -2058,9 +2154,14 @@ export interface UserGetSchema {
   /** @default "active" */
   status?: ProfileStatus;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -2098,12 +2199,6 @@ export interface UserUpdateSchema {
    * @example "1997-05-18"
    */
   birthday: string;
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /** Accepted date formats. */
   date_format_pref: DateFormat;
   /**
@@ -2160,10 +2255,10 @@ export interface UserUpdateSchema {
   status?: ProfileStatus;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Username
    * @minLength 8
@@ -2203,10 +2298,10 @@ export enum WeightUnit {
 export interface WorkoutComponentCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -2249,9 +2344,14 @@ export interface WorkoutComponentCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -2269,10 +2369,10 @@ export interface WorkoutComponentCreateSchema {
 export interface WorkoutComponentGetSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -2321,9 +2421,14 @@ export interface WorkoutComponentGetSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -2350,10 +2455,10 @@ export interface WorkoutComponentGetSchema {
 export interface WorkoutComponentTreeCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -2398,9 +2503,14 @@ export interface WorkoutComponentTreeCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -2416,10 +2526,10 @@ export interface WorkoutComponentTreeCreateSchema {
 export interface WorkoutComponentTreeRootCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Description
    * @default null
@@ -2464,9 +2574,14 @@ export interface WorkoutComponentTreeRootCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -2483,12 +2598,6 @@ export interface WorkoutComponentTreeRootCreateSchema {
  */
 export interface WorkoutComponentUpdateSchema {
   /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
-  /**
    * Description
    * @default null
    * @example "An exercise circuit for my legs"
@@ -2531,10 +2640,10 @@ export interface WorkoutComponentUpdateSchema {
   start_time: string;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Workout Component Id
    * @min 0
@@ -2550,10 +2659,10 @@ export interface WorkoutComponentUpdateSchema {
 export interface WorkoutCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2609,9 +2718,14 @@ export interface WorkoutCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
 }
@@ -2623,10 +2737,10 @@ export interface WorkoutCreateSchema {
 export interface WorkoutGetSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2688,9 +2802,14 @@ export interface WorkoutGetSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /**
@@ -2711,10 +2830,10 @@ export interface WorkoutGetSchema {
 export interface WorkoutTreeCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2764,9 +2883,14 @@ export interface WorkoutTreeCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /** Workout Components */
@@ -2784,10 +2908,10 @@ export interface WorkoutTreeCreateSchema {
 export interface WorkoutTreeRootCreateSchema {
   /**
    * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at?: string | null;
+  created_at: string;
   /**
    * Created By
    * @min 0
@@ -2843,9 +2967,14 @@ export interface WorkoutTreeRootCreateSchema {
    */
   start_time: string;
   /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
    * Updated At
    * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
   /** Workout Components */
@@ -2857,12 +2986,6 @@ export interface WorkoutTreeRootCreateSchema {
  * Schema to validate the workout update schema
  */
 export interface WorkoutUpdateSchema {
-  /**
-   * Created At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
-   */
-  created_at?: string | null;
   /**
    * Created By
    * @min 0
@@ -2901,10 +3024,10 @@ export interface WorkoutUpdateSchema {
   plan_component_id?: number | null;
   /**
    * Updated At
-   * @default null
-   * @example "2021-05-18T12:00:00.000Z"
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
    */
-  updated_at?: string | null;
+  updated_at: string;
   /**
    * Workout Id
    * @min 0

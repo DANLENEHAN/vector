@@ -37,6 +37,7 @@ export const syncBatchLimit: number = 100;
  * @readonly
  * @property {string} createdAt - Represents the creation timestamp field.
  * @property {string} updatedAt - Represents the last update timestamp field.
+ * @property {string} timezone - Represents the timezone field.
  *
  * @example
  * // Example usage:
@@ -46,4 +47,5 @@ export const syncBatchLimit: number = 100;
 export enum timestampFields {
   createdAt = 'created_at',
   updatedAt = 'updated_at',
+  timezone = 'timezone',
 }
