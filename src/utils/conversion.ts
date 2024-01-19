@@ -1,7 +1,7 @@
 // Types
 import {Unit} from 'convert-units';
 import {
-  StatSchema,
+  StatCreateSchema,
   WaterUnit,
   WeightUnit,
 } from '@services/api/swagger/data-contracts';
@@ -16,10 +16,10 @@ const STONE_TO_POUNDS = 14;
  *
  * @interface convertUnitParams
  *
- * @property {StatSchema['unit']} unit  The unit to be converted.
+ * @property {StatCreateSchema['unit']} unit  The unit to be converted.
  */
 interface convertUnitParams {
-  unit: StatSchema['unit'];
+  unit: StatCreateSchema['unit'];
 }
 
 /**
@@ -55,13 +55,13 @@ const convertUnit = ({unit}: convertUnitParams): Unit => {
  * @interface convertValueParams
  *
  * @property {number} value  The value to be converted.
- * @property {StatSchema['unit']} fromUnit  The unit of the value.
- * @property {StatSchema['unit']} toUnit  The target unit.
+ * @property {StatCreateSchema['unit']} fromUnit  The unit of the value.
+ * @property {StatCreateSchema['unit']} toUnit  The target unit.
  */
 interface convertValueParams {
   value: number;
-  fromUnit: StatSchema['unit'];
-  toUnit: StatSchema['unit'];
+  fromUnit: StatCreateSchema['unit'];
+  toUnit: StatCreateSchema['unit'];
 }
 
 /**
@@ -123,12 +123,12 @@ const convertValue = ({
  *
  * @interface unitConversion
  *
- * @property {StatSchema[]} stats  The stats to be converted.
- * @property {StatSchema['unit']} targetUnit  The target unit.
+ * @property {StatCreateSchema[]} stats  The stats to be converted.
+ * @property {StatCreateSchema['unit']} targetUnit  The target unit.
  */
 interface unitConversion {
-  stats: StatSchema[];
-  targetUnit: StatSchema['unit'];
+  stats: StatCreateSchema[];
+  targetUnit: StatCreateSchema['unit'];
 }
 
 /**
@@ -142,18 +142,18 @@ interface unitConversion {
  *   unit: WeightUnit.Kg,
  *   user_id: 1,
  *   value: 1,
- *  } as StatSchema,
+ *  } as StatCreateSchema,
  * ];
  * convertStats({stats: stats, targetUnit: WeightUnit.Lbs});
  * // Returns the converted stats.
  *
  * @param {unitConversion} {stats, targetUnit} The stats to be converted and the target unit.
- * @returns {StatSchema[]} The converted stats.
+ * @returns {StatCreateSchema[]} The converted stats.
  */
 export const convertStats = ({
   stats,
   targetUnit,
-}: unitConversion): StatSchema[] => {
+}: unitConversion): StatCreateSchema[] => {
   return stats.map(stat => ({
     ...stat,
     value: Number(

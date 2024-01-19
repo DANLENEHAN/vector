@@ -1,7 +1,11 @@
 import {AxiosResponse} from 'axios';
 import {SyncOperation, SyncType} from '@shared/enums';
 import {dbTables} from '@shared/contants';
-import {StatSchema, QuerySchema} from '@services/api/swagger/data-contracts';
+import {
+  StatCreateSchema,
+  StatUpdateSchema,
+  QuerySchema,
+} from '@services/api/swagger/data-contracts';
 
 /**
  * Represents a schema for data that can be synchronized during a create operation.
@@ -10,7 +14,7 @@ import {StatSchema, QuerySchema} from '@services/api/swagger/data-contracts';
  *
  * @description A schema for data that can be synchronized during a create operation.
  */
-export type SyncCreateSchemas = StatSchema;
+export type SyncCreateSchemas = StatCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -19,23 +23,67 @@ export type SyncCreateSchemas = StatSchema;
  *
  * @description A schema for data that can be synchronized during an update operation.
  */
-export type SyncUpdateSchemas = StatSchema;
+export type SyncUpdateSchemas = StatUpdateSchema;
 
 /**
- * Defines functions for creating and updating records in a synchronized table.
+ * Represents an object with synchronization information.
+ *
+ * @interface SyncObject
+ *
+ * @property {boolean} isSync - A flag indicating whether the object is synchronized.
+ *
+ * @example
+ * // Example usage:
+ * const syncData: SyncObject = {
+ *   isSync: true,
+ * };
+ */
+export interface SyncObject {
+  isSync: boolean;
+}
+
+/**
+ * Function signature for creating records in a synchronized table.
+ *
+ * @type {function(data: SyncCreateSchemas): Promise<AxiosResponse>} CreatesFunction
+ */
+export type CreatesFunction = (
+  data: SyncCreateSchemas,
+  query?: SyncObject,
+) => Promise<AxiosResponse>;
+
+/**
+ * Function signature for updating records in a synchronized table.
+ *
+ * @type {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} UpdatesFunction
+ */
+export type UpdatesFunction = (
+  data: SyncUpdateSchemas,
+  query?: SyncObject,
+) => Promise<AxiosResponse>;
+
+/**
+ * Function signature for retrieving records from a synchronized table.
+ *
+ * @type {function(data: QuerySchema): Promise<AxiosResponse<SyncCreateSchemas[]>>} GetsFunction
+ */
+type GetsFunction = (
+  data: QuerySchema,
+) => Promise<AxiosResponse<SyncCreateSchemas[]>>;
+
+/**
+ * Defines functions for creating, updating, and retrieving records in a synchronized table.
  *
  * @interface SyncTableFunctions
  *
- * @property {function(data: SyncCreateSchemas): Promise<AxiosResponse>} Creates - Function for creating records.
- * @property {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} Updates - Function for updating records.
- * @property {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} Get - Function for getting records.
+ * @property {CreatesFunction} Creates - Function for creating records.
+ * @property {UpdatesFunction} Updates - Function for updating records.
+ * @property {GetsFunction} Gets - Function for retrieving records.
  */
 export interface SyncTableFunctions {
-  [SyncOperation.Creates]: (data: SyncCreateSchemas) => Promise<AxiosResponse>;
-  [SyncOperation.Updates]: (data: SyncUpdateSchemas) => Promise<AxiosResponse>;
-  [SyncOperation.Gets]: (
-    data: QuerySchema,
-  ) => Promise<AxiosResponse<SyncCreateSchemas[]>>;
+  [SyncOperation.Creates]: CreatesFunction;
+  [SyncOperation.Updates]: UpdatesFunction;
+  [SyncOperation.Gets]: GetsFunction;
 }
 
 /**

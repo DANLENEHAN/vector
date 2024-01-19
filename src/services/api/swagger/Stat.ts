@@ -9,7 +9,11 @@
  * ---------------------------------------------------------------
  */
 
-import {QuerySchema, StatSchema} from './data-contracts';
+import {
+  QuerySchema,
+  StatCreateSchema,
+  StatUpdateSchema,
+} from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
 export class Stat<SecurityDataType = unknown> {
@@ -30,10 +34,21 @@ export class Stat<SecurityDataType = unknown> {
    * @response `204` `void` Stats retrieved successfully
    * @response `400` `void` Query parameter validation error
    */
-  createCreate = (data: StatSchema, params: RequestParams = {}) =>
+  createCreate = (
+    data: StatCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
       path: `/stat/create`,
       method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
@@ -66,11 +81,11 @@ export class Stat<SecurityDataType = unknown> {
    * @summary Get a stat.
    * @request GET:/stat/get/{stat_id}
    * @secure
-   * @response `200` `StatSchema` Stat for user retrieved successfully
+   * @response `200` `StatCreateSchema` Stat for user retrieved successfully
    * @response `404` `void` Stat not found
    */
   getStat = (statId: number, params: RequestParams = {}) =>
-    this.http.request<StatSchema, void>({
+    this.http.request<StatCreateSchema, void>({
       path: `/stat/get/${statId}`,
       method: 'GET',
       secure: true,
@@ -85,11 +100,11 @@ export class Stat<SecurityDataType = unknown> {
    * @summary Get stats.
    * @request POST:/stat/get
    * @secure
-   * @response `204` `(StatSchema)[]` Stats found successfully
+   * @response `204` `(StatCreateSchema)[]` Stats found successfully
    * @response `400` `void` Query validation error
    */
   postStat = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<StatSchema[], void>({
+    this.http.request<StatCreateSchema[], void>({
       path: `/stat/get`,
       method: 'POST',
       body: data,
@@ -110,10 +125,21 @@ export class Stat<SecurityDataType = unknown> {
    * @response `400` `void` Stats validation error
    * @response `404` `void` Stat not found
    */
-  updateUpdate = (data: StatSchema, params: RequestParams = {}) =>
+  updateUpdate = (
+    data: StatUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
       path: `/stat/update`,
       method: 'PUT',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,

@@ -391,9 +391,15 @@ export const updateRows = async (
                 reject(error);
               },
             );
+          } else if (
+            newRowObject[timestampFields.updatedAt] === currentRowTimestamp
+          ) {
+            console.log(
+              'Current and pulled row have be updated at the same time doing nothing.',
+            );
           } else {
             logger.info(
-              `Current row with ${rowIdColumn} = '${rowId}' is more up-to-date than the pulled row... skipping.`,
+              `Current row with ${rowIdColumn} = '${rowId}' is more up-to-date than the pulled row...skipping.`,
             );
             resolve();
           }
