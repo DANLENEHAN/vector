@@ -394,7 +394,7 @@ export const updateRows = async (
           } else if (
             newRowObject[timestampFields.updatedAt] === currentRowTimestamp
           ) {
-            console.log(
+            logger.info(
               'Current and pulled row have be updated at the same time doing nothing.',
             );
           } else {

@@ -12,15 +12,11 @@ import {TimestampTimezone} from './type';
  * @example
  * const timestamp = 1620000000000;
  * const formattedDate = millisecondsToDate(timestamp);
- * console.log(formattedDate); // Example output: '2021-05-03T12:34:56.789'
+ * logger.info(formattedDate); // Example output: '2021-05-03T12:34:56.789'
  */
 const millisecondsToDate = (timestamp: number): string => {
-  // Create a moment object from the provided timestamp
-  const date: moment.Moment = moment(timestamp);
-
-  // Format the date string in the desired format
+  const date: moment.Moment = moment(timestamp).utc();
   const formattedDate: string = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
   return formattedDate;
 };
 
@@ -31,7 +27,7 @@ const millisecondsToDate = (timestamp: number): string => {
  *
  * @example
  * const currentUtcTimestamp = utcTimestampNow();
- * console.log(currentUtcTimestamp); // Example output: '2022-01-18T15:42:30.123'
+ * logger.info(currentUtcTimestamp); // Example output: '2022-01-18T15:42:30.123'
  */
 const utcTimestampNow = (): string => {
   // Get the current timestamp in milliseconds
@@ -50,7 +46,7 @@ const utcTimestampNow = (): string => {
  *
  * @example
  * const currentTimestampTimezone = getCurrentTimestampTimezone();
- * console.log(currentTimestampTimezone);
+ * logger.info(currentTimestampTimezone);
  * // Example output: { timestamp: '2022-01-18T15:42:30.123', timezone: 'America/New_York' }
  */
 export const getCurrentTimestampTimezone = (): TimestampTimezone => {
