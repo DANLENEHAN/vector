@@ -15,7 +15,9 @@ import {TimestampTimezone} from './type';
  * logger.info(formattedDate); // Example output: '2021-05-03T12:34:56.789'
  */
 const millisecondsToDate = (timestamp: number): string => {
-  const date: moment.Moment = moment(timestamp).utc();
+  // If you wish to interact with the date as a UTC date, use moment.utc:
+  // This results in a date with a utc offset of +0:00:
+  const date: moment.Moment = moment.utc(timestamp);
   const formattedDate: string = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
   return formattedDate;
 };
