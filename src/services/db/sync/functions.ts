@@ -144,17 +144,17 @@ export const insertSyncUpdate = async (
   });
 };
 
-const convertListToSyncUpdateSchemas = (
+function convertListToSyncUpdateSchemas(
   createSchemasList: SyncCreateSchemas[],
-): SyncUpdateSchemas[] => {
+): SyncUpdateSchemas[] {
   return createSchemasList.map(createSchema => {
-    return {
-      ...createSchema,
-      created_at: undefined,
-      timezone: undefined,
-    } as SyncUpdateSchemas;
+    const {created_at, timezone, ...rest} = createSchema;
+    // remove the below at somepoint
+    created_at;
+    timezone;
+    return rest as SyncUpdateSchemas;
   });
-};
+}
 
 const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
