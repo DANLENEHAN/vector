@@ -24,13 +24,13 @@ export const getLastSyncedForTableQuery = (
  *
  * @param {string} tableName - The name of the table to retrieve rows for synchronization.
  * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @param {string | undefined} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
+ * @param {string | null} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
  * @returns {string} A SQL query string.
  */
 export const getRowsToSyncQuery = (
   tableName: string,
   syncOperation: SyncOperation,
-  lastSyncTime?: string,
+  lastSyncTime: string | null,
 ): string => {
   let query = `
     SELECT *
@@ -42,7 +42,7 @@ export const getRowsToSyncQuery = (
       ? timestampFields.createdAt
       : timestampFields.updatedAt;
 
-  if (lastSyncTime !== undefined) {
+  if (lastSyncTime !== null) {
     query += `WHERE ${timestampField} > '${lastSyncTime}' `;
   } else {
     // In the event there's been no sync for this type yet

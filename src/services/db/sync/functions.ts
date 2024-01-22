@@ -1,6 +1,5 @@
 // Typing
 import {AxiosResponse} from 'axios';
-import {Transaction, ResultSet} from 'react-native-sqlite-storage';
 import {
   SyncApiFunctions,
   SyncTable,
@@ -16,12 +15,21 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@shared/enums';
 import {dbTables, timestampFields} from '@shared/contants';
+import {RowData} from '../types';
 
 // Functions
-import {db, updateRows, insertRows} from '../functions';
+import {
+  updateRows,
+  insertRows,
+  runSqlSelect,
+  executeSqlNonQuery,
+} from '@services/db/functions';
 import api from '@services/api/apiService';
 import {Stat} from '@services/api/swagger/Stat';
-import {getLastSyncedForTableQuery, getRowsToSyncQuery} from './queries';
+import {
+  getLastSyncedForTableQuery,
+  getRowsToSyncQuery,
+} from '@services/db/sync/queries';
 
 // Logger
 import logger from '@utils/logger';
@@ -56,21 +64,12 @@ export const getLastSyncedForTable = async (
   tableName: dbTables,
   syncType: SyncType,
   syncOperation: SyncOperation,
-): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx: Transaction) => {
-      tx.executeSql(
-        getLastSyncedForTableQuery(tableName, syncType, syncOperation),
-        [],
-        (_, result: ResultSet) => {
-          resolve(result.rows.item(0)?.last_synced);
-        },
-        (error: Transaction) => {
-          reject(error);
-        },
-      );
-    });
-  });
+): Promise<string | null> => {
+  const response: RowData[] = await runSqlSelect(
+    getLastSyncedForTableQuery(tableName, syncType, syncOperation),
+    [],
+  );
+  return response.length > 0 ? response[0].last_synced : null;
 };
 
 /**
@@ -78,7 +77,7 @@ export const getLastSyncedForTable = async (
  *
  * @param {string} tableName - The name of the table to retrieve rows for synchronization.
  * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @param {string | undefined} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
+ * @param {string | null} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
  * @returns {Promise<(SyncCreateSchemas | SyncUpdateSchemas)[]>} A promise that resolves to an array
  *   of schemas representing rows to be synchronized.
  * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
@@ -86,26 +85,12 @@ export const getLastSyncedForTable = async (
 export const getRowsToSync = async (
   tableName: dbTables,
   syncOperation: SyncOperation,
-  lastSyncTime?: string,
+  lastSyncTime: string | null,
 ): Promise<SyncCreateSchemas[]> => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx: Transaction) => {
-      tx.executeSql(
-        getRowsToSyncQuery(tableName, syncOperation, lastSyncTime),
-        [],
-        (_, result: ResultSet) => {
-          resolve(
-            Array.from({length: result.rows.length}, (_, i) =>
-              result.rows.item(i),
-            ) || [],
-          );
-        },
-        (error: Transaction) => {
-          reject(error);
-        },
-      );
-    });
-  });
+  return await runSqlSelect(
+    getRowsToSyncQuery(tableName, syncOperation, lastSyncTime),
+    [],
+  );
 };
 
 /**
@@ -125,26 +110,18 @@ export const insertSyncUpdate = async (
     .map(() => '?')
     .join(', ')})`;
 
-  return new Promise((resolve, reject) => {
-    db.transaction((tx: Transaction) => {
-      tx.executeSql(
-        `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
-        Object.values(syncUpdate),
-        (_, resultSet: ResultSet) => {
-          // Check if the operation was successful (you might need to adjust this condition based on your logic)
-          if (resultSet.rowsAffected > 0) {
-            resolve(); // Resolve the Promise on success
-          }
-        },
-        (error: Transaction) => {
-          reject(error);
-        },
-      );
-    });
-  });
+  const response: number = await executeSqlNonQuery(
+    `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
+    Object.values(syncUpdate),
+  );
+  if (response !== 1) {
+    throw new Error(
+      `Failed to insert or replace SyncUpdate. No ${response} rows affected.`,
+    );
+  }
 };
 
-function convertListToSyncUpdateSchemas(
+export function convertListToSyncUpdateSchemas(
   createSchemasList: SyncCreateSchemas[],
 ): SyncUpdateSchemas[] {
   return createSchemasList.map(createSchema => {
@@ -267,7 +244,7 @@ export const processSyncTypePush = async (
   syncOperation: SyncOperation,
 ): Promise<void> => {
   try {
-    const lastSynced: string = await getLastSyncedForTable(
+    const lastSynced: string | null = await getLastSyncedForTable(
       tableName,
       SyncType.Push,
       syncOperation,
@@ -309,12 +286,12 @@ export const processSyncTypePush = async (
  * const syncType = SyncOperation.Creates;
  * const queryObj = await getQueryObjForTable(tableName, syncType);
  */
-const getQueryObjForTable = async (
+export const getQueryObjForTable = async (
   tableName: dbTables,
   syncType: SyncOperation,
 ): Promise<QuerySchema> => {
   // Get the last synced timestamp for the table
-  const lastSynced: string = await getLastSyncedForTable(
+  const lastSynced: string | null = await getLastSyncedForTable(
     tableName,
     SyncType.Pull,
     syncType,
@@ -360,7 +337,7 @@ const getQueryObjForTable = async (
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePull(tableName, syncFunctions, syncOperation);
  */
-const processSyncTypePull = async (
+export const processSyncTypePull = async (
   tableName: dbTables,
   syncFunctions: SyncTableFunctions,
   syncOperation: SyncOperation,

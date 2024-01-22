@@ -416,3 +416,74 @@ export const updateRows = async (
     } in '${tableName}' out of the ${data.length} pulled in the sync.`,
   );
 };
+
+/**
+ * Execute a SELECT SQL statement and retrieve the result set.
+ *
+ * @param {string} sqlStatement - The SELECT SQL statement to be executed.
+ * @param {RowData[]} rowData - The data to be passed as parameters to the SQL statement.
+ * @returns {Promise<T[]>} A promise that resolves with the result set obtained from the SELECT statement.
+ * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
+ */
+export const runSqlSelect = <T>(
+  sqlStatement: string,
+  rowData: RowData[],
+): Promise<T[]> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: Transaction) => {
+      tx.executeSql(
+        sqlStatement,
+        rowData,
+        (_, result: ResultSet) => {
+          const rows: T[] = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            rows.push(result.rows.item(i));
+          }
+          resolve(rows);
+        },
+        (error: Transaction) => {
+          // Include sqlStatement in the error message for better context
+          reject(
+            new Error(
+              `Error executing SELECT SQL statement: ${sqlStatement}. ${error}`,
+            ),
+          );
+        },
+      );
+    });
+  });
+};
+
+/**
+ * Execute a non-query SQL statement (INSERT, DELETE, REPLACE, or UPDATE) and retrieve the number of affected rows.
+ *
+ * @param {string} sqlStatement - The non-query SQL statement to be executed.
+ * @param {any[]} params - The parameters to be passed to the SQL statement.
+ * @returns {Promise<number>} A promise that resolves with the number of affected rows.
+ * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
+ */
+export const executeSqlNonQuery = (
+  sqlStatement: string,
+  params: any[] = [],
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: Transaction) => {
+      tx.executeSql(
+        sqlStatement,
+        params,
+        (_, result: ResultSet) => {
+          // Return the number of affected rows for INSERT, DELETE, REPLACE, UPDATE
+          resolve(result.rowsAffected);
+        },
+        (error: Transaction) => {
+          // Include sqlStatement in the error message for better context
+          reject(
+            new Error(
+              `Error executing non-query SQL statement: ${sqlStatement}. ${error}`,
+            ),
+          );
+        },
+      );
+    });
+  });
+};
