@@ -5,14 +5,14 @@ import {dbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/enums';
 
 // Functions
-import {processUpdatesSyncTypePush} from '@services/db/sync/processFunctions';
+import {processUpdatesSyncTypePush} from '@services/db/sync/ProcessFunctions';
 import {insertSyncUpdate} from '@services/db/sync/utils';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
 
 /*
-   Required when importing @services/db/sync/processFunctions
+   Required when importing @services/db/sync/ProcessFunctions
    Mocking external dependencies
 */
 jest.mock('react-native-fs', () => ({
