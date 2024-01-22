@@ -1,6 +1,6 @@
 // Typing
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
-import {dbTables} from '@shared/contants';
+import {dbTables} from '@shared/Constants';
 // Functions
 import {insertRows} from '@services/db/functions';
 

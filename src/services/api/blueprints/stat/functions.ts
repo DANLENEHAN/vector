@@ -7,7 +7,7 @@ import {getCurrentTimestampTimezone} from '@services/date/functions';
 import {StatType, StatCreateSchema} from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/types';
 import {insertStat} from '@services/db/stat/functions';
-import {timestampFields} from '@shared/contants';
+import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/type';
 
 // Logger

@@ -1,139 +1,31 @@
 // Typing
 import {AxiosResponse} from 'axios';
 import {
-  SyncApiFunctions,
-  SyncTable,
   SyncTableFunctions,
   SyncCreateSchemas,
   SyncUpdateSchemas,
-  SyncObject,
 } from './types';
-import {
-  StatCreateSchema,
-  StatUpdateSchema,
-  QuerySchema,
-} from '@services/api/swagger/data-contracts';
+import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@shared/enums';
-import {dbTables, timestampFields} from '@shared/contants';
-import {RowData} from '../types';
+import {dbTables, timestampFields} from '@shared/Constants';
 
 // Functions
+import {updateRows, insertRows} from '@services/db/functions';
 import {
-  updateRows,
-  insertRows,
-  runSqlSelect,
-  executeSqlNonQuery,
-} from '@services/db/functions';
-import api from '@services/api/apiService';
-import {Stat} from '@services/api/swagger/Stat';
-import {
-  getLastSyncedForTableQuery,
-  getRowsToSyncQuery,
-} from '@services/db/sync/queries';
+  convertListToSyncUpdateSchemas,
+  insertSyncUpdate,
+  getLastSyncedForTable,
+  getRowsToSync,
+  getQueryObjForTable,
+} from '@services/db/sync/utils';
+
+// Constants
+import {apiFunctions} from '@services/db/sync/Constants';
 
 // Logger
 import logger from '@utils/logger';
 
-const StatApi = new Stat(api);
-
-const apiFunctions: SyncApiFunctions = {
-  [dbTables.statTable]: {
-    [SyncOperation.Creates]: (
-      data: StatCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => StatApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: StatUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => StatApi.updateUpdate(data, query),
-    [SyncOperation.Gets]: (data: QuerySchema): Promise<AxiosResponse> =>
-      StatApi.postStat(data),
-  },
-};
-
-/**
- * Retrieve the last synced timestamp for a specific table based on sync type and operation.
- *
- * @param {string} tableName - The name of the table to retrieve the last synced timestamp for.
- * @param {SyncType} syncType - The type of synchronization (e.g., Push, Pull).
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @returns {Promise<string>} A promise that resolves to the last synced timestamp as a string.
- * @throws {Error} If there is an issue with the database transaction or SQL execution.
- */
-export const getLastSyncedForTable = async (
-  tableName: dbTables,
-  syncType: SyncType,
-  syncOperation: SyncOperation,
-): Promise<string | null> => {
-  const response: RowData[] = await runSqlSelect(
-    getLastSyncedForTableQuery(tableName, syncType, syncOperation),
-    [],
-  );
-  return response.length > 0 ? response[0].last_synced : null;
-};
-
-/**
- * Retrieve rows to be synchronized for a specific table and sync operation.
- *
- * @param {string} tableName - The name of the table to retrieve rows for synchronization.
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @param {string | null} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
- * @returns {Promise<(SyncCreateSchemas | SyncUpdateSchemas)[]>} A promise that resolves to an array
- *   of schemas representing rows to be synchronized.
- * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
- */
-export const getRowsToSync = async (
-  tableName: dbTables,
-  syncOperation: SyncOperation,
-  lastSyncTime: string | null,
-): Promise<SyncCreateSchemas[]> => {
-  return await runSqlSelect(
-    getRowsToSyncQuery(tableName, syncOperation, lastSyncTime),
-    [],
-  );
-};
-
-/**
- * Insert or replace a synchronization update record into the sync table.
- *
- * @param {SyncTable} syncUpdate - The synchronization update to be inserted or replaced.
- * @returns {Promise<void>} A promise that resolves when the insertion or replacement is successful.
- * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
- */
-export const insertSyncUpdate = async (
-  syncUpdate: SyncTable,
-): Promise<void> => {
-  const columns = `(${Object.keys(syncUpdate)
-    .map(key => `'${key}'`)
-    .join(', ')})`;
-  const insertValues = `(${Object.keys(syncUpdate)
-    .map(() => '?')
-    .join(', ')})`;
-
-  const response: number = await executeSqlNonQuery(
-    `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
-    Object.values(syncUpdate),
-  );
-  if (response !== 1) {
-    throw new Error(
-      `Failed to insert or replace SyncUpdate. No ${response} rows affected.`,
-    );
-  }
-};
-
-export function convertListToSyncUpdateSchemas(
-  createSchemasList: SyncCreateSchemas[],
-): SyncUpdateSchemas[] {
-  return createSchemasList.map(createSchema => {
-    const {created_at, timezone, ...rest} = createSchema;
-    // remove the below at somepoint
-    created_at;
-    timezone;
-    return rest as SyncUpdateSchemas;
-  });
-}
-
-const processUpdatesSyncTypePush = async (
+export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
   tableName: dbTables,
   tableFunctions: SyncTableFunctions,
@@ -268,54 +160,6 @@ export const processSyncTypePush = async (
 };
 
 /**
- * Generate a query object for synchronizing a table based on the last synchronization time.
- *
- * @param {dbTables} tableName - The name of the table for which to generate the query.
- * @param {SyncOperation} syncType - The type of synchronization operation (Creates or Updates).
- * @returns {Promise<QuerySchema>} A promise that resolves with the generated query schema.
- * @throws {Error} Throws an error if there is an issue fetching the last synchronization time.
- *
- * @description
- * The `getQueryObjForTable` function generates a query schema for synchronizing a table based on the last synchronization time.
- * It retrieves the last synced timestamp and constructs a query schema with filters and sorting based on the sync type.
- * The generated query schema is returned as a promise.
- *
- * @example
- * // Example usage:
- * const tableName = dbTables.statTable;
- * const syncType = SyncOperation.Creates;
- * const queryObj = await getQueryObjForTable(tableName, syncType);
- */
-export const getQueryObjForTable = async (
-  tableName: dbTables,
-  syncType: SyncOperation,
-): Promise<QuerySchema> => {
-  // Get the last synced timestamp for the table
-  const lastSynced: string | null = await getLastSyncedForTable(
-    tableName,
-    SyncType.Pull,
-    syncType,
-  );
-
-  // Determine the timestamp field based on the sync type
-  const timestampField =
-    syncType === SyncOperation.Creates
-      ? timestampFields.createdAt
-      : timestampFields.updatedAt;
-
-  // Define the condition for the timestamp field
-  const condition = lastSynced === undefined ? {ne: null} : {gt: lastSynced};
-
-  // Construct and return the query schema
-  return {
-    filters: {
-      [timestampField]: condition,
-    },
-    sort: [`${timestampField}:asc`],
-  } as QuerySchema;
-};
-
-/**
  * Process a synchronization pull operation for a specific table.
  *
  * @param {dbTables} tableName - The name of the table to sync.
@@ -342,9 +186,15 @@ export const processSyncTypePull = async (
   syncFunctions: SyncTableFunctions,
   syncOperation: SyncOperation,
 ): Promise<void> => {
+  const lastSynced: string | null = await getLastSyncedForTable(
+    tableName,
+    SyncType.Pull,
+    syncOperation,
+  );
+
   // Get query schema for the table and sync operation
   const tableQuerySchema: QuerySchema = await getQueryObjForTable(
-    tableName,
+    lastSynced,
     syncOperation,
   );
 

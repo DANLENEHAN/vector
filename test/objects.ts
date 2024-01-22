@@ -7,7 +7,7 @@ import {
 
 import {SyncType, SyncOperation} from '@shared/enums';
 import {SyncTable} from '@services/db/sync/types';
-import {dbTables} from '@shared/contants';
+import {dbTables} from '@shared/Constants';
 
 // Objects
 export const sampleTimestampOne: string = '2025-01-01T00:00:00.000';

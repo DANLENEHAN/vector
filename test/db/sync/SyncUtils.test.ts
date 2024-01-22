@@ -7,10 +7,11 @@ import {
   getLastSyncedForTable,
   getRowsToSync,
   insertSyncUpdate,
-} from '@services/db/sync/functions';
+  getQueryObjForTable,
+} from '@services/db/sync/utils';
 
 // Types
-import {dbTables} from '@shared/contants';
+import {dbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@shared/enums';
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/functions';
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
@@ -28,7 +29,7 @@ jest.mock('@services/db/functions', () => ({
   executeSqlNonQuery: jest.fn(),
 }));
 
-describe('Sync Tests', () => {
+describe('Sync Utils Tests', () => {
   test('should convert list of SyncCreateSchemas to SyncUpdateSchemas', () => {
     // Arrange
     const createSchemasList = [sampleStat];
@@ -138,5 +139,43 @@ describe('Sync Tests', () => {
     await expect(insertSyncUpdate(sampleSyncUpdate)).rejects.toThrow(
       `Failed to insert or replace SyncUpdate. No ${response} rows affected.`,
     );
+  });
+
+  test('generates correct query schema for Creates sync operation', async () => {
+    // Arrange
+    const lastSyncedTimestamp: string = sampleTimestampOne;
+
+    // Act
+    const result = await getQueryObjForTable(
+      lastSyncedTimestamp,
+      SyncOperation.Creates,
+    );
+
+    // Assert
+    expect(result).toEqual({
+      filters: {
+        created_at: {gt: lastSyncedTimestamp},
+      },
+      sort: ['created_at:asc'],
+    });
+  });
+
+  test('generates correct query schema for Updates sync operation', async () => {
+    // Arrange
+    const lastSyncedTimestamp: string = sampleTimestampOne;
+
+    // Act
+    const result = await getQueryObjForTable(
+      lastSyncedTimestamp,
+      SyncOperation.Updates,
+    );
+
+    // Assert
+    expect(result).toEqual({
+      filters: {
+        updated_at: {gt: lastSyncedTimestamp},
+      },
+      sort: ['updated_at:asc'],
+    });
   });
 });
