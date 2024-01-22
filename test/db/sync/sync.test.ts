@@ -29,12 +29,6 @@ jest.mock('@services/db/functions', () => ({
 }));
 
 describe('Sync Tests', () => {
-  afterAll(() => {
-    jest.clearAllMocks();
-    jest.resetModules();
-    jest.restoreAllMocks();
-  });
-
   test('should convert list of SyncCreateSchemas to SyncUpdateSchemas', () => {
     // Arrange
     const createSchemasList = [sampleStat];
