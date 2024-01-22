@@ -28,7 +28,7 @@ jest.mock('@services/db/functions', () => ({
   executeSqlNonQuery: jest.fn(),
 }));
 
-describe('Sync Tests One', () => {
+describe('Sync Tests', () => {
   afterAll(() => {
     jest.clearAllMocks();
     jest.resetModules();
