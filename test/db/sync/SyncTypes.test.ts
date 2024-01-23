@@ -111,13 +111,17 @@ describe('SyncType Tests', () => {
   });
 
   test("processSyncTypePush SyncOperation 'Creates'", async () => {
+    // Arrange
     const tableToSync: dbTables = dbTables.statTable;
+
+    // Act
     await processSyncTypePush(
       tableToSync,
       apiFunctions[tableToSync],
       SyncOperation.Creates,
     );
 
+    // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
       dbTables.statTable,
@@ -141,14 +145,17 @@ describe('SyncType Tests', () => {
   });
 
   test("processSyncTypePush SyncOperation 'Updates'", async () => {
+    // Arrange
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processSyncTypePush(
       tableToSync,
       apiFunctions[tableToSync],
       SyncOperation.Updates,
     );
 
+    // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
       dbTables.statTable,
@@ -172,14 +179,17 @@ describe('SyncType Tests', () => {
   });
 
   test("processSyncTypePull sync operation 'Creates'", async () => {
+    // Arrange
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processSyncTypePull(
       tableToSync,
       apiFunctions[tableToSync],
       SyncOperation.Creates,
     );
 
+    // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
       dbTables.statTable,

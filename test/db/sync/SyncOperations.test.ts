@@ -50,15 +50,18 @@ describe('Sync Operation Tests', () => {
   });
 
   test('processUpdatesSyncTypePush with one row', async () => {
+    // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processUpdatesSyncTypePush(
       rowsToSync,
       tableToSync,
       apiFunctions[tableToSync],
     );
 
+    // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
       last_synced: sampleStat.updated_at,
@@ -69,27 +72,34 @@ describe('Sync Operation Tests', () => {
   });
 
   test('processUpdatesSyncTypePush with no rows', async () => {
+    // Arrange
     const rowsToSync: SyncCreateSchemas[] = [];
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processUpdatesSyncTypePush(
       rowsToSync,
       tableToSync,
       apiFunctions[tableToSync],
     );
+
+    // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(0);
   });
 
   test('processCreatesSyncTypePush with one row', async () => {
+    // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processCreatesSyncTypePush(
       rowsToSync,
       tableToSync,
       apiFunctions[tableToSync],
     );
 
+    // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
       last_synced: sampleStat.created_at,
@@ -100,15 +110,18 @@ describe('Sync Operation Tests', () => {
   });
 
   test('processCreatesSyncTypePush with no rows', async () => {
+    // Arrange
     const rowsToSync: SyncCreateSchemas[] = [];
     const tableToSync: dbTables = dbTables.statTable;
 
+    // Act
     await processCreatesSyncTypePush(
       rowsToSync,
       tableToSync,
       apiFunctions[tableToSync],
     );
 
+    // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(0);
   });
 });

@@ -35,8 +35,11 @@ jest.mock('@services/db/sync/SyncTypes', () => ({
 
 describe('Sync Process Tests', () => {
   test('runSyncProcess', async () => {
+    // Arrange
+    // Act
     await runSyncProcess();
 
+    // Assert
     expect(processSyncTypePull).toHaveBeenCalledTimes(2);
     expect(processSyncTypePull).toHaveBeenCalledWith(
       dbTables.statTable,
@@ -48,7 +51,6 @@ describe('Sync Process Tests', () => {
       apiFunctions[dbTables.statTable],
       SyncOperation.Updates,
     );
-
     expect(processSyncTypePush).toHaveBeenCalledTimes(2);
     expect(processSyncTypePush).toHaveBeenCalledWith(
       dbTables.statTable,
