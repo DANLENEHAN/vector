@@ -68,7 +68,7 @@ export const processUpdatesSyncTypePush = async (
   );
 };
 
-const processCreatesSyncTypePush = async (
+export const processCreatesSyncTypePush = async (
   rowsToSync: SyncCreateSchemas[],
   tableName: dbTables,
   tableFunctions: SyncTableFunctions,

@@ -18,8 +18,8 @@ export const sampleStat = {
   stat_type: StatType.Water,
   unit: WaterUnit.Ml,
   timezone: 'UTC',
-  updated_at: sampleTimestampOne,
-  created_at: sampleTimestampTwo,
+  created_at: sampleTimestampOne,
+  updated_at: sampleTimestampTwo,
   user_id: 1,
   value: 500,
 } as StatCreateSchema;
