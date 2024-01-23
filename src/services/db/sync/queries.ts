@@ -1,5 +1,5 @@
 import {SyncOperation, SyncType} from '@shared/enums';
-import {syncBatchLimit, timestampFields} from '@shared/contants';
+import {syncBatchLimit, timestampFields} from '@shared/Constants';
 
 /**
  * Generate a SQL query to retrieve the last synced timestamp for a specific table, sync type, and sync operation.

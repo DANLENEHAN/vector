@@ -7,7 +7,7 @@ import {
 
 import {SyncType, SyncOperation} from '@shared/enums';
 import {SyncTable} from '@services/db/sync/types';
-import {dbTables} from '@shared/contants';
+import {dbTables} from '@shared/Constants';
 
 // Objects
 export const sampleTimestampOne: string = '2025-01-01T00:00:00.000';
@@ -18,8 +18,8 @@ export const sampleStat = {
   stat_type: StatType.Water,
   unit: WaterUnit.Ml,
   timezone: 'UTC',
-  updated_at: sampleTimestampOne,
-  created_at: sampleTimestampTwo,
+  created_at: sampleTimestampOne,
+  updated_at: sampleTimestampTwo,
   user_id: 1,
   value: 500,
 } as StatCreateSchema;

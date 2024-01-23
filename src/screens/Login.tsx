@@ -34,7 +34,7 @@ import {
   ProfileStatus,
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/types';
-import {timestampFields} from '@shared/contants';
+import {timestampFields} from '@shared/Constants';
 /**
  *  Login screen
  *

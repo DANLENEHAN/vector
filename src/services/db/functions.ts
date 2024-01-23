@@ -8,7 +8,7 @@ import RNFS from 'react-native-fs';
 // Types
 import {alembicTable, RevisionCallback} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
-import {dbTables, timestampFields} from '@shared/contants';
+import {dbTables, timestampFields} from '@shared/Constants';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
 import {generateDeletionQuery} from '@services/db/queries';
