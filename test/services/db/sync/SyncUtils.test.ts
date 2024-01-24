@@ -23,7 +23,7 @@ jest.mock('react-native-sqlite-storage', () => ({
   })),
 }));
 
-jest.mock('@services/db/functions', () => ({
+jest.mock('@services/db/Functions', () => ({
   runSqlSelect: jest.fn(),
   executeSqlNonQuery: jest.fn(),
 }));

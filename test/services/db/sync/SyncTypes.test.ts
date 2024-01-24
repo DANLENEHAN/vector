@@ -39,21 +39,6 @@ jest.mock('react-native-sqlite-storage', () => ({
     transaction: jest.fn(),
   })),
 }));
-/**/
-jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mocked/document/directory/path',
-}));
-
-jest.mock('uuid', () => ({
-  uuidv4: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-}));
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
-/**/
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
@@ -100,8 +85,8 @@ jest.mock('@services/db/sync/SyncOperations', () => ({
   processUpdatesSyncTypePush: jest.fn(),
 }));
 
-jest.mock('@services/db/functions', () => ({
-  ...jest.requireActual('@services/db/functions'),
+jest.mock('@services/db/Functions', () => ({
+  ...jest.requireActual('@services/db/Functions'),
   insertRows: jest.fn(),
 }));
 
