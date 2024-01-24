@@ -12,6 +12,9 @@ import {
   getRowsToSyncQuery,
 } from '@services/db/sync/queries';
 
+// Constants
+import {unixEpoch} from '@shared/Constants';
+
 /**
  * Retrieve the last synced timestamp for a specific table based on sync type and operation.
  *
@@ -124,6 +127,7 @@ export const getQueryObjForTable = async (
       : timestampFields.updatedAt;
 
   // Define the condition for the timestamp field
+  lastSynced = lastSynced === null ? unixEpoch : lastSynced;
   const condition = lastSynced === undefined ? {ne: null} : {gt: lastSynced};
 
   // Construct and return the query schema

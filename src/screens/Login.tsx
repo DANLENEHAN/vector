@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 // Functions
 import {loginUser, createUser} from '@services/api/blueprints/user/api';
 import {getCurrentTimestampTimezone} from '@services/date/functions';
+import {runSyncProcess} from '@services/db/sync/SyncProcess';
 //Utils
 import logger from '@utils/logger';
 //Layouts
@@ -66,6 +67,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
     } else {
       logger.info('Login successful, navigating to home screen.');
       navigation.navigate('App', {screen: 'Home'});
+      runSyncProcess();
     }
   };
 
@@ -98,6 +100,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
       logger.info('Account creation successful, logging in.');
       response = await loginUser({email: email, password: password});
       navigation.navigate('App', {screen: 'Home'});
+      runSyncProcess();
     }
   };
 

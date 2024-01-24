@@ -6,7 +6,7 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
 // Types
-import {alembicTable, RevisionCallback} from '@services/db/types';
+import {alembicTable} from '@services/db/types';
 import {dbName, RowData} from '@services/db/types';
 import {dbTables, timestampFields} from '@shared/Constants';
 // Functions
@@ -86,78 +86,125 @@ export const getKeyValuesStartingFrom = (
 
 /**
  * @description Runs database migrations starting from the specified revision ID.
- * It processes revisions and executes corresponding SQL commands.
+ * It processes revisions and executes corresponding SQL commands within transactions.
  *
- * @param revisionId The starting revision ID for migrations. If null, starts from the beginning.
- * @returns {void} This function doesn't return a promise as it operates synchronously.
+ * @param {string | null} revisionId - The starting revision ID for migrations.
+ * If null, the function starts migrations from the beginning.
+ *
+ * @returns {Promise<void>} A promise that resolves when all migrations are successfully completed.
+ *
+ * @throws {Error} If an error occurs during the migration process, the promise is rejected with the corresponding error.
  *
  * @example
  * // Example usage:
  * const startingRevisionId: string | null = '123';
- * runMigrations(startingRevisionId);
+ * await runMigrations(startingRevisionId);
  */
-export const runMigrations = (revisionId: string | null): void => {
+export const runMigrations = async (
+  revisionId: string | null,
+): Promise<void> => {
   try {
     const revisionsToProcess = getKeyValuesStartingFrom(revisionId);
+
     if (Object.keys(revisionsToProcess).length === 0) {
       logger.info('No revisions to process. Moving on...');
+      return Promise.resolve();
     }
+
+    const transactionPromises: Promise<void>[] = [];
+
     for (const revisionID_ in revisionsToProcess) {
       const sqlCommands = revisionObject[revisionID_];
-      db.transaction((tx: any) => {
-        logger.info(`Migration for ${revisionID_} applied successfully`);
-        sqlCommands.forEach(sqlCommand => {
-          tx.executeSql(
-            sqlCommand,
-            [],
-            () => {},
-            (error: Transaction) => {
-              logger.error(`Error executing SQL for ${sqlCommand}:`, error);
-            },
-          );
-        });
+
+      const transactionPromise = new Promise<void>((resolve, reject) => {
+        db.transaction(
+          (tx: any) => {
+            logger.info(`Migration for ${revisionID_} applied successfully`);
+            const commandPromises: Promise<void>[] = [];
+
+            sqlCommands.forEach(sqlCommand => {
+              const commandPromise = new Promise<void>(
+                (cmdResolve, cmdReject) => {
+                  tx.executeSql(
+                    sqlCommand,
+                    [],
+                    () => cmdResolve(),
+                    (error: Transaction) => {
+                      logger.error(
+                        `Error executing SQL for ${sqlCommand}:`,
+                        error,
+                      );
+                      cmdReject(error);
+                    },
+                  );
+                },
+              );
+
+              commandPromises.push(commandPromise);
+            });
+
+            Promise.all(commandPromises)
+              .then(() => resolve())
+              .catch(error => reject(error));
+          },
+          (error: SQLError) => {
+            logger.error(
+              `Error starting transaction for ${revisionID_}:`,
+              error,
+            );
+            reject(error);
+          },
+        );
       });
+
+      transactionPromises.push(transactionPromise);
     }
+
+    await Promise.all(transactionPromises);
   } catch (error) {
     logger.error('Error applying migrations:', error);
+    throw error;
   }
 };
 
 /**
- * @description Retrieves the current revision ID from the alembic table.
+ * @description Retrieves the current revision ID from the alembic table and triggers
+ * database migrations accordingly.
  *
- * @param callback A callback function to handle the retrieved revision ID.
- * @returns {void} This function doesn't return a promise as it operates synchronously.
+ * @returns {Promise<void>} A promise that resolves when the current revision is retrieved
+ * and corresponding migrations are executed successfully.
+ *
+ * @throws {Error} If an error occurs during the process, the promise is rejected with the
+ * corresponding error.
  *
  * @example
  * // Example usage:
- * getCurrentRevision((revisionId) => {
- *   if (revisionId) {
- *     logger.info('Current revision ID:', revisionId);
- *   } else {
- *     logger.info('No revision ID found. Starting from scratch...');
- *   }
- * });
+ * await runDbMigrationProcess();
  */
-export const getCurrentRevision = (callback: RevisionCallback): void => {
-  db.transaction((tx: Transaction) => {
-    tx.executeSql(
-      `SELECT version_num FROM ${alembicTable};`,
-      [],
-      (_: Transaction, result: ResultSet) => {
-        if (result.rows.length > 0) {
-          const revision_id: string = result.rows.item(0).version_num;
-          callback(revision_id);
-        } else {
-          logger.error('No revision id found.');
-        }
-      },
-      (error: Transaction) => {
-        logger.info(`Unable to retrieve revision id. Error: ${error}`);
-        logger.info('Starting from stratch...');
-        callback(null);
-      },
-    );
+export const runDbMigrationProcess = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: Transaction) => {
+      tx.executeSql(
+        `SELECT version_num FROM ${alembicTable};`,
+        [],
+        async (_: Transaction, result: ResultSet) => {
+          if (result.rows.length > 0) {
+            const revision_id: string = result.rows.item(0).version_num;
+            await runMigrations(revision_id);
+            resolve();
+          } else {
+            logger.error('No revision id found.');
+            reject(new Error('No revision id found.'));
+          }
+        },
+        (error: Transaction) => {
+          logger.info(`Unable to retrieve revision id. Error: ${error}`);
+          logger.info('Starting from scratch...');
+          runMigrations(null);
+          resolve();
+        },
+      );
+    });
   });
 };
 

@@ -12,7 +12,7 @@ import {dbTables, timestampFields} from '@shared/Constants';
 import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
-} from '@services/db/sync/utils';
+} from '@services/db/sync/SyncUtils';
 
 // Logger
 import logger from '@utils/logger';

@@ -9,7 +9,7 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
   getRowsToSync,
-} from '@services/db/sync/utils';
+} from '@services/db/sync/SyncUtils';
 import {
   processSyncTypePush,
   processSyncTypePull,

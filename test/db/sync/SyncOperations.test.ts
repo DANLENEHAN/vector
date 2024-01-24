@@ -9,7 +9,7 @@ import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import {insertSyncUpdate} from '@services/db/sync/utils';
+import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
