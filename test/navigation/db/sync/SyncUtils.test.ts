@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../objects';
+import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../objects';
 
 // Functions
 import {
