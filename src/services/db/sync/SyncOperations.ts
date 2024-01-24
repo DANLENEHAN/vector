@@ -13,6 +13,7 @@ import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
+import {storeFailedSyncPushErrors} from '@services/asyncStorage/functions';
 
 // Logger
 import logger from '@utils/Logger';
@@ -24,6 +25,7 @@ export const processUpdatesSyncTypePush = async (
 ) => {
   let successfulRequests = 0;
 
+  const failedPushes: SyncUpdateSchemas[] = [];
   if (rows.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Updates}'.`,
@@ -42,6 +44,7 @@ export const processUpdatesSyncTypePush = async (
         if (response.status === 204) {
           successfulRequests++;
         } else {
+          failedPushes.push(row);
           logger.error('Unexpected response status code: ', response.status);
         }
       } catch (error) {
@@ -54,6 +57,7 @@ export const processUpdatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Updates,
     });
+    storeFailedSyncPushErrors(tableName, failedPushes);
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Updates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rows.length} succeeded.`,
@@ -67,6 +71,7 @@ export const processCreatesSyncTypePush = async (
 ) => {
   let successfulRequests = 0;
 
+  const failedPushes: SyncCreateSchemas[] = [];
   if (rowsToSync.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Creates}'.`,
@@ -84,6 +89,7 @@ export const processCreatesSyncTypePush = async (
         if (response.status === 201) {
           successfulRequests++;
         } else {
+          failedPushes.push(row);
           logger.error('Unexpected response status code: ', response.status);
         }
       } catch (error) {
@@ -96,6 +102,7 @@ export const processCreatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
     });
+    storeFailedSyncPushErrors(tableName, failedPushes);
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rowsToSync.length} succeeded.`,
