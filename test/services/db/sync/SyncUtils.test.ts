@@ -11,7 +11,7 @@ import {
 } from '@services/db/sync/SyncUtils';
 // Types
 import {dbTables} from '@shared/Constants';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
 
