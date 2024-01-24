@@ -1,4 +1,4 @@
-import {convertStats} from '@utils/conversion';
+import {convertStats} from '@utils/Conversion';
 import {
   StatCreateSchema,
   StatType,

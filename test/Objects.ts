@@ -5,8 +5,8 @@ import {
   WaterUnit,
 } from '@services/api/swagger/data-contracts';
 
-import {SyncType, SyncOperation} from '@shared/enums';
-import {SyncTable} from '@services/db/sync/types';
+import {SyncType, SyncOperation} from '@shared/Enums';
+import {SyncTable} from '@services/db/sync/Types';
 import {dbTables} from '@shared/Constants';
 
 // Objects

@@ -8,13 +8,13 @@ import {
   darkThemeColors,
   margins,
   fontWeights,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import HeaderBackButton from '@components/buttons/HeaderBackButton';
 import {View, StyleSheet, Text} from 'react-native';
 // Navigation
-import {ScreenNavigationProp} from '@navigation/types';
+import {ScreenNavigationProp} from '@navigation/Types';
 
 /**
  * Interface for the Header component

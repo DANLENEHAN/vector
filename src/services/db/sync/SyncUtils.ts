@@ -1,16 +1,16 @@
 // Typing
-import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './types';
+import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {dbTables, timestampFields} from '@shared/Constants';
-import {RowData} from '../types';
+import {RowData} from '../Types';
 
 // Functions
-import {runSqlSelect, executeSqlNonQuery} from '@services/db/functions';
+import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
 import {
   getLastSyncedForTableQuery,
   getRowsToSyncQuery,
-} from '@services/db/sync/queries';
+} from '@services/db/sync/Queries';
 
 // Constants
 import {unixEpoch} from '@shared/Constants';

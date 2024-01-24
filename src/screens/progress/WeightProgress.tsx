@@ -9,24 +9,24 @@ import {
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '@styles/main';
+} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 import {View, StyleSheet} from 'react-native';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {getUserStats} from '@services/api/blueprints/stat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Utils
-import {convertStats} from '@utils/conversion';
+import {convertStats} from '@utils/Conversion';
 import {parse} from 'date-fns';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
-import {GraphPlotData} from '@components/graphs/Line/types';
+import {GraphPlotData} from '@components/graphs/Line/Types';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  *  Weight progress screen

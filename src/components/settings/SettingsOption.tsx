@@ -12,7 +12,7 @@ import {
   iconSizes,
   borderRadius,
   borderWidth,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

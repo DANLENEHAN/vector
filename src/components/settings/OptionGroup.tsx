@@ -9,7 +9,7 @@ import {
   paddings,
   borderWidth,
   iconSizes,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import Icon from 'react-native-vector-icons/FontAwesome6';

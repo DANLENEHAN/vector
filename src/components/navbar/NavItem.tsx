@@ -13,7 +13,7 @@ import {
   darkThemeColors,
   iconSizes,
   fontWeights,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

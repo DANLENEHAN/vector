@@ -1,16 +1,16 @@
 // Typing
 import {AxiosResponse} from 'axios';
-import {SyncApiFunctions, SyncObject} from './types';
+import {SyncApiFunctions, SyncObject} from './Types';
 import {
   StatCreateSchema,
   StatUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
-import {SyncOperation} from '@shared/enums';
+import {SyncOperation} from '@shared/Enums';
 import {dbTables} from '@shared/Constants';
 
 // Functions
-import api from '@services/api/apiService';
+import api from '@services/api/ApiService';
 import {Stat} from '@services/api/swagger/Stat';
 
 const StatApi = new Stat(api);

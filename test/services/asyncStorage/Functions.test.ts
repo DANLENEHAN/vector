@@ -1,4 +1,4 @@
-import {getUserDetails} from '@services/asyncStorage/functions';
+import {getUserDetails} from '@services/asyncStorage/Functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Mocking AsyncStorage

@@ -5,7 +5,7 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '@components/layout/HomepageLayout';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 
 /**
  *  Home screen

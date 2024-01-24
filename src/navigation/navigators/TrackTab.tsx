@@ -9,7 +9,7 @@ import WellnessTracking from '@screens/track/WellnessTracking';
 // Components
 import TopTabNavBar from '@components/navbar/TopTabNavBar';
 // Types
-import {TopBarProps} from '@components/navbar/types';
+import {TopBarProps} from '@components/navbar/Types';
 
 // Navigation stacks
 const TrackTabStack = createMaterialTopTabNavigator();

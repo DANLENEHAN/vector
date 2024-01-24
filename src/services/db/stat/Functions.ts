@@ -2,7 +2,7 @@
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
 import {dbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/functions';
+import {insertRows} from '@services/db/Functions';
 
 /**
  * @description Inserts an array of stats into the stat table.

@@ -4,8 +4,8 @@ import {
   SyncTableFunctions,
   SyncCreateSchemas,
   SyncUpdateSchemas,
-} from './types';
-import {SyncOperation, SyncType} from '@shared/enums';
+} from './Types';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {dbTables, timestampFields} from '@shared/Constants';
 
 // Functions
@@ -15,7 +15,7 @@ import {
 } from '@services/db/sync/SyncUtils';
 
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],

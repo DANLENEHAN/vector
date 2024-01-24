@@ -4,7 +4,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {RootStackParamList} from '@navigation/types';
+import {RootStackParamList} from '@navigation/Types';
 //// Screens
 // General Screens
 import LoginScreen from '@screens/Login';
@@ -25,7 +25,7 @@ import TrackTabNavigator from '@navigation/navigators/TrackTab';
 import ProgressTabNavigator from '@navigation/navigators/ProgressTab';
 import SettingsStackNavigator from '@navigation/navigators/SettingsStack';
 // Types
-import {BottomBarProps} from '@components/navbar/types';
+import {BottomBarProps} from '@components/navbar/Types';
 
 // Navigation stacks
 const AppStack = createNativeStackNavigator<RootStackParamList>();
