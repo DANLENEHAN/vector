@@ -1,34 +1,16 @@
 // Test Objects
-import {sampleStat} from '../../../Objects';
+import {mock_Stat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {dbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
-
 // Functions
 import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
-
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-
-/* Mocking external dependencies */
-jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mocked/document/directory/path',
-}));
-
-jest.mock('uuid', () => ({
-  uuidv4: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-}));
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
-/**/
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
@@ -51,7 +33,7 @@ describe('Sync Operation Tests', () => {
 
   test('processUpdatesSyncTypePush with one row', async () => {
     // Arrange
-    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
+    const rowsToSync: SyncCreateSchemas[] = [mock_Stat];
     const tableToSync: dbTables = dbTables.statTable;
 
     // Act
@@ -64,7 +46,7 @@ describe('Sync Operation Tests', () => {
     // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: sampleStat.updated_at,
+      last_synced: mock_Stat.updated_at,
       sync_operation: SyncOperation.Updates,
       sync_type: SyncType.Push,
       table_name: dbTables.statTable,
@@ -89,7 +71,7 @@ describe('Sync Operation Tests', () => {
 
   test('processCreatesSyncTypePush with one row', async () => {
     // Arrange
-    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
+    const rowsToSync: SyncCreateSchemas[] = [mock_Stat];
     const tableToSync: dbTables = dbTables.statTable;
 
     // Act
@@ -102,7 +84,7 @@ describe('Sync Operation Tests', () => {
     // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: sampleStat.created_at,
+      last_synced: mock_Stat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Push,
       table_name: dbTables.statTable,

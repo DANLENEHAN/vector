@@ -23,22 +23,7 @@ import {insertRows} from '@services/db/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {sampleStat} from '../../../Objects';
-
-/* Mocking external dependencies */
-jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mocked/document/directory/path',
-}));
-
-jest.mock('uuid', () => ({
-  uuidv4: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-}));
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
+import {mock_Stat} from '../../../Objects';
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
@@ -124,7 +109,7 @@ describe('SyncType Tests', () => {
 
     expect(processCreatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processCreatesSyncTypePush).toHaveBeenCalledWith(
-      sampleStat,
+      mock_Stat,
       dbTables.statTable,
       apiFunctions[dbTables.statTable],
     );
@@ -158,7 +143,7 @@ describe('SyncType Tests', () => {
 
     expect(processUpdatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processUpdatesSyncTypePush).toHaveBeenCalledWith(
-      sampleStat,
+      mock_Stat,
       dbTables.statTable,
       apiFunctions[dbTables.statTable],
     );
@@ -191,7 +176,7 @@ describe('SyncType Tests', () => {
 
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: sampleStat.created_at,
+      last_synced: mock_Stat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Pull,
       table_name: dbTables.statTable,
@@ -199,7 +184,7 @@ describe('SyncType Tests', () => {
     expect(insertRows).toHaveBeenCalledTimes(1);
     expect(insertRows).toHaveBeenCalledWith(
       dbTables.statTable,
-      [sampleStat],
+      [mock_Stat],
       false,
     );
   });

@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../Objects';
+import {mock_Stat, sampleTimestampOne, sampleSyncRow} from '../../../Objects';
 
 // Functions
 import {
@@ -31,7 +31,7 @@ jest.mock('@services/db/Functions', () => ({
 describe('Sync Utils Tests', () => {
   test('should convert list of SyncCreateSchemas to SyncUpdateSchemas', () => {
     // Arrange
-    const createSchemasList = [sampleStat];
+    const createSchemasList = [mock_Stat];
     // Act
     const result = convertListToSyncUpdateSchemas(createSchemasList);
     // Assert
@@ -99,7 +99,7 @@ describe('Sync Utils Tests', () => {
 
   test('getRowsToSync handles non empty response', async () => {
     // Arrange
-    const sampleResponse: StatCreateSchema[] = [sampleStat, sampleStat];
+    const sampleResponse: StatCreateSchema[] = [mock_Stat, mock_Stat];
     const mockedRunSqlSelect = jest.mocked(runSqlSelect);
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
     // Act
