@@ -29,3 +29,5 @@ export const apiFunctions: SyncApiFunctions = {
       StatApi.postStat(data),
   },
 };
+
+export const maxSyncPushRetry = 3;
