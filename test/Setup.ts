@@ -10,7 +10,7 @@ jest.mock('react-native-sqlite-storage', () => ({
   })),
 }));
 
-jest.mock('@utils/logger', () => {
+jest.mock('@utils/Logger', () => {
   const mockLogger = {
     info: jest.fn(),
     error: jest.fn(),
