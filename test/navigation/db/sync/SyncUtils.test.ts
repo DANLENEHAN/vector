@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../objects';
+import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../objects';
 
 // Functions
 import {
@@ -8,7 +8,7 @@ import {
   getRowsToSync,
   insertSyncUpdate,
   getQueryObjForTable,
-} from '@services/db/sync/utils';
+} from '@services/db/sync/SyncUtils';
 
 // Types
 import {dbTables} from '@shared/Constants';

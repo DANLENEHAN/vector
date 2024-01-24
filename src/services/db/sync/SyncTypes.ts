@@ -11,7 +11,7 @@ import {
   getRowsToSync,
   getQueryObjForTable,
   insertSyncUpdate,
-} from '@services/db/sync/utils';
+} from '@services/db/sync/SyncUtils';
 import {insertRows, updateRows} from '../functions';
 import {
   processCreatesSyncTypePush,

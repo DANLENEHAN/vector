@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat} from '../../objects';
+import {sampleStat} from '../../../objects';
 import {SyncCreateSchemas} from '@services/db/sync/types';
 import {dbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/enums';
@@ -9,7 +9,7 @@ import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import {insertSyncUpdate} from '@services/db/sync/utils';
+import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
@@ -30,8 +30,8 @@ jest.mock('react-native-sqlite-storage', () => ({
 }));
 /**/
 
-jest.mock('@services/db/sync/utils', () => ({
-  ...jest.requireActual('@services/db/sync/utils'),
+jest.mock('@services/db/sync/SyncUtils', () => ({
+  ...jest.requireActual('@services/db/sync/SyncUtils'),
   insertSyncUpdate: jest.fn(),
 }));
 

@@ -9,7 +9,7 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
   getRowsToSync,
-} from '@services/db/sync/utils';
+} from '@services/db/sync/SyncUtils';
 import {
   processSyncTypePush,
   processSyncTypePull,
@@ -22,7 +22,7 @@ import {insertRows} from '@services/db/functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {sampleStat} from '../../objects';
+import {sampleStat} from '../../../objects';
 
 /* Mocking external dependencies */
 jest.mock('react-native-fs', () => ({
@@ -54,8 +54,8 @@ jest.mock('react-native-sqlite-storage', () => ({
 }));
 /**/
 
-jest.mock('@services/db/sync/utils', () => ({
-  ...jest.requireActual('@services/db/sync/utils'),
+jest.mock('@services/db/sync/SyncUtils', () => ({
+  ...jest.requireActual('@services/db/sync/SyncUtils'),
   insertSyncUpdate: jest.fn(),
   getQueryObjForTable: jest.fn(),
   getLastSyncedForTable: jest.fn().mockResolvedValue('2025-01-01T00:00:00.000'),

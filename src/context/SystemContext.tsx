@@ -17,6 +17,8 @@ import {
 } from '@react-native-community/netinfo';
 // Logger
 import logger from '@utils/logger';
+// Functions
+import {runDbMigrationProcess} from '@services/db/functions';
 
 /**
  * System Context
@@ -39,6 +41,7 @@ interface SystemContextType {
   setUserPreferenceTheme: (theme: 'light' | 'dark' | 'system') => void;
   isConnected: boolean;
   systemVarsLoaded: boolean;
+  migrationsComplete: boolean;
 }
 
 const SystemContext = createContext<SystemContextType>(null!);
@@ -65,7 +68,8 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
     'light' | 'dark' | 'system'
   >('light');
   const [isConnected, setIsConnected] = useState(false);
-  const [systemVarsLoaded, setIsLoaded] = useState(false); // Introduce loading state
+  const [systemVarsLoaded, setIsLoaded] = useState(false);
+  const [migrationsComplete, setMigrationsComplete] = useState(false);
 
   // Run once on mount
   useEffect(() => {
@@ -91,6 +95,10 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
       .finally(() => {
         setIsLoaded(true);
       });
+
+    runDbMigrationProcess().finally(() => {
+      setMigrationsComplete(true);
+    });
 
     // Create system theme subscription
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
@@ -119,6 +127,7 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
         setUserPreferenceTheme,
         isConnected,
         systemVarsLoaded,
+        migrationsComplete,
       }}>
       {children}
     </SystemContext.Provider>

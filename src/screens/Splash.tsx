@@ -21,6 +21,8 @@ import {
 import {ScreenProps} from '@screens/types';
 // Logger
 import logger from '@utils/logger';
+// Functions
+import {runSyncProcess} from '@services/db/sync/SyncProcess';
 
 /**
  * Splash screen that checks if the user is logged in or not
@@ -38,10 +40,11 @@ import logger from '@utils/logger';
  * <Splash navigation={navigation} />
  */
 const Splash: React.FC<ScreenProps> = ({navigation}) => {
-  const {isConnected, systemVarsLoaded, theme} = useSystem();
+  const {isConnected, systemVarsLoaded, migrationsComplete, theme} =
+    useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const getData = useCallback(async () => {
+  const loginAndRedirectUser = useCallback(async () => {
     const value = await AsyncStorage.getItem(FlaskLoginCookie);
     if (value === null) {
       logger.info('Auth failed, login required, redirecting');
@@ -51,6 +54,7 @@ const Splash: React.FC<ScreenProps> = ({navigation}) => {
       if (isConnected === true) {
         const response = await testAuthentication();
         if (response === undefined) {
+          runSyncProcess();
           navigation.navigate('App', {screen: 'Home'});
         } else {
           logger.info(
@@ -67,10 +71,10 @@ const Splash: React.FC<ScreenProps> = ({navigation}) => {
   }, [isConnected, navigation]);
 
   useEffect(() => {
-    if (systemVarsLoaded) {
-      getData();
+    if (systemVarsLoaded && migrationsComplete) {
+      loginAndRedirectUser();
     }
-  }, [systemVarsLoaded, getData]);
+  }, [systemVarsLoaded, migrationsComplete, loginAndRedirectUser]);
 
   return (
     <ScreenWrapper>
