@@ -9,7 +9,7 @@ import {
   getUserStats,
 } from '@services/api/blueprints/stat/Functions';
 // Data
-import {mock_Stat} from '../../../../Objects';
+import {sampleStat} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
 
 jest.mock('@services/date/Functions', () => ({
@@ -37,10 +37,10 @@ describe('Stat Functions Tests', () => {
   test('createNewStat', async () => {
     // Arrange
     const params = {
-      value: mock_Stat.value,
+      value: sampleStat.value,
       navigation: mockNavigation,
-      statType: mock_Stat.stat_type,
-      unitValue: mock_Stat.unit,
+      statType: sampleStat.stat_type,
+      unitValue: sampleStat.unit,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
 
@@ -55,8 +55,8 @@ describe('Stat Functions Tests', () => {
         stat_type: params.statType,
         user_id: 1,
         value: params.value,
-        created_at: mock_Stat.created_at,
-        timezone: mock_Stat.timezone,
+        created_at: sampleStat.created_at,
+        timezone: sampleStat.timezone,
       },
     ]);
     expect(mockNavigation.goBack).toHaveBeenCalledTimes(1);
@@ -65,10 +65,10 @@ describe('Stat Functions Tests', () => {
   test('createNewStat with error', async () => {
     // Arrange
     const params = {
-      value: mock_Stat.value,
+      value: sampleStat.value,
       navigation: mockNavigation,
-      statType: mock_Stat.stat_type,
-      unitValue: mock_Stat.unit,
+      statType: sampleStat.stat_type,
+      unitValue: sampleStat.unit,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
     // Act
@@ -82,12 +82,12 @@ describe('Stat Functions Tests', () => {
   test('getUserStats', async () => {
     // Arrange
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
-    jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue([mock_Stat]);
-    const statType = mock_Stat.stat_type;
+    jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue([sampleStat]);
+    const statType = sampleStat.stat_type;
     // Act
     const result = await getUserStats({statType: statType});
     // Assert
-    expect(result).toEqual([mock_Stat]);
+    expect(result).toEqual([sampleStat]);
   });
 
   test('getUserStats with validation error', async () => {
@@ -96,7 +96,7 @@ describe('Stat Functions Tests', () => {
     const validationError = new SwaggerValidationError(validationMessage);
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
     jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue(validationError);
-    const statType = mock_Stat.stat_type;
+    const statType = sampleStat.stat_type;
     // Act
     await getUserStats({statType: statType});
     // Assert
@@ -107,7 +107,7 @@ describe('Stat Functions Tests', () => {
     // Arrange
     // Cause an error by rejecting the promise
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
-    const statType = mock_Stat.stat_type;
+    const statType = sampleStat.stat_type;
     // Act
     const result = await getUserStats({statType: statType});
     // Assert

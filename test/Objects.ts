@@ -13,7 +13,7 @@ import {dbTables} from '@shared/Constants';
 export const sampleTimestampOne: string = '2025-01-01T00:00:00.000';
 export const sampleTimestampTwo: string = '2025-01-01T00:01:00.000';
 
-export const mock_Stat = {
+export const sampleStat = {
   stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
   stat_type: StatType.Water,
   unit: WaterUnit.Ml,

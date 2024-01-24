@@ -23,7 +23,7 @@ import {insertRows} from '@services/db/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {mock_Stat} from '../../../Objects';
+import {sampleStat} from '../../../Objects';
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
@@ -109,7 +109,7 @@ describe('SyncType Tests', () => {
 
     expect(processCreatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processCreatesSyncTypePush).toHaveBeenCalledWith(
-      mock_Stat,
+      sampleStat,
       dbTables.statTable,
       apiFunctions[dbTables.statTable],
     );
@@ -143,7 +143,7 @@ describe('SyncType Tests', () => {
 
     expect(processUpdatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processUpdatesSyncTypePush).toHaveBeenCalledWith(
-      mock_Stat,
+      sampleStat,
       dbTables.statTable,
       apiFunctions[dbTables.statTable],
     );
@@ -176,7 +176,7 @@ describe('SyncType Tests', () => {
 
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: mock_Stat.created_at,
+      last_synced: sampleStat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Pull,
       table_name: dbTables.statTable,
@@ -184,7 +184,7 @@ describe('SyncType Tests', () => {
     expect(insertRows).toHaveBeenCalledTimes(1);
     expect(insertRows).toHaveBeenCalledWith(
       dbTables.statTable,
-      [mock_Stat],
+      [sampleStat],
       false,
     );
   });

@@ -1,5 +1,5 @@
 // Test Objects
-import {mock_Stat} from '../../../Objects';
+import {sampleStat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {dbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
@@ -33,7 +33,7 @@ describe('Sync Operation Tests', () => {
 
   test('processUpdatesSyncTypePush with one row', async () => {
     // Arrange
-    const rowsToSync: SyncCreateSchemas[] = [mock_Stat];
+    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
     const tableToSync: dbTables = dbTables.statTable;
 
     // Act
@@ -46,7 +46,7 @@ describe('Sync Operation Tests', () => {
     // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: mock_Stat.updated_at,
+      last_synced: sampleStat.updated_at,
       sync_operation: SyncOperation.Updates,
       sync_type: SyncType.Push,
       table_name: dbTables.statTable,
@@ -71,7 +71,7 @@ describe('Sync Operation Tests', () => {
 
   test('processCreatesSyncTypePush with one row', async () => {
     // Arrange
-    const rowsToSync: SyncCreateSchemas[] = [mock_Stat];
+    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
     const tableToSync: dbTables = dbTables.statTable;
 
     // Act
@@ -84,7 +84,7 @@ describe('Sync Operation Tests', () => {
     // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: mock_Stat.created_at,
+      last_synced: sampleStat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Push,
       table_name: dbTables.statTable,
