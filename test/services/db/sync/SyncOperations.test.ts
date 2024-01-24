@@ -39,7 +39,7 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
 jest.mock('@services/api/swagger/Stat', () => ({
   Stat: jest.fn().mockImplementation(() => ({
     createCreate: jest.fn().mockResolvedValue({status: 201}),
-    updateUpdate: jest.fn().mockResolvedValue({status: 201}),
+    updateUpdate: jest.fn().mockResolvedValue({status: 204}),
   })),
 }));
 
