@@ -6,7 +6,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie} from '@services/asyncStorage/types';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import {testAuthentication} from '@services/api/blueprints/user/api';
 import {useSystem} from '@context/SystemContext';
 //Theme
@@ -45,7 +45,7 @@ const Splash: React.FC<ScreenProps> = ({navigation}) => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const loginAndRedirectUser = useCallback(async () => {
-    const value = await AsyncStorage.getItem(FlaskLoginCookie);
+    const value = await AsyncStorage.getItem(AsyncStorageKeys.FlaskLoginCookie);
     if (value === null) {
       logger.info('Auth failed, login required, redirecting');
       navigation.navigate('Login');
@@ -58,9 +58,9 @@ const Splash: React.FC<ScreenProps> = ({navigation}) => {
           navigation.navigate('App', {screen: 'Home'});
         } else {
           logger.info(
-            `Trouble logging in with key ${FlaskLoginCookie} value ${value}. Deleting...`,
+            `Trouble logging in with key ${AsyncStorageKeys.FlaskLoginCookie} value ${value}. Deleting...`,
           );
-          AsyncStorage.removeItem(FlaskLoginCookie);
+          AsyncStorage.removeItem(AsyncStorageKeys.FlaskLoginCookie);
           navigation.navigate('Login');
         }
       } else {

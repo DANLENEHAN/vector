@@ -8,7 +8,7 @@ import {margins} from '@styles/main';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '@services/asyncStorage/types';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 
 /**
@@ -44,7 +44,7 @@ const ThemeScreen: React.FC<any> = ({navigation}) => {
       setTheme(selectedTheme);
     }
     setUserPreferenceTheme(selectedTheme);
-    AsyncStorage.setItem(UserThemePreference, selectedTheme);
+    AsyncStorage.setItem(AsyncStorageKeys.UserThemePreference, selectedTheme);
   };
   return (
     <ScreenWrapper>

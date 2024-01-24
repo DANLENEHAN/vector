@@ -1768,7 +1768,7 @@ export interface StatCreateSchema {
    * Unique uuid for a stat entry
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  stat_id?: string | null;
+  stat_id: string;
   /**
    * The type of the stat
    * @example "weight"
@@ -1829,7 +1829,7 @@ export enum StatType {
 /**
  * StatUpdateSchema
  * A class representing the schema for updating statistics,
- * inheriting from StatCreateSchema and SyncUpdateModel.
+ * inheriting from StatCreateSchema and SyncUpdateSchema.
  */
 export interface StatUpdateSchema {
   /**
@@ -1844,7 +1844,7 @@ export interface StatUpdateSchema {
    * Unique uuid for a stat entry
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  stat_id?: string | null;
+  stat_id: string;
   /**
    * The type of the stat
    * @example "weight"

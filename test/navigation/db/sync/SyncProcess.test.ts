@@ -1,6 +1,6 @@
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 
 // Types
 import {SyncOperation} from '@shared/enums';
@@ -42,24 +42,24 @@ describe('Sync Process Tests', () => {
     // Assert
     expect(processSyncTypePull).toHaveBeenCalledTimes(2);
     expect(processSyncTypePull).toHaveBeenCalledWith(
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
       SyncOperation.Creates,
     );
     expect(processSyncTypePull).toHaveBeenCalledWith(
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
       SyncOperation.Updates,
     );
     expect(processSyncTypePush).toHaveBeenCalledTimes(2);
     expect(processSyncTypePush).toHaveBeenCalledWith(
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
       SyncOperation.Creates,
     );
     expect(processSyncTypePush).toHaveBeenCalledWith(
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
       SyncOperation.Updates,
     );
   });

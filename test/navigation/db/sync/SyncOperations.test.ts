@@ -1,7 +1,7 @@
 // Test Objects
 import {sampleStat} from '../../../objects';
 import {SyncCreateSchemas} from '@services/db/sync/types';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/enums';
 
 // Functions
@@ -52,7 +52,7 @@ describe('Sync Operation Tests', () => {
   test('processUpdatesSyncTypePush with one row', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processUpdatesSyncTypePush(
@@ -67,14 +67,14 @@ describe('Sync Operation Tests', () => {
       last_synced: sampleStat.updated_at,
       sync_operation: SyncOperation.Updates,
       sync_type: SyncType.Push,
-      table_name: dbTables.statTable,
+      table_name: syncDbTables.statTable,
     });
   });
 
   test('processUpdatesSyncTypePush with no rows', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [];
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processUpdatesSyncTypePush(
@@ -90,7 +90,7 @@ describe('Sync Operation Tests', () => {
   test('processCreatesSyncTypePush with one row', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processCreatesSyncTypePush(
@@ -105,14 +105,14 @@ describe('Sync Operation Tests', () => {
       last_synced: sampleStat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Push,
-      table_name: dbTables.statTable,
+      table_name: syncDbTables.statTable,
     });
   });
 
   test('processCreatesSyncTypePush with no rows', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [];
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processCreatesSyncTypePush(

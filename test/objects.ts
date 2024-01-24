@@ -7,7 +7,7 @@ import {
 
 import {SyncType, SyncOperation} from '@shared/enums';
 import {SyncTable} from '@services/db/sync/types';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 
 // Objects
 export const sampleTimestampOne: string = '2025-01-01T00:00:00.000';
@@ -25,7 +25,7 @@ export const sampleStat = {
 } as StatCreateSchema;
 
 export const sampleSyncRow = {
-  table_name: dbTables.statTable,
+  table_name: syncDbTables.statTable,
   last_synced: sampleTimestampTwo,
   sync_type: SyncType.Pull,
   sync_operation: SyncOperation.Creates,

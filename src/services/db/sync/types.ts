@@ -1,6 +1,6 @@
 import {AxiosResponse} from 'axios';
 import {SyncOperation, SyncType} from '@shared/enums';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 import {
   StatCreateSchema,
   StatUpdateSchema,
@@ -94,7 +94,7 @@ export interface SyncTableFunctions {
  * @property {SyncTableFunctions} statTable - API functions for the 'statTable' table.
  */
 export interface SyncApiFunctions {
-  [dbTables.statTable]: SyncTableFunctions;
+  [syncDbTables.statTable]: SyncTableFunctions;
 }
 
 /**

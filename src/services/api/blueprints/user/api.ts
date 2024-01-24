@@ -7,7 +7,7 @@ import {
 import {User} from '@services/api/swagger/User';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie, UserDetails} from '@services/asyncStorage/types';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 // Functions
 import {HandleSwaggerValidationError} from '@services/api/functions';
 // Types
@@ -70,7 +70,7 @@ export const loginUser = async (data: {
         );
         const cookieValue = targetCookie?.split(';')[0].split('=')[1].trim();
         if (cookieValue) {
-          AsyncStorage.setItem(FlaskLoginCookie, cookieValue);
+          AsyncStorage.setItem(AsyncStorageKeys.FlaskLoginCookie, cookieValue);
         }
       }
       const response_data = response.data;
@@ -79,7 +79,10 @@ export const loginUser = async (data: {
         return new SwaggerValidationError();
       }
       // Save the user ID to AsyncStorage and return a resolved promise.
-      AsyncStorage.setItem(UserDetails, JSON.stringify(response_data));
+      AsyncStorage.setItem(
+        AsyncStorageKeys.UserDetails,
+        JSON.stringify(response_data),
+      );
       return Promise.resolve();
     } else {
       return new SwaggerValidationError();
@@ -105,7 +108,7 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
     const response: AxiosResponse<void> = await UserApi.logoutCreate();
 
     if (response.status === 204) {
-      AsyncStorage.removeItem(FlaskLoginCookie);
+      AsyncStorage.removeItem(AsyncStorageKeys.FlaskLoginCookie);
       return Promise.resolve();
     } else {
       return new SwaggerValidationError();

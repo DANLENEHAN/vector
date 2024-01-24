@@ -7,7 +7,7 @@ import {
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation} from '@shared/enums';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 
 // Functions
 import api from '@services/api/apiService';
@@ -16,7 +16,7 @@ import {Stat} from '@services/api/swagger/Stat';
 const StatApi = new Stat(api);
 
 export const apiFunctions: SyncApiFunctions = {
-  [dbTables.statTable]: {
+  [syncDbTables.statTable]: {
     [SyncOperation.Creates]: (
       data: StatCreateSchema,
       query?: SyncObject,

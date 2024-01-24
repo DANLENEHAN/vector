@@ -1,6 +1,6 @@
 // Typing
 import {SyncOperation, SyncType} from '@shared/enums';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 import {
   processSyncTypePush,
   processSyncTypePull,
@@ -36,14 +36,14 @@ export const runSyncProcess = async (): Promise<void> => {
 
       // Process synchronization pull for create operations
       await processSyncTypePull(
-        tableName as dbTables,
+        tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Creates,
       );
 
       // Process synchronization pull for update operations
       await processSyncTypePull(
-        tableName as dbTables,
+        tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Updates,
       );
@@ -59,14 +59,14 @@ export const runSyncProcess = async (): Promise<void> => {
 
       // Trigger synchronization push for create operation
       await processSyncTypePush(
-        tableName as dbTables,
+        tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Creates,
       );
 
       // Trigger synchronization push for update operation
       await processSyncTypePush(
-        tableName as dbTables,
+        tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Updates,
       );

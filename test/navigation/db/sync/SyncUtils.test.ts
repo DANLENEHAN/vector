@@ -11,7 +11,7 @@ import {
 } from '@services/db/sync/SyncUtils';
 
 // Types
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@shared/enums';
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/functions';
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
@@ -59,7 +59,7 @@ describe('Sync Utils Tests', () => {
     );
     // Act
     const result = await getLastSyncedForTable(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Push,
       SyncOperation.Creates,
     );
@@ -76,7 +76,7 @@ describe('Sync Utils Tests', () => {
     );
     // Act
     const result = await getLastSyncedForTable(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Pull,
       SyncOperation.Updates,
     );
@@ -90,7 +90,7 @@ describe('Sync Utils Tests', () => {
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve([]));
     // Act
     const result = await getLastSyncedForTable(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Pull,
       SyncOperation.Creates,
     );
@@ -105,7 +105,7 @@ describe('Sync Utils Tests', () => {
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
     // Act
     const result = await getRowsToSync(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncOperation.Creates,
       sampleTimestampOne,
     );
@@ -120,7 +120,7 @@ describe('Sync Utils Tests', () => {
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
     // Act
     const result = await getRowsToSync(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncOperation.Creates,
       sampleTimestampOne,
     );

@@ -6,7 +6,7 @@ import {
   SyncUpdateSchemas,
 } from './types';
 import {SyncOperation, SyncType} from '@shared/enums';
-import {dbTables, timestampFields} from '@shared/Constants';
+import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions
 import {
@@ -19,7 +19,7 @@ import logger from '@utils/logger';
 
 export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
-  tableName: dbTables,
+  tableName: syncDbTables,
   tableFunctions: SyncTableFunctions,
 ) => {
   let successfulRequests = 0;
@@ -62,7 +62,7 @@ export const processUpdatesSyncTypePush = async (
 
 export const processCreatesSyncTypePush = async (
   rowsToSync: SyncCreateSchemas[],
-  tableName: dbTables,
+  tableName: syncDbTables,
   tableFunctions: SyncTableFunctions,
 ) => {
   let successfulRequests = 0;

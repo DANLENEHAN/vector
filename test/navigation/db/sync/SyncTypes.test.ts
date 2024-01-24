@@ -1,6 +1,6 @@
 // Test Objects
 
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/enums';
 
 // Functions
@@ -25,20 +25,6 @@ import {apiFunctions} from '@services/db/sync/Constants';
 import {sampleStat} from '../../../objects';
 
 /* Mocking external dependencies */
-jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mocked/document/directory/path',
-}));
-
-jest.mock('uuid', () => ({
-  uuidv4: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-}));
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
-/**/
 jest.mock('react-native-fs', () => ({
   DocumentDirectoryPath: '/mocked/document/directory/path',
 }));
@@ -112,7 +98,7 @@ describe('SyncType Tests', () => {
 
   test("processSyncTypePush SyncOperation 'Creates'", async () => {
     // Arrange
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processSyncTypePush(
@@ -124,14 +110,14 @@ describe('SyncType Tests', () => {
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Push,
       SyncOperation.Creates,
     );
 
     expect(getRowsToSync).toHaveBeenCalledTimes(1);
     expect(getRowsToSync).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncOperation.Creates,
       '2025-01-01T00:00:00.000',
     );
@@ -139,14 +125,14 @@ describe('SyncType Tests', () => {
     expect(processCreatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processCreatesSyncTypePush).toHaveBeenCalledWith(
       sampleStat,
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
     );
   });
 
   test("processSyncTypePush SyncOperation 'Updates'", async () => {
     // Arrange
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processSyncTypePush(
@@ -158,14 +144,14 @@ describe('SyncType Tests', () => {
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Push,
       SyncOperation.Updates,
     );
 
     expect(getRowsToSync).toHaveBeenCalledTimes(1);
     expect(getRowsToSync).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncOperation.Updates,
       '2025-01-01T00:00:00.000',
     );
@@ -173,14 +159,14 @@ describe('SyncType Tests', () => {
     expect(processUpdatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processUpdatesSyncTypePush).toHaveBeenCalledWith(
       sampleStat,
-      dbTables.statTable,
-      apiFunctions[dbTables.statTable],
+      syncDbTables.statTable,
+      apiFunctions[syncDbTables.statTable],
     );
   });
 
   test("processSyncTypePull sync operation 'Creates'", async () => {
     // Arrange
-    const tableToSync: dbTables = dbTables.statTable;
+    const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
     await processSyncTypePull(
@@ -192,7 +178,7 @@ describe('SyncType Tests', () => {
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
     expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       SyncType.Pull,
       SyncOperation.Creates,
     );
@@ -208,11 +194,11 @@ describe('SyncType Tests', () => {
       last_synced: sampleStat.created_at,
       sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Pull,
-      table_name: dbTables.statTable,
+      table_name: syncDbTables.statTable,
     });
     expect(insertRows).toHaveBeenCalledTimes(1);
     expect(insertRows).toHaveBeenCalledWith(
-      dbTables.statTable,
+      syncDbTables.statTable,
       [sampleStat],
       false,
     );
