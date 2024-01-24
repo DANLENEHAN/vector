@@ -11,7 +11,7 @@ import {
   margins,
   paddings,
   borderRadius,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

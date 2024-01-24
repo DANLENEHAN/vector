@@ -1,4 +1,4 @@
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {syncBatchLimit, timestampFields} from '@shared/Constants';
 
 /**

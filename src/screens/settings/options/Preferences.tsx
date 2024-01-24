@@ -5,9 +5,9 @@ import {View, StyleSheet} from 'react-native';
 import SettingsOption from '@components/settings/SettingsOption';
 import Header from '@components/navbar/Header';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Theme
-import {lightThemeColors, darkThemeColors, margins} from '@styles/main';
+import {lightThemeColors, darkThemeColors, margins} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 

@@ -3,16 +3,16 @@ import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, margins} from '@styles/main';
+import {fontSizes, margins} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {getUserStats} from '@services/api/blueprints/stat/Functions';
 // Utils
-import {convertStats} from '@utils/conversion';
+import {convertStats} from '@utils/Conversion';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {
   StatCreateSchema,
   StatType,

@@ -8,17 +8,17 @@ import {
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '@styles/main';
+} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/functions';
+import {getUserStats} from '@services/api/blueprints/stat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {StatType} from '@services/api/swagger/data-contracts';
 
 /**

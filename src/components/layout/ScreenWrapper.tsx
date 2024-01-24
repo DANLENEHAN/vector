@@ -3,7 +3,7 @@ import React from 'react';
 // Components
 import {StyleSheet} from 'react-native';
 // Theme
-import {darkThemeColors, lightThemeColors} from '@styles/main';
+import {darkThemeColors, lightThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Layout
 import {

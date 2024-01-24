@@ -3,14 +3,14 @@ import React from 'react';
 // Components
 import NavItem from '@components/navbar/NavItem';
 import {View, StyleSheet} from 'react-native';
-import {BottomBarProps} from '@components/navbar/types';
+import {BottomBarProps} from '@components/navbar/Types';
 // Styling
 import {
   lightThemeColors,
   darkThemeColors,
   paddings,
   borderWidth,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSystem} from '@context/SystemContext';
 

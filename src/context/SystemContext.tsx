@@ -9,16 +9,16 @@ import React, {
 import {Appearance} from 'react-native';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '@services/asyncStorage/types';
+import {UserThemePreference} from '@services/asyncStorage/Types';
 import {
   NetInfoState,
   NetInfoSubscription,
   addEventListener,
 } from '@react-native-community/netinfo';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 // Functions
-import {runDbMigrationProcess} from '@services/db/functions';
+import {runDbMigrationProcess} from '@services/db/Functions';
 
 /**
  * System Context

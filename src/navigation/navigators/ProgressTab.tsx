@@ -9,7 +9,7 @@ import NutritionProgressScreen from '@screens/progress/NutritionProgress';
 // Components
 import TopTabNavBar from '@components/navbar/TopTabNavBar';
 // Types
-import {TopBarProps} from '@components/navbar/types';
+import {TopBarProps} from '@components/navbar/Types';
 
 // Navigation stacks
 const ProgressTabStack = createMaterialTopTabNavigator();

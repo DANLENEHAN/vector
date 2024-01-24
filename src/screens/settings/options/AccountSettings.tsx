@@ -1,19 +1,19 @@
 // React Import
 import React from 'react';
 // Functions
-import {logoutUser} from '@services/api/blueprints/user/api';
+import {logoutUser} from '@services/api/blueprints/user/Api';
 // Components
 import SettingsOption from '@components/settings/SettingsOption';
 import Header from '@components/navbar/Header';
 import {View, StyleSheet} from 'react-native';
 // Types
-import {ScreenProps} from '@screens/types';
-import {SwaggerValidationError} from '@services/api/types';
+import {ScreenProps} from '@screens/Types';
+import {SwaggerValidationError} from '@services/api/Types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * Account Settings Screen

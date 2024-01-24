@@ -8,7 +8,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   margins,
-} from '@styles/main';
+} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -25,7 +25,7 @@ import {AverageValueText} from '@components/graphs/Line/AverageValue';
 import {useFont} from '@shopify/react-native-skia';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
-import {graphDataPoint} from '@components/graphs/Line/types';
+import {graphDataPoint} from '@components/graphs/Line/Types';
 
 /**
  * Interface for the LineGraph component

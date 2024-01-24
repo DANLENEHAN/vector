@@ -6,17 +6,17 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
 // Types
-import {alembicTable} from '@services/db/types';
-import {dbName, RowData} from '@services/db/types';
+import {alembicTable} from '@services/db/Types';
+import {dbName, RowData} from '@services/db/Types';
 import {dbTables, timestampFields} from '@shared/Constants';
 // Functions
 import {revisionObject} from '@services/db/vectorRevisions';
-import {generateDeletionQuery} from '@services/db/queries';
-import {getRowByIdQuery} from './sync/queries';
+import {generateDeletionQuery} from '@services/db/Queries';
+import {getRowByIdQuery} from './sync/Queries';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * @description Retrieves the document directory path using React Native File System (RNFS).

@@ -5,7 +5,7 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '@components/layout/HomepageLayout';
 // Styling
-import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/main';
+import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

@@ -14,17 +14,17 @@ import UnitSelector from '@components/buttons/UnitSelector';
 import NumberInput from '@components/inputs/NumberInput';
 import Header from '@components/navbar/Header';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {StatType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '@styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/Functions';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  *  Water tracking screen

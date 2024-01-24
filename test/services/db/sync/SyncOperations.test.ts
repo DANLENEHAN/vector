@@ -1,8 +1,8 @@
 // Test Objects
-import {sampleStat} from '../../../objects';
-import {SyncCreateSchemas} from '@services/db/sync/types';
+import {sampleStat} from '../../../Objects';
+import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {dbTables} from '@shared/Constants';
-import {SyncType, SyncOperation} from '@shared/enums';
+import {SyncType, SyncOperation} from '@shared/Enums';
 
 // Functions
 import {
@@ -39,7 +39,7 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
 jest.mock('@services/api/swagger/Stat', () => ({
   Stat: jest.fn().mockImplementation(() => ({
     createCreate: jest.fn().mockResolvedValue({status: 201}),
-    updateUpdate: jest.fn().mockResolvedValue({status: 204}),
+    updateUpdate: jest.fn().mockResolvedValue({status: 201}),
   })),
 }));
 

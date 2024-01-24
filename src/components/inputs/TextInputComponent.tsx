@@ -19,7 +19,7 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

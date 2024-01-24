@@ -6,12 +6,12 @@ import SettingsOption from '@components/settings/SettingsOption';
 import ProfileHeader from '@components/settings/ProfileHeader';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * Settings Screen

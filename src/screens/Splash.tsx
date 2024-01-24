@@ -6,8 +6,8 @@ import {View, Text, StyleSheet} from 'react-native';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FlaskLoginCookie} from '@services/asyncStorage/types';
-import {testAuthentication} from '@services/api/blueprints/user/api';
+import {FlaskLoginCookie} from '@services/asyncStorage/Types';
+import {testAuthentication} from '@services/api/blueprints/user/Api';
 import {useSystem} from '@context/SystemContext';
 //Theme
 import {
@@ -16,11 +16,11 @@ import {
   fontSizes,
   fonts,
   fontWeights,
-} from '@styles/main';
+} from '@styles/Main';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 // Functions
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 

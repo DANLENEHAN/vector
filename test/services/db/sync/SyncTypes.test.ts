@@ -1,7 +1,7 @@
 // Test Objects
 
 import {dbTables} from '@shared/Constants';
-import {SyncType, SyncOperation} from '@shared/enums';
+import {SyncType, SyncOperation} from '@shared/Enums';
 
 // Functions
 import {
@@ -10,6 +10,7 @@ import {
   insertSyncUpdate,
   getRowsToSync,
 } from '@services/db/sync/SyncUtils';
+
 import {
   processSyncTypePush,
   processSyncTypePull,
@@ -18,11 +19,11 @@ import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import {insertRows} from '@services/db/functions';
+import {insertRows} from '@services/db/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {sampleStat} from '../../../objects';
+import {sampleStat} from '../../../Objects';
 
 /* Mocking external dependencies */
 jest.mock('react-native-fs', () => ({

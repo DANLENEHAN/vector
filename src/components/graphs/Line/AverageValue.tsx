@@ -7,7 +7,7 @@ import {
   margins,
   fontSizes,
   fontWeights,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import {AnimatedText} from '@components/inputs/AnimatedText';

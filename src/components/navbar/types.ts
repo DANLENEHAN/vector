@@ -1,5 +1,5 @@
 // Navigation
-import {ScreenNavigationProp} from '@navigation/types';
+import {ScreenNavigationProp} from '@navigation/Types';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 

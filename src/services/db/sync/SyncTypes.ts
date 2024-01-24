@@ -1,8 +1,8 @@
 // Typing
 import {AxiosResponse} from 'axios';
-import {SyncTableFunctions, SyncCreateSchemas} from './types';
+import {SyncTableFunctions, SyncCreateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {dbTables, timestampFields} from '@shared/Constants';
 
 // Functions
@@ -12,14 +12,14 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '../functions';
+import {insertRows, updateRows} from '../Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * Process a synchronization pull operation for a specific table.

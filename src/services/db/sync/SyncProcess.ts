@@ -1,5 +1,5 @@
 // Typing
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {dbTables} from '@shared/Constants';
 import {
   processSyncTypePush,
@@ -10,7 +10,7 @@ import {
 import {apiFunctions} from '@services/db/sync/Constants';
 
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * Process synchronization pull and push for all tables.

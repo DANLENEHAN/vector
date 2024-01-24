@@ -3,7 +3,7 @@ import React from 'react';
 // Components
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 // Types
-import {TopBarProps} from '@components/navbar/types';
+import {TopBarProps} from '@components/navbar/Types';
 // Styling
 import {
   fonts,
@@ -13,7 +13,7 @@ import {
   darkThemeColors,
   paddings,
   borderWidth,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
 import {useSystem} from '@context/SystemContext';

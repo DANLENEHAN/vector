@@ -1,13 +1,13 @@
 // React imports
 import React from 'react';
 // Styling
-import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
 import Header from '@components/navbar/Header';
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {TileData} from '@components/buttons/ClickableTile';
 import {View, StyleSheet, ScrollView} from 'react-native';
 

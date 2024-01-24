@@ -1,17 +1,17 @@
 // Functions
-import {getUserDetails} from '@services/asyncStorage/functions';
-import {getStats} from '@services/api/blueprints/stat/api';
-import {getCurrentTimestampTimezone} from '@services/date/functions';
+import {getUserDetails} from '@services/asyncStorage/Functions';
+import {getStats} from '@services/api/blueprints/stat/Api';
+import {getCurrentTimestampTimezone} from '@services/date/Functions';
 
 // Types
 import {StatType, StatCreateSchema} from '@services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '@services/api/types';
-import {insertStat} from '@services/db/stat/functions';
+import {SwaggerValidationError} from '@services/api/Types';
+import {insertStat} from '@services/db/stat/Functions';
 import {timestampFields} from '@shared/Constants';
-import {TimestampTimezone} from '@services/date/type';
+import {TimestampTimezone} from '@services/date/Type';
 
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * Interface for the createNewStat function.
