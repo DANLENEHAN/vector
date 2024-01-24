@@ -3,32 +3,14 @@ import {sampleStat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {dbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
-
 // Functions
 import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
-
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-
-/* Mocking external dependencies */
-jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mocked/document/directory/path',
-}));
-
-jest.mock('uuid', () => ({
-  uuidv4: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-}));
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
-/**/
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
