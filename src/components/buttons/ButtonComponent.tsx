@@ -13,7 +13,7 @@ import {
   lightThemeColors,
   buttonHeight,
   buttonWidth,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**

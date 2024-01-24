@@ -5,7 +5,7 @@ import TopNavBar from '@components/navbar/TopNavBar';
 import {View, StyleSheet} from 'react-native';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeParamList, RootStackParamList} from '@navigation/types';
+import {HomeParamList, RootStackParamList} from '@navigation/Types';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 

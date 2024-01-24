@@ -16,11 +16,11 @@ import {
   fontSizes,
   fonts,
   fontWeights,
-} from '@styles/main';
+} from '@styles/Main';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 // Functions
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 

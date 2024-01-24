@@ -15,7 +15,7 @@ import {
 } from '@services/db/sync/SyncUtils';
 
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],

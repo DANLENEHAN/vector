@@ -16,9 +16,9 @@ import {
   addEventListener,
 } from '@react-native-community/netinfo';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 // Functions
-import {runDbMigrationProcess} from '@services/db/functions';
+import {runDbMigrationProcess} from '@services/db/Functions';
 
 /**
  * System Context

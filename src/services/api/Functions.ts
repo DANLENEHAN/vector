@@ -4,7 +4,7 @@ import {
   StatusCodeToMessage,
   SwaggerValidationError,
   unknownErrorMessage,
-} from '@services/api/types';
+} from '@services/api/Types';
 
 /**
  * A function for handling Grau's Error responses. All response codes and

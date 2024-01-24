@@ -4,7 +4,7 @@ import React from 'react';
 import {Appearance, View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
 import OptionGroup from '@components/settings/OptionGroup';
-import {margins} from '@styles/main';
+import {margins} from '@styles/Main';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';

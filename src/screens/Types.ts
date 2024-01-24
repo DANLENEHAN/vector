@@ -1,5 +1,5 @@
 // Navigation
-import {ScreenNavigationProp} from '@navigation/types';
+import {ScreenNavigationProp} from '@navigation/Types';
 
 /**
  * The props for the Screen component.

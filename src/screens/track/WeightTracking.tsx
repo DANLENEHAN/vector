@@ -9,7 +9,7 @@ import {
   darkThemeColors,
   fontWeights,
   margins,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import Header from '@components/navbar/Header';
@@ -24,12 +24,12 @@ import {
   Keyboard,
 } from 'react-native';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/Functions';
 // Types
 import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  *  Weight tracking screen

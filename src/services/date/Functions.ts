@@ -1,7 +1,7 @@
 import moment from 'moment';
 import * as RNLocalize from 'react-native-localize';
 
-import {TimestampTimezone} from './type';
+import {TimestampTimezone} from './Type';
 
 /**
  * Converts a Unix timestamp in milliseconds to a formatted date string.

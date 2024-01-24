@@ -10,6 +10,7 @@ import {
   insertSyncUpdate,
   getRowsToSync,
 } from '@services/db/sync/SyncUtils';
+
 import {
   processSyncTypePush,
   processSyncTypePull,
@@ -18,11 +19,11 @@ import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import {insertRows} from '@services/db/functions';
+import {insertRows} from '@services/db/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
-import {sampleStat} from '../../../objects';
+import {sampleStat} from '../../../Objects';
 
 /* Mocking external dependencies */
 jest.mock('react-native-fs', () => ({
@@ -85,8 +86,8 @@ jest.mock('@services/db/sync/SyncOperations', () => ({
   processUpdatesSyncTypePush: jest.fn(),
 }));
 
-jest.mock('@services/db/functions', () => ({
-  ...jest.requireActual('@services/db/functions'),
+jest.mock('@services/db/Functions', () => ({
+  ...jest.requireActual('@services/db/Functions'),
   insertRows: jest.fn(),
 }));
 

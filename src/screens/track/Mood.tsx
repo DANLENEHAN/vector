@@ -8,14 +8,14 @@ import {View, Text, StyleSheet} from 'react-native';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Types
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 import {StatType} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
-import {lightThemeColors, darkThemeColors} from '@styles/main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/functions';
+import {createNewStat} from '@services/api/blueprints/stat/Functions';
 
 /**
  * Interface for the mood object

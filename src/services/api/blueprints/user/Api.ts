@@ -1,5 +1,5 @@
 import {AxiosResponse} from 'axios';
-import api from '@services/api/apiService';
+import api from '@services/api/ApiService';
 import {
   UserCreateSchema,
   UserGetSchema,
@@ -9,11 +9,11 @@ import {User} from '@services/api/swagger/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 // Functions
-import {HandleSwaggerValidationError} from '@services/api/functions';
+import {HandleSwaggerValidationError} from '@services/api/Functions';
 // Types
-import {SwaggerValidationError} from '@services/api/types';
+import {SwaggerValidationError} from '@services/api/Types';
 // Logger
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 const UserApi = new User(api);
 

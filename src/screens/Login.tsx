@@ -1,11 +1,11 @@
 // React import
 import React, {useState} from 'react';
 // Functions
-import {loginUser, createUser} from '@services/api/blueprints/user/api';
-import {getCurrentTimestampTimezone} from '@services/date/functions';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
+import {loginUser, createUser} from '@services/api/blueprints/user/Api';
+import {getCurrentTimestampTimezone} from '@services/date/Functions';
 //Utils
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 //Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
@@ -21,11 +21,11 @@ import {
   lightThemeColors,
   paddings,
   margins,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
-import {ScreenProps} from '@screens/types';
-import {TimestampTimezone} from '@services/date/type';
+import {ScreenProps} from '@screens/Types';
+import {TimestampTimezone} from '@services/date/Type';
 import {
   DateFormat,
   Gender,
@@ -34,7 +34,7 @@ import {
   WeightUnit,
   ProfileStatus,
 } from '@services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '@services/api/types';
+import {SwaggerValidationError} from '@services/api/Types';
 import {timestampFields} from '@shared/Constants';
 /**
  *  Login screen

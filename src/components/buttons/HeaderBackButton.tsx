@@ -4,7 +4,7 @@ import React from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Navigation
-import {ScreenNavigationProp} from '@navigation/types';
+import {ScreenNavigationProp} from '@navigation/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {
@@ -13,7 +13,7 @@ import {
   margins,
   paddings,
   iconSizes,
-} from '@styles/main';
+} from '@styles/Main';
 
 /**
  * Interface for the Header Back Button Component

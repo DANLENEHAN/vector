@@ -11,13 +11,13 @@ import {
   darkThemeColors,
   borderWidth,
   iconSizes,
-} from '@styles/main';
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Typing
-import {NavBarProps} from '@components/navbar/types';
+import {NavBarProps} from '@components/navbar/Types';
 // Logging
-import logger from '@utils/logger';
+import logger from '@utils/Logger';
 
 /**
  * TopNavBar Component

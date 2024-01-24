@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../objects';
+import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../Objects';
 
 // Functions
 import {
@@ -9,7 +9,6 @@ import {
   insertSyncUpdate,
   getQueryObjForTable,
 } from '@services/db/sync/SyncUtils';
-
 // Types
 import {syncDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@shared/enums';
@@ -24,7 +23,7 @@ jest.mock('react-native-sqlite-storage', () => ({
   })),
 }));
 
-jest.mock('@services/db/functions', () => ({
+jest.mock('@services/db/Functions', () => ({
   runSqlSelect: jest.fn(),
   executeSqlNonQuery: jest.fn(),
 }));

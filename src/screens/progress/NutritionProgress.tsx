@@ -1,11 +1,11 @@
 // React imports
 import React from 'react';
 // Styling
-import {lightThemeColors, darkThemeColors} from '@styles/main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
 import {TileData} from '@components/buttons/ClickableTile';
-import {ScreenProps} from '@screens/types';
+import {ScreenProps} from '@screens/Types';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
 import Header from '@components/navbar/Header';
