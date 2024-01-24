@@ -81,46 +81,52 @@ export async function getUserDetails(field_name: string): Promise<any> {
 export const storeFailedSyncPushErrors = async (
   tableName: syncDbTables,
   failedSyncPushErrors: SyncCreateSchemas[] | SyncUpdateSchemas[],
-) => {
-  const syncPushErrorsStore = await AsyncStorage.getItem(
-    AsyncStorageKeys.SyncPushErrors,
-  );
+): Promise<void> => {
+  try {
+    const syncPushErrorsStore = await AsyncStorage.getItem(
+      AsyncStorageKeys.SyncPushErrors,
+    );
 
-  let syncPushErrorsObject: FailedSyncPushError = {};
-  if (syncPushErrorsStore !== null) {
-    try {
-      syncPushErrorsObject = JSON.parse(syncPushErrorsStore);
-    } catch (error) {
-      logger.warn(
-        `${AsyncStorageKeys.SyncPushErrors} key invalid JSON. Rebuilding...`,
-      );
-    }
-  }
+    let syncPushErrorsObject: FailedSyncPushError = {};
 
-  const tableSyncPushErrors = syncPushErrorsObject[tableName] ?? {};
-  for (const failedSyncPushError of failedSyncPushErrors) {
-    // uuid value for the row
-    const key = failedSyncPushError[`${tableName}_id`];
-
-    // ! is used to ensure ts this won't be null
-    if (key in tableSyncPushErrors) {
-      if (tableSyncPushErrors[key].retries > maxSyncPushRetry) {
-        // push to dump endpoint
-      } else {
-        tableSyncPushErrors[key].retries++;
+    if (syncPushErrorsStore !== null) {
+      try {
+        syncPushErrorsObject = JSON.parse(syncPushErrorsStore);
+      } catch (error) {
+        logger.warn(
+          `${AsyncStorageKeys.SyncPushErrors} key has invalid JSON. Rebuilding...`,
+        );
       }
-    } else {
-      tableSyncPushErrors[key] = {
-        retries: 1,
-        data: failedSyncPushError,
-      };
     }
-  }
-  syncPushErrorsObject[tableName] = tableSyncPushErrors;
-  await AsyncStorage.setItem(
-    AsyncStorageKeys.SyncPushErrors,
-    JSON.stringify(syncPushErrorsObject),
-  );
 
-  return;
+    const tableSyncPushErrors = syncPushErrorsObject[tableName] ?? {};
+
+    for (const syncError of failedSyncPushErrors) {
+      // uuid value for the row
+      const rowUuid = syncError[`${tableName}_id`];
+
+      // Ensure ts this won't be null
+      if (rowUuid in tableSyncPushErrors) {
+        if (tableSyncPushErrors[rowUuid].retries > maxSyncPushRetry) {
+          // push to dump endpoint
+        } else {
+          tableSyncPushErrors[rowUuid].retries++;
+        }
+      } else {
+        tableSyncPushErrors[rowUuid] = {
+          retries: 1,
+          data: syncError,
+        };
+      }
+    }
+
+    syncPushErrorsObject[tableName] = tableSyncPushErrors;
+    await AsyncStorage.setItem(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify(syncPushErrorsObject),
+    );
+  } catch (error) {
+    // Handle any unexpected errors during storage
+    throw new Error(`Failed to store synchronization push errors: ${error}`);
+  }
 };
