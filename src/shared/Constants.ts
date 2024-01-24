@@ -49,3 +49,5 @@ export enum timestampFields {
   updatedAt = 'updated_at',
   timezone = 'timezone',
 }
+
+export const unixEpoch: string = '1970-01-01T00:00:00.000';
