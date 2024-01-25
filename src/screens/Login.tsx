@@ -13,6 +13,7 @@ import ButtonComponent from '@components/buttons/ButtonComponent';
 import TextInputComponent from '@components/inputs/TextInputComponent';
 import ClickableLink from '@components/buttons/ClickableLink';
 import {View, Text, StyleSheet, Keyboard} from 'react-native';
+import NoNetworkPopup from '@components/popups/NoNetworkPopup';
 // Styling
 import {
   fontSizes,
@@ -36,6 +37,7 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
 import {timestampFields} from '@shared/Constants';
+import NetInfo from '@react-native-community/netinfo';
 /**
  *  Login screen
  *
@@ -55,10 +57,16 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
-  const {theme} = useSystem();
+  const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
+  //const {netInfo, refresh} = useNetInfoInstance();
+
   const handleLogin = async () => {
+    await NetInfo.refresh();
+    if (!isConnected) {
+      return;
+    }
     logger.info('Logging in.');
     Keyboard.dismiss();
     let response = await loginUser({email: email, password: password});
@@ -72,6 +80,10 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleCreateAccount = async () => {
+    await NetInfo.refresh();
+    if (!isConnected) {
+      return;
+    }
     const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
     let response = await createUser({
       // NOTE: Remove these hard-coded values when the UI is implemented fully
@@ -162,6 +174,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           text={viewLinkText}
         />
       </View>
+      {!isConnected && <NoNetworkPopup />}
     </ScreenWrapper>
   );
 };
