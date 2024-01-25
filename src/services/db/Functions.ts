@@ -297,6 +297,7 @@ export const insertRows = async (
       const insertValues = data.flatMap(value => Object.values(value));
 
       tx.executeSql(
+        // In the case we get back rows we already have we 'IGNORE'
         `INSERT OR IGNORE INTO ${tableName} (${columns}) VALUES ${placeholders}`,
         insertValues,
         () => {
