@@ -9,6 +9,8 @@ import {
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
+import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
+
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
 
@@ -20,9 +22,22 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
 // Mocking the Stat Api Class
 jest.mock('@services/api/swagger/Stat', () => ({
   Stat: jest.fn().mockImplementation(() => ({
-    createCreate: jest.fn().mockResolvedValue({status: 201}),
-    updateUpdate: jest.fn().mockResolvedValue({status: 204}),
+    createCreate: jest
+      .fn()
+      .mockResolvedValue({status: 201})
+      .mockResolvedValueOnce({status: 201})
+      .mockResolvedValueOnce({status: 500}),
+    updateUpdate: jest
+      .fn()
+      .mockResolvedValue({status: 204})
+      .mockResolvedValueOnce({status: 204})
+      .mockResolvedValueOnce({status: 500}),
   })),
+}));
+
+jest.mock('@services/asyncStorage/Functions', () => ({
+  ...jest.requireActual('@services/asyncStorage/Functions'),
+  storeFailedSyncPushErrors: jest.fn(),
 }));
 
 describe('Sync Operation Tests', () => {
@@ -69,6 +84,32 @@ describe('Sync Operation Tests', () => {
     expect(insertSyncUpdate).toHaveBeenCalledTimes(0);
   });
 
+  test('processUpdatesSyncTypePush with request failure', async () => {
+    // Arrange
+    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
+    const tableToSync: syncDbTables = syncDbTables.statTable;
+    const updatedStat = sampleStat;
+    // We transform to a SyncUpdateSchema in processUpdatesSyncTypePush
+    delete updatedStat.created_at;
+    delete updatedStat.timezone;
+
+    // Act
+    await processUpdatesSyncTypePush(
+      rowsToSync,
+      tableToSync,
+      apiFunctions[tableToSync],
+    );
+
+    // Assert
+    expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(storeFailedSyncPushErrors).toHaveBeenCalledTimes(1);
+    expect(storeFailedSyncPushErrors).toHaveBeenCalledWith(
+      syncDbTables.statTable,
+      SyncOperation.Updates,
+      [updatedStat],
+    );
+  });
+
   test('processCreatesSyncTypePush with one row', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
@@ -105,5 +146,27 @@ describe('Sync Operation Tests', () => {
 
     // Assert
     expect(insertSyncUpdate).toHaveBeenCalledTimes(0);
+  });
+
+  test('processCreatesSyncTypePush with request failure', async () => {
+    // Arrange
+    const rowsToSync: SyncCreateSchemas[] = [sampleStat];
+    const tableToSync: syncDbTables = syncDbTables.statTable;
+
+    // Act
+    await processCreatesSyncTypePush(
+      rowsToSync,
+      tableToSync,
+      apiFunctions[tableToSync],
+    );
+
+    // Assert
+    expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(storeFailedSyncPushErrors).toHaveBeenCalledTimes(1);
+    expect(storeFailedSyncPushErrors).toHaveBeenCalledWith(
+      syncDbTables.statTable,
+      SyncOperation.Creates,
+      [sampleStat],
+    );
   });
 });

@@ -21,7 +21,7 @@ import {SyncOperation} from '@shared/Enums';
 import {SyncErrorDump} from '@services/api/swagger/SyncErrorDump';
 import api from '@services/api/ApiService';
 
-const SyncErrorDumpApi = new SyncErrorDump(api);
+export const SyncErrorDumpApi = new SyncErrorDump(api);
 
 /**
  * Gets the user details from AsyncStorage.
@@ -121,7 +121,7 @@ export const storeFailedSyncPushErrors = async (
       if (rowUuid in tableSyncPushErrors) {
         if (tableSyncPushErrors[rowUuid].retries > maxSyncPushRetry) {
           const row: SyncCreateSchemas = tableSyncPushErrors[rowUuid].data;
-          SyncErrorDumpApi.createCreate({
+          await SyncErrorDumpApi.createCreate({
             table_name: tableName,
             row_id: row[`${tableName}_id`],
             data: row,
@@ -199,7 +199,7 @@ export const getFailedSyncPushesForTable = async (
         );
         tableSyncPushErrors = tableSyncPushErrors.map(item => item.data);
       } else {
-        logger.warn(
+        logger.info(
           `No failed Sync Pushes for table '${tableName}' sync operation '${syncOperation}'`,
         );
       }

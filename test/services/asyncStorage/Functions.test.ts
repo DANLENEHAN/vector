@@ -1,12 +1,42 @@
-import {getUserDetails} from '@services/asyncStorage/Functions';
+// Classes
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Constants
+import {syncDbTables} from '@shared/Constants';
+import {SyncOperation} from '@shared/Enums';
+
+// Types
+import {SyncCreateSchemas} from '@services/db/sync/Types';
+import {sampleStat} from '../../Objects';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
+
+// Functions
+import {
+  getUserDetails,
+  storeFailedSyncPushErrors,
+  getFailedSyncPushesForTable,
+  SyncErrorDumpApi,
+} from '@services/asyncStorage/Functions';
 
 // Mocking AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
+  setItem: jest.fn(),
+}));
+
+// Mocking the Stat Api Class
+jest.mock('@services/api/swagger/SyncErrorDump', () => ({
+  SyncErrorDump: jest.fn().mockImplementation(() => ({
+    createCreate: jest.fn().mockResolvedValue({status: 204}),
+  })),
 }));
 
 describe('getUserDetails', () => {
+  beforeEach(() => {
+    // Clears 'toHaveBeenCalledTimes' cache
+    jest.clearAllMocks();
+  });
+
   it('Gets value when present', async () => {
     // Arrange
     const fieldName = 'username';
@@ -53,5 +83,137 @@ describe('getUserDetails', () => {
     await expect(getUserDetails(target_field)).rejects.toThrow(
       'Error retrieving user details: User details not found in AsyncStorage',
     );
+  });
+
+  it('storeFailedSyncPushErrors first time failure', async () => {
+    // Arrange
+    const failedSyncPushErrors: SyncCreateSchemas[] = [sampleStat];
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+
+    // Act
+    await storeFailedSyncPushErrors(
+      syncDbTables.statTable,
+      SyncOperation.Creates,
+      failedSyncPushErrors,
+    );
+
+    // Assert
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify({
+        [syncDbTables.statTable]: {
+          [SyncOperation.Creates]: {
+            [sampleStat.stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  it('storeFailedSyncPushErrors max failures', async () => {
+    // Arrange
+    const failedSyncPushErrors: SyncCreateSchemas[] = [sampleStat];
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.statTable]: {
+          [SyncOperation.Creates]: {
+            [sampleStat.stat_id]: {
+              retries: 3,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+
+    // Act
+    await storeFailedSyncPushErrors(
+      syncDbTables.statTable,
+      SyncOperation.Creates,
+      failedSyncPushErrors,
+    );
+
+    // Assert
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify({
+        [syncDbTables.statTable]: {
+          [SyncOperation.Creates]: {},
+        },
+      }),
+    );
+
+    // Assert
+    expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledTimes(1);
+    expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledWith({
+      table_name: syncDbTables.statTable,
+      row_id: sampleStat.stat_id,
+      data: sampleStat,
+      created_at: sampleStat.created_at,
+      updated_at: sampleStat.updated_at,
+      timezone: sampleStat.timezone,
+    });
+  });
+
+  it('getFailedSyncPushesForTable has failed pushes', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.statTable]: {
+          [SyncOperation.Creates]: {
+            [sampleStat.stat_id]: {
+              retries: 3,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+
+    // Act
+    const response: SyncCreateSchemas[] = await getFailedSyncPushesForTable(
+      syncDbTables.statTable,
+      SyncOperation.Creates,
+    );
+
+    // Assert
+    expect(response).toEqual([sampleStat]);
+  });
+
+  it('getFailedSyncPushesForTable no failed pushes', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve());
+
+    // Act
+    const response: SyncCreateSchemas[] = await getFailedSyncPushesForTable(
+      syncDbTables.statTable,
+      SyncOperation.Creates,
+    );
+
+    // Assert
+    expect(response).toEqual([]);
   });
 });
