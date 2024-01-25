@@ -1,5 +1,5 @@
 // Test Objects
-import {sampleStat} from '../../../objects';
+import {sampleStat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {syncDbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
