@@ -12,6 +12,9 @@ import {
 import {sampleStat} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
 
+jest.mock('uuid', () => ({
+  v4: jest.fn().mockReturnValue('67f6127d-13cc-4c27-b91f-2b1f83c48eeb'),
+}));
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
   getCurrentTimestampTimezone: jest.fn().mockReturnValue({
@@ -51,6 +54,7 @@ describe('Stat Functions Tests', () => {
     expect(insertStat).toHaveBeenCalledTimes(1);
     expect(insertStat).toHaveBeenCalledWith([
       {
+        stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
         unit: params.unitValue,
         stat_type: params.statType,
         user_id: 1,

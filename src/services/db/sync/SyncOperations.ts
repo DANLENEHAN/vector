@@ -58,7 +58,9 @@ export const processUpdatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Updates,
     });
-    storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
+    if (failedPushes.length > 0) {
+      storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
+    }
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Updates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rows.length} succeeded.`,
@@ -104,7 +106,9 @@ export const processCreatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
     });
-    storeFailedSyncPushErrors(tableName, SyncOperation.Creates, failedPushes);
+    if (failedPushes.length > 0) {
+      storeFailedSyncPushErrors(tableName, SyncOperation.Creates, failedPushes);
+    }
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rowsToSync.length} succeeded.`,
