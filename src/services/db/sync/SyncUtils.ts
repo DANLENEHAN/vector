@@ -1,9 +1,9 @@
 // Typing
 import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
-import {RowData} from '../types';
+import {RowData} from '@services/db/Types';
 
 // Functions
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';

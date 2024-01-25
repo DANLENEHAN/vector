@@ -6,11 +6,11 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
 // Types
-import {alembicTable} from '@services/db/types';
-import {dbName, RowData} from '@services/db/types';
+import {alembicTable} from '@services/db/Types';
+import {dbName, RowData} from '@services/db/Types';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 // Functions
-import {revisionObject} from '@services/db/vectorRevisions';
+import {revisionObject} from '@services/db/VectorRevisions';
 import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
 import 'react-native-get-random-values';
@@ -297,7 +297,7 @@ export const insertRows = async (
       const insertValues = data.flatMap(value => Object.values(value));
 
       tx.executeSql(
-        `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
+        `INSERT OR IGNORE INTO ${tableName} (${columns}) VALUES ${placeholders}`,
         insertValues,
         () => {
           // Transaction success callback

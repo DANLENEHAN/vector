@@ -4,8 +4,8 @@ import {
   SyncTableFunctions,
   SyncCreateSchemas,
   SyncUpdateSchemas,
-} from './types';
-import {SyncOperation, SyncType} from '@shared/enums';
+} from './Types';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions
@@ -13,7 +13,7 @@ import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
-import {storeFailedSyncPushErrors} from '@services/asyncStorage/functions';
+import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
 
 // Logger
 import logger from '@utils/Logger';
@@ -49,6 +49,7 @@ export const processUpdatesSyncTypePush = async (
         }
       } catch (error) {
         logger.error('Error sending request:', error);
+        failedPushes.push(row);
       }
     }
     await insertSyncUpdate({
@@ -57,7 +58,7 @@ export const processUpdatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Updates,
     });
-    storeFailedSyncPushErrors(tableName, failedPushes);
+    storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Updates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rows.length} succeeded.`,
@@ -94,6 +95,7 @@ export const processCreatesSyncTypePush = async (
         }
       } catch (error) {
         logger.error('Error sending request:', error);
+        failedPushes.push(row);
       }
     }
     await insertSyncUpdate({
@@ -102,7 +104,7 @@ export const processCreatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
     });
-    storeFailedSyncPushErrors(tableName, failedPushes);
+    storeFailedSyncPushErrors(tableName, SyncOperation.Creates, failedPushes);
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rowsToSync.length} succeeded.`,

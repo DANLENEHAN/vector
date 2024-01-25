@@ -2,7 +2,7 @@
 import {AxiosResponse} from 'axios';
 import {SyncTableFunctions, SyncCreateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions
@@ -12,11 +12,12 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '../Functions';
+import {insertRows, updateRows} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
+import {getFailedSyncPushesForTable} from '@services/asyncStorage/Functions';
 
 // Logger
 import logger from '@utils/Logger';
@@ -127,12 +128,15 @@ export const processSyncTypePush = async (
       syncOperation,
     );
 
-    const rowsToSync: SyncCreateSchemas[] = await getRowsToSync(
+    const newRowsToSync: SyncCreateSchemas[] = await getRowsToSync(
       tableName,
       syncOperation,
       lastSynced,
     );
 
+    const failedSyncPushesForTable: SyncCreateSchemas[] =
+      await getFailedSyncPushesForTable(tableName, syncOperation);
+    const rowsToSync = [...failedSyncPushesForTable, ...newRowsToSync];
     if (syncOperation === SyncOperation.Creates) {
       processCreatesSyncTypePush(rowsToSync, tableName, tableFunctions);
     } else {

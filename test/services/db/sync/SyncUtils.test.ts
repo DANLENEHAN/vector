@@ -12,7 +12,7 @@ import {
 // Types
 import {syncDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@shared/enums';
-import {runSqlSelect, executeSqlNonQuery} from '@services/db/functions';
+import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Global Mocks

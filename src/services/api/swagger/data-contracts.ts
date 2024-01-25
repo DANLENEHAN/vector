@@ -1969,6 +1969,62 @@ export enum SubMuscleGroup {
 }
 
 /**
+ * SyncErrorDumpCreateSchema
+ * Schema for creating a synchronization error dump entry.
+ *
+ * Represents the data structure expected when creating an entry
+ * in the synchronization error dump table.
+ *
+ * Attributes:
+ *     table_name (str): The name of the table associated with
+ *         the failed synchronization push error.
+ *     row_id (str): The unique identifier of the row associated
+ *         with the failed synchronization push error.
+ *     data (str): The actual data of the failed
+ *         synchronization push error.
+ *
+ * Inherits from:
+ *     SyncCreateSchema: Base schema for creating synchronization entries.
+ */
+export interface SyncErrorDumpCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Error Data
+   * The actual data of the failed synchronization push error.
+   * @example {"error_message":"Invalid data","field":"value"}
+   */
+  data: object;
+  /**
+   * Row ID
+   * The unique identifier of the row associated with the failed synchronization push error.
+   * @example "uuid123"
+   */
+  row_id: string;
+  /**
+   * Table Name
+   * The name of the table associated with the failed synchronization push error.
+   * @example "bodypart"
+   */
+  table_name: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
  * UserCreateSchema
  * Schema for validating the full user schema
  */

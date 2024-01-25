@@ -1,5 +1,5 @@
 import {AxiosResponse} from 'axios';
-import {SyncOperation, SyncType} from '@shared/enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {syncDbTables} from '@shared/Constants';
 import {
   StatCreateSchema,

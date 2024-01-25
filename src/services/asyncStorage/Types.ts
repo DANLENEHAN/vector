@@ -2,7 +2,7 @@
 import {syncDbTables} from '@shared/Constants';
 
 // Types
-import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/types';
+import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
 
 /**
  * Represents an item in the "stat" array for failed synchronization push errors.
@@ -28,6 +28,11 @@ export interface SyncPushErrorItem {
  */
 export type FailedSyncPushError = {
   [key in syncDbTables]?: {
-    [key: string]: SyncPushErrorItem;
+    creates?: {
+      [key: string]: SyncPushErrorItem;
+    };
+    updates?: {
+      [key: string]: SyncPushErrorItem;
+    };
   };
 };

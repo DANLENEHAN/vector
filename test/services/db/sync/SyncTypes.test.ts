@@ -1,7 +1,7 @@
 // Test Objects
 
 import {syncDbTables} from '@shared/Constants';
-import {SyncType, SyncOperation} from '@shared/enums';
+import {SyncType, SyncOperation} from '@shared/Enums';
 
 // Functions
 import {

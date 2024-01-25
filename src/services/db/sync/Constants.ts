@@ -1,12 +1,12 @@
 // Typing
 import {AxiosResponse} from 'axios';
-import {SyncApiFunctions, SyncObject} from './Types';
+import {SyncApiFunctions, SyncObject} from '@services/db/sync/Types';
 import {
   StatCreateSchema,
   StatUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
-import {SyncOperation} from '@shared/enums';
+import {SyncOperation} from '@shared/Enums';
 import {syncDbTables} from '@shared/Constants';
 
 // Functions
@@ -30,4 +30,4 @@ export const apiFunctions: SyncApiFunctions = {
   },
 };
 
-export const maxSyncPushRetry = 3;
+export const maxSyncPushRetry = 2;

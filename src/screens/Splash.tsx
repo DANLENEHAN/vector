@@ -7,7 +7,7 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
-import {testAuthentication} from '@services/api/blueprints/user/api';
+import {testAuthentication} from '@services/api/blueprints/user/Api';
 import {useSystem} from '@context/SystemContext';
 //Theme
 import {
