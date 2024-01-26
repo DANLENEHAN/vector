@@ -2,7 +2,7 @@
 import {syncDbTables} from '@shared/Constants';
 
 // Types
-import {SyncOperation} from '@shared/Enums';
+import {SyncOperation} from '@services/api/swagger/data-contracts';
 
 /**
  * Represents an item containing information about a failed synchronization push.

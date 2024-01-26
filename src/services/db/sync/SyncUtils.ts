@@ -1,7 +1,7 @@
 // Typing
 import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/Enums';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
 import {RowData} from '@services/db/Types';
 

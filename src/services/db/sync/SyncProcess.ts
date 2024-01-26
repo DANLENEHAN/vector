@@ -1,5 +1,5 @@
 // Typing
-import {SyncOperation, SyncType} from '@shared/Enums';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {
   processSyncTypePush,

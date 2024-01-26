@@ -2,7 +2,7 @@
 import {AxiosResponse} from 'axios';
 import {SyncTableFunctions, SyncCreateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/Enums';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions

@@ -3,7 +3,7 @@ import {apiFunctions} from '@services/db/sync/Constants';
 import {syncDbTables} from '@shared/Constants';
 
 // Types
-import {SyncOperation} from '@shared/Enums';
+import {SyncOperation} from '@services/api/swagger/data-contracts';
 
 // Functions
 import {runSyncProcess} from '@services/db/sync/SyncProcess';

@@ -5,7 +5,7 @@ import {
   SyncCreateSchemas,
   SyncUpdateSchemas,
 } from './Types';
-import {SyncOperation, SyncType} from '@shared/Enums';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions

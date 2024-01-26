@@ -13,9 +13,10 @@ import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import {syncDbTables} from '@shared/Constants';
 import {maxSyncPushRetry} from '@services/db/sync/Constants';
 import logger from '@utils/Logger';
-import {SyncOperation} from '@shared/Enums';
+import {SyncOperation} from '@services/api/swagger/data-contracts';
 import {SyncErrorDump} from '@services/api/swagger/SyncErrorDump';
 import api from '@services/api/ApiService';
+import {SyncType} from '@services/api/swagger/data-contracts';
 
 export const SyncErrorDumpApi = new SyncErrorDump(api);
 
@@ -105,9 +106,11 @@ export const storeFailedSyncPushErrors = async <
             table_name: tableName,
             row_id: row[`${tableName}_id`],
             data: row,
-            created_at: 'created_at' in row ? row.created_at : 'update_please',
-            updated_at: row.updated_at,
-            timezone: 'timezone' in row ? row.timezone : 'update_please',
+            created_at: 'created_at' in row ? row.created_at : null,
+            updated_at: 'updated_at' in row ? row.updated_at : null,
+            timezone: 'timezone' in row ? row.timezone : null,
+            sync_type: SyncType.Push,
+            sync_operation: syncOperation,
           });
           delete tableSyncPushErrors[rowUuid];
         } else {

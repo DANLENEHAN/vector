@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Constants
 import {syncDbTables} from '@shared/Constants';
-import {SyncOperation} from '@shared/Enums';
+import {SyncOperation} from '@services/api/swagger/data-contracts';
 
 // Types
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';

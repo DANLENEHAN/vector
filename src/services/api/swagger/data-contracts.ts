@@ -1989,10 +1989,10 @@ export enum SubMuscleGroup {
 export interface SyncErrorDumpCreateSchema {
   /**
    * Created At
-   * @format date-time
+   * @default null
    * @example "2024-12-18T12:00:00.000Z"
    */
-  created_at: string;
+  created_at?: string | null;
   /**
    * Error Data
    * The actual data of the failed synchronization push error.
@@ -2006,6 +2006,21 @@ export interface SyncErrorDumpCreateSchema {
    */
   row_id: string;
   /**
+   * Enum relating to the type of
+   * sync operation being processed.
+   * Can either be 'creates' realting
+   * to newly created rows not yet synced
+   * or 'updates', being newly updated rows
+   * not yet synced.
+   */
+  sync_operation: SyncOperation;
+  /**
+   * Enum relating to the type
+   * of sync be it pulling from a destination
+   * or pushing to a destination.
+   */
+  sync_type: SyncType;
+  /**
    * Table Name
    * The name of the table associated with the failed synchronization push error.
    * @example "bodypart"
@@ -2013,15 +2028,41 @@ export interface SyncErrorDumpCreateSchema {
   table_name: string;
   /**
    * Timezone
+   * @default null
    * @example "UTC"
    */
-  timezone: string;
+  timezone?: string | null;
   /**
    * Updated At
    * @default null
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+}
+
+/**
+ * SyncOperation
+ * Enum relating to the type of
+ * sync operation being processed.
+ * Can either be 'creates' realting
+ * to newly created rows not yet synced
+ * or 'updates', being newly updated rows
+ * not yet synced.
+ */
+export enum SyncOperation {
+  Creates = 'creates',
+  Updates = 'updates',
+}
+
+/**
+ * SyncType
+ * Enum relating to the type
+ * of sync be it pulling from a destination
+ * or pushing to a destination.
+ */
+export enum SyncType {
+  Pull = 'pull',
+  Push = 'push',
 }
 
 /**
