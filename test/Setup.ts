@@ -9,6 +9,11 @@ jest.mock('react-native-sqlite-storage', () => ({
     transaction: jest.fn(),
   })),
 }));
+// Mock useSafeAreaInsets hook
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: jest.fn().mockReturnValue({top: 0, bottom: 0}),
+  SafeAreaProvider: jest.fn().mockImplementation(({children}) => children),
+}));
 
 jest.mock('@utils/Logger', () => {
   const mockLogger = {

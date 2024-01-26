@@ -76,7 +76,13 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
     // Setup subscription to network status
     const networkSubscription: NetInfoSubscription = addEventListener(
       (state: NetInfoState) => {
-        setIsConnected(state.isConnected || false);
+        const connected =
+          (state.isConnected && state.isInternetReachable) || false;
+        setIsConnected(connected);
+        const connectionStatusMessage = connected
+          ? 'Connected'
+          : 'Disconnected';
+        logger.info('Network status changed: ' + connectionStatusMessage);
       },
     );
 

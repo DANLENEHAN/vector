@@ -13,7 +13,7 @@ const API_URLS: ApiConfigMap = {
 };
 
 const environment = process.env.NODE_ENV || 'development';
-const apiBaseUrl = API_URLS[environment as keyof typeof API_URLS];
+export const apiBaseUrl = API_URLS[environment as keyof typeof API_URLS];
 
 const api = new HttpClient({
   baseURL: apiBaseUrl,
