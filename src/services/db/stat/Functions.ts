@@ -1,6 +1,6 @@
 // Typing
 import {StatCreateSchema} from '@services/api/swagger/data-contracts';
-import {dbTables} from '@shared/Constants';
+import {syncDbTables} from '@shared/Constants';
 // Functions
 import {insertRows} from '@services/db/Functions';
 
@@ -17,5 +17,5 @@ import {insertRows} from '@services/db/Functions';
  * await insertStat(stats);
  */
 export const insertStat = async (stats: StatCreateSchema[]): Promise<void> => {
-  await insertRows(dbTables.statTable, stats);
+  await insertRows(syncDbTables.statTable, stats);
 };

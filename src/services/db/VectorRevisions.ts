@@ -5,6 +5,7 @@ import {sqlCommands_19012024090311838724_4770c0c95563} from './revisions/1901202
 import {sqlCommands_19012024090312153727_dcfd5e06bde9} from './revisions/19012024090312153727_dcfd5e06bde9';
 import {sqlCommands_19012024090312527576_3a4bd56c760f} from './revisions/19012024090312527576_3a4bd56c760f';
 import {sqlCommands_19012024090313133954_01b72a8d1240} from './revisions/19012024090313133954_01b72a8d1240';
+import {sqlCommands_24012024193206460851_d960804dbc4b} from './revisions/24012024193206460851_d960804dbc4b';
 
 export const revisionObject: {[key: string]: string[]} = {
   '19012024090310986101_ea7213f41859':
@@ -21,4 +22,6 @@ export const revisionObject: {[key: string]: string[]} = {
     sqlCommands_19012024090312527576_3a4bd56c760f,
   '19012024090313133954_01b72a8d1240':
     sqlCommands_19012024090313133954_01b72a8d1240,
+  '24012024193206460851_d960804dbc4b':
+    sqlCommands_24012024193206460851_d960804dbc4b,
 };

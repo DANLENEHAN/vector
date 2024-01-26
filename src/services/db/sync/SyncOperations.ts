@@ -5,35 +5,51 @@ import {
   SyncCreateSchemas,
   SyncUpdateSchemas,
 } from './Types';
-import {SyncOperation, SyncType} from '@shared/Enums';
-import {dbTables, timestampFields} from '@shared/Constants';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
+import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions
 import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
+import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
+import {
+  getFailedSyncPushesCreatesForTable,
+  getFailedSyncPushesUpdatesForTable,
+} from '@services/asyncStorage/Functions';
 
 // Logger
 import logger from '@utils/Logger';
 
 export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
-  tableName: dbTables,
+  tableName: syncDbTables,
   tableFunctions: SyncTableFunctions,
 ) => {
   let successfulRequests = 0;
 
+  const failedPushes: SyncUpdateSchemas[] = [];
   if (rows.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Updates}'.`,
     );
   } else {
-    const rowsToSync = convertListToSyncUpdateSchemas(rows);
-    const lastRow: SyncCreateSchemas | SyncUpdateSchemas =
-      rowsToSync.slice(-1)[0];
+    // Convert the CreateSchemas to UpdateSchemas
+    const rowsToSync: SyncUpdateSchemas[] =
+      convertListToSyncUpdateSchemas(rows);
 
-    for (const row of rowsToSync) {
+    // Get any previously failed UpdateSchemas
+    const failedSyncPushesForTable: SyncUpdateSchemas[] =
+      await getFailedSyncPushesUpdatesForTable(tableName);
+
+    const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
+
+    // Use the last (Latest Updated) row as the 'lastRow' not the last
+    // of allRowsToSync
+    const lastRow: SyncUpdateSchemas = rowsToSync.slice(-1)[0];
+
+    for (const row of allRowsToSync) {
       try {
         const response: AxiosResponse<void> = await tableFunctions[
           SyncOperation.Updates
@@ -42,10 +58,12 @@ export const processUpdatesSyncTypePush = async (
         if (response.status === 204) {
           successfulRequests++;
         } else {
+          failedPushes.push(row);
           logger.error('Unexpected response status code: ', response.status);
         }
       } catch (error) {
         logger.error('Error sending request:', error);
+        failedPushes.push(row);
       }
     }
     await insertSyncUpdate({
@@ -54,6 +72,9 @@ export const processUpdatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Updates,
     });
+    if (failedPushes.length > 0) {
+      storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
+    }
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Updates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rows.length} succeeded.`,
@@ -62,20 +83,27 @@ export const processUpdatesSyncTypePush = async (
 
 export const processCreatesSyncTypePush = async (
   rowsToSync: SyncCreateSchemas[],
-  tableName: dbTables,
+  tableName: syncDbTables,
   tableFunctions: SyncTableFunctions,
 ) => {
   let successfulRequests = 0;
 
+  const failedSyncPushesForTable: SyncCreateSchemas[] =
+    await getFailedSyncPushesCreatesForTable(tableName);
+  const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
+
+  const failedPushes: SyncCreateSchemas[] = [];
   if (rowsToSync.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Creates}'.`,
     );
   } else {
+    // Use the last (Latest Updated) row as the 'lastRow' not the last
+    // of allRowsToSync
     const lastRow: SyncCreateSchemas | SyncUpdateSchemas =
       rowsToSync.slice(-1)[0];
 
-    for (const row of rowsToSync) {
+    for (const row of allRowsToSync) {
       try {
         const response: AxiosResponse<void> = await tableFunctions[
           SyncOperation.Creates
@@ -84,10 +112,12 @@ export const processCreatesSyncTypePush = async (
         if (response.status === 201) {
           successfulRequests++;
         } else {
+          failedPushes.push(row);
           logger.error('Unexpected response status code: ', response.status);
         }
       } catch (error) {
         logger.error('Error sending request:', error);
+        failedPushes.push(row);
       }
     }
     await insertSyncUpdate({
@@ -96,6 +126,9 @@ export const processCreatesSyncTypePush = async (
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
     });
+    if (failedPushes.length > 0) {
+      storeFailedSyncPushErrors(tableName, SyncOperation.Creates, failedPushes);
+    }
   }
   logger.info(
     `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rowsToSync.length} succeeded.`,

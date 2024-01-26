@@ -1768,7 +1768,7 @@ export interface StatCreateSchema {
    * Unique uuid for a stat entry
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  stat_id?: string | null;
+  stat_id: string;
   /**
    * The type of the stat
    * @example "weight"
@@ -1829,7 +1829,7 @@ export enum StatType {
 /**
  * StatUpdateSchema
  * A class representing the schema for updating statistics,
- * inheriting from StatCreateSchema and SyncUpdateModel.
+ * inheriting from StatCreateSchema and SyncUpdateSchema.
  */
 export interface StatUpdateSchema {
   /**
@@ -1844,7 +1844,7 @@ export interface StatUpdateSchema {
    * Unique uuid for a stat entry
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  stat_id?: string | null;
+  stat_id: string;
   /**
    * The type of the stat
    * @example "weight"
@@ -1966,6 +1966,103 @@ export enum SubMuscleGroup {
   Infraspinatus = 'Infraspinatus',
   Supraspinatus = 'Supraspinatus',
   LevatorScapulae = 'Levator Scapulae',
+}
+
+/**
+ * SyncErrorDumpCreateSchema
+ * Schema for creating a synchronization error dump entry.
+ *
+ * Represents the data structure expected when creating an entry
+ * in the synchronization error dump table.
+ *
+ * Attributes:
+ *     table_name (str): The name of the table associated with
+ *         the failed synchronization push error.
+ *     row_id (str): The unique identifier of the row associated
+ *         with the failed synchronization push error.
+ *     data (str): The actual data of the failed
+ *         synchronization push error.
+ *
+ * Inherits from:
+ *     SyncCreateSchema: Base schema for creating synchronization entries.
+ */
+export interface SyncErrorDumpCreateSchema {
+  /**
+   * Created At
+   * @default null
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at?: string | null;
+  /**
+   * Error Data
+   * The actual data of the failed synchronization push error.
+   * @example {"error_message":"Invalid data","field":"value"}
+   */
+  data: object;
+  /**
+   * Row ID
+   * The unique identifier of the row associated with the failed synchronization push error.
+   * @example "uuid123"
+   */
+  row_id: string;
+  /**
+   * Enum relating to the type of
+   * sync operation being processed.
+   * Can either be 'creates' realting
+   * to newly created rows not yet synced
+   * or 'updates', being newly updated rows
+   * not yet synced.
+   */
+  sync_operation: SyncOperation;
+  /**
+   * Enum relating to the type
+   * of sync be it pulling from a destination
+   * or pushing to a destination.
+   */
+  sync_type: SyncType;
+  /**
+   * Table Name
+   * The name of the table associated with the failed synchronization push error.
+   * @example "bodypart"
+   */
+  table_name: string;
+  /**
+   * Timezone
+   * @default null
+   * @example "UTC"
+   */
+  timezone?: string | null;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
+ * SyncOperation
+ * Enum relating to the type of
+ * sync operation being processed.
+ * Can either be 'creates' realting
+ * to newly created rows not yet synced
+ * or 'updates', being newly updated rows
+ * not yet synced.
+ */
+export enum SyncOperation {
+  Creates = 'creates',
+  Updates = 'updates',
+}
+
+/**
+ * SyncType
+ * Enum relating to the type
+ * of sync be it pulling from a destination
+ * or pushing to a destination.
+ */
+export enum SyncType {
+  Pull = 'pull',
+  Push = 'push',
 }
 
 /**

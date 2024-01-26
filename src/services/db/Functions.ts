@@ -8,13 +8,12 @@ import RNFS from 'react-native-fs';
 // Types
 import {alembicTable} from '@services/db/Types';
 import {dbName, RowData} from '@services/db/Types';
-import {dbTables, timestampFields} from '@shared/Constants';
+import {syncDbTables, timestampFields} from '@shared/Constants';
 // Functions
-import {revisionObject} from '@services/db/vectorRevisions';
+import {revisionObject} from '@services/db/VectorRevisions';
 import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
 import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
 // Logger
 import logger from '@utils/Logger';
 
@@ -248,7 +247,7 @@ export const deleteDB = (): void => {
 /**
  * Inserts rows into the specified table using the provided data.
  *
- * @param {dbTables} tableName - The name of the table where the rows will be inserted.
+ * @param {syncDbTables} tableName - The name of the table where the rows will be inserted.
  * @param {RowData[]} data - An array of RowData representing the rows to be inserted.
  * @param {boolean} [insert_uuid=true] - Optional parameter to insert UUIDs for each row. Defaults to true.
  * @returns {Promise<void>} A promise that resolves when the rows are successfully inserted.
@@ -263,22 +262,16 @@ export const deleteDB = (): void => {
  *
  * @example
  * // Example usage:
- * const tableName = dbTables.myTable;
+ * const tableName = syncDbTables.myTable;
  * const data: RowData[] = [...]; // An array of RowData representing rows
  * await insertRows(tableName, data);
  */
 export const insertRows = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   data: RowData[],
-  insert_uuid: boolean = true,
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
-  }
-
-  // Optionally insert UUIDs for each row.
-  if (insert_uuid === true) {
-    data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
 
   return new Promise((resolve, reject) => {
@@ -297,6 +290,7 @@ export const insertRows = async (
       const insertValues = data.flatMap(value => Object.values(value));
 
       tx.executeSql(
+        // In the case we get back rows we already have we 'IGNORE'
         `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
         insertValues,
         () => {
@@ -322,7 +316,7 @@ export const insertRows = async (
 /**
  * Retrieve the timestamp for a specific row in the specified table.
  *
- * @param {dbTables} tableName - The name of the table.
+ * @param {syncDbTables} tableName - The name of the table.
  * @param {timestampFields} timestampField - The timestamp field to retrieve ('created_at' or 'updated_at').
  * @param {string} uuid - The UUID of the row.
  * @returns {Promise<string | null>} A promise that resolves with the timestamp or null if the row is not found.
@@ -337,13 +331,13 @@ export const insertRows = async (
  *
  * @example
  * // Example usage:
- * const tableName = dbTables.statTable;
+ * const tableName = syncDbTables.statTable;
  * const timestampField = timestampFields.updatedAt;
  * const uuid = 'some_uuid';
  * const timestamp: string | null = await getTimestampForRow(tableName, timestampField, uuid);
  */
 const getTimestampForRow = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   timestampField: timestampFields,
   uuid: string,
 ): Promise<string | null> => {
@@ -374,7 +368,7 @@ const getTimestampForRow = async (
 /**
  * Updates rows in the specified table based on the provided data.
  *
- * @param {dbTables} tableName - The name of the table.
+ * @param {syncDbTables} tableName - The name of the table.
  * @param {RowData[]} data - An array of RowData representing the rows to be updated.
  * @returns {Promise<void>} A promise that resolves when the rows are successfully updated.
  * @throws {Error} Throws an error if there is an issue updating the rows.
@@ -386,12 +380,12 @@ const getTimestampForRow = async (
  *
  * @example
  * // Example usage:
- * const tableName = dbTables.statTable;
+ * const tableName = syncDbTables.statTable;
  * const data: RowData[] = [...]; // An array of RowData representing rows
  * await updateRows(tableName, data);
  */
 export const updateRows = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   data: RowData[],
 ): Promise<void> => {
   if (data.length === 0) {

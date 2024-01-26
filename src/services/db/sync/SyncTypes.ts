@@ -2,8 +2,8 @@
 import {AxiosResponse} from 'axios';
 import {SyncTableFunctions, SyncCreateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/Enums';
-import {dbTables, timestampFields} from '@shared/Constants';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
+import {syncDbTables, timestampFields} from '@shared/Constants';
 
 // Functions
 import {
@@ -12,7 +12,7 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '../Functions';
+import {insertRows, updateRows, runSqlSelect} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
@@ -24,7 +24,7 @@ import logger from '@utils/Logger';
 /**
  * Process a synchronization pull operation for a specific table.
  *
- * @param {dbTables} tableName - The name of the table to sync.
+ * @param {syncDbTables} tableName - The name of the table to sync.
  * @param {SyncTableFunctions} syncFunctions - Object containing sync functions for the table.
  * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
  * @returns {Promise<void>} A promise that resolves when the synchronization pull operation is completed.
@@ -38,13 +38,13 @@ import logger from '@utils/Logger';
  *
  * @example
  * // Example usage:
- * const tableName = dbTables.statTable;
+ * const tableName = syncDbTables.statTable;
  * const syncFunctions = { Gets: yourGetFunction };
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePull(tableName, syncFunctions, syncOperation);
  */
 export const processSyncTypePull = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   syncFunctions: SyncTableFunctions,
   syncOperation: SyncOperation,
 ): Promise<void> => {
@@ -62,7 +62,7 @@ export const processSyncTypePull = async (
 
   // Retrieve data from the backend using the specified sync function
   const response: AxiosResponse<SyncCreateSchemas[]> = await syncFunctions[
-    SyncOperation.Gets
+    SyncType.Pull
   ](tableQuerySchema);
 
   // Process synchronization based on the sync operation type
@@ -73,7 +73,21 @@ export const processSyncTypePull = async (
     );
   } else {
     if (syncOperation === SyncOperation.Creates) {
-      await insertRows(tableName, rowsToSync, false);
+      // Removing any existing rows to avoid errors
+      const placeholders = rowsToSync.map(() => '?').join(',');
+      const tableUuids = rowsToSync.map(item => ({
+        [`${tableName}_id`]: item[`${tableName}_id`],
+      }));
+      const existingUuids = await runSqlSelect(
+        `SELECT * FROM ${tableName} WHERE ${tableName}_id IN (${placeholders})`,
+        tableUuids,
+      );
+      const rowsToInsert = rowsToSync.filter(
+        item => !existingUuids.includes(item[`${tableName}_id`]),
+      );
+      if (rowsToInsert.length > 0) {
+        await insertRows(tableName, rowsToInsert);
+      }
     } else {
       await updateRows(tableName, rowsToSync);
     }
@@ -98,7 +112,7 @@ export const processSyncTypePull = async (
 /**
  * Process synchronization push operation for a specific table.
  *
- * @param {keyof typeof dbTables} tableName - The name of the table to synchronize.
+ * @param {keyof typeof syncDbTables} tableName - The name of the table to synchronize.
  * @param {SyncTableFunctions} tableFunctions - Functions for creating and updating records in the table.
  * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
  * @throws {Error} If there are issues with retrieving data, sending requests, or updating the sync table.
@@ -110,13 +124,13 @@ export const processSyncTypePull = async (
  *
  * @example
  * // Example usage:
- * const tableName = dbTables.statTable;
+ * const tableName = syncDbTables.statTable;
  * const tableFunctions = { Creates: yourCreateFunction, Updates: yourUpdateFunction };
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePush(tableName, tableFunctions, syncOperation);
  */
 export const processSyncTypePush = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   tableFunctions: SyncTableFunctions,
   syncOperation: SyncOperation,
 ): Promise<void> => {

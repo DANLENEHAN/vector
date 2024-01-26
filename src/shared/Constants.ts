@@ -3,16 +3,30 @@
  *
  * @enum {string}
  * @readonly
- * @property {string} syncTable - Represents the synchronization tracking table.
+ * @property {string} syncTable - Represents db tables.
+ *
+ * @example
+ * // Example usage:
+ * const tableName: otherDbTables = otherDbTables.syncTable;
+ * logger.info(`Selected table: ${tableName}`);
+ */
+export enum otherDbTables {
+  syncTable = 'sync_table',
+}
+
+/**
+ * Enum representing database sync table names.
+ *
+ * @enum {string}
+ * @readonly
  * @property {string} statTable - Represents the statistics table.
  *
  * @example
  * // Example usage:
- * const tableName: dbTables = dbTables.syncTable;
+ * const tableName: syncDbTables = syncDbTables.statTable;
  * logger.info(`Selected table: ${tableName}`);
  */
-export enum dbTables {
-  syncTable = 'sync_table',
+export enum syncDbTables {
   statTable = 'stat',
 }
 

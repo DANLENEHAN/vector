@@ -1,6 +1,6 @@
 import {AxiosResponse} from 'axios';
-import {SyncOperation, SyncType} from '@shared/Enums';
-import {dbTables} from '@shared/Constants';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
+import {syncDbTables} from '@shared/Constants';
 import {
   StatCreateSchema,
   StatUpdateSchema,
@@ -78,12 +78,12 @@ type GetsFunction = (
  *
  * @property {CreatesFunction} Creates - Function for creating records.
  * @property {UpdatesFunction} Updates - Function for updating records.
- * @property {GetsFunction} Gets - Function for retrieving records.
+ * @property {GetsFunction} Pull - Function for retrieving records.
  */
 export interface SyncTableFunctions {
   [SyncOperation.Creates]: CreatesFunction;
   [SyncOperation.Updates]: UpdatesFunction;
-  [SyncOperation.Gets]: GetsFunction;
+  [SyncType.Pull]: GetsFunction;
 }
 
 /**
@@ -94,7 +94,7 @@ export interface SyncTableFunctions {
  * @property {SyncTableFunctions} statTable - API functions for the 'statTable' table.
  */
 export interface SyncApiFunctions {
-  [dbTables.statTable]: SyncTableFunctions;
+  [syncDbTables.statTable]: SyncTableFunctions;
 }
 
 /**

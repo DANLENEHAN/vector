@@ -1,6 +1,6 @@
 // React imports
 import React, {useState} from 'react';
-import {useFocusEffect} from '@react-navigation/native'; // Import useFocusEffect
+import {useFocusEffect} from '@react-navigation/native';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling

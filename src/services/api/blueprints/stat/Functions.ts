@@ -2,6 +2,7 @@
 import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getStats} from '@services/api/blueprints/stat/Api';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {v4 as uuidv4} from 'uuid';
 
 // Types
 import {StatType, StatCreateSchema} from '@services/api/swagger/data-contracts';
@@ -56,6 +57,7 @@ export const createNewStat = async ({
 
     await insertStat([
       {
+        stat_id: uuidv4(),
         unit: unitValue,
         stat_type: statType,
         user_id: user_id,

@@ -9,7 +9,7 @@ import React, {
 import {Appearance} from 'react-native';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {UserThemePreference} from '@services/asyncStorage/Types';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import {
   NetInfoState,
   NetInfoSubscription,
@@ -87,7 +87,7 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
     );
 
     // Set theme from cache if it exists otherwise use systems
-    AsyncStorage.getItem(UserThemePreference)
+    AsyncStorage.getItem(AsyncStorageKeys.UserThemePreference)
       .then(value => {
         if (value) {
           setUserPreferenceTheme(value as 'light' | 'dark' | 'system');

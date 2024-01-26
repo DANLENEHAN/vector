@@ -1,9 +1,9 @@
 // Typing
 import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
-import {SyncOperation, SyncType} from '@shared/Enums';
-import {dbTables, timestampFields} from '@shared/Constants';
-import {RowData} from '../Types';
+import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
+import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
+import {RowData} from '@services/db/Types';
 
 // Functions
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
@@ -25,7 +25,7 @@ import {unixEpoch} from '@shared/Constants';
  * @throws {Error} If there is an issue with the database transaction or SQL execution.
  */
 export const getLastSyncedForTable = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   syncType: SyncType,
   syncOperation: SyncOperation,
 ): Promise<string | null> => {
@@ -47,7 +47,7 @@ export const getLastSyncedForTable = async (
  * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
  */
 export const getRowsToSync = async (
-  tableName: dbTables,
+  tableName: syncDbTables,
   syncOperation: SyncOperation,
   lastSyncTime: string | null,
 ): Promise<SyncCreateSchemas[]> => {
@@ -75,7 +75,7 @@ export const insertSyncUpdate = async (
     .join(', ')})`;
 
   const response: number = await executeSqlNonQuery(
-    `INSERT OR REPLACE INTO ${dbTables.syncTable} ${columns} VALUES ${insertValues};`,
+    `INSERT OR REPLACE INTO ${otherDbTables.syncTable} ${columns} VALUES ${insertValues};`,
     Object.values(syncUpdate),
   );
   if (response !== 1) {
