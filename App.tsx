@@ -11,8 +11,10 @@ import {apiBaseUrl} from '@services/api/ApiService';
 NetInfo.configure({
   reachabilityUrl: apiBaseUrl + '/health',
   reachabilityTest: async response => response.status === 200,
-  reachabilityLongTimeout: 60 * 1000, // Wait if previous reachability check succeeded (3s)
-  reachabilityShortTimeout: 60 * 1000, // Wait if previous reachability check failed (3s)
+  // Wait if previous reachability check succeeded (60s)
+  reachabilityLongTimeout: 60 * 1000,
+  // Wait if previous reachability check failed (60s)
+  reachabilityShortTimeout: 60 * 1000,
 });
 
 function App(): JSX.Element {
