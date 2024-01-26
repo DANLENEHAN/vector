@@ -18,6 +18,7 @@ import {
   getFailedSyncPushesUpdatesForTable,
   SyncErrorDumpApi,
 } from '@services/asyncStorage/Functions';
+import {SyncType} from '@shared/Enums';
 
 // Mocking AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -169,6 +170,8 @@ describe('getUserDetails', () => {
     expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledTimes(1);
     expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledWith({
       table_name: syncDbTables.statTable,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Creates,
       row_id: sampleStat.stat_id,
       data: sampleStat,
       created_at: sampleStat.created_at,
