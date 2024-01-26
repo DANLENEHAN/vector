@@ -78,12 +78,12 @@ type GetsFunction = (
  *
  * @property {CreatesFunction} Creates - Function for creating records.
  * @property {UpdatesFunction} Updates - Function for updating records.
- * @property {GetsFunction} Gets - Function for retrieving records.
+ * @property {GetsFunction} Pull - Function for retrieving records.
  */
 export interface SyncTableFunctions {
   [SyncOperation.Creates]: CreatesFunction;
   [SyncOperation.Updates]: UpdatesFunction;
-  [SyncOperation.Gets]: GetsFunction;
+  [SyncType.Pull]: GetsFunction;
 }
 
 /**

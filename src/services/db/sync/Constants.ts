@@ -6,7 +6,7 @@ import {
   StatUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
-import {SyncOperation} from '@shared/Enums';
+import {SyncOperation, SyncType} from '@shared/Enums';
 import {syncDbTables} from '@shared/Constants';
 
 // Functions
@@ -25,9 +25,9 @@ export const apiFunctions: SyncApiFunctions = {
       data: StatUpdateSchema,
       query?: SyncObject,
     ): Promise<AxiosResponse> => StatApi.updateUpdate(data, query),
-    [SyncOperation.Gets]: (data: QuerySchema): Promise<AxiosResponse> =>
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       StatApi.postStat(data),
   },
 };
 
-export const maxSyncPushRetry = 2;
+export const maxSyncPushRetry = 3;

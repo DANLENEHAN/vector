@@ -3,11 +3,11 @@
  *
  * @enum {string}
  * @readonly
- * @property {string} syncTable - Represents the synchronization tracking table.
+ * @property {string} syncTable - Represents db tables.
  *
  * @example
  * // Example usage:
- * const tableName: syncDbTables = syncDbTables.syncTable;
+ * const tableName: otherDbTables = otherDbTables.syncTable;
  * logger.info(`Selected table: ${tableName}`);
  */
 export enum otherDbTables {
@@ -15,7 +15,7 @@ export enum otherDbTables {
 }
 
 /**
- * Enum representing database table names.
+ * Enum representing database sync table names.
  *
  * @enum {string}
  * @readonly

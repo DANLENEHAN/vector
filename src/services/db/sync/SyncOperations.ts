@@ -14,6 +14,10 @@ import {
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
 import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
+import {
+  getFailedSyncPushesCreatesForTable,
+  getFailedSyncPushesUpdatesForTable,
+} from '@services/asyncStorage/Functions';
 
 // Logger
 import logger from '@utils/Logger';
@@ -31,11 +35,21 @@ export const processUpdatesSyncTypePush = async (
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Updates}'.`,
     );
   } else {
-    const rowsToSync = convertListToSyncUpdateSchemas(rows);
-    const lastRow: SyncCreateSchemas | SyncUpdateSchemas =
-      rowsToSync.slice(-1)[0];
+    // Convert the CreateSchemas to UpdateSchemas
+    const rowsToSync: SyncUpdateSchemas[] =
+      convertListToSyncUpdateSchemas(rows);
 
-    for (const row of rowsToSync) {
+    // Get any previously failed UpdateSchemas
+    const failedSyncPushesForTable: SyncUpdateSchemas[] =
+      await getFailedSyncPushesUpdatesForTable(tableName);
+
+    const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
+
+    // Use the last (Latest Updated) row as the 'lastRow' not the last
+    // of allRowsToSync
+    const lastRow: SyncUpdateSchemas = rowsToSync.slice(-1)[0];
+
+    for (const row of allRowsToSync) {
       try {
         const response: AxiosResponse<void> = await tableFunctions[
           SyncOperation.Updates
@@ -74,16 +88,22 @@ export const processCreatesSyncTypePush = async (
 ) => {
   let successfulRequests = 0;
 
+  const failedSyncPushesForTable: SyncCreateSchemas[] =
+    await getFailedSyncPushesCreatesForTable(tableName);
+  const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
+
   const failedPushes: SyncCreateSchemas[] = [];
   if (rowsToSync.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Creates}'.`,
     );
   } else {
+    // Use the last (Latest Updated) row as the 'lastRow' not the last
+    // of allRowsToSync
     const lastRow: SyncCreateSchemas | SyncUpdateSchemas =
       rowsToSync.slice(-1)[0];
 
-    for (const row of rowsToSync) {
+    for (const row of allRowsToSync) {
       try {
         const response: AxiosResponse<void> = await tableFunctions[
           SyncOperation.Creates

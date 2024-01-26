@@ -17,7 +17,6 @@ import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import {getFailedSyncPushesForTable} from '@services/asyncStorage/Functions';
 
 // Logger
 import logger from '@utils/Logger';
@@ -63,7 +62,7 @@ export const processSyncTypePull = async (
 
   // Retrieve data from the backend using the specified sync function
   const response: AxiosResponse<SyncCreateSchemas[]> = await syncFunctions[
-    SyncOperation.Gets
+    SyncType.Pull
   ](tableQuerySchema);
 
   // Process synchronization based on the sync operation type
@@ -128,15 +127,12 @@ export const processSyncTypePush = async (
       syncOperation,
     );
 
-    const newRowsToSync: SyncCreateSchemas[] = await getRowsToSync(
+    const rowsToSync: SyncCreateSchemas[] = await getRowsToSync(
       tableName,
       syncOperation,
       lastSynced,
     );
 
-    const failedSyncPushesForTable: SyncCreateSchemas[] =
-      await getFailedSyncPushesForTable(tableName, syncOperation);
-    const rowsToSync = [...failedSyncPushesForTable, ...newRowsToSync];
     if (syncOperation === SyncOperation.Creates) {
       processCreatesSyncTypePush(rowsToSync, tableName, tableFunctions);
     } else {

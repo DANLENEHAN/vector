@@ -6,15 +6,16 @@ import {syncDbTables} from '@shared/Constants';
 import {SyncOperation} from '@shared/Enums';
 
 // Types
-import {SyncCreateSchemas} from '@services/db/sync/Types';
-import {sampleStat} from '../../Objects';
+import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
+import {sampleStat, sampleUpdatedStat} from '../../Objects';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 
 // Functions
 import {
   getUserDetails,
   storeFailedSyncPushErrors,
-  getFailedSyncPushesForTable,
+  getFailedSyncPushesCreatesForTable,
+  getFailedSyncPushesUpdatesForTable,
   SyncErrorDumpApi,
 } from '@services/asyncStorage/Functions';
 
@@ -176,7 +177,7 @@ describe('getUserDetails', () => {
     });
   });
 
-  it('getFailedSyncPushesForTable has failed pushes', async () => {
+  it('getFailedSyncPushesCreatesForTable has failed pushes', async () => {
     // Arrange
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
       JSON.stringify({
@@ -194,24 +195,57 @@ describe('getUserDetails', () => {
     );
 
     // Act
-    const response: SyncCreateSchemas[] = await getFailedSyncPushesForTable(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
-    );
+    const response: SyncCreateSchemas[] =
+      await getFailedSyncPushesCreatesForTable(syncDbTables.statTable);
 
     // Assert
     expect(response).toEqual([sampleStat]);
   });
 
-  it('getFailedSyncPushesForTable no failed pushes', async () => {
+  it('getFailedSyncPushesCreatesForTable no failed pushes', async () => {
     // Arrange
     (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve());
 
     // Act
-    const response: SyncCreateSchemas[] = await getFailedSyncPushesForTable(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
+    const response: SyncCreateSchemas[] =
+      await getFailedSyncPushesCreatesForTable(syncDbTables.statTable);
+
+    // Assert
+    expect(response).toEqual([]);
+  });
+
+  it('getFailedSyncPushesUpdatesForTable has failed pushes', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.statTable]: {
+          [SyncOperation.Updates]: {
+            [sampleUpdatedStat.stat_id]: {
+              retries: 3,
+              data: {
+                ...sampleUpdatedStat,
+              },
+            },
+          },
+        },
+      }),
     );
+
+    // Act
+    const response: SyncUpdateSchemas[] =
+      await getFailedSyncPushesUpdatesForTable(syncDbTables.statTable);
+
+    // Assert
+    expect(response).toEqual([sampleUpdatedStat]);
+  });
+
+  it('getFailedSyncPushesUpdatesForTable no failed pushes', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve());
+
+    // Act
+    const response: SyncUpdateSchemas[] =
+      await getFailedSyncPushesUpdatesForTable(syncDbTables.statTable);
 
     // Assert
     expect(response).toEqual([]);

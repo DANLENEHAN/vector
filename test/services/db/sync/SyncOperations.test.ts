@@ -3,13 +3,16 @@ import {sampleStat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {syncDbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
-// Functions
+// Functionsx
 import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 import {insertSyncUpdate} from '@services/db/sync/SyncUtils';
-import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
+import {
+  storeFailedSyncPushErrors,
+  getFailedSyncPushesUpdatesForTable,
+} from '@services/asyncStorage/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
@@ -24,12 +27,12 @@ jest.mock('@services/api/swagger/Stat', () => ({
   Stat: jest.fn().mockImplementation(() => ({
     createCreate: jest
       .fn()
-      .mockResolvedValue({status: 201})
+      .mockResolvedValueOnce({status: 201})
       .mockResolvedValueOnce({status: 201})
       .mockResolvedValueOnce({status: 500}),
     updateUpdate: jest
       .fn()
-      .mockResolvedValue({status: 204})
+      .mockResolvedValueOnce({status: 204})
       .mockResolvedValueOnce({status: 204})
       .mockResolvedValueOnce({status: 500}),
   })),
@@ -37,6 +40,28 @@ jest.mock('@services/api/swagger/Stat', () => ({
 
 jest.mock('@services/asyncStorage/Functions', () => ({
   ...jest.requireActual('@services/asyncStorage/Functions'),
+  getFailedSyncPushesCreatesForTable: jest.fn().mockResolvedValue([
+    {
+      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+      stat_type: 'water',
+      unit: 'ml',
+      timezone: 'UTC',
+      created_at: '2025-01-01T00:00:00.000',
+      updated_at: '2025-01-01T00:01:00.000',
+      user_id: 1,
+      value: 500,
+    },
+  ]),
+  getFailedSyncPushesUpdatesForTable: jest.fn().mockResolvedValue([
+    {
+      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+      stat_type: 'water',
+      unit: 'ml',
+      updated_at: '2025-01-01T00:01:00.000',
+      user_id: 1,
+      value: 500,
+    },
+  ]),
   storeFailedSyncPushErrors: jest.fn(),
 }));
 
@@ -59,6 +84,12 @@ describe('Sync Operation Tests', () => {
     );
 
     // Assert
+
+    expect(getFailedSyncPushesUpdatesForTable).toHaveBeenCalledTimes(1);
+    expect(getFailedSyncPushesUpdatesForTable).toHaveBeenCalledWith(
+      syncDbTables.statTable,
+    );
+
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
     expect(insertSyncUpdate).toHaveBeenCalledWith({
       last_synced: sampleStat.updated_at,
@@ -88,10 +119,9 @@ describe('Sync Operation Tests', () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
     const tableToSync: syncDbTables = syncDbTables.statTable;
-    const updatedStat = sampleStat;
-    // We transform to a SyncUpdateSchema in processUpdatesSyncTypePush
-    delete updatedStat.created_at;
-    delete updatedStat.timezone;
+    const {timezone, created_at, ...updatedStat} = sampleStat;
+    timezone;
+    created_at;
 
     // Act
     await processUpdatesSyncTypePush(
@@ -106,7 +136,7 @@ describe('Sync Operation Tests', () => {
     expect(storeFailedSyncPushErrors).toHaveBeenCalledWith(
       syncDbTables.statTable,
       SyncOperation.Updates,
-      [updatedStat],
+      [updatedStat, updatedStat],
     );
   });
 
@@ -166,7 +196,7 @@ describe('Sync Operation Tests', () => {
     expect(storeFailedSyncPushErrors).toHaveBeenCalledWith(
       syncDbTables.statTable,
       SyncOperation.Creates,
-      [sampleStat],
+      [sampleStat, sampleStat],
     );
   });
 });

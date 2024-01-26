@@ -19,7 +19,6 @@ import {
   processUpdatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
 import {insertRows} from '@services/db/Functions';
-import {getFailedSyncPushesForTable} from '@services/asyncStorage/Functions';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
@@ -77,22 +76,6 @@ jest.mock('@services/db/Functions', () => ({
   insertRows: jest.fn(),
 }));
 
-jest.mock('@services/asyncStorage/Functions', () => ({
-  ...jest.requireActual('@services/asyncStorage/Functions'),
-  getFailedSyncPushesForTable: jest.fn().mockResolvedValue([
-    {
-      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-      stat_type: 'water',
-      unit: 'ml',
-      timezone: 'UTC',
-      created_at: '2025-01-01T00:00:00.000',
-      updated_at: '2025-01-01T00:01:00.000',
-      user_id: 1,
-      value: 500,
-    },
-  ]),
-}));
-
 describe('SyncType Tests', () => {
   beforeEach(() => {
     // Clears 'toHaveBeenCalledTimes' cache
@@ -125,15 +108,9 @@ describe('SyncType Tests', () => {
       '2025-01-01T00:00:00.000',
     );
 
-    expect(getFailedSyncPushesForTable).toHaveBeenCalledTimes(1);
-    expect(getFailedSyncPushesForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
-    );
-
     expect(processCreatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processCreatesSyncTypePush).toHaveBeenCalledWith(
-      [sampleStat, sampleStat],
+      [sampleStat],
       syncDbTables.statTable,
       apiFunctions[syncDbTables.statTable],
     );
@@ -165,15 +142,9 @@ describe('SyncType Tests', () => {
       '2025-01-01T00:00:00.000',
     );
 
-    expect(getFailedSyncPushesForTable).toHaveBeenCalledTimes(1);
-    expect(getFailedSyncPushesForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncOperation.Updates,
-    );
-
     expect(processUpdatesSyncTypePush).toHaveBeenCalledTimes(1);
     expect(processUpdatesSyncTypePush).toHaveBeenCalledWith(
-      [sampleStat, sampleStat],
+      [sampleStat],
       syncDbTables.statTable,
       apiFunctions[syncDbTables.statTable],
     );

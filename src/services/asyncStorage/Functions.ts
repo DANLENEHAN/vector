@@ -1,7 +1,3 @@
-/*
-	This file contains utility functions that are used throughout the application.
-*/
-
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -54,49 +50,34 @@ export async function getUserDetails(field_name: string): Promise<any> {
 }
 
 /**
- * Stores information about failed synchronization push errors in asynchronous storage.
+ * Stores failed synchronization push errors in AsyncStorage for a specific table and sync operation.
  *
- * @async
- * @function
- * @param {syncDbTables} tableName - The name of the table associated with the failed synchronization push errors.
- * @param {SyncCreateSchemas[] | SyncUpdateSchemas[]} failedSyncPushErrors - An array of synchronization push errors to be stored.
- * @returns {Promise<void>} A Promise that resolves once the storage operation is complete.
- *
- * @throws {Error} If there is an issue parsing the existing synchronization push errors from storage.
- *
- * @description
- * This function retrieves the current state of synchronization push errors from asynchronous storage,
- * updates the information based on the provided failed synchronization push errors, and then stores
- * the updated state back into asynchronous storage.
- *
- * If the existing storage contains invalid JSON for synchronization push errors, it logs a warning and
- * attempts to rebuild the synchronization push errors state.
- *
- * The function increments the retry count for each synchronization push error, and if the retry count
- * exceeds the defined maximum retry threshold (maxSyncPushRetry), it may trigger additional actions
- * such as pushing the error to a dump endpoint.
+ * @param tableName - The name of the synchronization table.
+ * @param syncOperation - The type of synchronization operation (e.g., Creates, Updates).
+ * @param failedSyncPushErrors - An array of failed synchronization items to be stored.
+ * @returns A promise that resolves when the storage operation is successful.
+ * @throws If there is an error retrieving, parsing, or storing synchronization push errors.
  *
  * @example
- * // Example usage:
- * const tableName = 'exampleTable';
- * const failedSyncPushErrors = [
- *   { exampleTable_id: 'uuid1', ...other properties },
- *   { exampleTable_id: 'uuid2', ...other properties },
- *   // ...
+ * const failedCreates: SyncCreateSchemas[] = [
+ *   { id: 1, name: 'John' },
+ *   { id: 2, name: 'Jane' },
  * ];
- * await storeFailedSyncPushErrors(tableName, failedSyncPushErrors);
+ * await storeFailedSyncPushErrors<SyncCreateSchemas>('myTable', SyncOperation.Creates, failedCreates);
  */
-export const storeFailedSyncPushErrors = async (
+export const storeFailedSyncPushErrors = async <
+  T extends SyncCreateSchemas | SyncUpdateSchemas,
+>(
   tableName: syncDbTables,
   syncOperation: SyncOperation,
-  failedSyncPushErrors: SyncCreateSchemas[] | SyncUpdateSchemas[],
+  failedSyncPushErrors: T[],
 ): Promise<void> => {
   try {
     const syncPushErrorsStore = await AsyncStorage.getItem(
       AsyncStorageKeys.SyncPushErrors,
     );
 
-    let syncPushErrorsObject: FailedSyncPushError = {};
+    let syncPushErrorsObject: FailedSyncPushError<T> = {};
 
     if (syncPushErrorsStore !== null) {
       try {
@@ -107,27 +88,26 @@ export const storeFailedSyncPushErrors = async (
         );
       }
     }
-    const tableSyncPushErrors: SyncPushErrorItem =
+
+    const tableSyncPushErrors: {[key: string]: SyncPushErrorItem<T>} =
       (syncPushErrorsObject &&
         syncPushErrorsObject[tableName] &&
-        syncPushErrorsObject[tableName][syncOperation]) ??
+        syncPushErrorsObject[tableName]?.[syncOperation]) ??
       {};
 
     for (const syncError of failedSyncPushErrors) {
-      // uuid value for the row
       const rowUuid = syncError[`${tableName}_id`];
 
-      // Ensure ts this won't be null
       if (rowUuid in tableSyncPushErrors) {
-        if (tableSyncPushErrors[rowUuid].retries > maxSyncPushRetry) {
-          const row: SyncCreateSchemas = tableSyncPushErrors[rowUuid].data;
+        if (tableSyncPushErrors[rowUuid].retries === maxSyncPushRetry) {
+          const row: T = tableSyncPushErrors[rowUuid].data;
           await SyncErrorDumpApi.createCreate({
             table_name: tableName,
             row_id: row[`${tableName}_id`],
             data: row,
-            created_at: row.created_at,
+            created_at: 'created_at' in row ? row.created_at : 'update_please',
             updated_at: row.updated_at,
-            timezone: row.timezone,
+            timezone: 'timezone' in row ? row.timezone : 'update_please',
           });
           delete tableSyncPushErrors[rowUuid];
         } else {
@@ -152,32 +132,25 @@ export const storeFailedSyncPushErrors = async (
       JSON.stringify(syncPushErrorsObject),
     );
   } catch (error) {
-    // Handle any unexpected errors during storage
     throw new Error(`Failed to store synchronization push errors: ${error}`);
   }
 };
 
 /**
- * Retrieves the failed synchronization push errors for a specific table from AsyncStorage.
- *
- * @async
- * @param {syncDbTables} tableName - The name of the table for which to retrieve failed synchronization push errors.
- * @returns {Array} - An array containing the failed synchronization push errors for the specified table.
- *                   If the data is not found or has an unexpected structure, an empty array is returned.
- * @throws {Error} - If there is an error during the retrieval or parsing of synchronization push errors,
- *                   an error message is logged, and the function may rethrow the error or return an appropriate value.
- *
+ * Retrieves a list of failed synchronization pushes for a specific table and sync operation.
+ * @param tableName - The name of the synchronization table.
+ * @param syncOperation - The type of synchronization operation (e.g., Creates, Updates).
+ * @returns A promise that resolves to an array of failed synchronization items.
+ * @throws If there is an error retrieving or parsing synchronization push errors.
  * @example
- * // Usage example:
- * const tableName = 'exampleTable';
- * const failedPushErrors = await getFailedSyncPushesForTable(tableName);
- * logger.info(failedPushErrors);
+ * const failedCreates = await getFailedSyncPushesForTable<SyncCreateSchemas>('myTable', SyncOperation.Creates);
  */
-export const getFailedSyncPushesForTable = async (
+const getFailedSyncPushesForTable = async <T>(
   tableName: syncDbTables,
   syncOperation: SyncOperation,
-): Promise<SyncCreateSchemas[]> => {
-  let tableSyncPushErrors = [];
+): Promise<T[]> => {
+  let tableSyncPushErrors: SyncPushErrorItem<T>[] = [];
+  let failedPushErrors: T[] = [];
 
   try {
     const syncPushErrorsStore = await AsyncStorage.getItem(
@@ -187,17 +160,19 @@ export const getFailedSyncPushesForTable = async (
     if (syncPushErrorsStore === null) {
       logger.warn(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
     } else {
-      const parsedData = JSON.parse(syncPushErrorsStore);
+      const parsedData: FailedSyncPushError<T> =
+        JSON.parse(syncPushErrorsStore);
 
       if (
         parsedData &&
         parsedData[tableName] &&
-        parsedData[tableName][syncOperation]
+        parsedData[tableName]?.[syncOperation]
       ) {
-        tableSyncPushErrors = Object.values(
-          parsedData[tableName][syncOperation],
-        );
-        tableSyncPushErrors = tableSyncPushErrors.map(item => item.data);
+        const operationData = parsedData[tableName]?.[syncOperation];
+        if (operationData) {
+          tableSyncPushErrors = Object.values(operationData);
+          failedPushErrors = tableSyncPushErrors.map(item => item.data);
+        }
       } else {
         logger.info(
           `No failed Sync Pushes for table '${tableName}' sync operation '${syncOperation}'`,
@@ -209,5 +184,39 @@ export const getFailedSyncPushesForTable = async (
       `Failed to retrieve failed sync pushes for table ${tableName}: ${error}`,
     );
   }
-  return tableSyncPushErrors;
+  return failedPushErrors;
+};
+
+/**
+ * Retrieves a list of failed synchronization pushes for creating records in a specific table.
+ * @param tableName - The name of the synchronization table.
+ * @returns A promise that resolves to an array of failed synchronization creates.
+ * @throws If there is an error retrieving or parsing synchronization push errors.
+ * @example
+ * const failedCreates = await getFailedSyncPushesCreatesForTable('myTable');
+ */
+export const getFailedSyncPushesCreatesForTable = async (
+  tableName: syncDbTables,
+): Promise<SyncCreateSchemas[]> => {
+  return getFailedSyncPushesForTable<SyncCreateSchemas>(
+    tableName,
+    SyncOperation.Creates,
+  );
+};
+
+/**
+ * Retrieves a list of failed synchronization pushes for updating records in a specific table.
+ * @param tableName - The name of the synchronization table.
+ * @returns A promise that resolves to an array of failed synchronization updates.
+ * @throws If there is an error retrieving or parsing synchronization push errors.
+ * @example
+ * const failedUpdates = await getFailedSyncPushesUpdatesForTable('myTable');
+ */
+export const getFailedSyncPushesUpdatesForTable = async (
+  tableName: syncDbTables,
+): Promise<SyncUpdateSchemas[]> => {
+  return getFailedSyncPushesForTable<SyncUpdateSchemas>(
+    tableName,
+    SyncOperation.Updates,
+  );
 };
