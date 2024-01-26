@@ -17,5 +17,5 @@ import {insertRows} from '@services/db/Functions';
  * await insertStat(stats);
  */
 export const insertStat = async (stats: StatCreateSchema[]): Promise<void> => {
-  await insertRows(syncDbTables.statTable, stats, false);
+  await insertRows(syncDbTables.statTable, stats);
 };

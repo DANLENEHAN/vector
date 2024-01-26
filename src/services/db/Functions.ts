@@ -14,7 +14,6 @@ import {revisionObject} from '@services/db/VectorRevisions';
 import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
 import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
 // Logger
 import logger from '@utils/Logger';
 
@@ -270,15 +269,9 @@ export const deleteDB = (): void => {
 export const insertRows = async (
   tableName: syncDbTables,
   data: RowData[],
-  insert_uuid: boolean = true,
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
-  }
-
-  // Optionally insert UUIDs for each row.
-  if (insert_uuid === true) {
-    data = data.map(obj => ({...obj, [`${tableName}_id`]: uuidv4()}));
   }
 
   return new Promise((resolve, reject) => {
@@ -298,7 +291,7 @@ export const insertRows = async (
 
       tx.executeSql(
         // In the case we get back rows we already have we 'IGNORE'
-        `INSERT OR IGNORE INTO ${tableName} (${columns}) VALUES ${placeholders}`,
+        `INSERT INTO ${tableName} (${columns}) VALUES ${placeholders}`,
         insertValues,
         () => {
           // Transaction success callback

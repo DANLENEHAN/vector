@@ -12,7 +12,7 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '@services/db/Functions';
+import {insertRows, updateRows, runSqlSelect} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
@@ -73,7 +73,21 @@ export const processSyncTypePull = async (
     );
   } else {
     if (syncOperation === SyncOperation.Creates) {
-      await insertRows(tableName, rowsToSync, false);
+      // Removing any existing rows to avoid errors
+      const placeholders = rowsToSync.map(() => '?').join(',');
+      const tableUuids = rowsToSync.map(item => ({
+        [`${tableName}_id`]: item[`${tableName}_id`],
+      }));
+      const existingUuids = await runSqlSelect(
+        `SELECT * FROM ${tableName} WHERE ${tableName}_id IN (${placeholders})`,
+        tableUuids,
+      );
+      const rowsToInsert = rowsToSync.filter(
+        item => !existingUuids.includes(item[`${tableName}_id`]),
+      );
+      if (rowsToInsert.length > 0) {
+        await insertRows(tableName, rowsToInsert);
+      }
     } else {
       await updateRows(tableName, rowsToSync);
     }
