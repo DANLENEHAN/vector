@@ -9,7 +9,7 @@ import {
   getUserStats,
 } from '@services/api/blueprints/stat/Functions';
 // Data
-import {sampleStat} from '../../../../Objects';
+import {sampleStat, mockNavigation} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
 
 jest.mock('@services/date/Functions', () => ({
@@ -23,11 +23,6 @@ jest.mock('@services/db/stat/Functions', () => ({
   ...jest.requireActual('@services/db/stat/Functions'),
   insertStat: jest.fn(),
 }));
-
-// Mock navigation with a spy on goBack
-const mockNavigation = {
-  goBack: jest.fn(),
-};
 
 describe('Stat Functions Tests', () => {
   beforeEach(() => {
