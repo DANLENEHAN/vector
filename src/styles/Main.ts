@@ -71,6 +71,7 @@ export const lightThemeColors = {
   darkText: '#333333', // Darker text color for more emphasis
   error: '#FF3B30', // Error text color
   shadow: 'rgba(150, 150, 150, 0.3)',
+  lowOpacityBackground: 'rgba(51, 51, 51, 0.5)',
 };
 
 export const darkThemeColors = {
@@ -87,6 +88,7 @@ export const darkThemeColors = {
   darkText: '#F2F2F7',
   error: '#FF453A',
   shadow: 'rgba(50, 50, 50, 0.3)',
+  lowOpacityBackground: 'rgba(255, 255, 255, 0.5)',
 };
 
 export const paddings = {

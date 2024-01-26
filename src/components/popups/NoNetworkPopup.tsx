@@ -32,27 +32,20 @@ const NoNetworkPopup: React.FC = () => {
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const backgroundColor = `rgba(${parseInt(
-    currentTheme.text.slice(1, 3),
-    16,
-  )}, ${parseInt(currentTheme.text.slice(3, 5), 16)}, ${parseInt(
-    currentTheme.text.slice(5, 7),
-    16,
-  )}, ${0.5})`;
   return (
     <View
       testID="no-network-popup"
       style={[
         styles.overlayContainer,
         {
-          backgroundColor: backgroundColor,
+          backgroundColor: currentTheme.lowOpacityBackground,
         },
       ]}>
       <View
         style={[
           styles.overlayTop,
           {
-            backgroundColor: backgroundColor,
+            backgroundColor: currentTheme.lowOpacityBackground,
           },
         ]}
       />
@@ -95,8 +88,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
-    zIndex: 100,
-    borderTop: 1,
+    zIndex: 1,
   },
   overlayTop: {
     flex: 1,
