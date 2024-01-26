@@ -30,3 +30,18 @@ export const sampleSyncRow = {
   sync_type: SyncType.Pull,
   sync_operation: SyncOperation.Creates,
 } as SyncTable;
+
+export const mockNavigation = {
+  goBack: jest.fn(),
+  navigate: jest.fn(),
+};
+
+export const mockSystemContextData = {
+  theme: 'light' as 'light' | 'dark',
+  setTheme: jest.fn(),
+  userPreferenceTheme: 'system' as 'system' | 'light' | 'dark',
+  setUserPreferenceTheme: jest.fn(),
+  isConnected: true,
+  systemVarsLoaded: true,
+  migrationsComplete: true,
+};

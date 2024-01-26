@@ -32,31 +32,27 @@ const NoNetworkPopup: React.FC = () => {
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
+  const backgroundColor = `rgba(${parseInt(
+    currentTheme.text.slice(1, 3),
+    16,
+  )}, ${parseInt(currentTheme.text.slice(3, 5), 16)}, ${parseInt(
+    currentTheme.text.slice(5, 7),
+    16,
+  )}, ${0.5})`;
   return (
     <View
+      testID="no-network-popup"
       style={[
         styles.overlayContainer,
         {
-          backgroundColor: `rgba(${parseInt(
-            currentTheme.text.slice(1, 3),
-            16,
-          )}, ${parseInt(currentTheme.text.slice(3, 5), 16)}, ${parseInt(
-            currentTheme.text.slice(5, 7),
-            16,
-          )}, ${0.5})`,
+          backgroundColor: backgroundColor,
         },
       ]}>
       <View
         style={[
           styles.overlayTop,
           {
-            backgroundColor: `rgba(${parseInt(
-              currentTheme.text.slice(1, 3),
-              16,
-            )}, ${parseInt(currentTheme.text.slice(3, 5), 16)}, ${parseInt(
-              currentTheme.text.slice(5, 7),
-              16,
-            )}, ${0.5})`,
+            backgroundColor: backgroundColor,
           },
         ]}
       />

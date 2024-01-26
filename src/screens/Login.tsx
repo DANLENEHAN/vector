@@ -1,18 +1,18 @@
 // React import
 import React, {useState} from 'react';
 // Functions
-import {runSyncProcess} from '@services/db/sync/SyncProcess';
-import {loginUser, createUser} from '@services/api/blueprints/user/Api';
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
-//Utils
-import logger from '@utils/Logger';
+import {
+  handleLogin,
+  handleCreateAccount,
+} from '@services/api/blueprints/user/Functions';
+import NetInfo from '@react-native-community/netinfo';
 //Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import TextInputComponent from '@components/inputs/TextInputComponent';
 import ClickableLink from '@components/buttons/ClickableLink';
-import {View, Text, StyleSheet, Keyboard} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import NoNetworkPopup from '@components/popups/NoNetworkPopup';
 // Styling
 import {
@@ -26,18 +26,7 @@ import {
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {TimestampTimezone} from '@services/date/Type';
-import {
-  DateFormat,
-  Gender,
-  FitnessGoal,
-  HeightUnit,
-  WeightUnit,
-  ProfileStatus,
-} from '@services/api/swagger/data-contracts';
-import {SwaggerValidationError} from '@services/api/Types';
-import {timestampFields} from '@shared/Constants';
-import NetInfo from '@react-native-community/netinfo';
+
 /**
  *  Login screen
  *
@@ -50,83 +39,25 @@ import NetInfo from '@react-native-community/netinfo';
  * <LoginScreen navigation={navigation}/>
  */
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
+  // State
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
-
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
+  // Theme
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  //const {netInfo, refresh} = useNetInfoInstance();
-
-  const handleLogin = async () => {
-    await NetInfo.refresh();
-    if (!isConnected) {
-      return;
-    }
-    logger.info('Logging in.');
-    Keyboard.dismiss();
-    let response = await loginUser({email: email, password: password});
-    if (response instanceof SwaggerValidationError) {
-      logger.error(`Error: ${response.message}`);
-    } else {
-      logger.info('Login successful, navigating to home screen.');
-      navigation.navigate('App', {screen: 'Home'});
-      runSyncProcess();
-    }
-  };
-
-  const handleCreateAccount = async () => {
-    await NetInfo.refresh();
-    if (!isConnected) {
-      return;
-    }
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-    let response = await createUser({
-      // NOTE: Remove these hard-coded values when the UI is implemented fully
-      email: email,
-      password: password,
-      age: 125,
-      birthday: '1997-05-18',
-      date_format_pref: DateFormat.ValueDMY,
-      first_name: `${email.split('@')[0]}`,
-      gender: Gender.Male,
-      goal: FitnessGoal.BuildMuscle,
-      height_unit_pref: HeightUnit.Cm,
-      language: 'en',
-      last_name: 'Lenehan',
-      phone_number: '+447308821533',
-      premium: false,
-      status: ProfileStatus.Active,
-      username: 'danlen97',
-      weight_unit_pref: WeightUnit.Kg,
-      [timestampFields.createdAt]: timestampTimezone.timestamp,
-      [timestampFields.timezone]: timestampTimezone.timezone,
-    });
-    if (response instanceof SwaggerValidationError) {
-      logger.error(`Error: ${response.message}`);
-    } else {
-      logger.info('Account creation successful, logging in.');
-      response = await loginUser({email: email, password: password});
-      navigation.navigate('App', {screen: 'Home'});
-      runSyncProcess();
-    }
-  };
-
-  const toggleView = () => {
-    setIsLogin(!isLogin);
-  };
-
+  // View Link Text
   const viewLinkText = isLogin
     ? 'New here? Create Account'
     : 'Got an Account? Login';
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <View style={styles.container} testID="login-screen">
         <Text style={[styles.title, {color: currentTheme.text}]}>
           {isLogin ? 'Login' : 'Create Account'}
         </Text>
@@ -152,7 +83,15 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
                 onPress={() => null}
               />
               <ButtonComponent
-                onPress={handleLogin}
+                onPress={async () => {
+                  await NetInfo.refresh();
+                  handleLogin({
+                    email: email,
+                    password: password,
+                    navigation: navigation,
+                    isConnected: isConnected,
+                  });
+                }}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Login"
               />
@@ -161,7 +100,15 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 style={styles.createAccButton}
-                onPress={handleCreateAccount}
+                onPress={async () => {
+                  await NetInfo.refresh();
+                  handleCreateAccount({
+                    email: email,
+                    password: password,
+                    navigation: navigation,
+                    isConnected: isConnected,
+                  });
+                }}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Create Account"
               />
@@ -170,7 +117,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
         </View>
         <ClickableLink
           textStyle={{color: currentTheme.text}}
-          onPress={toggleView}
+          onPress={() => setIsLogin(prev => !prev)}
           text={viewLinkText}
         />
       </View>
