@@ -64,7 +64,7 @@ export default class TextValidation extends BaseValidation {
       this.textRules.maxLength !== undefined &&
       value.length > this.textRules.maxLength
     ) {
-      this.setError('maxLength', {maxLength: this.textRules.maxLength});
+      this.setError('maxLength');
       return false;
     }
 
@@ -73,7 +73,7 @@ export default class TextValidation extends BaseValidation {
       this.textRules.minLength !== undefined &&
       value.length < this.textRules.minLength
     ) {
-      this.setError('minLength', {minLength: this.textRules.minLength});
+      this.setError('minLength');
       return false;
     }
 
@@ -82,7 +82,7 @@ export default class TextValidation extends BaseValidation {
       this.textRules.pattern !== undefined &&
       !this.textRules.pattern.test(value)
     ) {
-      this.setError('pattern', {pattern: this.textRules.pattern});
+      this.setError('pattern');
       return false;
     }
 

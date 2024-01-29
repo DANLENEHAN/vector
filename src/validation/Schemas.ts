@@ -1,6 +1,6 @@
 import {TextValidationRules, LoginValidationKey} from '@validation/Types';
 
-export const emailRegex = /^[w.-]+@[a-zA-Zd.-]+\.[a-zA-Z]{2,}$/;
+export const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const passwordRegex = /^[A-Za-z0-9@#$%^&+=]+$/;
 
 export const LoginValidationSchema: Record<

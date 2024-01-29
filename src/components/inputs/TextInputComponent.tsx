@@ -133,9 +133,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
           </TouchableOpacity>
         )}
       </View>
-      <View>
-        {error && <Text style={{color: currentTheme.error}}>{error}</Text>}
-      </View>
+      {error ? (
+        <View style={styles.errorContainer}>
+          <Text style={{color: currentTheme.error}}>{error}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -165,6 +167,9 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: paddings.small,
     paddingLeft: paddings.small,
+  },
+  errorContainer: {
+    marginTop: margins.small,
   },
 });
 

@@ -9,10 +9,10 @@ import {
  */
 export default class BaseValidation {
   /** The validation rules for the field. */
-  protected rules: BaseValidationRules;
+  rules: BaseValidationRules;
 
   /** The error messages corresponding to different validation rules. */
-  protected errorMessages: BaseValidationErrorMessages;
+  errorMessages: BaseValidationErrorMessages;
 
   /** The current error message. Null if there is no error. */
   error: string | null = null;
@@ -67,16 +67,12 @@ export default class BaseValidation {
   }
 
   /**
-   * Sets the error message based on the specified key and values.
+   * Sets the error message based on the specified key.
    *
    * @param key - The key corresponding to the validation rule.
-   * @param values - Additional values to replace placeholders in the error message.
    */
-  setError(
-    key: keyof BaseValidationErrorMessages,
-    values?: Record<string, any>,
-  ): void {
-    const errorMessage = this.getErrorMessage(key, values);
+  setError(key: keyof BaseValidationErrorMessages): void {
+    const errorMessage = this.getErrorMessage(key);
     this.error = errorMessage;
   }
 
@@ -88,22 +84,12 @@ export default class BaseValidation {
   }
 
   /**
-   * Retrieves the error message for the specified key, replacing placeholders with values if provided.
+   * Retrieves the error message for the specified key.
    *
    * @param key - The key corresponding to the validation rule.
-   * @param values - Additional values to replace placeholders in the error message.
    * @returns The formatted error message or null if no message is found.
    */
-  getErrorMessage(
-    key: keyof BaseValidationErrorMessages,
-    values?: Record<string, any>,
-  ): string | null {
-    const errorMessage = this.errorMessages[key];
-    return errorMessage && values
-      ? errorMessage.replace(
-          /\${(\w+)}/,
-          (_, match) => `${values[match as keyof BaseValidationErrorMessages]}`,
-        )
-      : errorMessage || null;
+  getErrorMessage(key: keyof BaseValidationErrorMessages): string | null {
+    return this.errorMessages[key] || null;
   }
 }
