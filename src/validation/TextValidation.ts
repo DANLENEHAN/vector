@@ -1,25 +1,54 @@
 import BaseValidation from './BaseValidation';
-import {TextValidationRules} from './Types';
+import {TextValidationRules, TextValidationErrors} from './Types';
 
+/**
+ * TextValidation class extends BaseValidation and provides additional text-specific validation rules.
+ * It validates a given string value based on specified rules such as maximum length, minimum length, and pattern.
+ */
 export default class TextValidation extends BaseValidation {
+  /** The text-specific validation rules for the field. */
   textRules: TextValidationRules;
 
-  constructor(textRules: TextValidationRules) {
-    const errorMessages: Record<string, string> = {
+  /**
+   * Constructor for TextValidation class.
+   *
+   * @param textRules - Text-specific validation rules for the field.
+   * @param errorMessages - Error messages for text-specific validation rules.
+   */
+  constructor(
+    textRules: TextValidationRules,
+    errorMessages?: TextValidationErrors,
+  ) {
+    /**
+     * Default error messages for text-specific rules, with placeholders for dynamic values.
+     * These messages are used if custom error messages are not provided.
+     */
+    const defaultErrorMessages: TextValidationErrors = {
       maxLength: 'Value exceeds maximum length of ${maxLength}',
       minLength: 'Value must be at least ${minLength} characters long',
       pattern: 'Value must match the pattern: ${pattern}',
     };
 
-    super(textRules, errorMessages);
+    // Call the constructor of the base class (BaseValidation) with the provided rules and error messages.
+    super(textRules, {...defaultErrorMessages, ...errorMessages});
+
+    // Set the text-specific rules for this instance.
     this.textRules = textRules;
   }
 
+  /**
+   * Validates the given string value based on the specified text-specific rules.
+   *
+   * @param value - The string value to be validated.
+   * @returns True if validation passes, false otherwise.
+   */
   validate(value: string): boolean {
+    // Check the common validation rules using the base class method.
     if (!super.validate(value)) {
       return false;
     }
 
+    // Check for maximum length rule violation.
     if (
       this.textRules.maxLength !== undefined &&
       value.length > this.textRules.maxLength
@@ -28,6 +57,7 @@ export default class TextValidation extends BaseValidation {
       return false;
     }
 
+    // Check for minimum length rule violation.
     if (
       this.textRules.minLength !== undefined &&
       value.length < this.textRules.minLength
@@ -36,6 +66,7 @@ export default class TextValidation extends BaseValidation {
       return false;
     }
 
+    // Check for pattern rule violation.
     if (
       this.textRules.pattern !== undefined &&
       !this.textRules.pattern.test(value)
@@ -44,8 +75,8 @@ export default class TextValidation extends BaseValidation {
       return false;
     }
 
+    // Clear any existing errors if validation passes.
     this.clearError();
-    // Clearing error when validation passes
     return true;
   }
 }

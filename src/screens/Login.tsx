@@ -42,21 +42,40 @@ import {LoginValidationSchema} from '@validation/Schemas';
  * <LoginScreen navigation={navigation}/>
  */
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
-  // State
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [isSubmitPressed, setIsSubmitPressed] = useState(false);
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
-  // Theme
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
-  // View Link Text
   const viewLinkText = isLogin
     ? 'New here? Create Account'
     : 'Got an Account? Login';
+
+  const handleLoginSubmit = async () => {
+    await NetInfo.refresh();
+    setIsSubmitPressed(true);
+    handleLogin({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+  };
+
+  const handleCreateAccountSubmit = async () => {
+    await NetInfo.refresh();
+    setIsSubmitPressed(true);
+    handleCreateAccount({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+  };
 
   return (
     <ScreenWrapper>
@@ -70,6 +89,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           onChangeText={text => setUsername(text)}
           iconName="envelope"
           validation={new TextValidation(LoginValidationSchema.email)}
+          enableErrors={isSubmitPressed}
         />
         <TextInputComponent
           placeholder="Enter your password"
@@ -78,6 +98,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           iconName="lock"
           secureTextEntry={true}
           validation={new TextValidation(LoginValidationSchema.password)}
+          enableErrors={isSubmitPressed}
         />
         <View style={styles.buttonContainer}>
           {isLogin ? (
@@ -88,15 +109,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
                 onPress={() => null}
               />
               <ButtonComponent
-                onPress={async () => {
-                  await NetInfo.refresh();
-                  handleLogin({
-                    email: email,
-                    password: password,
-                    navigation: navigation,
-                    isConnected: isConnected,
-                  });
-                }}
+                onPress={handleLoginSubmit}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Login"
               />
@@ -105,15 +118,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 style={styles.createAccButton}
-                onPress={async () => {
-                  await NetInfo.refresh();
-                  handleCreateAccount({
-                    email: email,
-                    password: password,
-                    navigation: navigation,
-                    isConnected: isConnected,
-                  });
-                }}
+                onPress={handleCreateAccountSubmit}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Create Account"
               />

@@ -1,5 +1,5 @@
 // React Import
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // Components
 import {
   View,
@@ -45,6 +45,7 @@ interface TextInputProps {
   autoCapitalize?: boolean;
   iconName: string;
   validation: TextValidation;
+  enableErrors?: boolean;
 }
 
 /**
@@ -60,6 +61,7 @@ interface TextInputProps {
  *     autoCapitalize={true}
  *     iconName={'lock'}
  *     validation={textValidationInstance}
+ *     enableErrors={true}
  * />
  *
  * @param {Object} props - Component TextInput Props
@@ -71,6 +73,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   iconName,
   onChangeText,
   validation,
+  enableErrors = false,
   secureTextEntry = false,
   autoCapitalize = false,
 }) => {
@@ -80,9 +83,17 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleTextChange = (text: string) => {
-    setError(validation.validate(text) ? null : validation.error);
+    if (enableErrors) {
+      setError(validation.validate(text) ? null : validation.error);
+    }
     onChangeText(text);
   };
+
+  useEffect(() => {
+    if (enableErrors) {
+      setError(validation.validate(value) ? null : validation.error);
+    }
+  }, [enableErrors, value, validation]);
 
   return (
     <View style={styles.mainContainer}>
