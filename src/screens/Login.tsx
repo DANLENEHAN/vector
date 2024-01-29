@@ -88,7 +88,11 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           value={email}
           onChangeText={text => setUsername(text)}
           iconName="envelope"
-          validation={new TextValidation('Email', LoginValidationSchema.email)}
+          validation={
+            new TextValidation('Email', LoginValidationSchema.email, {
+              pattern: 'Please enter a valid email address',
+            })
+          }
           enableErrors={isSubmitPressed}
         />
         <TextInputComponent

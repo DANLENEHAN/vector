@@ -7,12 +7,13 @@ export interface BaseValidationRules {
 }
 
 /**
- * Interface defining the base validation error messages for a field.
- * The keys represent the validation rule names, and the values are the corresponding error messages.
+ * Interface defining error messages for base validation rules.
+ * Each key represents a validation rule, and its value is the corresponding error message.
+ * The 'required' key is used to provide an error message for the presence/absence rule.
+ *
  */
-export interface BaseValidationErrors {
+export interface BaseValidationErrorMessages {
   [key: string]: string | undefined;
-  /** Error message for the 'required' rule. */
   required?: string;
 }
 
@@ -29,15 +30,17 @@ export interface TextValidationRules extends BaseValidationRules {
 }
 
 /**
- * Interface defining the validation error messages for text fields.
- * Each property corresponds to a specific validation rule, and the values are the corresponding error messages.
+ * Interface defining error messages for text-specific validation rules.
+ * Extends the BaseValidationErrorMessages interface and adds additional keys
+ * for text-related validation rules such as 'maxLength', 'minLength', and 'pattern'.
+ *
+ * @extends BaseValidationErrorMessages
+ *
  */
-export interface TextValidationErrors {
-  /** Error message for exceeding the maximum length specified in 'maxLength'. */
+export interface TextValidationErrorMessages
+  extends BaseValidationErrorMessages {
   maxLength?: string;
-  /** Error message for not meeting the minimum required length specified in 'minLength'. */
   minLength?: string;
-  /** Error message for not matching the specified regular expression pattern in 'pattern'. */
   pattern?: string;
 }
 

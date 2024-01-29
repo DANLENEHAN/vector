@@ -1,4 +1,4 @@
-import {BaseValidationRules, BaseValidationErrors} from './Types';
+import {BaseValidationRules, BaseValidationErrorMessages} from './Types';
 
 /**
  * Base class for field validation.
@@ -9,7 +9,7 @@ export default class BaseValidation {
   protected rules: BaseValidationRules;
 
   /** The error messages corresponding to different validation rules. */
-  protected errorMessages: BaseValidationErrors;
+  protected errorMessages: BaseValidationErrorMessages;
 
   /** The current error message. Null if there is no error. */
   error: string | null = null;
@@ -27,7 +27,7 @@ export default class BaseValidation {
   constructor(
     displayName: string,
     rules?: BaseValidationRules,
-    errorMessages?: BaseValidationErrors,
+    errorMessages?: BaseValidationErrorMessages,
   ) {
     /**
      * Default rules include 'required' as true,
@@ -70,7 +70,7 @@ export default class BaseValidation {
    * @param values - Additional values to replace placeholders in the error message.
    */
   setError(
-    key: keyof BaseValidationErrors,
+    key: keyof BaseValidationErrorMessages,
     values?: Record<string, any>,
   ): void {
     const errorMessage = this.getErrorMessage(key, values);
@@ -92,14 +92,14 @@ export default class BaseValidation {
    * @returns The formatted error message or null if no message is found.
    */
   getErrorMessage(
-    key: keyof BaseValidationErrors,
+    key: keyof BaseValidationErrorMessages,
     values?: Record<string, any>,
   ): string | null {
     const errorMessage = this.errorMessages[key];
     return errorMessage && values
       ? errorMessage.replace(
           /\${(\w+)}/,
-          (_, match) => `${values[match as keyof BaseValidationErrors]}`,
+          (_, match) => `${values[match as keyof BaseValidationErrorMessages]}`,
         )
       : errorMessage || null;
   }

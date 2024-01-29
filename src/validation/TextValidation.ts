@@ -1,5 +1,5 @@
 import BaseValidation from './BaseValidation';
-import {TextValidationRules, TextValidationErrors} from './Types';
+import {TextValidationRules, TextValidationErrorMessages} from './Types';
 
 /**
  * TextValidation class extends BaseValidation and provides additional text-specific validation rules.
@@ -22,13 +22,13 @@ export default class TextValidation extends BaseValidation {
   constructor(
     displayName: string,
     textRules: TextValidationRules,
-    errorMessages?: TextValidationErrors,
+    errorMessages?: TextValidationErrorMessages,
   ) {
     /**
      * Default error messages for text-specific rules, with placeholders for dynamic values.
      * These messages are used if custom error messages are not provided.
      */
-    const defaultErrorMessages: TextValidationErrors = {
+    const defaultErrorMessages: TextValidationErrorMessages = {
       maxLength: `${displayName} exceeds maximum length of ${textRules.maxLength}`,
       minLength: `${displayName} must be at least ${textRules.minLength} characters long`,
       pattern: `${displayName} must match the pattern: ${textRules.pattern}`,
