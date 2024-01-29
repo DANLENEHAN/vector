@@ -1,4 +1,7 @@
-import {BaseValidationRules, BaseValidationErrorMessages} from './Types';
+import {
+  BaseValidationRules,
+  BaseValidationErrorMessages,
+} from '@validation/Types';
 
 /**
  * Base class for field validation.

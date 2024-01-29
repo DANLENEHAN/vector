@@ -1,5 +1,8 @@
-import BaseValidation from './BaseValidation';
-import {TextValidationRules, TextValidationErrorMessages} from './Types';
+import BaseValidation from '@validation/BaseValidation';
+import {
+  TextValidationRules,
+  TextValidationErrorMessages,
+} from '@validation/Types';
 
 /**
  * TextValidation class extends BaseValidation and provides additional text-specific validation rules.

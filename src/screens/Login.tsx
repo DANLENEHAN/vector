@@ -6,7 +6,7 @@ import {
   handleCreateAccount,
 } from '@services/api/blueprints/user/Functions';
 import NetInfo from '@react-native-community/netinfo';
-import TextValidation from '../validation/TextValidation';
+import TextValidation from '@validation/TextValidation';
 //Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components

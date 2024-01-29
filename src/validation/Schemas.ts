@@ -1,4 +1,4 @@
-import {TextValidationRules, LoginValidationKey} from './Types';
+import {TextValidationRules, LoginValidationKey} from '@validation/Types';
 
 export const emailRegex = /^[w.-]+@[a-zA-Zd.-]+\.[a-zA-Z]{2,}$/;
 export const passwordRegex = /^[A-Za-z0-9@#$%^&+=]+$/;
