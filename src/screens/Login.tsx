@@ -88,6 +88,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           value={email}
           onChangeText={text => setUsername(text)}
           iconName="envelope"
+          style={{...styles.inputContainers}}
           validation={
             new TextValidation('Email', LoginValidationSchema.email, {
               pattern: 'Please enter a valid email address',
@@ -101,6 +102,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           iconName="lock"
           secureTextEntry={true}
+          style={{...styles.inputContainers}}
           validation={
             new TextValidation('Password', LoginValidationSchema.password)
           }
@@ -108,7 +110,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
         />
         <View style={styles.buttonContainer}>
           {isLogin ? (
-            <View style={styles.buttonContainer}>
+            <>
               <ButtonComponent
                 text="Forgot Password"
                 disabled={false}
@@ -119,16 +121,14 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Login"
               />
-            </View>
+            </>
           ) : (
-            <View style={styles.buttonContainer}>
-              <ButtonComponent
-                style={styles.createAccButton}
-                onPress={handleCreateAccountSubmit}
-                disabled={!isEmailFilled || !isPasswordFilled}
-                text="Create Account"
-              />
-            </View>
+            <ButtonComponent
+              style={styles.createAccButton}
+              onPress={handleCreateAccountSubmit}
+              disabled={!isEmailFilled || !isPasswordFilled}
+              text="Create Account"
+            />
           )}
         </View>
         <ClickableLink
@@ -154,16 +154,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginBottom: margins.medium,
+    marginBottom: margins.xxLarge,
   },
   title: {
     fontSize: fontSizes.xLarge,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.medium,
+    marginBottom: margins.xxLarge,
   },
   createAccButton: {
     // Override default button width
     minWidth: 225,
+  },
+  inputContainers: {
+    marginBottom: margins.xxLarge,
   },
 });
 

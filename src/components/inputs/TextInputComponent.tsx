@@ -26,16 +26,19 @@ import {useSystem} from '@context/SystemContext';
 import TextValidation from '@validation/TextValidation';
 
 /**
- * Interface for the TextInput Component
+ * Props for a TextInput component used in forms.
  *
  * @interface TextInputProps
+ * @property {string} placeholder - The placeholder text for the input.
+ * @property {string} value - The current value of the input.
+ * @property {(text: string) => void} onChangeText - Callback function triggered when the text changes.
+ * @property {boolean} [secureTextEntry] - Determines whether the input is a secure text entry (e.g., for passwords).
+ * @property {boolean} [autoCapitalize] - Determines whether the input automatically capitalizes certain characters.
+ * @property {string} iconName - The name of the icon associated with the input.
+ * @property {object} [style] - Additional styles to be applied to the TextInput component.
+ * @property {TextValidation} validation - An instance of TextValidation for validating the input.
+ * @property {boolean} [enableErrors] - Indicates whether error messages from validation should be displayed.
  *
- * @param {string} placeholder - The placeholder text for the input
- * @param {string} value - The value of the input
- * @param {(text: string) => void} onChangeText - Function to be called when the text changes
- * @param {boolean} secureTextEntry - Boolean to hide the text (optional)
- * @param {boolean} autoCapitalize - Boolean to capitalize the text (optional)
- * @param {string} iconName - The name of the icon to be displayed
  */
 interface TextInputProps {
   placeholder: string;
@@ -44,6 +47,7 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
+  style?: object;
   validation: TextValidation;
   enableErrors?: boolean;
 }
@@ -73,6 +77,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   iconName,
   onChangeText,
   validation,
+  style,
   enableErrors = false,
   secureTextEntry = false,
   autoCapitalize = false,
@@ -96,7 +101,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   }, [enableErrors, value, validation]);
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={{...styles.mainContainer, ...style}}>
       <View
         style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
         <Icon
@@ -128,7 +133,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
           </TouchableOpacity>
         )}
       </View>
-      <View style={styles.errorContainer}>
+      <View>
         {error && <Text style={{color: currentTheme.error}}>{error}</Text>}
       </View>
     </View>
@@ -144,7 +149,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: margins.small,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
     padding: paddings.small,
@@ -161,9 +165,6 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: paddings.small,
     paddingLeft: paddings.small,
-  },
-  errorContainer: {
-    marginBottom: margins.large,
   },
 });
 
