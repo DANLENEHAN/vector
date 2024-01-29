@@ -88,7 +88,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           value={email}
           onChangeText={text => setUsername(text)}
           iconName="envelope"
-          validation={new TextValidation(LoginValidationSchema.email)}
+          validation={new TextValidation('Email', LoginValidationSchema.email)}
           enableErrors={isSubmitPressed}
         />
         <TextInputComponent
@@ -97,7 +97,9 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           iconName="lock"
           secureTextEntry={true}
-          validation={new TextValidation(LoginValidationSchema.password)}
+          validation={
+            new TextValidation('Password', LoginValidationSchema.password)
+          }
           enableErrors={isSubmitPressed}
         />
         <View style={styles.buttonContainer}>

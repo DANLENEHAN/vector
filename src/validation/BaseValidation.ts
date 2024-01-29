@@ -14,13 +14,18 @@ export default class BaseValidation {
   /** The current error message. Null if there is no error. */
   error: string | null = null;
 
+  /** The name of the field being validated. */
+  displayName: string;
+
   /**
    * Constructor for BaseValidation class.
    *
+   * @param displayName - The name of the field being validated.
    * @param rules - Validation rules for the field.
    * @param errorMessages - Error messages for validation rules.
    */
   constructor(
+    displayName: string,
     rules?: BaseValidationRules,
     errorMessages?: BaseValidationErrors,
   ) {
@@ -30,12 +35,15 @@ export default class BaseValidation {
      */
     this.rules = {required: true, ...(rules || {})};
 
+    // Set the displayName property.
+    this.displayName = displayName;
+
     /**
      * Default error message for the 'required' rule is set to 'Value is required',
      * allowing for easy customization while ensuring a default behavior.
      */
     this.errorMessages = errorMessages || {
-      required: 'Value is required',
+      required: `${this.displayName} is required`,
     };
   }
 

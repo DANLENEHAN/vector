@@ -9,13 +9,18 @@ export default class TextValidation extends BaseValidation {
   /** The text-specific validation rules for the field. */
   textRules: TextValidationRules;
 
+  /** The name of the field being validated. */
+  displayName: string;
+
   /**
    * Constructor for TextValidation class.
    *
+   * @param displayName - The name of the field being validated.
    * @param textRules - Text-specific validation rules for the field.
    * @param errorMessages - Error messages for text-specific validation rules.
    */
   constructor(
+    displayName: string,
     textRules: TextValidationRules,
     errorMessages?: TextValidationErrors,
   ) {
@@ -24,16 +29,19 @@ export default class TextValidation extends BaseValidation {
      * These messages are used if custom error messages are not provided.
      */
     const defaultErrorMessages: TextValidationErrors = {
-      maxLength: 'Value exceeds maximum length of ${maxLength}',
-      minLength: 'Value must be at least ${minLength} characters long',
-      pattern: 'Value must match the pattern: ${pattern}',
+      maxLength: `${displayName} exceeds maximum length of ${textRules.maxLength}`,
+      minLength: `${displayName} must be at least ${textRules.minLength} characters long`,
+      pattern: `${displayName} must match the pattern: ${textRules.pattern}`,
     };
 
     // Call the constructor of the base class (BaseValidation) with the provided rules and error messages.
-    super(textRules, {...defaultErrorMessages, ...errorMessages});
+    super(displayName, textRules, {...defaultErrorMessages, ...errorMessages});
 
     // Set the text-specific rules for this instance.
     this.textRules = textRules;
+
+    // Set the displayName property.
+    this.displayName = displayName;
   }
 
   /**
