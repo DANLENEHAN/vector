@@ -6,6 +6,7 @@ import {
   handleCreateAccount,
 } from '@services/api/blueprints/user/Functions';
 import NetInfo from '@react-native-community/netinfo';
+import TextValidation from '../validation/TextValidation';
 //Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
@@ -26,6 +27,8 @@ import {
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
+// Objects
+import {LoginValidationSchema} from '@validation/Schemas';
 
 /**
  *  Login screen
@@ -66,6 +69,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           value={email}
           onChangeText={text => setUsername(text)}
           iconName="envelope"
+          validation={new TextValidation(LoginValidationSchema.email)}
         />
         <TextInputComponent
           placeholder="Enter your password"
@@ -73,6 +77,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           iconName="lock"
           secureTextEntry={true}
+          validation={new TextValidation(LoginValidationSchema.password)}
         />
         <View style={styles.buttonContainer}>
           {isLogin ? (

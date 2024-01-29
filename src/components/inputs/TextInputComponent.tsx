@@ -22,6 +22,9 @@ import {
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
+// Types
+import TextValidation from '@validation/TextValidation';
+
 /**
  * Interface for the TextInput Component
  *
@@ -41,6 +44,7 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
+  validation: TextValidation;
 }
 
 /**
@@ -55,6 +59,7 @@ interface TextInputProps {
  *     secureTextEntry={true}
  *     autoCapitalize={true}
  *     iconName={'lock'}
+ *     validation={textValidationInstance}
  * />
  *
  * @param {Object} props - Component TextInput Props
@@ -65,52 +70,70 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   value,
   iconName,
   onChangeText,
+  validation,
   secureTextEntry = false,
   autoCapitalize = false,
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [isSecureEntry, setIsSecureEntry] = useState<boolean>(secureTextEntry);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleTextChange = (text: string) => {
+    setError(validation.validate(text) ? null : validation.error);
+    onChangeText(text);
+  };
 
   return (
-    <View style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
-      <Icon
-        name={iconName}
-        size={iconSizes.xLarge}
-        color={currentTheme.icon}
-        solid
-      />
-      <TextInput
-        style={[
-          styles.input,
-          {
-            color: currentTheme.text,
-          },
-        ]}
-        placeholder={placeholder}
-        placeholderTextColor={currentTheme.lightText}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={isSecureEntry}
-        autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
-      />
-      {secureTextEntry === true && value.length > 0 && (
-        <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
-          <Text
-            style={[styles.showHideButton, {color: currentTheme.lightText}]}>
-            {isSecureEntry ? 'Show' : 'Hide'}
-          </Text>
-        </TouchableOpacity>
-      )}
+    <View style={styles.mainContainer}>
+      <View
+        style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
+        <Icon
+          name={iconName}
+          size={iconSizes.xLarge}
+          color={currentTheme.icon}
+          solid
+        />
+        <TextInput
+          style={[
+            styles.input,
+            {
+              color: currentTheme.text,
+            },
+          ]}
+          placeholder={placeholder}
+          placeholderTextColor={currentTheme.lightText}
+          value={value}
+          onChangeText={handleTextChange}
+          secureTextEntry={isSecureEntry}
+          autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
+        />
+        {secureTextEntry === true && value.length > 0 && (
+          <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
+            <Text
+              style={[styles.showHideButton, {color: currentTheme.lightText}]}>
+              {isSecureEntry ? 'Show' : 'Hide'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.errorContainer}>
+        {error && <Text style={{color: currentTheme.error}}>{error}</Text>}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: margins.large,
+    marginBottom: margins.small,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
     padding: paddings.small,
@@ -127,6 +150,9 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: paddings.small,
     paddingLeft: paddings.small,
+  },
+  errorContainer: {
+    marginBottom: margins.large,
   },
 });
 
