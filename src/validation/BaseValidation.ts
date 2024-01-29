@@ -45,8 +45,9 @@ export default class BaseValidation {
      * Default error message for the 'required' rule is set to 'Value is required',
      * allowing for easy customization while ensuring a default behavior.
      */
-    this.errorMessages = errorMessages || {
+    this.errorMessages = {
       required: `${this.displayName} is required`,
+      ...errorMessages,
     };
   }
 
