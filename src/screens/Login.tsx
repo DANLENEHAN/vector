@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: fontSizes.title,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.large,
+    marginBottom: margins.xLarge,
   },
   createAccButton: {
     // Override default button width
