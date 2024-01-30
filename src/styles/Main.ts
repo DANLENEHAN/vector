@@ -106,6 +106,7 @@ export const margins = {
   large: 20,
   xLarge: 25,
   xxLarge: 30,
+  xxxLarge: 40,
 };
 
 export const borderRadius = {

@@ -147,26 +147,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: paddings.large,
+    paddingLeft: paddings.large,
+    paddingRight: paddings.large,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginBottom: margins.large,
+    marginBottom: margins.xxxLarge,
   },
   title: {
     fontSize: fontSizes.title,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.xLarge,
+    marginBottom: margins.xxxLarge,
   },
   createAccButton: {
     // Override default button width
     minWidth: 225,
   },
   inputContainers: {
-    marginBottom: margins.large,
+    marginBottom: margins.xxxLarge,
   },
 });
 

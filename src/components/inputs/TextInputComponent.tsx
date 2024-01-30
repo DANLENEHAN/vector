@@ -106,16 +106,24 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   // Fixing the Height of the Error Container and adjusting margins
   // to prevent movement on error popup
   const errorContainerHeight = 16;
-  const marginBottom = style?.marginBottom ? style.marginBottom : margins.large;
-  const errorContainerMarginTop = marginBottom - errorContainerHeight;
+  const defaultMarginBottom = style?.marginBottom || margins.xLarge;
+  const errorContainerMarginTop = margins.xSmall;
+  const errorContainerMarginBottom =
+    defaultMarginBottom - errorContainerHeight - errorContainerMarginTop;
 
   return (
-    <View style={{...styles.mainContainer, ...style}}>
+    <View
+      style={[
+        styles.mainContainer,
+        style,
+        error
+          ? {marginBottom: errorContainerMarginBottom}
+          : {marginBottom: defaultMarginBottom},
+      ]}>
       <View
         style={[
           styles.inputContainer,
-          {borderColor: currentTheme.borders},
-          error ? {} : {marginBottom: marginBottom},
+          {borderColor: error ? 'red' : currentTheme.borders},
         ]}>
         <Icon
           name={iconName}
