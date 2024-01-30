@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: paddings.medium,
+    padding: paddings.large,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: margins.large,
   },
   title: {
-    fontSize: fontSizes.xLarge,
+    fontSize: fontSizes.title,
     fontWeight: fontWeights.bold,
     marginBottom: margins.large,
   },
