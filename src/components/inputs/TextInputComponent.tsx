@@ -31,7 +31,7 @@ import TextValidation from '@validation/TextValidation';
  * @interface TextInputProps
  * @property {string} placeholder - The placeholder text for the input.
  * @property {string} value - The current value of the input.
- * @property {(text: string) => void} onChangeText - Callback function triggered when the text changes.
+ * @property {(textInput: string, inputValid: boolean) => void} onChangeText - Callback function triggered when the text changes.
  * @property {boolean} [secureTextEntry] - Determines whether the input is a secure text entry (e.g., for passwords).
  * @property {boolean} [autoCapitalize] - Determines whether the input automatically capitalizes certain characters.
  * @property {string} iconName - The name of the icon associated with the input.
@@ -43,7 +43,7 @@ import TextValidation from '@validation/TextValidation';
 interface TextInputProps {
   placeholder: string;
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText: (textInput: string, inputValid: boolean) => void;
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
@@ -63,7 +63,7 @@ interface TextInputProps {
  * <TextInputComponent
  *     placeholder={'Placeholder Text'}
  *     value={inputValue}
- *     onChangeText={setInputValue}
+ *     onChangeText={(emailInput: string, emailValid: boolean) => setEmail(emailInput, emailValid)}
  *     secureTextEntry={true}
  *     autoCapitalize={true}
  *     iconName={'lock'}
@@ -91,10 +91,13 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleTextChange = (text: string) => {
+    const error: string | null = validation.validate(text)
+      ? null
+      : validation.error;
     if (enableErrors) {
-      setError(validation.validate(text) ? null : validation.error);
+      setError(error);
     }
-    onChangeText(text);
+    onChangeText(text, error ? false : true);
   };
 
   useEffect(() => {
