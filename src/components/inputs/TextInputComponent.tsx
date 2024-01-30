@@ -105,7 +105,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
 
   // Fixing the Height of the Error Container and adjusting margins
   // to prevent movement on error popup
-  const errorContainerHeight = 20;
+  const errorContainerHeight = 16;
   const marginBottom = style?.marginBottom ? style.marginBottom : margins.large;
   const errorContainerMarginTop = marginBottom - errorContainerHeight;
 
