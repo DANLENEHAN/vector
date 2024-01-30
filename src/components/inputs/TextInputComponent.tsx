@@ -47,7 +47,10 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
-  style?: object;
+  style?: {
+    [key: string]: any;
+    marginBottom?: number;
+  };
   validation: TextValidation;
   enableErrors?: boolean;
 }
@@ -100,10 +103,20 @@ const TextInputComponent: React.FC<TextInputProps> = ({
     }
   }, [enableErrors, value, validation]);
 
+  // Fixing the Height of the Error Container and adjusting margins
+  // to prevent movement on error popup
+  const errorContainerHeight = 20;
+  const marginBottom = style?.marginBottom ? style.marginBottom : margins.large;
+  const errorContainerMarginTop = marginBottom - errorContainerHeight;
+
   return (
     <View style={{...styles.mainContainer, ...style}}>
       <View
-        style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
+        style={[
+          styles.inputContainer,
+          {borderColor: currentTheme.borders},
+          error ? {} : {marginBottom: marginBottom},
+        ]}>
         <Icon
           name={iconName}
           size={iconSizes.xLarge}
@@ -134,7 +147,12 @@ const TextInputComponent: React.FC<TextInputProps> = ({
         )}
       </View>
       {error ? (
-        <View style={styles.errorContainer}>
+        <View
+          style={{
+            marginTop: errorContainerMarginTop,
+            height: errorContainerHeight,
+          }}
+          testID="text-input-error">
           <Text style={{color: currentTheme.error}}>{error}</Text>
         </View>
       ) : null}
@@ -167,9 +185,6 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: paddings.small,
     paddingLeft: paddings.small,
-  },
-  errorContainer: {
-    marginTop: margins.small,
   },
 });
 
