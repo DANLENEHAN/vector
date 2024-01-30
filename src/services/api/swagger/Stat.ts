@@ -66,7 +66,7 @@ export class Stat<SecurityDataType = unknown> {
    * @response `400` `void` Stat ID is required to delete a stat
    * @response `404` `void` Stat not found
    */
-  deleteStringStatIdDelete = (statId: number, params: RequestParams = {}) =>
+  deleteStringStatIdDelete = (statId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/stat/delete/{string${statId}}`,
       method: 'DELETE',
@@ -77,16 +77,16 @@ export class Stat<SecurityDataType = unknown> {
    * @description Get specific stats for a user.
    *
    * @tags Stat
-   * @name GetStat
+   * @name GetStringStatIdList
    * @summary Get a stat.
-   * @request GET:/stat/get/{stat_id}
+   * @request GET:/stat/get/{string:stat_id}
    * @secure
    * @response `200` `StatCreateSchema` Stat for user retrieved successfully
    * @response `404` `void` Stat not found
    */
-  getStat = (statId: number, params: RequestParams = {}) =>
+  getStringStatIdList = (statId: string, params: RequestParams = {}) =>
     this.http.request<StatCreateSchema, void>({
-      path: `/stat/get/${statId}`,
+      path: `/stat/get/{string${statId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

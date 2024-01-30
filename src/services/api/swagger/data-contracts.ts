@@ -602,6 +602,24 @@ export enum Gender {
 }
 
 /**
+ * MoodLabels
+ * Mood labels.
+ */
+export enum GrauGrauEnumsGrauEnumsMoodLabels1 {
+  Awful = 'Awful',
+  VeryBad = 'Very Bad',
+  Bad = 'Bad',
+  Neutral = 'Neutral',
+  Good = 'Good',
+  VeryGood = 'Very Good',
+  Amazing = 'Amazing',
+}
+
+/** @maxLength 50 */
+export type GrauGrauEnumsGrauEnumsMoodLabels2 =
+  GrauGrauEnumsGrauEnumsMoodLabels1;
+
+/**
  * HeightUnit
  * Height units.
  */
@@ -618,6 +636,301 @@ export enum HeightUnit {
 export enum Laterality {
   Bilateral = 'bilateral',
   Unilateral = 'unilateral',
+}
+
+/**
+ * MoodCreateSchema
+ * Validation schema for the Mood model.
+ */
+export interface MoodCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * The label of the mood
+   * @maxLength 50
+   * @example "Good"
+   */
+  label: GrauGrauEnumsGrauEnumsMoodLabels1;
+  /**
+   * Mood Id
+   * Unique uuid for a mood entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_id: string;
+  /**
+   * Note
+   * The note of the mood
+   * @default null
+   * @example "I feel great!"
+   */
+  note?: string | null;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the mood
+   * @min 0
+   * @max 6
+   * @example 1
+   */
+  value: number;
+}
+
+/**
+ * MoodTagCategory
+ * Enum relating to the type of
+ * tag category.
+ * These are the categories that
+ * the user can create tags for.
+ */
+export enum MoodTagCategory {
+  Sleep = 'sleep',
+  Work = 'work',
+  School = 'school',
+  Productivity = 'productivity',
+  Exercise = 'exercise',
+  Hobbies = 'hobbies',
+  Chores = 'chores',
+  Beauty = 'beauty',
+  BadHabits = 'bad_habits',
+  Emotions = 'emotions',
+  MenstrualCycle = 'menstrual_cycle',
+  Health = 'health',
+  Social = 'social',
+  Relationships = 'relationships',
+  News = 'news',
+  Places = 'places',
+  Weather = 'weather',
+}
+
+/**
+ * MoodTagCreateSchema
+ * Validation schema for the MoodTag model.
+ */
+export interface MoodTagCreateSchema {
+  /**
+   * The category of the mood_tag
+   * @example "social"
+   */
+  category: MoodTagCategory;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Icon
+   * The icon of the mood_tag
+   * @maxLength 50
+   * @example "mdi-emoticon-happy"
+   */
+  icon: string;
+  /**
+   * Label
+   * The label of the mood_tag
+   * @maxLength 100
+   * @example "Met with friends"
+   */
+  label: string;
+  /**
+   * Mood Tag Id
+   * Unique uuid for a mood_tag entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_tag_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+}
+
+/**
+ * MoodTagLinkCreateSchema
+ * Validation schema for the MoodTagLink model.
+ */
+export interface MoodTagLinkCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Mood Id
+   * The mood_id of the mood_tag_link
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_id: string;
+  /**
+   * Mood Tag Id
+   * The mood_tag_id of the mood_tag_link
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_tag_id: string;
+  /**
+   * Mood Tag Link Id
+   * Unique uuid for a mood_tag_link entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_tag_link_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
+ * MoodTagLinkUpdateSchema
+ * Validation schema for the MoodTagLink model.
+ */
+export interface MoodTagLinkUpdateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
+ * MoodTagUpdateSchema
+ * Validation schema for the Mood model.
+ */
+export interface MoodTagUpdateSchema {
+  /**
+   * The category of the mood_tag
+   * @example "social"
+   */
+  category: MoodTagCategory;
+  /**
+   * Icon
+   * The icon of the mood_tag
+   * @maxLength 50
+   * @example "mdi-emoticon-happy"
+   */
+  icon: string;
+  /**
+   * Label
+   * The label of the mood_tag
+   * @maxLength 100
+   * @example "Met with friends"
+   */
+  label: string;
+  /**
+   * Mood Tag Id
+   * Unique uuid for a mood_tag entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_tag_id: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+}
+
+/**
+ * MoodUpdateSchema
+ * Validation schema for the Mood model.
+ */
+export interface MoodUpdateSchema {
+  /**
+   * The label of the mood
+   * @maxLength 50
+   * @example "Good"
+   */
+  label: GrauGrauEnumsGrauEnumsMoodLabels1;
+  /**
+   * Mood Id
+   * Unique uuid for a mood entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  mood_id: string;
+  /**
+   * Note
+   * The note of the mood
+   * @default null
+   * @example "I feel great!"
+   */
+  note?: string | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the mood
+   * @min 0
+   * @max 6
+   * @example 1
+   */
+  value: number;
 }
 
 /**
