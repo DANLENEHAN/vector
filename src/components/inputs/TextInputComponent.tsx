@@ -1,5 +1,5 @@
 // React Import
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // Components
 import {
   View,
@@ -22,17 +22,23 @@ import {
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
+// Types
+import TextValidation from '@validation/TextValidation';
+
 /**
- * Interface for the TextInput Component
+ * Props for a TextInput component used in forms.
  *
  * @interface TextInputProps
+ * @property {string} placeholder - The placeholder text for the input.
+ * @property {string} value - The current value of the input.
+ * @property {(text: string) => void} onChangeText - Callback function triggered when the text changes.
+ * @property {boolean} [secureTextEntry] - Determines whether the input is a secure text entry (e.g., for passwords).
+ * @property {boolean} [autoCapitalize] - Determines whether the input automatically capitalizes certain characters.
+ * @property {string} iconName - The name of the icon associated with the input.
+ * @property {object} [style] - Additional styles to be applied to the TextInput component.
+ * @property {TextValidation} validation - An instance of TextValidation for validating the input.
+ * @property {boolean} [enableErrors] - Indicates whether error messages from validation should be displayed.
  *
- * @param {string} placeholder - The placeholder text for the input
- * @param {string} value - The value of the input
- * @param {(text: string) => void} onChangeText - Function to be called when the text changes
- * @param {boolean} secureTextEntry - Boolean to hide the text (optional)
- * @param {boolean} autoCapitalize - Boolean to capitalize the text (optional)
- * @param {string} iconName - The name of the icon to be displayed
  */
 interface TextInputProps {
   placeholder: string;
@@ -41,6 +47,12 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
+  style?: {
+    [key: string]: any;
+    marginBottom?: number;
+  };
+  validation: TextValidation;
+  enableErrors?: boolean;
 }
 
 /**
@@ -55,6 +67,8 @@ interface TextInputProps {
  *     secureTextEntry={true}
  *     autoCapitalize={true}
  *     iconName={'lock'}
+ *     validation={textValidationInstance}
+ *     enableErrors={true}
  * />
  *
  * @param {Object} props - Component TextInput Props
@@ -65,52 +79,104 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   value,
   iconName,
   onChangeText,
+  validation,
+  style,
+  enableErrors = false,
   secureTextEntry = false,
   autoCapitalize = false,
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [isSecureEntry, setIsSecureEntry] = useState<boolean>(secureTextEntry);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleTextChange = (text: string) => {
+    if (enableErrors) {
+      setError(validation.validate(text) ? null : validation.error);
+    }
+    onChangeText(text);
+  };
+
+  useEffect(() => {
+    if (enableErrors) {
+      setError(validation.validate(value) ? null : validation.error);
+    }
+  }, [enableErrors, value, validation]);
+
+  // Fixing the Height of the Error Container and adjusting margins
+  // to prevent movement on error popup
+  const errorContainerHeight = 16;
+  const defaultMarginBottom = style?.marginBottom || margins.xLarge;
+  const errorContainerMarginTop = margins.xSmall;
+  const errorContainerMarginBottom =
+    defaultMarginBottom - errorContainerHeight - errorContainerMarginTop;
 
   return (
-    <View style={[styles.inputContainer, {borderColor: currentTheme.borders}]}>
-      <Icon
-        name={iconName}
-        size={iconSizes.xLarge}
-        color={currentTheme.icon}
-        solid
-      />
-      <TextInput
+    <View
+      style={[
+        styles.mainContainer,
+        style,
+        error
+          ? {marginBottom: errorContainerMarginBottom}
+          : {marginBottom: defaultMarginBottom},
+      ]}>
+      <View
         style={[
-          styles.input,
-          {
-            color: currentTheme.text,
-          },
-        ]}
-        placeholder={placeholder}
-        placeholderTextColor={currentTheme.lightText}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={isSecureEntry}
-        autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
-      />
-      {secureTextEntry === true && value.length > 0 && (
-        <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
-          <Text
-            style={[styles.showHideButton, {color: currentTheme.lightText}]}>
-            {isSecureEntry ? 'Show' : 'Hide'}
-          </Text>
-        </TouchableOpacity>
-      )}
+          styles.inputContainer,
+          {borderColor: error ? 'red' : currentTheme.borders},
+        ]}>
+        <Icon
+          name={iconName}
+          size={iconSizes.xLarge}
+          color={currentTheme.icon}
+          solid
+        />
+        <TextInput
+          style={[
+            styles.input,
+            {
+              color: currentTheme.text,
+            },
+          ]}
+          placeholder={placeholder}
+          placeholderTextColor={currentTheme.lightText}
+          value={value}
+          onChangeText={handleTextChange}
+          secureTextEntry={isSecureEntry}
+          autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
+        />
+        {secureTextEntry === true && value.length > 0 && (
+          <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
+            <Text
+              style={[styles.showHideButton, {color: currentTheme.lightText}]}>
+              {isSecureEntry ? 'Show' : 'Hide'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {error ? (
+        <View
+          style={{
+            marginTop: errorContainerMarginTop,
+            height: errorContainerHeight,
+          }}
+          testID="text-input-error">
+          <Text style={{color: currentTheme.error}}>{error}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: margins.large,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
     padding: paddings.small,

@@ -16,6 +16,7 @@ module.exports = {
           '@utils': './src/utils',
           '@assets': './assets',
           '@shared': './src/shared',
+          '@validation': './src/validation',
         },
       },
     ],

@@ -6,6 +6,7 @@ import {
   handleCreateAccount,
 } from '@services/api/blueprints/user/Functions';
 import NetInfo from '@react-native-community/netinfo';
+import TextValidation from '@validation/TextValidation';
 //Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Components
@@ -26,6 +27,8 @@ import {
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
+// Objects
+import {LoginValidationSchema} from '@validation/Schemas';
 
 /**
  *  Login screen
@@ -39,21 +42,40 @@ import {ScreenProps} from '@screens/Types';
  * <LoginScreen navigation={navigation}/>
  */
 const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
-  // State
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [isSubmitPressed, setIsSubmitPressed] = useState(false);
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
-  // Theme
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
-  // View Link Text
   const viewLinkText = isLogin
     ? 'New here? Create Account'
     : 'Got an Account? Login';
+
+  const handleLoginSubmit = async () => {
+    await NetInfo.refresh();
+    setIsSubmitPressed(true);
+    handleLogin({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+  };
+
+  const handleCreateAccountSubmit = async () => {
+    await NetInfo.refresh();
+    setIsSubmitPressed(true);
+    handleCreateAccount({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+  };
 
   return (
     <ScreenWrapper>
@@ -66,6 +88,13 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           value={email}
           onChangeText={text => setUsername(text)}
           iconName="envelope"
+          style={{...styles.inputContainers}}
+          validation={
+            new TextValidation('Email', LoginValidationSchema.email, {
+              pattern: 'Please enter a valid email address',
+            })
+          }
+          enableErrors={isSubmitPressed}
         />
         <TextInputComponent
           placeholder="Enter your password"
@@ -73,46 +102,33 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           iconName="lock"
           secureTextEntry={true}
+          style={{...styles.inputContainers}}
+          validation={
+            new TextValidation('Password', LoginValidationSchema.password)
+          }
+          enableErrors={isSubmitPressed}
         />
         <View style={styles.buttonContainer}>
           {isLogin ? (
-            <View style={styles.buttonContainer}>
+            <>
               <ButtonComponent
                 text="Forgot Password"
                 disabled={false}
                 onPress={() => null}
               />
               <ButtonComponent
-                onPress={async () => {
-                  await NetInfo.refresh();
-                  handleLogin({
-                    email: email,
-                    password: password,
-                    navigation: navigation,
-                    isConnected: isConnected,
-                  });
-                }}
+                onPress={handleLoginSubmit}
                 disabled={!isEmailFilled || !isPasswordFilled}
                 text="Login"
               />
-            </View>
+            </>
           ) : (
-            <View style={styles.buttonContainer}>
-              <ButtonComponent
-                style={styles.createAccButton}
-                onPress={async () => {
-                  await NetInfo.refresh();
-                  handleCreateAccount({
-                    email: email,
-                    password: password,
-                    navigation: navigation,
-                    isConnected: isConnected,
-                  });
-                }}
-                disabled={!isEmailFilled || !isPasswordFilled}
-                text="Create Account"
-              />
-            </View>
+            <ButtonComponent
+              style={styles.createAccButton}
+              onPress={handleCreateAccountSubmit}
+              disabled={!isEmailFilled || !isPasswordFilled}
+              text="Create Account"
+            />
           )}
         </View>
         <ClickableLink
@@ -131,23 +147,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: paddings.medium,
+    paddingLeft: paddings.large,
+    paddingRight: paddings.large,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginBottom: margins.medium,
+    marginBottom: margins.xxxLarge,
   },
   title: {
-    fontSize: fontSizes.xLarge,
+    fontSize: fontSizes.title,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.medium,
+    marginBottom: margins.xxxLarge,
   },
   createAccButton: {
     // Override default button width
     minWidth: 225,
+  },
+  inputContainers: {
+    marginBottom: margins.xxxLarge,
   },
 });
 

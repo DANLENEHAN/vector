@@ -12,7 +12,8 @@
       "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/utils/*"],
       "@assets/*": ["./assets/*"],
-      "@shared/*": ["./src/shared/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@validation/*": ["./src/validation/*"]
     }
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
