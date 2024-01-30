@@ -117,3 +117,9 @@ SELECT 'DROP TABLE IF EXISTS ' || name || ';'
 FROM sqlite_master
 WHERE type = 'table' AND name != 'android_metadata';
 ```
+
+## GRAU Migrations
+ To move all necessary changes to swagger and DB migrations from GRAU repo run the following command
+```shell
+bash ./excute_migrations.sh 
+```
