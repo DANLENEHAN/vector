@@ -602,24 +602,6 @@ export enum Gender {
 }
 
 /**
- * MoodLabels
- * Mood labels.
- */
-export enum GrauGrauEnumsGrauEnumsMoodLabels1 {
-  Awful = 'Awful',
-  VeryBad = 'Very Bad',
-  Bad = 'Bad',
-  Neutral = 'Neutral',
-  Good = 'Good',
-  VeryGood = 'Very Good',
-  Amazing = 'Amazing',
-}
-
-/** @maxLength 50 */
-export type GrauGrauEnumsGrauEnumsMoodLabels2 =
-  GrauGrauEnumsGrauEnumsMoodLabels1;
-
-/**
  * HeightUnit
  * Height units.
  */
@@ -651,10 +633,9 @@ export interface MoodCreateSchema {
   created_at: string;
   /**
    * The label of the mood
-   * @maxLength 50
    * @example "Good"
    */
-  label: GrauGrauEnumsGrauEnumsMoodLabels1;
+  label: MoodValue;
   /**
    * Mood Id
    * Unique uuid for a mood entry
@@ -894,10 +875,9 @@ export interface MoodTagUpdateSchema {
 export interface MoodUpdateSchema {
   /**
    * The label of the mood
-   * @maxLength 50
    * @example "Good"
    */
-  label: GrauGrauEnumsGrauEnumsMoodLabels1;
+  label: MoodValue;
   /**
    * Mood Id
    * Unique uuid for a mood entry
@@ -931,6 +911,20 @@ export interface MoodUpdateSchema {
    * @example 1
    */
   value: number;
+}
+
+/**
+ * MoodValue
+ * Mood labels.
+ */
+export enum MoodValue {
+  Awful = 'Awful',
+  VeryBad = 'Very Bad',
+  Bad = 'Bad',
+  Neutral = 'Neutral',
+  Good = 'Good',
+  VeryGood = 'Very Good',
+  Amazing = 'Amazing',
 }
 
 /**
