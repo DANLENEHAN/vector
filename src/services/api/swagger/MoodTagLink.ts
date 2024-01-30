@@ -122,15 +122,15 @@ export class MoodTagLink<SecurityDataType = unknown> {
    * @description Update a mood tag link.
    *
    * @tags Mood Tag Link
-   * @name UpdateCreate
+   * @name UpdateUpdate
    * @summary Update a mood tag link.
-   * @request POST:/mood_tag_link/update
+   * @request PUT:/mood_tag_link/update
    * @secure
    * @response `204` `void` Moods retrieved successfully
    * @response `400` `void` Mood validation error
    * @response `404` `void` Mood not found
    */
-  updateCreate = (
+  updateUpdate = (
     data: MoodTagLinkUpdateSchema,
     query?: {
       /**
@@ -143,7 +143,7 @@ export class MoodTagLink<SecurityDataType = unknown> {
   ) =>
     this.http.request<void, void>({
       path: `/mood_tag_link/update`,
-      method: 'POST',
+      method: 'PUT',
       query: query,
       body: data,
       secure: true,
