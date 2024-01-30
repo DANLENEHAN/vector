@@ -154,19 +154,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginBottom: margins.xLarge,
+    marginBottom: margins.large,
   },
   title: {
     fontSize: fontSizes.xLarge,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.xLarge,
+    marginBottom: margins.large,
   },
   createAccButton: {
     // Override default button width
     minWidth: 225,
   },
   inputContainers: {
-    marginBottom: margins.xLarge,
+    marginBottom: margins.large,
   },
 });
 
