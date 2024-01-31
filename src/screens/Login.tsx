@@ -15,6 +15,8 @@ import TextInputComponent from '@components/inputs/TextInputComponent';
 import ClickableLink from '@components/buttons/ClickableLink';
 import {View, Text, StyleSheet} from 'react-native';
 import NoNetworkPopup from '@components/popups/NoNetworkPopup';
+import ErrorPopup from '@components/popups/ErrorPopup';
+
 // Styling
 import {
   fontSizes,
@@ -46,6 +48,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [emailValid, setEmailValid] = useState(false);
   const [password, setPasswordState] = useState('');
   const [passwordValid, setPasswordValid] = useState(false);
+  const [formError, setFormError] = useState<string>('');
   const [isLogin, setIsLogin] = useState(true);
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
@@ -64,6 +67,28 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
   const setPassword = (textInput: string, inputValid: boolean) => {
     setPasswordState(textInput);
     setPasswordValid(inputValid);
+  };
+
+  const handleLoginResponse = async () => {
+    NetInfo.refresh();
+    const response = await handleLogin({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+    setFormError(response ? response : '');
+  };
+
+  const handleCreateAccountResponse = async () => {
+    NetInfo.refresh();
+    const response = await handleCreateAccount({
+      email: email,
+      password: password,
+      navigation: navigation,
+      isConnected: isConnected,
+    });
+    setFormError(response ? response : '');
   };
 
   return (
@@ -111,13 +136,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
               />
               <ButtonComponent
                 onPress={() => {
-                  NetInfo.refresh();
-                  handleLogin({
-                    email: email,
-                    password: password,
-                    navigation: navigation,
-                    isConnected: isConnected,
-                  });
+                  handleLoginResponse();
                 }}
                 disabled={
                   !isEmailFilled ||
@@ -132,13 +151,7 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
             <ButtonComponent
               style={styles.createAccButton}
               onPress={() => {
-                NetInfo.refresh();
-                handleCreateAccount({
-                  email: email,
-                  password: password,
-                  navigation: navigation,
-                  isConnected: isConnected,
-                });
+                handleCreateAccountResponse();
               }}
               disabled={
                 !isEmailFilled ||
@@ -157,6 +170,11 @@ const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
         />
       </View>
       {!isConnected && <NoNetworkPopup />}
+      <ErrorPopup
+        visible={!!formError}
+        message={formError}
+        onClose={() => setFormError('')}
+      />
     </ScreenWrapper>
   );
 };

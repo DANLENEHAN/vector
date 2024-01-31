@@ -28,7 +28,7 @@ import {useSystem} from '@context/SystemContext';
  */
 interface ButtonProps {
   onPress: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   text: string;
   style?: object;
 }
@@ -50,7 +50,7 @@ interface ButtonProps {
  */
 const ButtonComponent: React.FC<ButtonProps> = ({
   onPress,
-  disabled,
+  disabled = false,
   text,
   style,
 }) => {
