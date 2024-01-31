@@ -8,6 +8,7 @@ import {
   lightThemeColors,
   margins,
   borderRadius,
+  fontSizes,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -40,7 +41,11 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({visible, message, onClose}) => {
           <Text style={[styles.errorText, {color: currentTheme.text}]}>
             {message}
           </Text>
-          <ButtonComponent onPress={onClose} text={'Ok'} />
+          <ButtonComponent
+            style={styles.closeButton}
+            onPress={onClose}
+            text={'Ok'}
+          />
         </View>
       </View>
     </Modal>
@@ -55,13 +60,19 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     flex: 0.2,
-    width: '80%',
+    width: '95%',
     borderRadius: borderRadius.large,
     alignItems: 'center',
     justifyContent: 'center',
   },
   errorText: {
-    margin: margins.xLarge,
+    marginLeft: margins.large,
+    marginRight: margins.large,
+    marginBottom: margins.xxLarge,
+    fontSize: fontSizes.large,
+  },
+  closeButton: {
+    width: 225,
   },
 });
 
