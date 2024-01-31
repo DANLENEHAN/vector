@@ -32,6 +32,7 @@ export enum syncDbTables {
   moodTagTable = 'mood_tag',
   moodTagLinkTable = 'mood_tag_link',
   nutritionTable = 'nutrition',
+  clientSessionEventTable = 'client_session_event',
 }
 
 /**

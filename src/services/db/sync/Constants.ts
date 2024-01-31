@@ -13,6 +13,8 @@ import {
   NutritionCreateSchema,
   NutritionUpdateSchema,
   QuerySchema,
+  ClientSessionEventCreateSchema,
+  ClientSessionEventUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
@@ -24,6 +26,7 @@ import {Mood} from '@services/api/swagger/Mood';
 import {MoodTag} from '@services/api/swagger/MoodTag';
 import {MoodTagLink} from '@services/api/swagger/MoodTagLink';
 import {Nutrition} from '@services/api/swagger/Nutrition';
+import {ClientSessionEvent} from '@services/api/swagger/ClientSessionEvent';
 
 // Apis
 const StatApi = new Stat(api);
@@ -31,6 +34,7 @@ const MoodApi = new Mood(api);
 const MoodTagApi = new MoodTag(api);
 const MoodTagLinkApi = new MoodTagLink(api);
 const NutritionApi = new Nutrition(api);
+const ClientSessionEventApi = new ClientSessionEvent(api);
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
@@ -98,6 +102,21 @@ export const apiFunctions: SyncApiFunctions = {
     ): Promise<AxiosResponse> => NutritionApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       NutritionApi.postNutrition(data),
+  },
+  // ClientSessionEvent
+  [syncDbTables.clientSessionEventTable]: {
+    [SyncOperation.Creates]: (
+      data: ClientSessionEventCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: ClientSessionEventUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      ClientSessionEventApi.postClientSessionEvent(data),
   },
 };
 
