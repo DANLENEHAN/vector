@@ -11,6 +11,7 @@ import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {insertRows} from '@services/db/Functions';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuidv4} from 'uuid';
+import {getUserDetails} from '@services/asyncStorage/Functions';
 
 /**
  * Inserts a client session event into the database.
@@ -21,11 +22,11 @@ import {v4 as uuidv4} from 'uuid';
  * @returns {Promise<void>} A promise that resolves once the session event is successfully inserted.
  */
 export const insertClientSessionEvent = async (
-  userId: number,
   eventType: ClientSessionEventType,
 ): Promise<void> => {
   const sessionEventDeviceInfo = await getDeviceInfo();
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+  const userId = await getUserDetails('user_id');
 
   const clientSessionEvent: ClientSessionEventCreateSchema = {
     user_id: userId,
@@ -41,5 +42,6 @@ export const insertClientSessionEvent = async (
     user_agent: sessionEventDeviceInfo?.userAgent,
   };
 
+  console.log(syncDbTables.clientSessionEventTable, [clientSessionEvent]);
   await insertRows(syncDbTables.clientSessionEventTable, [clientSessionEvent]);
 };
