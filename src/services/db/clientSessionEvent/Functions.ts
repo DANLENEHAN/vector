@@ -42,6 +42,5 @@ export const insertClientSessionEvent = async (
     user_agent: sessionEventDeviceInfo?.userAgent,
   };
 
-  console.log(syncDbTables.clientSessionEventTable, [clientSessionEvent]);
   await insertRows(syncDbTables.clientSessionEventTable, [clientSessionEvent]);
 };
