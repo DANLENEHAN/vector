@@ -214,7 +214,7 @@ describe('SyncType Tests', () => {
     const tableToSync: syncDbTables = syncDbTables.statTable;
     jest
       .spyOn(dbFunctions, 'runSqlSelect')
-      .mockResolvedValue([sampleStat.stat_id]);
+      .mockResolvedValue([{stat_id: sampleStat.stat_id}]);
 
     // Act
     await processSyncTypePull(
