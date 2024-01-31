@@ -73,9 +73,10 @@ export interface ClientSessionEventCreateSchema {
    * Brand
    * The brand of the client_hardware
    * @maxLength 50
+   * @default null
    * @example "Apple"
    */
-  brand: string;
+  brand?: string;
   /**
    * Client Session Event Id
    * ID of the user triggering the event
@@ -171,9 +172,10 @@ export interface ClientSessionEventUpdateSchema {
    * Brand
    * The brand of the client_hardware
    * @maxLength 50
+   * @default null
    * @example "Apple"
    */
-  brand: string;
+  brand?: string;
   /**
    * Client Session Event Id
    * ID of the user triggering the event
