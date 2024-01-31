@@ -3,6 +3,7 @@ import {sampleStat} from '../../../Objects';
 import {SyncCreateSchemas} from '@services/db/sync/Types';
 import {syncDbTables} from '@shared/Constants';
 import {SyncType, SyncOperation} from '@shared/Enums';
+import {SyncTableFunctions, SyncUpdateSchemas} from '@services/db/sync/Types';
 // Functionsx
 import {
   processUpdatesSyncTypePush,
@@ -80,7 +81,10 @@ describe('Sync Operation Tests', () => {
     await processUpdatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
@@ -108,7 +112,10 @@ describe('Sync Operation Tests', () => {
     await processUpdatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
@@ -127,7 +134,10 @@ describe('Sync Operation Tests', () => {
     await processUpdatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
@@ -149,7 +159,10 @@ describe('Sync Operation Tests', () => {
     await processCreatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
@@ -171,7 +184,10 @@ describe('Sync Operation Tests', () => {
     await processCreatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
@@ -187,7 +203,10 @@ describe('Sync Operation Tests', () => {
     await processCreatesSyncTypePush(
       rowsToSync,
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
     );
 
     // Assert
