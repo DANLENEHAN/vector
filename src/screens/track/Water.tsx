@@ -15,13 +15,13 @@ import NumberInput from '@components/inputs/NumberInput';
 import Header from '@components/navbar/Header';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {StatType, WaterUnit} from '@services/api/swagger/data-contracts';
+import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/Functions';
+import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Logger
 import logger from '@utils/Logger';
@@ -52,11 +52,11 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
       logger.error('Invalid water value. Please enter a valid water value.');
       return; // Stop the function if the weight is invalid
     }
-    createNewStat({
+    createNewNutrition({
       value: parsedWater,
-      unitValue: activeUnit.toLowerCase() as WaterUnit,
+      unit: activeUnit.toLowerCase() as WaterUnit,
       navigation: navigation,
-      statType: StatType.Water,
+      type: NutritionType.Water,
     });
   };
 
