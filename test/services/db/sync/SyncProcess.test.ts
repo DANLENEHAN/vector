@@ -18,33 +18,45 @@ jest.mock('@services/db/sync/SyncTypes', () => ({
 }));
 
 describe('Sync Process Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test('runSyncProcess', async () => {
     // Arrange
     // Act
     await runSyncProcess();
 
     // Assert
-    expect(processSyncTypePull).toHaveBeenCalledTimes(2);
-    expect(processSyncTypePull).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-      SyncOperation.Creates,
+    expect(processSyncTypePull).toHaveBeenCalledTimes(
+      Object.entries(apiFunctions).length * 2,
     );
-    expect(processSyncTypePull).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-      SyncOperation.Updates,
+    for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
+      expect(processSyncTypePull).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
+      expect(processSyncTypePull).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
+    }
+
+    expect(processSyncTypePush).toHaveBeenCalledTimes(
+      Object.entries(apiFunctions).length * 2,
     );
-    expect(processSyncTypePush).toHaveBeenCalledTimes(2);
-    expect(processSyncTypePush).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-      SyncOperation.Creates,
-    );
-    expect(processSyncTypePush).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-      SyncOperation.Updates,
-    );
+    for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
+      expect(processSyncTypePush).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
+      expect(processSyncTypePush).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
+    }
   });
 });

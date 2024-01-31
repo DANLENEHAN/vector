@@ -28,6 +28,9 @@ export enum otherDbTables {
  */
 export enum syncDbTables {
   statTable = 'stat',
+  moodTable = 'mood',
+  moodTagTable = 'mood_tag',
+  moodTagLinkTable = 'mood_tag_link',
 }
 
 /**

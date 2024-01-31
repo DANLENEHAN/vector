@@ -9,13 +9,14 @@ import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {StatType} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/Functions';
+import {createNewMood} from '@services/api/blueprints/mood/Functions';
+// Constants
+import {MoodValue} from '@services/api/swagger/data-contracts';
 
 /**
  * Interface for the mood object
@@ -46,13 +47,13 @@ interface MoodsDictionary {
 
 // Dictionary for the moods
 const moods: MoodsDictionary = {
-  0: {label: 'Awful', icon: 'sad-cry', color: '#FF4D4D'},
-  1: {label: 'Very Bad', icon: 'frown', color: '#FF8C4B'},
-  2: {label: 'Bad', icon: 'meh', color: '#FFC542'},
-  3: {label: 'Okay', icon: 'meh-blank', color: '#FFEB47'},
-  4: {label: 'Good', icon: 'smile', color: '#8CE25F'},
-  5: {label: 'Very Good', icon: 'grin', color: '#5EDC4E'},
-  6: {label: 'Amazing', icon: 'laugh', color: '#4EDC5E'},
+  0: {label: MoodValue.Awful, icon: 'sad-cry', color: '#FF4D4D'},
+  1: {label: MoodValue.VeryBad, icon: 'frown', color: '#FF8C4B'},
+  2: {label: MoodValue.Bad, icon: 'meh', color: '#FFC542'},
+  3: {label: MoodValue.Neutral, icon: 'meh-blank', color: '#FFEB47'},
+  4: {label: MoodValue.Good, icon: 'smile', color: '#8CE25F'},
+  5: {label: MoodValue.VeryGood, icon: 'grin', color: '#5EDC4E'},
+  6: {label: MoodValue.Amazing, icon: 'laugh', color: '#4EDC5E'},
 };
 
 /**
@@ -77,11 +78,10 @@ const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const handleSaveMood = async () => {
-    createNewStat({
+    createNewMood({
       value: moodValue,
-      unitValue: 'out_of_10',
+      label: moods[moodValue].label as MoodValue,
       navigation: navigation,
-      statType: StatType.Feeling,
     });
   };
 

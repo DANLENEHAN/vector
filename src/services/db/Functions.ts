@@ -468,7 +468,7 @@ export const updateRows = async (
  */
 export const runSqlSelect = <T>(
   sqlStatement: string,
-  rowData: RowData[],
+  rowData: any[],
 ): Promise<T[]> => {
   return new Promise((resolve, reject) => {
     db.transaction((tx: Transaction) => {

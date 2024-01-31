@@ -23,6 +23,9 @@ import * as dbFunctions from '@services/db/Functions';
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
 import {sampleStat} from '../../../Objects';
+import {SyncCreateSchemas} from '@services/db/sync/Types';
+import {SyncTableFunctions} from '@services/db/sync/Types';
+import {SyncUpdateSchemas} from '@services/db/sync/Types';
 
 jest.mock('@services/db/sync/SyncUtils', () => ({
   ...jest.requireActual('@services/db/sync/SyncUtils'),
@@ -90,7 +93,10 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePush(
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
       SyncOperation.Creates,
     );
 
@@ -124,7 +130,10 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePush(
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
       SyncOperation.Updates,
     );
 
@@ -159,7 +168,10 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
       SyncOperation.Creates,
     );
 
@@ -179,8 +191,8 @@ describe('SyncType Tests', () => {
 
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT * FROM stat WHERE stat_id IN (?)',
-      [{stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb'}],
+      'SELECT stat_id FROM stat WHERE stat_id IN (?)',
+      ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
     );
 
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
@@ -207,7 +219,10 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      apiFunctions[tableToSync],
+      apiFunctions[tableToSync] as SyncTableFunctions<
+        SyncCreateSchemas,
+        SyncUpdateSchemas
+      >,
       SyncOperation.Creates,
     );
 
@@ -228,8 +243,8 @@ describe('SyncType Tests', () => {
 
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT * FROM stat WHERE stat_id IN (?)',
-      [{stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb'}],
+      'SELECT stat_id FROM stat WHERE stat_id IN (?)',
+      ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
     );
 
     expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
