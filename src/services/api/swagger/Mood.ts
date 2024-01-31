@@ -73,27 +73,6 @@ export class Mood<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get moods.
-   *
-   * @tags Mood
-   * @name GetMood
-   * @summary Get moods.
-   * @request GET:/mood/get
-   * @secure
-   * @response `204` `(MoodCreateSchema)[]` Moods found successfully
-   * @response `400` `void` Query validation error
-   */
-  getMood = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<MoodCreateSchema[], void>({
-      path: `/mood/get`,
-      method: 'GET',
-      body: data,
-      secure: true,
-      type: ContentType.Json,
-      format: 'json',
-      ...params,
-    });
-  /**
    * @description Get a mood.
    *
    * @tags Mood
@@ -109,6 +88,27 @@ export class Mood<SecurityDataType = unknown> {
       path: `/mood/get/{string${moodId}}`,
       method: 'GET',
       secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get moods.
+   *
+   * @tags Mood
+   * @name PostMood
+   * @summary Get moods.
+   * @request POST:/mood/get
+   * @secure
+   * @response `204` `(MoodCreateSchema)[]` Moods found successfully
+   * @response `400` `void` Query validation error
+   */
+  postMood = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<MoodCreateSchema[], void>({
+      path: `/mood/get`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

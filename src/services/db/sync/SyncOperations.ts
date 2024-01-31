@@ -25,7 +25,7 @@ import logger from '@utils/Logger';
 export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
   tableName: syncDbTables,
-  tableFunctions: SyncTableFunctions,
+  tableFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
 ) => {
   let successfulRequests = 0;
 
@@ -84,7 +84,7 @@ export const processUpdatesSyncTypePush = async (
 export const processCreatesSyncTypePush = async (
   rowsToSync: SyncCreateSchemas[],
   tableName: syncDbTables,
-  tableFunctions: SyncTableFunctions,
+  tableFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
 ) => {
   let successfulRequests = 0;
 

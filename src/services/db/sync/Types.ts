@@ -4,6 +4,12 @@ import {syncDbTables} from '@shared/Constants';
 import {
   StatCreateSchema,
   StatUpdateSchema,
+  MoodUpdateSchema,
+  MoodCreateSchema,
+  MoodTagCreateSchema,
+  MoodTagUpdateSchema,
+  MoodTagLinkCreateSchema,
+  MoodTagLinkUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
 
@@ -14,7 +20,11 @@ import {
  *
  * @description A schema for data that can be synchronized during a create operation.
  */
-export type SyncCreateSchemas = StatCreateSchema;
+export type SyncCreateSchemas =
+  | StatCreateSchema
+  | MoodCreateSchema
+  | MoodTagCreateSchema
+  | MoodTagLinkCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -23,7 +33,11 @@ export type SyncCreateSchemas = StatCreateSchema;
  *
  * @description A schema for data that can be synchronized during an update operation.
  */
-export type SyncUpdateSchemas = StatUpdateSchema;
+export type SyncUpdateSchemas =
+  | StatUpdateSchema
+  | MoodUpdateSchema
+  | MoodTagUpdateSchema
+  | MoodTagLinkUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -47,8 +61,8 @@ export interface SyncObject {
  *
  * @type {function(data: SyncCreateSchemas): Promise<AxiosResponse>} CreatesFunction
  */
-export type CreatesFunction = (
-  data: SyncCreateSchemas,
+export type CreatesFunction<T extends SyncCreateSchemas> = (
+  data: T,
   query?: SyncObject,
 ) => Promise<AxiosResponse>;
 
@@ -57,8 +71,8 @@ export type CreatesFunction = (
  *
  * @type {function(data: SyncUpdateSchemas): Promise<AxiosResponse>} UpdatesFunction
  */
-export type UpdatesFunction = (
-  data: SyncUpdateSchemas,
+export type UpdatesFunction<T extends SyncUpdateSchemas> = (
+  data: T,
   query?: SyncObject,
 ) => Promise<AxiosResponse>;
 
@@ -80,9 +94,12 @@ type GetsFunction = (
  * @property {UpdatesFunction} Updates - Function for updating records.
  * @property {GetsFunction} Pull - Function for retrieving records.
  */
-export interface SyncTableFunctions {
-  [SyncOperation.Creates]: CreatesFunction;
-  [SyncOperation.Updates]: UpdatesFunction;
+export interface SyncTableFunctions<
+  C extends SyncCreateSchemas,
+  U extends SyncUpdateSchemas,
+> {
+  [SyncOperation.Creates]: CreatesFunction<C>;
+  [SyncOperation.Updates]: UpdatesFunction<U>;
   [SyncType.Pull]: GetsFunction;
 }
 
@@ -94,7 +111,22 @@ export interface SyncTableFunctions {
  * @property {SyncTableFunctions} statTable - API functions for the 'statTable' table.
  */
 export interface SyncApiFunctions {
-  [syncDbTables.statTable]: SyncTableFunctions;
+  [syncDbTables.statTable]: SyncTableFunctions<
+    StatCreateSchema,
+    StatUpdateSchema
+  >;
+  [syncDbTables.moodTable]: SyncTableFunctions<
+    MoodCreateSchema,
+    MoodUpdateSchema
+  >;
+  [syncDbTables.moodTagTable]: SyncTableFunctions<
+    MoodTagCreateSchema,
+    MoodTagUpdateSchema
+  >;
+  [syncDbTables.moodTagLinkTable]: SyncTableFunctions<
+    MoodTagLinkCreateSchema,
+    MoodTagLinkUpdateSchema
+  >;
 }
 
 /**

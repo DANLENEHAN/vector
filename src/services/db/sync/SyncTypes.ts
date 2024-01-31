@@ -1,6 +1,10 @@
 // Typing
 import {AxiosResponse} from 'axios';
-import {SyncTableFunctions, SyncCreateSchemas} from './Types';
+import {
+  SyncTableFunctions,
+  SyncCreateSchemas,
+  SyncUpdateSchemas,
+} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables, timestampFields} from '@shared/Constants';
@@ -20,6 +24,22 @@ import {
 
 // Logger
 import logger from '@utils/Logger';
+
+/**
+ * Interface for the processSyncTypePull and processSyncTypePush functions.
+ *
+ * @interface SyncParams
+ *
+ * @property {syncDbTables} tableName - The name of the table to sync.
+ * @property {SyncTableFunctions} syncFunctions - Object containing sync functions for the table.
+ * @property {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ *
+ */
+interface SyncParams<C extends SyncCreateSchemas, U extends SyncUpdateSchemas> {
+  tableName: syncDbTables;
+  syncFunctions: SyncTableFunctions<C, U>;
+  syncOperation: SyncOperation;
+}
 
 /**
  * Process a synchronization pull operation for a specific table.
@@ -43,11 +63,11 @@ import logger from '@utils/Logger';
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePull(tableName, syncFunctions, syncOperation);
  */
-export const processSyncTypePull = async (
-  tableName: syncDbTables,
-  syncFunctions: SyncTableFunctions,
-  syncOperation: SyncOperation,
-): Promise<void> => {
+export const processSyncTypePull = async ({
+  tableName,
+  syncFunctions,
+  syncOperation,
+}: SyncParams<SyncCreateSchemas, SyncUpdateSchemas>): Promise<void> => {
   const lastSynced: string | null = await getLastSyncedForTable(
     tableName,
     SyncType.Pull,
@@ -75,16 +95,21 @@ export const processSyncTypePull = async (
     if (syncOperation === SyncOperation.Creates) {
       // Removing any existing rows to avoid errors
       const placeholders = rowsToSync.map(() => '?').join(',');
-      const tableUuids = rowsToSync.map(item => ({
-        [`${tableName}_id`]: item[`${tableName}_id`],
-      }));
+      const table_id_field = `${tableName}_id`;
+      const tableUuids = rowsToSync.map(
+        item => item[table_id_field as keyof SyncCreateSchemas],
+      );
       const existingUuids = await runSqlSelect(
-        `SELECT * FROM ${tableName} WHERE ${tableName}_id IN (${placeholders})`,
+        `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`,
         tableUuids,
       );
       const rowsToInsert = rowsToSync.filter(
-        item => !existingUuids.includes(item[`${tableName}_id`]),
+        item =>
+          !existingUuids.includes(
+            item[table_id_field as keyof SyncCreateSchemas],
+          ),
       );
+
       if (rowsToInsert.length > 0) {
         await insertRows(tableName, rowsToInsert);
       }
@@ -129,11 +154,11 @@ export const processSyncTypePull = async (
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePush(tableName, tableFunctions, syncOperation);
  */
-export const processSyncTypePush = async (
-  tableName: syncDbTables,
-  tableFunctions: SyncTableFunctions,
-  syncOperation: SyncOperation,
-): Promise<void> => {
+export const processSyncTypePush = async ({
+  tableName,
+  syncFunctions,
+  syncOperation,
+}: SyncParams<SyncCreateSchemas, SyncUpdateSchemas>): Promise<void> => {
   try {
     const lastSynced: string | null = await getLastSyncedForTable(
       tableName,
@@ -148,9 +173,9 @@ export const processSyncTypePush = async (
     );
 
     if (syncOperation === SyncOperation.Creates) {
-      processCreatesSyncTypePush(rowsToSync, tableName, tableFunctions);
+      processCreatesSyncTypePush(rowsToSync, tableName, syncFunctions);
     } else {
-      processUpdatesSyncTypePush(rowsToSync, tableName, tableFunctions);
+      processUpdatesSyncTypePush(rowsToSync, tableName, syncFunctions);
     }
   } catch (error) {
     logger.error('Error processing synchronization push operation:', error);
