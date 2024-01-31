@@ -26,22 +26,6 @@ import {
 import logger from '@utils/Logger';
 
 /**
- * Interface for the processSyncTypePull and processSyncTypePush functions.
- *
- * @interface SyncParams
- *
- * @property {syncDbTables} tableName - The name of the table to sync.
- * @property {SyncTableFunctions} syncFunctions - Object containing sync functions for the table.
- * @property {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
- *
- */
-interface SyncParams<C extends SyncCreateSchemas, U extends SyncUpdateSchemas> {
-  tableName: syncDbTables;
-  syncFunctions: SyncTableFunctions<C, U>;
-  syncOperation: SyncOperation;
-}
-
-/**
  * Process a synchronization pull operation for a specific table.
  *
  * @param {syncDbTables} tableName - The name of the table to sync.
@@ -63,11 +47,11 @@ interface SyncParams<C extends SyncCreateSchemas, U extends SyncUpdateSchemas> {
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePull(tableName, syncFunctions, syncOperation);
  */
-export const processSyncTypePull = async ({
-  tableName,
-  syncFunctions,
-  syncOperation,
-}: SyncParams<SyncCreateSchemas, SyncUpdateSchemas>): Promise<void> => {
+export const processSyncTypePull = async (
+  tableName: syncDbTables,
+  syncFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
+  syncOperation: SyncOperation,
+): Promise<void> => {
   const lastSynced: string | null = await getLastSyncedForTable(
     tableName,
     SyncType.Pull,
@@ -154,11 +138,11 @@ export const processSyncTypePull = async ({
  * const syncOperation = SyncOperation.Creates;
  * await processSyncTypePush(tableName, tableFunctions, syncOperation);
  */
-export const processSyncTypePush = async ({
-  tableName,
-  syncFunctions,
-  syncOperation,
-}: SyncParams<SyncCreateSchemas, SyncUpdateSchemas>): Promise<void> => {
+export const processSyncTypePush = async (
+  tableName: syncDbTables,
+  syncFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
+  syncOperation: SyncOperation,
+): Promise<void> => {
   try {
     const lastSynced: string | null = await getLastSyncedForTable(
       tableName,

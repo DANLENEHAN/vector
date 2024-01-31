@@ -31,32 +31,32 @@ describe('Sync Process Tests', () => {
       Object.entries(apiFunctions).length * 2,
     );
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
-      expect(processSyncTypePull).toHaveBeenCalledWith({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Creates,
-      });
-      expect(processSyncTypePull).toHaveBeenCalledWith({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Updates,
-      });
+      expect(processSyncTypePull).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
+      expect(processSyncTypePull).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
     }
 
     expect(processSyncTypePush).toHaveBeenCalledTimes(
       Object.entries(apiFunctions).length * 2,
     );
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
-      expect(processSyncTypePush).toHaveBeenCalledWith({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Creates,
-      });
-      expect(processSyncTypePush).toHaveBeenCalledWith({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Updates,
-      });
+      expect(processSyncTypePush).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
+      expect(processSyncTypePush).toHaveBeenCalledWith(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
     }
   });
 });

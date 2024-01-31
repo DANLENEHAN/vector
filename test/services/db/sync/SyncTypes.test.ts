@@ -91,14 +91,14 @@ describe('SyncType Tests', () => {
     const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
-    await processSyncTypePush({
-      tableName: tableToSync,
-      syncFunctions: apiFunctions[tableToSync] as SyncTableFunctions<
+    await processSyncTypePush(
+      tableToSync,
+      apiFunctions[tableToSync] as SyncTableFunctions<
         SyncCreateSchemas,
         SyncUpdateSchemas
       >,
-      syncOperation: SyncOperation.Creates,
-    });
+      SyncOperation.Creates,
+    );
 
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
@@ -128,14 +128,14 @@ describe('SyncType Tests', () => {
     const tableToSync: syncDbTables = syncDbTables.statTable;
 
     // Act
-    await processSyncTypePush({
-      tableName: tableToSync,
-      syncFunctions: apiFunctions[tableToSync] as SyncTableFunctions<
+    await processSyncTypePush(
+      tableToSync,
+      apiFunctions[tableToSync] as SyncTableFunctions<
         SyncCreateSchemas,
         SyncUpdateSchemas
       >,
-      syncOperation: SyncOperation.Updates,
-    });
+      SyncOperation.Updates,
+    );
 
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
@@ -166,14 +166,14 @@ describe('SyncType Tests', () => {
     jest.spyOn(dbFunctions, 'runSqlSelect').mockResolvedValue([]);
 
     // Act
-    await processSyncTypePull({
-      tableName: tableToSync,
-      syncFunctions: apiFunctions[tableToSync] as SyncTableFunctions<
+    await processSyncTypePull(
+      tableToSync,
+      apiFunctions[tableToSync] as SyncTableFunctions<
         SyncCreateSchemas,
         SyncUpdateSchemas
       >,
-      syncOperation: SyncOperation.Creates,
-    });
+      SyncOperation.Creates,
+    );
 
     // Assert
     expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
@@ -217,14 +217,14 @@ describe('SyncType Tests', () => {
       .mockResolvedValue([sampleStat.stat_id]);
 
     // Act
-    await processSyncTypePull({
-      tableName: tableToSync,
-      syncFunctions: apiFunctions[tableToSync] as SyncTableFunctions<
+    await processSyncTypePull(
+      tableToSync,
+      apiFunctions[tableToSync] as SyncTableFunctions<
         SyncCreateSchemas,
         SyncUpdateSchemas
       >,
-      syncOperation: SyncOperation.Creates,
-    });
+      SyncOperation.Creates,
+    );
 
     // Assert
 

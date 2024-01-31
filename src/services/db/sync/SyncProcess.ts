@@ -35,18 +35,18 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       // Process synchronization pull for create operations
-      await processSyncTypePull({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Creates,
-      });
+      await processSyncTypePull(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
 
       // Process synchronization pull for update operations
-      await processSyncTypePull({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Updates,
-      });
+      await processSyncTypePull(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
 
       // Log information about the completion of synchronization pull
       logger.info(
@@ -58,18 +58,18 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       // Trigger synchronization push for create operation
-      await processSyncTypePush({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Creates,
-      });
+      await processSyncTypePush(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+      );
 
       // Trigger synchronization push for update operation
-      await processSyncTypePush({
-        tableName: tableName as syncDbTables,
-        syncFunctions: tableFunctions,
-        syncOperation: SyncOperation.Updates,
-      });
+      await processSyncTypePush(
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+      );
 
       logger.info(
         `Sync type ${SyncType.Push} completed successfully for table: '${tableName}'.`,
