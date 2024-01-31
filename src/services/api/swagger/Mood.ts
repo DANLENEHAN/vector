@@ -10,13 +10,13 @@
  */
 
 import {
+  MoodCreateSchema,
+  MoodUpdateSchema,
   QuerySchema,
-  StatCreateSchema,
-  StatUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
-export class Stat<SecurityDataType = unknown> {
+export class Mood<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -24,18 +24,18 @@ export class Stat<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new stat.
+   * @description Create a new mood.
    *
-   * @tags Stat
+   * @tags Mood
    * @name CreateCreate
-   * @summary Create a new stat.
-   * @request POST:/stat/create
+   * @summary Create a new mood.
+   * @request POST:/mood/create
    * @secure
-   * @response `204` `void` Stats retrieved successfully
+   * @response `204` `void` Moods retrieved successfully
    * @response `400` `void` Query parameter validation error
    */
   createCreate = (
-    data: StatCreateSchema,
+    data: MoodCreateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -46,7 +46,7 @@ export class Stat<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/stat/create`,
+      path: `/mood/create`,
       method: 'POST',
       query: query,
       body: data,
@@ -55,58 +55,38 @@ export class Stat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a stat.
+   * @description Delete a mood.
    *
-   * @tags Stat
-   * @name DeleteStringStatIdDelete
-   * @summary Delete a stat.
-   * @request DELETE:/stat/delete/{string:stat_id}
+   * @tags Mood
+   * @name DeleteStringMoodIdDelete
+   * @summary Delete a mood.
+   * @request DELETE:/mood/delete/{string:mood_id}
    * @secure
-   * @response `204` `void` Stat deleted successfully
-   * @response `400` `void` Stat ID is required to delete a stat
-   * @response `404` `void` Stat not found
+   * @response `204` `void` Mood deleted successfully
+   * @response `404` `void` Mood not found
    */
-  deleteStringStatIdDelete = (statId: string, params: RequestParams = {}) =>
+  deleteStringMoodIdDelete = (moodId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/stat/delete/{string${statId}}`,
+      path: `/mood/delete/{string${moodId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
     });
   /**
-   * @description Get specific stats for a user.
+   * @description Get moods.
    *
-   * @tags Stat
-   * @name GetStringStatIdList
-   * @summary Get a stat.
-   * @request GET:/stat/get/{string:stat_id}
+   * @tags Mood
+   * @name GetMood
+   * @summary Get moods.
+   * @request GET:/mood/get
    * @secure
-   * @response `200` `StatCreateSchema` Stat for user retrieved successfully
-   * @response `404` `void` Stat not found
-   */
-  getStringStatIdList = (statId: string, params: RequestParams = {}) =>
-    this.http.request<StatCreateSchema, void>({
-      path: `/stat/get/{string${statId}}`,
-      method: 'GET',
-      secure: true,
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Get stats for a user.
-   *
-   * @tags Stat
-   * @name PostStat
-   * @summary Get stats.
-   * @request POST:/stat/get
-   * @secure
-   * @response `204` `(StatCreateSchema)[]` Stats found successfully
+   * @response `204` `(MoodCreateSchema)[]` Moods found successfully
    * @response `400` `void` Query validation error
    */
-  postStat = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<StatCreateSchema[], void>({
-      path: `/stat/get`,
-      method: 'POST',
+  getMood = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<MoodCreateSchema[], void>({
+      path: `/mood/get`,
+      method: 'GET',
       body: data,
       secure: true,
       type: ContentType.Json,
@@ -114,19 +94,38 @@ export class Stat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a stat for a user.
+   * @description Get a mood.
    *
-   * @tags Stat
-   * @name UpdateUpdate
-   * @summary Update a stat.
-   * @request PUT:/stat/update
+   * @tags Mood
+   * @name GetStringMoodIdList
+   * @summary Get a mood.
+   * @request GET:/mood/get/{string:mood_id}
    * @secure
-   * @response `201` `void` Stat updated successfully
-   * @response `400` `void` Stats validation error
-   * @response `404` `void` Stat not found
+   * @response `200` `MoodCreateSchema` Mood retrieved successfully
+   * @response `404` `void` Mood not found
+   */
+  getStringMoodIdList = (moodId: string, params: RequestParams = {}) =>
+    this.http.request<MoodCreateSchema, void>({
+      path: `/mood/get/{string${moodId}}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Update a mood.
+   *
+   * @tags Mood
+   * @name UpdateUpdate
+   * @summary Update a mood.
+   * @request PUT:/mood/update
+   * @secure
+   * @response `204` `void` Moods retrieved successfully
+   * @response `400` `void` Mood validation error
+   * @response `404` `void` Mood not found
    */
   updateUpdate = (
-    data: StatUpdateSchema,
+    data: MoodUpdateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -137,7 +136,7 @@ export class Stat<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/stat/update`,
+      path: `/mood/update`,
       method: 'PUT',
       query: query,
       body: data,

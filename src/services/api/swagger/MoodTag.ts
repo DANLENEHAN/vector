@@ -10,13 +10,13 @@
  */
 
 import {
+  MoodTagCreateSchema,
+  MoodTagUpdateSchema,
   QuerySchema,
-  StatCreateSchema,
-  StatUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
-export class Stat<SecurityDataType = unknown> {
+export class MoodTag<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -24,18 +24,18 @@ export class Stat<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new stat.
+   * @description Create a new mood tag.
    *
-   * @tags Stat
+   * @tags Mood Tag
    * @name CreateCreate
-   * @summary Create a new stat.
-   * @request POST:/stat/create
+   * @summary Create a new mood tag.
+   * @request POST:/mood_tag/create
    * @secure
-   * @response `204` `void` Stats retrieved successfully
+   * @response `204` `void` Mood tag created successfully
    * @response `400` `void` Query parameter validation error
    */
   createCreate = (
-    data: StatCreateSchema,
+    data: MoodTagCreateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -46,7 +46,7 @@ export class Stat<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/stat/create`,
+      path: `/mood_tag/create`,
       method: 'POST',
       query: query,
       body: data,
@@ -55,57 +55,59 @@ export class Stat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a stat.
+   * @description Delete a mood tag.
    *
-   * @tags Stat
-   * @name DeleteStringStatIdDelete
-   * @summary Delete a stat.
-   * @request DELETE:/stat/delete/{string:stat_id}
+   * @tags Mood Tag
+   * @name DeleteStringMoodTagIdDelete
+   * @summary Delete a mood tag.
+   * @request DELETE:/mood_tag/delete/{string:mood_tag_id}
    * @secure
-   * @response `204` `void` Stat deleted successfully
-   * @response `400` `void` Stat ID is required to delete a stat
-   * @response `404` `void` Stat not found
+   * @response `204` `void` Mood tag deleted successfully
+   * @response `404` `void` Mood tag not found
    */
-  deleteStringStatIdDelete = (statId: string, params: RequestParams = {}) =>
+  deleteStringMoodTagIdDelete = (
+    moodTagId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/stat/delete/{string${statId}}`,
+      path: `/mood_tag/delete/{string${moodTagId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
     });
   /**
-   * @description Get specific stats for a user.
+   * @description Get a mood tag.
    *
-   * @tags Stat
-   * @name GetStringStatIdList
-   * @summary Get a stat.
-   * @request GET:/stat/get/{string:stat_id}
+   * @tags Mood Tag
+   * @name GetStringMoodTagIdList
+   * @summary Get a mood tag.
+   * @request GET:/mood_tag/get/{string:mood_tag_id}
    * @secure
-   * @response `200` `StatCreateSchema` Stat for user retrieved successfully
-   * @response `404` `void` Stat not found
+   * @response `200` `MoodTagCreateSchema` Mood Tag retrieved successfully
+   * @response `404` `void` Mood Tag not found
    */
-  getStringStatIdList = (statId: string, params: RequestParams = {}) =>
-    this.http.request<StatCreateSchema, void>({
-      path: `/stat/get/{string${statId}}`,
+  getStringMoodTagIdList = (moodTagId: string, params: RequestParams = {}) =>
+    this.http.request<MoodTagCreateSchema, void>({
+      path: `/mood_tag/get/{string${moodTagId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get stats for a user.
+   * @description Get mood tags.
    *
-   * @tags Stat
-   * @name PostStat
-   * @summary Get stats.
-   * @request POST:/stat/get
+   * @tags Mood Tag
+   * @name PostMoodTag
+   * @summary Get mood tags.
+   * @request POST:/mood_tag/get
    * @secure
-   * @response `204` `(StatCreateSchema)[]` Stats found successfully
+   * @response `204` `(MoodTagCreateSchema)[]` Moods found successfully
    * @response `400` `void` Query validation error
    */
-  postStat = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<StatCreateSchema[], void>({
-      path: `/stat/get`,
+  postMoodTag = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<MoodTagCreateSchema[], void>({
+      path: `/mood_tag/get`,
       method: 'POST',
       body: data,
       secure: true,
@@ -114,19 +116,19 @@ export class Stat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a stat for a user.
+   * @description Update a mood tag.
    *
-   * @tags Stat
+   * @tags Mood Tag
    * @name UpdateUpdate
-   * @summary Update a stat.
-   * @request PUT:/stat/update
+   * @summary Update a mood tag.
+   * @request PUT:/mood_tag/update
    * @secure
-   * @response `201` `void` Stat updated successfully
-   * @response `400` `void` Stats validation error
-   * @response `404` `void` Stat not found
+   * @response `204` `void` Moods retrieved successfully
+   * @response `400` `void` Mood validation error
+   * @response `404` `void` Mood not found
    */
   updateUpdate = (
-    data: StatUpdateSchema,
+    data: MoodTagUpdateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -137,7 +139,7 @@ export class Stat<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/stat/update`,
+      path: `/mood_tag/update`,
       method: 'PUT',
       query: query,
       body: data,
