@@ -43,7 +43,9 @@ interface LoginParams {
  * @returns {Promise<void>} A promise that resolves when the user is successfully
  * logged in.
  */
-export const handleLogin = async (params: LoginParams) => {
+export const handleLogin = async (
+  params: LoginParams,
+): Promise<string | void> => {
   if (!params.isConnected) {
     return;
   }
@@ -55,6 +57,7 @@ export const handleLogin = async (params: LoginParams) => {
   });
   if (response instanceof SwaggerValidationError) {
     logger.error(`Error: ${response.message}`);
+    return response.message;
   } else {
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
@@ -85,7 +88,9 @@ interface SignupParams {
  * @param {SignupParams} params  The parameters for handling the creation of a new user.
  * @returns {Promise<void>} A promise that resolves when the user is successfully created.
  */
-export const handleCreateAccount = async (params: SignupParams) => {
+export const handleCreateAccount = async (
+  params: SignupParams,
+): Promise<string | void> => {
   if (!params.isConnected) {
     return;
   }
@@ -113,6 +118,7 @@ export const handleCreateAccount = async (params: SignupParams) => {
   });
   if (response instanceof SwaggerValidationError) {
     logger.error(`Error: ${response.message}`);
+    return response.message;
   } else {
     logger.info('Account creation successful, logging in.');
     response = await loginUser({

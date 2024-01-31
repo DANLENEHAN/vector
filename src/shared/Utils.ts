@@ -7,7 +7,7 @@
  * @example
  * const originalString = "hello";
  * const capitalizedString = capitalizeString(originalString);
- * console.log(capitalizedString); // Output: "Hello"
+ * logger.info(capitalizedString); // Output: "Hello"
  */
 export const capitalizeString = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
