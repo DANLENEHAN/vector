@@ -29,6 +29,9 @@ const timestampTimezone: TimestampTimezone = {
 };
 
 // Mock the api functions
+jest.mock('@services/api/blueprints/clientSessionEvent/Functions', () => ({
+  handleClientSessionEvent: jest.fn(),
+}));
 jest.mock('@services/api/blueprints/user/Api', () => ({
   loginUser: jest.fn(),
   createUser: jest.fn(),

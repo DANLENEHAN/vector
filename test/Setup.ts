@@ -2,6 +2,7 @@
  * Global setup for tests
  */
 jest.mock('react-native-fs', () => {});
+jest.mock('react-native-device-info', () => {});
 jest.mock('uuid', () => {});
 jest.mock('react-native-localize', () => {});
 jest.mock('react-native-sqlite-storage', () => ({

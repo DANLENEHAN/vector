@@ -1,5 +1,5 @@
 import moment from 'moment';
-import * as RNLocalize from 'react-native-localize';
+import {getTimeZone} from 'react-native-localize';
 
 import {TimestampTimezone} from './Type';
 
@@ -54,6 +54,6 @@ const utcTimestampNow = (): string => {
 export const getCurrentTimestampTimezone = (): TimestampTimezone => {
   return {
     timestamp: utcTimestampNow(),
-    timezone: RNLocalize.getTimeZone(),
+    timezone: getTimeZone(),
   };
 };
