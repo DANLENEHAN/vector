@@ -34,7 +34,7 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
   getLastSyncedForTable: jest.fn().mockResolvedValue('2025-01-01T00:00:00.000'),
   getRowsToSync: jest.fn().mockResolvedValue([
     {
-      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
       stat_type: 'weight',
       unit: 'kg',
       timezone: 'UTC',
@@ -46,15 +46,15 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
   ]),
 }));
 
-// Mocking the Stat Api Class
-jest.mock('@services/api/swagger/Stat', () => ({
-  Stat: jest.fn().mockImplementation(() => ({
-    postStat: jest.fn().mockResolvedValue({
+// Mocking the BodyStat Api Class
+jest.mock('@services/api/swagger/BodyStat', () => ({
+  BodyStat: jest.fn().mockImplementation(() => ({
+    postBodyStat: jest.fn().mockResolvedValue({
       // Should be the sampleStat var.
       // Probaly could be if defining mock in test worked...
       data: [
         {
-          stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+          body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
           stat_type: 'weight',
           unit: 'kg',
           timezone: 'UTC',
@@ -191,7 +191,7 @@ describe('SyncType Tests', () => {
 
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT stat_id FROM stat WHERE stat_id IN (?)',
+      'SELECT body_stat_id FROM body_stat WHERE body_stat_id IN (?)',
       ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
     );
 
@@ -214,7 +214,7 @@ describe('SyncType Tests', () => {
     const tableToSync: syncDbTables = syncDbTables.statTable;
     jest
       .spyOn(dbFunctions, 'runSqlSelect')
-      .mockResolvedValue([{stat_id: sampleStat.stat_id}]);
+      .mockResolvedValue([{body_stat_id: sampleStat.body_stat_id}]);
 
     // Act
     await processSyncTypePull(
@@ -243,7 +243,7 @@ describe('SyncType Tests', () => {
 
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
     expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT stat_id FROM stat WHERE stat_id IN (?)',
+      'SELECT body_stat_id FROM body_stat WHERE body_stat_id IN (?)',
       ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
     );
 

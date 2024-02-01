@@ -1,6 +1,6 @@
 export const revisionID = '3d966cf7fd45';
 
-export const sqlCommands_19012024090311276536_3d966cf7fd45: string[] = [
+export const sqlCommands_20240201144005783256_3d966cf7fd45: string[] = [
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Clavicular Head)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Sternal Head)');",
   "INSERT INTO bodypart (muscle_group, specific_muscle) VALUES ('Chest', 'Pectoralis Major (Abdominal Head)');",

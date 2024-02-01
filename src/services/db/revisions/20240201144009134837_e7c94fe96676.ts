@@ -1,6 +1,6 @@
 export const revisionID = 'e7c94fe96676';
 
-export const sqlCommands_30012024124659844271_e7c94fe96676: string[] = [
+export const sqlCommands_20240201144009134837_e7c94fe96676: string[] = [
   `CREATE TABLE mood_tag_link (
 	    mood_tag_link_id VARCHAR(36) NOT NULL,
 	    mood_id VARCHAR(36) NOT NULL,

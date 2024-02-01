@@ -1,6 +1,6 @@
 export const revisionID = '3a4bd56c760f';
 
-export const sqlCommands_19012024090312527576_3a4bd56c760f: string[] = [
+export const sqlCommands_20240201144007163920_3a4bd56c760f: string[] = [
   'INSERT INTO exercise_bodypart (exercise_id, severity, bodypart_id) VALUES (1, 1, 45);',
   'INSERT INTO exercise_bodypart (exercise_id, severity, bodypart_id) VALUES (1, 1, 44);',
   'INSERT INTO exercise_bodypart (exercise_id, severity, bodypart_id) VALUES (1, 2, 47);',

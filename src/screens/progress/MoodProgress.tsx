@@ -15,11 +15,11 @@ import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/Functions';
+import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {StatType} from '@services/api/swagger/data-contracts';
+import {BodyStatType} from '@services/api/swagger/data-contracts';
 
 /**
  *  Weight progress screen
@@ -51,7 +51,8 @@ const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
 
   useEffect(() => {
     const getUserMoods = async () => {
-      let user_mood = await getUserStats({statType: StatType.Feeling});
+      // BROKEN
+      let user_mood = await getUserStats({bodyStatType: BodyStatType.Feeling});
 
       setData(user_mood ?? []);
     };

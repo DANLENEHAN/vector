@@ -2,8 +2,8 @@
 import {AxiosResponse} from 'axios';
 import {SyncApiFunctions, SyncObject} from '@services/db/sync/Types';
 import {
-  StatCreateSchema,
-  StatUpdateSchema,
+  BodyStatCreateSchema,
+  BodyStatUpdateSchema,
   MoodCreateSchema,
   MoodUpdateSchema,
   MoodTagUpdateSchema,
@@ -21,7 +21,7 @@ import {syncDbTables} from '@shared/Constants';
 
 // Functions
 import api from '@services/api/ApiService';
-import {Stat} from '@services/api/swagger/Stat';
+import {BodyStat} from '@services/api/swagger/BodyStat';
 import {Mood} from '@services/api/swagger/Mood';
 import {MoodTag} from '@services/api/swagger/MoodTag';
 import {MoodTagLink} from '@services/api/swagger/MoodTagLink';
@@ -29,7 +29,7 @@ import {Nutrition} from '@services/api/swagger/Nutrition';
 import {ClientSessionEvent} from '@services/api/swagger/ClientSessionEvent';
 
 // Apis
-const StatApi = new Stat(api);
+const BodyStatApi = new BodyStat(api);
 const MoodApi = new Mood(api);
 const MoodTagApi = new MoodTag(api);
 const MoodTagLinkApi = new MoodTagLink(api);
@@ -38,18 +38,18 @@ const ClientSessionEventApi = new ClientSessionEvent(api);
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
-  // Stat
+  // BodyStat
   [syncDbTables.statTable]: {
     [SyncOperation.Creates]: (
-      data: StatCreateSchema,
+      data: BodyStatCreateSchema,
       query?: SyncObject,
-    ): Promise<AxiosResponse> => StatApi.createCreate(data, query),
+    ): Promise<AxiosResponse> => BodyStatApi.createCreate(data, query),
     [SyncOperation.Updates]: (
-      data: StatUpdateSchema,
+      data: BodyStatUpdateSchema,
       query?: SyncObject,
-    ): Promise<AxiosResponse> => StatApi.updateUpdate(data, query),
+    ): Promise<AxiosResponse> => BodyStatApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-      StatApi.postStat(data),
+      BodyStatApi.postBodyStat(data),
   },
   // Mood
   [syncDbTables.moodTable]: {

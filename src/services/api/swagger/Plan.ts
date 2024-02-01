@@ -46,16 +46,16 @@ export class Plan<SecurityDataType = unknown> {
    * @description Delete a plan
    *
    * @tags Plan
-   * @name DeleteDelete
+   * @name DeleteIntPlanIdDelete
    * @summary Delete a plan
-   * @request DELETE:/plan/delete/{plan_id}
+   * @request DELETE:/plan/delete/{int:plan_id}
    * @response `204` `void` Plan deleted successfully
    * @response `400` `void` Plan ID is required to delete a plan
    * @response `404` `void` Plan not found
    */
-  deleteDelete = (planId: number, params: RequestParams = {}) =>
+  deleteIntPlanIdDelete = (planId: number, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/plan/delete/${planId}`,
+      path: `/plan/delete/{int${planId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -63,15 +63,15 @@ export class Plan<SecurityDataType = unknown> {
    * @description Get a plan
    *
    * @tags Plan
-   * @name GetPlan
+   * @name GetIntPlanIdList
    * @summary Get a plan
-   * @request GET:/plan/get/{plan_id}
+   * @request GET:/plan/get/{int:plan_id}
    * @response `200` `PlanGetSchema` Plan retrieved successfully
    * @response `404` `void` Plan not found
    */
-  getPlan = (planId: number, params: RequestParams = {}) =>
+  getIntPlanIdList = (planId: number, params: RequestParams = {}) =>
     this.http.request<PlanGetSchema, void>({
-      path: `/plan/get/${planId}`,
+      path: `/plan/get/{int${planId}}`,
       method: 'GET',
       format: 'json',
       ...params,

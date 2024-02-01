@@ -1,6 +1,6 @@
 export const revisionID = '25a0638117a1';
 
-export const sqlCommands_30012024095557080551_25a0638117a1: string[] = [
+export const sqlCommands_20240201144008475267_25a0638117a1: string[] = [
   `CREATE TABLE mood (
 	    mood_id VARCHAR(36) NOT NULL,
 	    user_id INTEGER NOT NULL,

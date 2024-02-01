@@ -23,9 +23,9 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
   insertSyncUpdate: jest.fn(),
 }));
 
-// Mocking the Stat Api Class
-jest.mock('@services/api/swagger/Stat', () => ({
-  Stat: jest.fn().mockImplementation(() => ({
+// Mocking the BodyStat Api Class
+jest.mock('@services/api/swagger/BodyStat', () => ({
+  BodyStat: jest.fn().mockImplementation(() => ({
     createCreate: jest
       .fn()
       .mockResolvedValueOnce({status: 201})
@@ -43,7 +43,7 @@ jest.mock('@services/asyncStorage/Functions', () => ({
   ...jest.requireActual('@services/asyncStorage/Functions'),
   getFailedSyncPushesCreatesForTable: jest.fn().mockResolvedValue([
     {
-      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
       stat_type: 'weight',
       unit: 'kg',
       timezone: 'UTC',
@@ -55,7 +55,7 @@ jest.mock('@services/asyncStorage/Functions', () => ({
   ]),
   getFailedSyncPushesUpdatesForTable: jest.fn().mockResolvedValue([
     {
-      stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
       stat_type: 'weight',
       unit: 'kg',
       updated_at: '2025-01-01T00:01:00.000',

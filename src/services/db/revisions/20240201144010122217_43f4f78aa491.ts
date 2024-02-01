@@ -1,6 +1,6 @@
 export const revisionID = '43f4f78aa491';
 
-export const sqlCommands_31012024211401712372_43f4f78aa491: string[] = [
+export const sqlCommands_20240201144010122217_43f4f78aa491: string[] = [
   `CREATE TABLE client_session_event (
 	    client_session_event_id VARCHAR(36) NOT NULL,
 	    user_id INTEGER NOT NULL,

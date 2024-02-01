@@ -24,15 +24,15 @@ export class Mood<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new mood.
+   * @description Create a new Mood.
    *
    * @tags Mood
    * @name CreateCreate
-   * @summary Create a new mood.
+   * @summary Create a new Mood.
    * @request POST:/mood/create
    * @secure
-   * @response `204` `void` Moods retrieved successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` Mood retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
     data: MoodCreateSchema,
@@ -55,14 +55,15 @@ export class Mood<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a mood.
+   * @description Delete a Mood.
    *
    * @tags Mood
    * @name DeleteStringMoodIdDelete
-   * @summary Delete a mood.
+   * @summary Delete a Mood.
    * @request DELETE:/mood/delete/{string:mood_id}
    * @secure
    * @response `204` `void` Mood deleted successfully
+   * @response `400` `void` Mood validation error
    * @response `404` `void` Mood not found
    */
   deleteStringMoodIdDelete = (moodId: string, params: RequestParams = {}) =>
@@ -73,14 +74,14 @@ export class Mood<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get a mood.
+   * @description Get specific Mood for a user.
    *
    * @tags Mood
    * @name GetStringMoodIdList
-   * @summary Get a mood.
+   * @summary Get a specific Mood for a user.
    * @request GET:/mood/get/{string:mood_id}
    * @secure
-   * @response `200` `MoodCreateSchema` Mood retrieved successfully
+   * @response `200` `MoodCreateSchema` Mood for user retrieved successfully
    * @response `404` `void` Mood not found
    */
   getStringMoodIdList = (moodId: string, params: RequestParams = {}) =>
@@ -92,14 +93,14 @@ export class Mood<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get moods.
+   * @description Get Mood for a user based on query.
    *
    * @tags Mood
    * @name PostMood
-   * @summary Get moods.
+   * @summary Get Mood for a user based on query.
    * @request POST:/mood/get
    * @secure
-   * @response `204` `(MoodCreateSchema)[]` Moods found successfully
+   * @response `204` `(MoodCreateSchema)[]` Mood for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postMood = (data: QuerySchema, params: RequestParams = {}) =>
@@ -113,14 +114,14 @@ export class Mood<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a mood.
+   * @description Update a Mood for a user.
    *
    * @tags Mood
    * @name UpdateUpdate
-   * @summary Update a mood.
+   * @summary Update a Mood for a user.
    * @request PUT:/mood/update
    * @secure
-   * @response `204` `void` Moods retrieved successfully
+   * @response `201` `void` Mood updated successfully
    * @response `400` `void` Mood validation error
    * @response `404` `void` Mood not found
    */

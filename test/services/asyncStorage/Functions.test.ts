@@ -26,7 +26,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
 }));
 
-// Mocking the Stat Api Class
+// Mocking the BodyStat Api Class
 jest.mock('@services/api/swagger/SyncErrorDump', () => ({
   SyncErrorDump: jest.fn().mockImplementation(() => ({
     createCreate: jest.fn().mockResolvedValue({status: 204}),
@@ -112,7 +112,7 @@ describe('getUserDetails', () => {
       JSON.stringify({
         [syncDbTables.statTable]: {
           [SyncOperation.Creates]: {
-            [sampleStat.stat_id]: {
+            [sampleStat.body_stat_id]: {
               retries: 1,
               data: {
                 ...sampleStat,
@@ -131,7 +131,7 @@ describe('getUserDetails', () => {
       JSON.stringify({
         [syncDbTables.statTable]: {
           [SyncOperation.Creates]: {
-            [sampleStat.stat_id]: {
+            [sampleStat.body_stat_id]: {
               retries: 3,
               data: {
                 ...sampleStat,
@@ -172,7 +172,7 @@ describe('getUserDetails', () => {
       table_name: syncDbTables.statTable,
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
-      row_id: sampleStat.stat_id,
+      row_id: sampleStat.body_stat_id,
       data: sampleStat,
       created_at: sampleStat.created_at,
       updated_at: sampleStat.updated_at,
@@ -186,7 +186,7 @@ describe('getUserDetails', () => {
       JSON.stringify({
         [syncDbTables.statTable]: {
           [SyncOperation.Creates]: {
-            [sampleStat.stat_id]: {
+            [sampleStat.body_stat_id]: {
               retries: 3,
               data: {
                 ...sampleStat,
@@ -223,7 +223,7 @@ describe('getUserDetails', () => {
       JSON.stringify({
         [syncDbTables.statTable]: {
           [SyncOperation.Updates]: {
-            [sampleUpdatedStat.stat_id]: {
+            [sampleUpdatedStat.body_stat_id]: {
               retries: 3,
               data: {
                 ...sampleUpdatedStat,

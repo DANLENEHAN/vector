@@ -1,13 +1,13 @@
 // Mocked Functions
-import {insertStat} from '@services/db/stat/Functions';
-import * as statApiFunctions from '@services/api/blueprints/stat/Api';
+import {insertStat} from '@services/db/bodyStat/Functions';
+import * as statApiFunctions from '@services/api/blueprints/bodyStat/Api';
 import * as asyncStorageFunctions from '@services/asyncStorage/Functions';
 import logger from '@utils/Logger';
 // Test Functions
 import {
   createNewStat,
   getUserStats,
-} from '@services/api/blueprints/stat/Functions';
+} from '@services/api/blueprints/bodyStat/Functions';
 // Data
 import {sampleStat, mockNavigation} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
@@ -22,12 +22,12 @@ jest.mock('@services/date/Functions', () => ({
     timezone: 'UTC',
   }),
 }));
-jest.mock('@services/db/stat/Functions', () => ({
-  ...jest.requireActual('@services/db/stat/Functions'),
+jest.mock('@services/db/bodyStat/Functions', () => ({
+  ...jest.requireActual('@services/db/bodyStat/Functions'),
   insertStat: jest.fn(),
 }));
 
-describe('Stat Functions Tests', () => {
+describe('Body BodyStat Functions Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -37,7 +37,7 @@ describe('Stat Functions Tests', () => {
     const params = {
       value: sampleStat.value,
       navigation: mockNavigation,
-      statType: sampleStat.stat_type,
+      bodyStatType: sampleStat.stat_type,
       unitValue: sampleStat.unit,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
@@ -49,9 +49,9 @@ describe('Stat Functions Tests', () => {
     expect(insertStat).toHaveBeenCalledTimes(1);
     expect(insertStat).toHaveBeenCalledWith([
       {
-        stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+        body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
         unit: params.unitValue,
-        stat_type: params.statType,
+        stat_type: params.bodyStatType,
         user_id: 1,
         value: params.value,
         created_at: sampleStat.created_at,
@@ -66,7 +66,7 @@ describe('Stat Functions Tests', () => {
     const params = {
       value: sampleStat.value,
       navigation: mockNavigation,
-      statType: sampleStat.stat_type,
+      bodyStatType: sampleStat.stat_type,
       unitValue: sampleStat.unit,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
@@ -82,9 +82,9 @@ describe('Stat Functions Tests', () => {
     // Arrange
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
     jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue([sampleStat]);
-    const statType = sampleStat.stat_type;
+    const bodyStatType = sampleStat.stat_type;
     // Act
-    const result = await getUserStats({statType: statType});
+    const result = await getUserStats({bodyStatType: bodyStatType});
     // Assert
     expect(result).toEqual([sampleStat]);
   });
@@ -95,9 +95,9 @@ describe('Stat Functions Tests', () => {
     const validationError = new SwaggerValidationError(validationMessage);
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
     jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue(validationError);
-    const statType = sampleStat.stat_type;
+    const bodyStatType = sampleStat.stat_type;
     // Act
-    await getUserStats({statType: statType});
+    await getUserStats({bodyStatType: bodyStatType});
     // Assert
     expect(logger.error).toHaveBeenCalledWith(`Error: ${validationMessage}`);
   });
@@ -106,9 +106,9 @@ describe('Stat Functions Tests', () => {
     // Arrange
     // Cause an error by rejecting the promise
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
-    const statType = sampleStat.stat_type;
+    const bodyStatType = sampleStat.stat_type;
     // Act
-    const result = await getUserStats({statType: statType});
+    const result = await getUserStats({bodyStatType: bodyStatType});
     // Assert
     expect(logger.error).toHaveBeenCalledWith('Error: ');
     expect(result).toEqual(undefined);

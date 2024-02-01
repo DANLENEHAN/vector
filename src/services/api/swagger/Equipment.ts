@@ -46,16 +46,19 @@ export class Equipment<SecurityDataType = unknown> {
    * @description Delete an equipment
    *
    * @tags Equipment
-   * @name DeleteDelete
+   * @name DeleteIntEquipmentIdDelete
    * @summary Delete an equipment
-   * @request DELETE:/equipment/delete/{equipment_id}
+   * @request DELETE:/equipment/delete/{int:equipment_id}
    * @response `204` `void` Equipment deleted successfully
    * @response `400` `void` Equipment ID is required to delete an equipment
    * @response `404` `void` Equipment not found
    */
-  deleteDelete = (equipmentId: number, params: RequestParams = {}) =>
+  deleteIntEquipmentIdDelete = (
+    equipmentId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/equipment/delete/${equipmentId}`,
+      path: `/equipment/delete/{int${equipmentId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -63,14 +66,14 @@ export class Equipment<SecurityDataType = unknown> {
    * @description Get an equipment
    *
    * @tags Equipment
-   * @name GetEquipment
+   * @name GetIntEquipmentIdList
    * @summary Get an equipment
-   * @request GET:/equipment/get/{equipment_id}
+   * @request GET:/equipment/get/{int:equipment_id}
    * @response `200` `EquipmentGetSchema` Equipment retrieved successfully
    */
-  getEquipment = (equipmentId: number, params: RequestParams = {}) =>
+  getIntEquipmentIdList = (equipmentId: number, params: RequestParams = {}) =>
     this.http.request<EquipmentGetSchema, any>({
-      path: `/equipment/get/${equipmentId}`,
+      path: `/equipment/get/{int${equipmentId}}`,
       method: 'GET',
       format: 'json',
       ...params,

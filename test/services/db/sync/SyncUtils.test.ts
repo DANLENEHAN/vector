@@ -13,7 +13,7 @@ import {
 import {syncDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
-import {StatCreateSchema} from '@services/api/swagger/data-contracts';
+import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Global Mocks
 
@@ -45,7 +45,7 @@ describe('Sync Utils Tests', () => {
       );
       expect(updateSchema.created_at).toBeUndefined();
       expect(updateSchema.timezone).toBeUndefined();
-      expect(updateSchema.stat_id).toBeDefined();
+      expect(updateSchema.body_stat_id).toBeDefined();
     });
   });
 
@@ -99,7 +99,7 @@ describe('Sync Utils Tests', () => {
 
   test('getRowsToSync handles non empty response', async () => {
     // Arrange
-    const sampleResponse: StatCreateSchema[] = [sampleStat, sampleStat];
+    const sampleResponse: BodyStatCreateSchema[] = [sampleStat, sampleStat];
     const mockedRunSqlSelect = jest.mocked(runSqlSelect);
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
     // Act
@@ -114,7 +114,7 @@ describe('Sync Utils Tests', () => {
 
   test('getRowsToSync handles empty response', async () => {
     // Arrange
-    const sampleResponse: StatCreateSchema[] = [];
+    const sampleResponse: BodyStatCreateSchema[] = [];
     const mockedRunSqlSelect = jest.mocked(runSqlSelect);
     mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
     // Act

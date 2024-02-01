@@ -46,16 +46,19 @@ export class Exercise<SecurityDataType = unknown> {
    * @description Delete an exercise
    *
    * @tags Exercise
-   * @name DeleteDelete
+   * @name DeleteIntExerciseIdDelete
    * @summary Delete an exercise
-   * @request DELETE:/exercise/delete/{exercise_id}
+   * @request DELETE:/exercise/delete/{int:exercise_id}
    * @response `204` `void` Exercise deleted successfully
    * @response `400` `void` Exercise ID is required to delete an exercise
    * @response `404` `void` Exercise not found
    */
-  deleteDelete = (exerciseId: number, params: RequestParams = {}) =>
+  deleteIntExerciseIdDelete = (
+    exerciseId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/exercise/delete/${exerciseId}`,
+      path: `/exercise/delete/{int${exerciseId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -63,14 +66,14 @@ export class Exercise<SecurityDataType = unknown> {
    * @description Get an exercise
    *
    * @tags Exercise
-   * @name GetExercise
+   * @name GetIntExerciseIdList
    * @summary Get an exercise
-   * @request GET:/exercise/get/{exercise_id}
+   * @request GET:/exercise/get/{int:exercise_id}
    * @response `200` `ExerciseGetSchema` Exercise retrieved successfully
    */
-  getExercise = (exerciseId: number, params: RequestParams = {}) =>
+  getIntExerciseIdList = (exerciseId: number, params: RequestParams = {}) =>
     this.http.request<ExerciseGetSchema, any>({
-      path: `/exercise/get/${exerciseId}`,
+      path: `/exercise/get/{int${exerciseId}}`,
       method: 'GET',
       format: 'json',
       ...params,

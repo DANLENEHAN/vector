@@ -53,19 +53,19 @@ export class Set<SecurityDataType = unknown> {
    * @description Delete a set component
    *
    * @tags Set Component
-   * @name ComponentDeleteDelete
+   * @name ComponentDeleteIntSetComponentIdDelete
    * @summary Delete a set component
-   * @request DELETE:/set/component/delete/{set_component_id}
+   * @request DELETE:/set/component/delete/{int:set_component_id}
    * @response `204` `void` Set Component deleted successfully
    * @response `400` `void` Set Component ID is required to delete a set component
    * @response `404` `void` Set Component not found
    */
-  componentDeleteDelete = (
+  componentDeleteIntSetComponentIdDelete = (
     setComponentId: number,
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/set/component/delete/${setComponentId}`,
+      path: `/set/component/delete/{int${setComponentId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -93,14 +93,17 @@ export class Set<SecurityDataType = unknown> {
    * @description Get a set component
    *
    * @tags Set Component
-   * @name ComponentGetDetail
+   * @name ComponentGetIntSetComponentIdList
    * @summary Get a set component
-   * @request GET:/set/component/get/{set_component_id}
+   * @request GET:/set/component/get/{int:set_component_id}
    * @response `200` `SetComponentGetSchema` Set Component retrieved successfully
    */
-  componentGetDetail = (setComponentId: number, params: RequestParams = {}) =>
+  componentGetIntSetComponentIdList = (
+    setComponentId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<SetComponentGetSchema, any>({
-      path: `/set/component/get/${setComponentId}`,
+      path: `/set/component/get/{int${setComponentId}}`,
       method: 'GET',
       format: 'json',
       ...params,
@@ -171,16 +174,16 @@ export class Set<SecurityDataType = unknown> {
    * @description Delete a set
    *
    * @tags Set
-   * @name DeleteDelete
+   * @name DeleteIntSetIdDelete
    * @summary Delete a set
-   * @request DELETE:/set/delete/{set_id}
+   * @request DELETE:/set/delete/{int:set_id}
    * @response `204` `void` Set deleted successfully
    * @response `400` `void` Set ID is required to delete a set
    * @response `404` `void` Set not found
    */
-  deleteDelete = (setId?: number, params: RequestParams = {}) =>
+  deleteIntSetIdDelete = (setId?: number, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/set/delete/${setId}`,
+      path: `/set/delete/{int${setId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -188,15 +191,15 @@ export class Set<SecurityDataType = unknown> {
    * @description Get a set
    *
    * @tags Set
-   * @name GetSet
+   * @name GetIntSetIdList
    * @summary Get a set
-   * @request GET:/set/get/{set_id}
+   * @request GET:/set/get/{int:set_id}
    * @response `200` `SetGetSchema` Set retrieved successfully
    * @response `404` `void` Set not found
    */
-  getSet = (setId?: number, params: RequestParams = {}) =>
+  getIntSetIdList = (setId?: number, params: RequestParams = {}) =>
     this.http.request<SetGetSchema, void>({
-      path: `/set/get/${setId}`,
+      path: `/set/get/{int${setId}}`,
       method: 'GET',
       format: 'json',
       ...params,

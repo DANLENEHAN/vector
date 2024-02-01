@@ -24,15 +24,15 @@ export class MoodTag<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new mood tag.
+   * @description Create a new MoodTag.
    *
-   * @tags Mood Tag
+   * @tags MoodTag
    * @name CreateCreate
-   * @summary Create a new mood tag.
+   * @summary Create a new MoodTag.
    * @request POST:/mood_tag/create
    * @secure
-   * @response `204` `void` Mood tag created successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` MoodTag retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
     data: MoodTagCreateSchema,
@@ -55,15 +55,16 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a mood tag.
+   * @description Delete a MoodTag.
    *
-   * @tags Mood Tag
+   * @tags MoodTag
    * @name DeleteStringMoodTagIdDelete
-   * @summary Delete a mood tag.
+   * @summary Delete a MoodTag.
    * @request DELETE:/mood_tag/delete/{string:mood_tag_id}
    * @secure
-   * @response `204` `void` Mood tag deleted successfully
-   * @response `404` `void` Mood tag not found
+   * @response `204` `void` MoodTag deleted successfully
+   * @response `400` `void` MoodTag validation error
+   * @response `404` `void` MoodTag not found
    */
   deleteStringMoodTagIdDelete = (
     moodTagId: string,
@@ -76,15 +77,15 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get a mood tag.
+   * @description Get specific MoodTag for a user.
    *
-   * @tags Mood Tag
+   * @tags MoodTag
    * @name GetStringMoodTagIdList
-   * @summary Get a mood tag.
+   * @summary Get a specific MoodTag for a user.
    * @request GET:/mood_tag/get/{string:mood_tag_id}
    * @secure
-   * @response `200` `MoodTagCreateSchema` Mood Tag retrieved successfully
-   * @response `404` `void` Mood Tag not found
+   * @response `200` `MoodTagCreateSchema` MoodTag for user retrieved successfully
+   * @response `404` `void` MoodTag not found
    */
   getStringMoodTagIdList = (moodTagId: string, params: RequestParams = {}) =>
     this.http.request<MoodTagCreateSchema, void>({
@@ -95,14 +96,14 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get mood tags.
+   * @description Get MoodTag for a user based on query.
    *
-   * @tags Mood Tag
+   * @tags MoodTag
    * @name PostMoodTag
-   * @summary Get mood tags.
+   * @summary Get MoodTag for a user based on query.
    * @request POST:/mood_tag/get
    * @secure
-   * @response `204` `(MoodTagCreateSchema)[]` Moods found successfully
+   * @response `204` `(MoodTagCreateSchema)[]` MoodTag for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postMoodTag = (data: QuerySchema, params: RequestParams = {}) =>
@@ -116,16 +117,16 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a mood tag.
+   * @description Update a MoodTag for a user.
    *
-   * @tags Mood Tag
+   * @tags MoodTag
    * @name UpdateUpdate
-   * @summary Update a mood tag.
+   * @summary Update a MoodTag for a user.
    * @request PUT:/mood_tag/update
    * @secure
-   * @response `204` `void` Moods retrieved successfully
-   * @response `400` `void` Mood validation error
-   * @response `404` `void` Mood not found
+   * @response `201` `void` MoodTag updated successfully
+   * @response `400` `void` MoodTag validation error
+   * @response `404` `void` MoodTag not found
    */
   updateUpdate = (
     data: MoodTagUpdateSchema,

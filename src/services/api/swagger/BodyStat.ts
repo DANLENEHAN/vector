@@ -10,13 +10,13 @@
  */
 
 import {
-  NutritionCreateSchema,
-  NutritionUpdateSchema,
+  BodyStatCreateSchema,
+  BodyStatUpdateSchema,
   QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
-export class Nutrition<SecurityDataType = unknown> {
+export class BodyStat<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -24,18 +24,18 @@ export class Nutrition<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new Nutrition.
+   * @description Create a new BodyStat.
    *
-   * @tags Nutrition
+   * @tags BodyStat
    * @name CreateCreate
-   * @summary Create a new Nutrition.
-   * @request POST:/nutrition/create
+   * @summary Create a new BodyStat.
+   * @request POST:/body_stat/create
    * @secure
-   * @response `204` `void` Nutrition retrieved successfully
+   * @response `204` `void` BodyStat retrieved successfully
    * @response `400` `void` Bad request
    */
   createCreate = (
-    data: NutritionCreateSchema,
+    data: BodyStatCreateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -46,7 +46,7 @@ export class Nutrition<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/nutrition/create`,
+      path: `/body_stat/create`,
       method: 'POST',
       query: query,
       body: data,
@@ -55,63 +55,65 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a Nutrition.
+   * @description Delete a BodyStat.
    *
-   * @tags Nutrition
-   * @name DeleteStringNutritionIdDelete
-   * @summary Delete a Nutrition.
-   * @request DELETE:/nutrition/delete/{string:nutrition_id}
+   * @tags BodyStat
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a BodyStat.
+   * @request DELETE:/body_stat/delete/{string:object_id}
    * @secure
-   * @response `204` `void` Nutrition deleted successfully
-   * @response `400` `void` Nutrition validation error
-   * @response `404` `void` Nutrition not found
+   * @response `204` `void` BodyStat deleted successfully
+   * @response `400` `void` BodyStat validation error
+   * @response `404` `void` BodyStat not found
    */
-  deleteStringNutritionIdDelete = (
-    nutritionId: string,
+  deleteStringObjectIdDelete = (
+    bodyStatId: string,
+    objectId: string,
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/nutrition/delete/{string${nutritionId}}`,
+      path: `/body_stat/delete/{string${objectId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
     });
   /**
-   * @description Get specific Nutrition for a user.
+   * @description Get specific BodyStat for a user.
    *
-   * @tags Nutrition
-   * @name GetStringNutritionIdList
-   * @summary Get a specific Nutrition for a user.
-   * @request GET:/nutrition/get/{string:nutrition_id}
+   * @tags BodyStat
+   * @name GetStringObjectIdList
+   * @summary Get a specific BodyStat for a user.
+   * @request GET:/body_stat/get/{string:object_id}
    * @secure
-   * @response `200` `NutritionCreateSchema` Nutrition for user retrieved successfully
-   * @response `404` `void` Nutrition not found
+   * @response `200` `BodyStatCreateSchema` BodyStat for user retrieved successfully
+   * @response `404` `void` BodyStat not found
    */
-  getStringNutritionIdList = (
-    nutritionId: string,
+  getStringObjectIdList = (
+    bodyStatId: string,
+    objectId: string,
     params: RequestParams = {},
   ) =>
-    this.http.request<NutritionCreateSchema, void>({
-      path: `/nutrition/get/{string${nutritionId}}`,
+    this.http.request<BodyStatCreateSchema, void>({
+      path: `/body_stat/get/{string${objectId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get Nutrition for a user based on query.
+   * @description Get BodyStat for a user based on query.
    *
-   * @tags Nutrition
-   * @name PostNutrition
-   * @summary Get Nutrition for a user based on query.
-   * @request POST:/nutrition/get
+   * @tags BodyStat
+   * @name PostBodyStat
+   * @summary Get BodyStat for a user based on query.
+   * @request POST:/body_stat/get
    * @secure
-   * @response `204` `(NutritionCreateSchema)[]` Nutrition for user retrieved successfully
+   * @response `204` `(BodyStatCreateSchema)[]` BodyStat for user retrieved successfully
    * @response `400` `void` Query validation error
    */
-  postNutrition = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<NutritionCreateSchema[], void>({
-      path: `/nutrition/get`,
+  postBodyStat = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<BodyStatCreateSchema[], void>({
+      path: `/body_stat/get`,
       method: 'POST',
       body: data,
       secure: true,
@@ -120,19 +122,19 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a Nutrition for a user.
+   * @description Update a BodyStat for a user.
    *
-   * @tags Nutrition
+   * @tags BodyStat
    * @name UpdateUpdate
-   * @summary Update a Nutrition for a user.
-   * @request PUT:/nutrition/update
+   * @summary Update a BodyStat for a user.
+   * @request PUT:/body_stat/update
    * @secure
-   * @response `201` `void` Nutrition updated successfully
-   * @response `400` `void` Nutrition validation error
-   * @response `404` `void` Nutrition not found
+   * @response `201` `void` BodyStat updated successfully
+   * @response `400` `void` BodyStat validation error
+   * @response `404` `void` BodyStat not found
    */
   updateUpdate = (
-    data: NutritionUpdateSchema,
+    data: BodyStatUpdateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -143,7 +145,7 @@ export class Nutrition<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/nutrition/update`,
+      path: `/body_stat/update`,
       method: 'PUT',
       query: query,
       body: data,

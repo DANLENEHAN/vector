@@ -16,14 +16,14 @@ import LineGraph from '@components/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 import {View, StyleSheet} from 'react-native';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/Functions';
+import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Utils
 import {convertStats} from '@utils/Conversion';
 import {parse} from 'date-fns';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
 import {GraphPlotData} from '@components/graphs/Line/Types';
 // Logger
 import logger from '@utils/Logger';
@@ -53,7 +53,9 @@ const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
       const getUserWeights = async () => {
         // NOTE: This is a temporary solution until we have a user profile page
         const weightUnitPref = WeightUnit.Kg;
-        let user_weights = await getUserStats({statType: StatType.Weight});
+        let user_weights = await getUserStats({
+          bodyStatType: BodyStatType.Weight,
+        });
         if (user_weights == null) {
           logger.info('No user weights found');
           return;

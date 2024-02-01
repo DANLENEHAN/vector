@@ -1,6 +1,6 @@
 export const revisionID = 'ea7213f41859';
 
-export const sqlCommands_19012024090310986101_ea7213f41859: string[] = [
+export const sqlCommands_20240201144005439101_ea7213f41859: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL,
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)

@@ -1,6 +1,6 @@
 export const revisionID = '472ccb6e0599';
 
-export const sqlCommands_26012024152808868170_472ccb6e0599: string[] = [
+export const sqlCommands_20240201144008153543_472ccb6e0599: string[] = [
   `CREATE TABLE sync_error_dump (
 	    id INTEGER NOT NULL,
 	    table_name VARCHAR(100) NOT NULL,
