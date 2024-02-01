@@ -574,12 +574,6 @@ export interface ExerciseUpdateSchema {
 }
 
 /**
- * FeelingUnit
- * Feeling units.
- */
-export type FeelingUnit = 'out_of_10';
-
-/**
  * FitnessGoal
  * Fitness goals.
  */
@@ -944,6 +938,129 @@ export enum MuscleGroup {
   Forearms = 'Forearms',
   Neck = 'Neck',
   Traps = 'Traps',
+}
+
+/**
+ * NutritionCreateSchema
+ * Validation schema for the Nutrition model.
+ */
+export interface NutritionCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Nutrition Id
+   * Unique uuid for a nutrition entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  nutrition_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * The type of the nutrition entry
+   * @example "water"
+   */
+  type: NutritionType;
+  /**
+   * Unit
+   * The unit of the nutrition entry
+   * @maxLength 50
+   * @example "ml"
+   */
+  unit: WaterUnit | NutritionWeightUnit | CaloriesUnit;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the nutrition entry
+   * @min 0
+   * @example 52
+   */
+  value: number;
+}
+
+/**
+ * NutritionType
+ * Nutrition types.
+ */
+export enum NutritionType {
+  Water = 'water',
+  Calories = 'calories',
+  Protein = 'protein',
+  Carbohydrates = 'carbohydrates',
+  Fat = 'fat',
+  Fiber = 'fiber',
+}
+
+/**
+ * NutritionUpdateSchema
+ * A class representing the schema for updating nutrition entries,
+ * inheriting from StatCreateSchema and SyncUpdateSchema.
+ */
+export interface NutritionUpdateSchema {
+  /**
+   * Nutrition Id
+   * Unique uuid for a nutrition entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  nutrition_id: string;
+  /**
+   * The type of the nutrition entry
+   * @example "water"
+   */
+  type: NutritionType;
+  /**
+   * Unit
+   * The unit of the nutrition entry
+   * @maxLength 50
+   * @example "ml"
+   */
+  unit: WaterUnit | NutritionWeightUnit | CaloriesUnit;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Id
+   * The user_id of the stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the nutrition entry
+   * @min 0
+   * @example 52
+   */
+  value: number;
+}
+
+/**
+ * NutritionWeightUnit
+ * Nutrition weight units.
+ */
+export enum NutritionWeightUnit {
+  Mg = 'mg',
+  G = 'g',
+  Oz = 'oz',
 }
 
 /**
@@ -2092,13 +2209,7 @@ export interface StatCreateSchema {
    * @maxLength 50
    * @example "kg"
    */
-  unit:
-    | CaloriesUnit
-    | FeelingUnit
-    | HeightUnit
-    | StepsUnit
-    | WaterUnit
-    | WeightUnit;
+  unit: CaloriesUnit | HeightUnit | StepsUnit | WaterUnit | WeightUnit;
   /**
    * Updated At
    * @default null
@@ -2127,9 +2238,6 @@ export interface StatCreateSchema {
 export enum StatType {
   Height = 'height',
   Weight = 'weight',
-  Feeling = 'feeling',
-  Water = 'water',
-  Calories = 'calories',
   Steps = 'steps',
 }
 
@@ -2163,13 +2271,7 @@ export interface StatUpdateSchema {
    * @maxLength 50
    * @example "kg"
    */
-  unit:
-    | CaloriesUnit
-    | FeelingUnit
-    | HeightUnit
-    | StepsUnit
-    | WaterUnit
-    | WeightUnit;
+  unit: CaloriesUnit | HeightUnit | StepsUnit | WaterUnit | WeightUnit;
   /**
    * Updated At
    * @format date-time

@@ -87,9 +87,12 @@ export const processSyncTypePull = async (
         `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`,
         tableUuids,
       );
+      const existingUuidList = existingUuids.map(
+        item => item[table_id_field as keyof SyncCreateSchemas],
+      );
       const rowsToInsert = rowsToSync.filter(
         item =>
-          !existingUuids.includes(
+          !existingUuidList.includes(
             item[table_id_field as keyof SyncCreateSchemas],
           ),
       );

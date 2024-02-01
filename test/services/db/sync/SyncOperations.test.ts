@@ -44,8 +44,8 @@ jest.mock('@services/asyncStorage/Functions', () => ({
   getFailedSyncPushesCreatesForTable: jest.fn().mockResolvedValue([
     {
       stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-      stat_type: 'water',
-      unit: 'ml',
+      stat_type: 'weight',
+      unit: 'kg',
       timezone: 'UTC',
       created_at: '2025-01-01T00:00:00.000',
       updated_at: '2025-01-01T00:01:00.000',
@@ -56,8 +56,8 @@ jest.mock('@services/asyncStorage/Functions', () => ({
   getFailedSyncPushesUpdatesForTable: jest.fn().mockResolvedValue([
     {
       stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-      stat_type: 'water',
-      unit: 'ml',
+      stat_type: 'weight',
+      unit: 'kg',
       updated_at: '2025-01-01T00:01:00.000',
       user_id: 1,
       value: 500,

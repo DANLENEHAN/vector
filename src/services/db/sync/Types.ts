@@ -10,6 +10,8 @@ import {
   MoodTagUpdateSchema,
   MoodTagLinkCreateSchema,
   MoodTagLinkUpdateSchema,
+  NutritionCreateSchema,
+  NutritionUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
 
@@ -24,7 +26,8 @@ export type SyncCreateSchemas =
   | StatCreateSchema
   | MoodCreateSchema
   | MoodTagCreateSchema
-  | MoodTagLinkCreateSchema;
+  | MoodTagLinkCreateSchema
+  | NutritionCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -37,7 +40,8 @@ export type SyncUpdateSchemas =
   | StatUpdateSchema
   | MoodUpdateSchema
   | MoodTagUpdateSchema
-  | MoodTagLinkUpdateSchema;
+  | MoodTagLinkUpdateSchema
+  | NutritionUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -126,6 +130,10 @@ export interface SyncApiFunctions {
   [syncDbTables.moodTagLinkTable]: SyncTableFunctions<
     MoodTagLinkCreateSchema,
     MoodTagLinkUpdateSchema
+  >;
+  [syncDbTables.nutritionTable]: SyncTableFunctions<
+    NutritionCreateSchema,
+    NutritionUpdateSchema
   >;
 }
 

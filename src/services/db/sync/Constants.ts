@@ -10,6 +10,8 @@ import {
   MoodTagCreateSchema,
   MoodTagLinkCreateSchema,
   MoodTagLinkUpdateSchema,
+  NutritionCreateSchema,
+  NutritionUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
@@ -21,12 +23,14 @@ import {Stat} from '@services/api/swagger/Stat';
 import {Mood} from '@services/api/swagger/Mood';
 import {MoodTag} from '@services/api/swagger/MoodTag';
 import {MoodTagLink} from '@services/api/swagger/MoodTagLink';
+import {Nutrition} from '@services/api/swagger/Nutrition';
 
 // Apis
 const StatApi = new Stat(api);
 const MoodApi = new Mood(api);
 const MoodTagApi = new MoodTag(api);
 const MoodTagLinkApi = new MoodTagLink(api);
+const NutritionApi = new Nutrition(api);
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
@@ -81,6 +85,19 @@ export const apiFunctions: SyncApiFunctions = {
     ): Promise<AxiosResponse> => MoodTagLinkApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       MoodTagLinkApi.postMoodTagLink(data),
+  },
+  // Nutrition
+  [syncDbTables.nutritionTable]: {
+    [SyncOperation.Creates]: (
+      data: NutritionCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => NutritionApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: NutritionUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => NutritionApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      NutritionApi.postNutrition(data),
   },
 };
 
