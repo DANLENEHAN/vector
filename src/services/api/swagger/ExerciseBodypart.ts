@@ -49,16 +49,19 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Delete an exercise_bodypart
    *
    * @tags ExerciseBodypart
-   * @name DeleteDelete
+   * @name DeleteIntExerciseBodypartIdDelete
    * @summary Delete an exercise_bodypart
-   * @request DELETE:/exercise_bodypart/delete/{exercise_bodypart_id}
+   * @request DELETE:/exercise_bodypart/delete/{int:exercise_bodypart_id}
    * @response `204` `void` ExerciseBodypart deleted successfully
    * @response `400` `void` ExerciseBodypart ID is required to delete an exercise_bodypart
    * @response `404` `void` ExerciseBodypart not found
    */
-  deleteDelete = (exerciseBodypartId: number, params: RequestParams = {}) =>
+  deleteIntExerciseBodypartIdDelete = (
+    exerciseBodypartId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/exercise_bodypart/delete/${exerciseBodypartId}`,
+      path: `/exercise_bodypart/delete/{int${exerciseBodypartId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -66,17 +69,17 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Get an exercise_bodypart
    *
    * @tags ExerciseBodypart
-   * @name GetExerciseBodypart
+   * @name GetIntExerciseBodypartIdList
    * @summary Get an exercise_bodypart
-   * @request GET:/exercise_bodypart/get/{exercise_bodypart_id}
+   * @request GET:/exercise_bodypart/get/{int:exercise_bodypart_id}
    * @response `200` `ExerciseBodypartGetSchema` ExerciseBodypart retrieved successfully
    */
-  getExerciseBodypart = (
+  getIntExerciseBodypartIdList = (
     exerciseBodypartId: number,
     params: RequestParams = {},
   ) =>
     this.http.request<ExerciseBodypartGetSchema, any>({
-      path: `/exercise_bodypart/get/${exerciseBodypartId}`,
+      path: `/exercise_bodypart/get/{int${exerciseBodypartId}}`,
       method: 'GET',
       format: 'json',
       ...params,

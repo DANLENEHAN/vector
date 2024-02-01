@@ -24,15 +24,15 @@ export class Nutrition<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new nutrition entry.
+   * @description Create a new Nutrition.
    *
    * @tags Nutrition
    * @name CreateCreate
-   * @summary Create a new nutrition entry.
+   * @summary Create a new Nutrition.
    * @request POST:/nutrition/create
    * @secure
-   * @response `204` `void` Nutrition entry created successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` Nutrition retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
     data: NutritionCreateSchema,
@@ -55,15 +55,15 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a nutrition entry.
+   * @description Delete a Nutrition.
    *
    * @tags Nutrition
    * @name DeleteStringNutritionIdDelete
-   * @summary Delete a nutrition entry.
+   * @summary Delete a Nutrition.
    * @request DELETE:/nutrition/delete/{string:nutrition_id}
    * @secure
    * @response `204` `void` Nutrition deleted successfully
-   * @response `400` `void` Nutrition ID is required to delete a nutrition entry
+   * @response `400` `void` Nutrition validation error
    * @response `404` `void` Nutrition not found
    */
   deleteStringNutritionIdDelete = (
@@ -77,11 +77,11 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get a nutrition entry.
+   * @description Get specific Nutrition for a user.
    *
    * @tags Nutrition
    * @name GetStringNutritionIdList
-   * @summary Get a nutrition entry.
+   * @summary Get a specific Nutrition for a user.
    * @request GET:/nutrition/get/{string:nutrition_id}
    * @secure
    * @response `200` `NutritionCreateSchema` Nutrition for user retrieved successfully
@@ -99,14 +99,14 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get all nutritions for a user.
+   * @description Get Nutrition for a user based on query.
    *
    * @tags Nutrition
    * @name PostNutrition
-   * @summary Get all nutritions for a user.
+   * @summary Get Nutrition for a user based on query.
    * @request POST:/nutrition/get
    * @secure
-   * @response `204` `(NutritionCreateSchema)[]` Nutrition entries found successfully
+   * @response `204` `(NutritionCreateSchema)[]` Nutrition for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postNutrition = (data: QuerySchema, params: RequestParams = {}) =>
@@ -120,11 +120,11 @@ export class Nutrition<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a nutrition entry.
+   * @description Update a Nutrition for a user.
    *
    * @tags Nutrition
    * @name UpdateUpdate
-   * @summary Update a nutrition entry.
+   * @summary Update a Nutrition for a user.
    * @request PUT:/nutrition/update
    * @secure
    * @response `201` `void` Nutrition updated successfully

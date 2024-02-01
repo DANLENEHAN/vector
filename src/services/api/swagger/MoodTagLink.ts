@@ -24,15 +24,15 @@ export class MoodTagLink<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new mood tag link.
+   * @description Create a new MoodTagLink.
    *
-   * @tags Mood Tag Link
+   * @tags MoodTagLink
    * @name CreateCreate
-   * @summary Create a new mood tag link.
+   * @summary Create a new MoodTagLink.
    * @request POST:/mood_tag_link/create
    * @secure
-   * @response `204` `void` Mood tag link created successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` MoodTagLink retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
     data: MoodTagLinkCreateSchema,
@@ -55,15 +55,16 @@ export class MoodTagLink<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a mood tag link.
+   * @description Delete a MoodTagLink.
    *
-   * @tags Mood Tag Link
+   * @tags MoodTagLink
    * @name DeleteStringMoodTagLinkIdDelete
-   * @summary Delete a mood tag link.
+   * @summary Delete a MoodTagLink.
    * @request DELETE:/mood_tag_link/delete/{string:mood_tag_link_id}
    * @secure
-   * @response `204` `void` Mood tag link deleted successfully
-   * @response `404` `void` Mood tag link not found
+   * @response `204` `void` MoodTagLink deleted successfully
+   * @response `400` `void` MoodTagLink validation error
+   * @response `404` `void` MoodTagLink not found
    */
   deleteStringMoodTagLinkIdDelete = (
     moodTagLinkId: string,
@@ -76,15 +77,15 @@ export class MoodTagLink<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get a mood tag link.
+   * @description Get specific MoodTagLink for a user.
    *
-   * @tags Mood Tag Link
+   * @tags MoodTagLink
    * @name GetStringMoodTagLinkIdList
-   * @summary Get a mood tag link.
+   * @summary Get a specific MoodTagLink for a user.
    * @request GET:/mood_tag_link/get/{string:mood_tag_link_id}
    * @secure
-   * @response `200` `MoodTagLinkCreateSchema` Mood Tag retrieved successfully
-   * @response `404` `void` Mood Tag not found
+   * @response `200` `MoodTagLinkCreateSchema` MoodTagLink for user retrieved successfully
+   * @response `404` `void` MoodTagLink not found
    */
   getStringMoodTagLinkIdList = (
     moodTagLinkId: string,
@@ -98,14 +99,14 @@ export class MoodTagLink<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get mood tag links.
+   * @description Get MoodTagLink for a user based on query.
    *
-   * @tags Mood Tag Link
+   * @tags MoodTagLink
    * @name PostMoodTagLink
-   * @summary Get mood tag links.
+   * @summary Get MoodTagLink for a user based on query.
    * @request POST:/mood_tag_link/get
    * @secure
-   * @response `204` `(MoodTagLinkCreateSchema)[]` Moods found successfully
+   * @response `204` `(MoodTagLinkCreateSchema)[]` MoodTagLink for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postMoodTagLink = (data: QuerySchema, params: RequestParams = {}) =>
@@ -119,16 +120,16 @@ export class MoodTagLink<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a mood tag link.
+   * @description Update a MoodTagLink for a user.
    *
-   * @tags Mood Tag Link
+   * @tags MoodTagLink
    * @name UpdateUpdate
-   * @summary Update a mood tag link.
+   * @summary Update a MoodTagLink for a user.
    * @request PUT:/mood_tag_link/update
    * @secure
-   * @response `204` `void` Moods retrieved successfully
-   * @response `400` `void` Mood validation error
-   * @response `404` `void` Mood not found
+   * @response `201` `void` MoodTagLink updated successfully
+   * @response `400` `void` MoodTagLink validation error
+   * @response `404` `void` MoodTagLink not found
    */
   updateUpdate = (
     data: MoodTagLinkUpdateSchema,

@@ -49,16 +49,19 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Delete a plan_component
    *
    * @tags Plan Component
-   * @name DeleteDelete
+   * @name DeleteIntPlanComponentIdDelete
    * @summary Delete a plan_component
-   * @request DELETE:/plan_component/delete/{plan_component_id}
+   * @request DELETE:/plan_component/delete/{int:plan_component_id}
    * @response `204` `void` Plan Component deleted successfully
    * @response `400` `void` Plan Component ID is required to delete a plan_component
    * @response `404` `void` Plan Component not found
    */
-  deleteDelete = (planComponentId: number, params: RequestParams = {}) =>
+  deleteIntPlanComponentIdDelete = (
+    planComponentId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/plan_component/delete/${planComponentId}`,
+      path: `/plan_component/delete/{int${planComponentId}}`,
       method: 'DELETE',
       ...params,
     });
@@ -66,15 +69,18 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Get a plan_component
    *
    * @tags Plan Component
-   * @name GetPlanComponent
+   * @name GetIntPlanComponentIdList
    * @summary Get a plan_component
-   * @request GET:/plan_component/get/{plan_component_id}
+   * @request GET:/plan_component/get/{int:plan_component_id}
    * @response `200` `PlanComponentGetSchema` Plan Component retrieved successfully
    * @response `404` `void` Plan Component not found
    */
-  getPlanComponent = (planComponentId: number, params: RequestParams = {}) =>
+  getIntPlanComponentIdList = (
+    planComponentId: number,
+    params: RequestParams = {},
+  ) =>
     this.http.request<PlanComponentGetSchema, void>({
-      path: `/plan_component/get/${planComponentId}`,
+      path: `/plan_component/get/{int${planComponentId}}`,
       method: 'GET',
       format: 'json',
       ...params,

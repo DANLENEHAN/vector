@@ -23,14 +23,14 @@ export class Bodypart<SecurityDataType = unknown> {
    * @description Get a bodypart
    *
    * @tags Bodypart
-   * @name GetBodypart
+   * @name GetIntBodypartIdList
    * @summary Get a bodypart
-   * @request GET:/bodypart/get/{bodypart_id}
+   * @request GET:/bodypart/get/{int:bodypart_id}
    * @response `200` `BodypartGetSchema` Bodypart retrieved successfully
    */
-  getBodypart = (bodypartId: number, params: RequestParams = {}) =>
+  getIntBodypartIdList = (bodypartId: number, params: RequestParams = {}) =>
     this.http.request<BodypartGetSchema, any>({
-      path: `/bodypart/get/${bodypartId}`,
+      path: `/bodypart/get/{int${bodypartId}}`,
       method: 'GET',
       format: 'json',
       ...params,

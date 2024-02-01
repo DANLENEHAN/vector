@@ -10,8 +10,8 @@
  */
 
 import {
-  BodyBodyStatCreateSchema,
-  BodyBodyStatUpdateSchema,
+  BodyStatCreateSchema,
+  BodyStatUpdateSchema,
   QuerySchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
@@ -24,18 +24,18 @@ export class BodyStat<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new body_stat.
+   * @description Create a new BodyStat.
    *
    * @tags BodyStat
    * @name CreateCreate
-   * @summary Create a new body_stat.
+   * @summary Create a new BodyStat.
    * @request POST:/body_stat/create
    * @secure
-   * @response `204` `void` Stats retrieved successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` BodyStat retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
-    data: BodyBodyStatCreateSchema,
+    data: BodyStatCreateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -55,59 +55,64 @@ export class BodyStat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a body_stat.
+   * @description Delete a BodyStat.
    *
    * @tags BodyStat
-   * @name DeleteStringBodyStatIdDelete
-   * @summary Delete a body_stat.
-   * @request DELETE:/body_stat/delete/{string:body_stat_id}
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a BodyStat.
+   * @request DELETE:/body_stat/delete/{string:object_id}
    * @secure
    * @response `204` `void` BodyStat deleted successfully
-   * @response `400` `void` BodyStat ID is required to delete a body_stat
+   * @response `400` `void` BodyStat validation error
    * @response `404` `void` BodyStat not found
    */
-  deleteStringBodyStatIdDelete = (
+  deleteStringObjectIdDelete = (
     bodyStatId: string,
+    objectId: string,
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/body_stat/delete/{string${bodyStatId}}`,
+      path: `/body_stat/delete/{string${objectId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
     });
   /**
-   * @description Get specific stats for a user.
+   * @description Get specific BodyStat for a user.
    *
    * @tags BodyStat
-   * @name GetStringBodyStatIdList
-   * @summary Get a body_stat.
-   * @request GET:/body_stat/get/{string:body_stat_id}
+   * @name GetStringObjectIdList
+   * @summary Get a specific BodyStat for a user.
+   * @request GET:/body_stat/get/{string:object_id}
    * @secure
-   * @response `200` `BodyBodyStatCreateSchema` BodyStat for user retrieved successfully
+   * @response `200` `BodyStatCreateSchema` BodyStat for user retrieved successfully
    * @response `404` `void` BodyStat not found
    */
-  getStringBodyStatIdList = (bodyStatId: string, params: RequestParams = {}) =>
-    this.http.request<BodyBodyStatCreateSchema, void>({
-      path: `/body_stat/get/{string${bodyStatId}}`,
+  getStringObjectIdList = (
+    bodyStatId: string,
+    objectId: string,
+    params: RequestParams = {},
+  ) =>
+    this.http.request<BodyStatCreateSchema, void>({
+      path: `/body_stat/get/{string${objectId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get stats for a user.
+   * @description Get BodyStat for a user based on query.
    *
    * @tags BodyStat
    * @name PostBodyStat
-   * @summary Get stats.
+   * @summary Get BodyStat for a user based on query.
    * @request POST:/body_stat/get
    * @secure
-   * @response `204` `(BodyBodyStatCreateSchema)[]` Stats found successfully
+   * @response `204` `(BodyStatCreateSchema)[]` BodyStat for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postBodyStat = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<BodyBodyStatCreateSchema[], void>({
+    this.http.request<BodyStatCreateSchema[], void>({
       path: `/body_stat/get`,
       method: 'POST',
       body: data,
@@ -117,19 +122,19 @@ export class BodyStat<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a body_stat for a user.
+   * @description Update a BodyStat for a user.
    *
    * @tags BodyStat
    * @name UpdateUpdate
-   * @summary Update a body_stat.
+   * @summary Update a BodyStat for a user.
    * @request PUT:/body_stat/update
    * @secure
    * @response `201` `void` BodyStat updated successfully
-   * @response `400` `void` Stats validation error
+   * @response `400` `void` BodyStat validation error
    * @response `404` `void` BodyStat not found
    */
   updateUpdate = (
-    data: BodyBodyStatUpdateSchema,
+    data: BodyStatUpdateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.

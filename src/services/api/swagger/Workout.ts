@@ -75,20 +75,20 @@ export class Workout<SecurityDataType = unknown> {
    * @description Delete a workout component
    *
    * @tags Workout Component
-   * @name ComponentDeleteDelete
+   * @name ComponentDeleteIntWorkoutComponentDelete
    * @summary Delete a workout component
-   * @request DELETE:/workout/component/delete/{workout_component}
+   * @request DELETE:/workout/component/delete/{int:workout_component}
    * @response `204` `void` Workout Component deleted successfully
    * @response `400` `void` Workout Component ID is required to delete a workout component
    * @response `404` `void` Workout Component not found
    */
-  componentDeleteDelete = (
+  componentDeleteIntWorkoutComponentDelete = (
     workoutComponentId: number,
     workoutComponent: string,
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/workout/component/delete/${workoutComponent}`,
+      path: `/workout/component/delete/{int${workoutComponent}}`,
       method: 'DELETE',
       ...params,
     });
@@ -116,17 +116,17 @@ export class Workout<SecurityDataType = unknown> {
    * @description Get a workout component
    *
    * @tags Workout Component
-   * @name ComponentGetDetail
+   * @name ComponentGetIntWorkoutComponentIdList
    * @summary Get a workout component
-   * @request GET:/workout/component/get/{workout_component_id}
+   * @request GET:/workout/component/get/{int:workout_component_id}
    * @response `200` `WorkoutComponentGetSchema` Workout Component retrieved successfully
    */
-  componentGetDetail = (
+  componentGetIntWorkoutComponentIdList = (
     workoutComponentId: number,
     params: RequestParams = {},
   ) =>
     this.http.request<WorkoutComponentGetSchema, any>({
-      path: `/workout/component/get/${workoutComponentId}`,
+      path: `/workout/component/get/{int${workoutComponentId}}`,
       method: 'GET',
       format: 'json',
       ...params,
@@ -197,14 +197,14 @@ export class Workout<SecurityDataType = unknown> {
    * @description Delete a workout
    *
    * @tags Workout
-   * @name DeleteDelete
+   * @name DeleteIntWorkoutIdDelete
    * @summary Delete a workout
-   * @request DELETE:/workout/delete/{workout_id}
+   * @request DELETE:/workout/delete/{int:workout_id}
    * @response `204` `void` Workout deleted successfully
    * @response `400` `void` Workout ID is required to delete a workout
    * @response `404` `void` Workout not found
    */
-  deleteDelete = (
+  deleteIntWorkoutIdDelete = (
     workoutId: string,
     query: {
       /** ID of the workout to delete from the database */
@@ -213,7 +213,7 @@ export class Workout<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/workout/delete/${workoutId}`,
+      path: `/workout/delete/{int${workoutId}}`,
       method: 'DELETE',
       query: query,
       ...params,
@@ -222,14 +222,14 @@ export class Workout<SecurityDataType = unknown> {
    * @description Get a workout
    *
    * @tags Workout
-   * @name GetWorkout
+   * @name GetIntWorkoutIdList
    * @summary Get a workout
-   * @request GET:/workout/get/{workout_id}
+   * @request GET:/workout/get/{int:workout_id}
    * @response `200` `WorkoutGetSchema` Workout retrieved successfully
    */
-  getWorkout = (workoutId: number, params: RequestParams = {}) =>
+  getIntWorkoutIdList = (workoutId: number, params: RequestParams = {}) =>
     this.http.request<WorkoutGetSchema, any>({
-      path: `/workout/get/${workoutId}`,
+      path: `/workout/get/{int${workoutId}}`,
       method: 'GET',
       format: 'json',
       ...params,

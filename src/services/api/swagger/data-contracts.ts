@@ -9,10 +9,10 @@
  */
 
 /**
- * BodyBodyStatCreateSchema
+ * BodyStatCreateSchema
  * Validation schema for the BodyStat model.
  */
-export interface BodyBodyStatCreateSchema {
+export interface BodyStatCreateSchema {
   /**
    * Body Stat Id
    * ID for the body body_stat entry
@@ -81,11 +81,11 @@ export enum BodyStatType {
 }
 
 /**
- * BodyBodyStatUpdateSchema
+ * BodyStatUpdateSchema
  * A class representing the schema for updating statistics,
- * inheriting from BodyBodyStatCreateSchema and SyncUpdateSchema.
+ * inheriting from BodyStatCreateSchema and SyncUpdateSchema.
  */
-export interface BodyBodyStatUpdateSchema {
+export interface BodyStatUpdateSchema {
   /**
    * Body Stat Id
    * ID for the body body_stat entry
@@ -1322,7 +1322,7 @@ export enum NutritionType {
 /**
  * NutritionUpdateSchema
  * A class representing the schema for updating nutrition entries,
- * inheriting from BodyBodyStatCreateSchema and SyncUpdateSchema.
+ * inheriting from BodyStatCreateSchema and SyncUpdateSchema.
  */
 export interface NutritionUpdateSchema {
   /**

@@ -24,15 +24,15 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new client_session_event.
+   * @description Create a new ClientSessionEvent.
    *
    * @tags ClientSessionEvent
    * @name CreateCreate
-   * @summary Create a new client_session_event.
+   * @summary Create a new ClientSessionEvent.
    * @request POST:/client_session_event/create
    * @secure
-   * @response `204` `void` Client session events retrieved successfully
-   * @response `400` `void` Query parameter validation error
+   * @response `204` `void` ClientSessionEvent retrieved successfully
+   * @response `400` `void` Bad request
    */
   createCreate = (
     data: ClientSessionEventCreateSchema,
@@ -55,15 +55,16 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a client_session_event.
+   * @description Delete a ClientSessionEvent.
    *
    * @tags ClientSessionEvent
    * @name DeleteStringClientSessionEventIdDelete
-   * @summary Delete a client_session_event.
+   * @summary Delete a ClientSessionEvent.
    * @request DELETE:/client_session_event/delete/{string:client_session_event_id}
    * @secure
-   * @response `204` `void` Client session event deleted successfully
-   * @response `404` `void` Client session event not found
+   * @response `204` `void` ClientSessionEvent deleted successfully
+   * @response `400` `void` ClientSessionEvent validation error
+   * @response `404` `void` ClientSessionEvent not found
    */
   deleteStringClientSessionEventIdDelete = (
     clientSessionEventId: string,
@@ -76,15 +77,15 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get a client_session_event.
+   * @description Get specific ClientSessionEvent for a user.
    *
    * @tags ClientSessionEvent
    * @name GetStringClientSessionEventIdList
-   * @summary Get a client_session_event.
+   * @summary Get a specific ClientSessionEvent for a user.
    * @request GET:/client_session_event/get/{string:client_session_event_id}
    * @secure
-   * @response `200` `ClientSessionEventCreateSchema` Client session event retrieved successfully
-   * @response `404` `void` Client session event not found
+   * @response `200` `ClientSessionEventCreateSchema` ClientSessionEvent for user retrieved successfully
+   * @response `404` `void` ClientSessionEvent not found
    */
   getStringClientSessionEventIdList = (
     clientSessionEventId: string,
@@ -98,14 +99,14 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get client_session_events.
+   * @description Get ClientSessionEvent for a user based on query.
    *
    * @tags ClientSessionEvent
    * @name PostClientSessionEvent
-   * @summary Get client_session_events.
+   * @summary Get ClientSessionEvent for a user based on query.
    * @request POST:/client_session_event/get
    * @secure
-   * @response `204` `(ClientSessionEventCreateSchema)[]` Client session events found successfully
+   * @response `204` `(ClientSessionEventCreateSchema)[]` ClientSessionEvent for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postClientSessionEvent = (data: QuerySchema, params: RequestParams = {}) =>
@@ -119,16 +120,16 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a client_session_event.
+   * @description Update a ClientSessionEvent for a user.
    *
    * @tags ClientSessionEvent
    * @name UpdateUpdate
-   * @summary Update a client_session_event.
+   * @summary Update a ClientSessionEvent for a user.
    * @request PUT:/client_session_event/update
    * @secure
-   * @response `204` `void` s retrieved successfully
-   * @response `400` `void` Client session event validation error
-   * @response `404` `void` Client session event not found
+   * @response `201` `void` ClientSessionEvent updated successfully
+   * @response `400` `void` ClientSessionEvent validation error
+   * @response `404` `void` ClientSessionEvent not found
    */
   updateUpdate = (
     data: ClientSessionEventUpdateSchema,
