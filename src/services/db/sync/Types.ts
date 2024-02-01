@@ -1,5 +1,10 @@
 import {AxiosResponse} from 'axios';
-import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
+import {
+  ClientSessionEventCreateSchema,
+  ClientSessionEventUpdateSchema,
+  SyncOperation,
+  SyncType,
+} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {
   StatCreateSchema,
@@ -27,7 +32,8 @@ export type SyncCreateSchemas =
   | MoodCreateSchema
   | MoodTagCreateSchema
   | MoodTagLinkCreateSchema
-  | NutritionCreateSchema;
+  | NutritionCreateSchema
+  | ClientSessionEventCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -41,7 +47,8 @@ export type SyncUpdateSchemas =
   | MoodUpdateSchema
   | MoodTagUpdateSchema
   | MoodTagLinkUpdateSchema
-  | NutritionUpdateSchema;
+  | NutritionUpdateSchema
+  | ClientSessionEventUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -134,6 +141,10 @@ export interface SyncApiFunctions {
   [syncDbTables.nutritionTable]: SyncTableFunctions<
     NutritionCreateSchema,
     NutritionUpdateSchema
+  >;
+  [syncDbTables.clientSessionEventTable]: SyncTableFunctions<
+    ClientSessionEventCreateSchema,
+    ClientSessionEventUpdateSchema
   >;
 }
 

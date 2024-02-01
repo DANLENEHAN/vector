@@ -6,6 +6,7 @@ import {SwaggerValidationError} from '@services/api/Types';
 import {Keyboard} from 'react-native';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {
@@ -17,6 +18,7 @@ import {
   ProfileStatus,
 } from '@services/api/swagger/data-contracts';
 import {timestampFields} from '@shared/Constants';
+import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 
 /**
  * Interface for the login parameters.
@@ -61,6 +63,7 @@ export const handleLogin = async (
   } else {
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
+    handleClientSessionEvent(ClientSessionEventType.LoggedIn);
     runSyncProcess();
   }
 };
