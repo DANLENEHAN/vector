@@ -27,7 +27,7 @@ export enum otherDbTables {
  * logger.info(`Selected table: ${tableName}`);
  */
 export enum syncDbTables {
-  statTable = 'stat',
+  statTable = 'body_stat',
   moodTable = 'mood',
   moodTagTable = 'mood_tag',
   moodTagLinkTable = 'mood_tag_link',

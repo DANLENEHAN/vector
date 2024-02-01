@@ -1,11 +1,11 @@
 //Mocked Functions
 import {HandleSwaggerValidationError} from '@services/api/Functions';
 // Test Functions
-import {getStats} from '@services/api/blueprints/stat/Api';
+import {getStats} from '@services/api/blueprints/bodyStat/Api';
 
-// Mocking the Stat Api Class
-jest.mock('@services/api/swagger/Stat', () => ({
-  Stat: jest.fn().mockImplementation(() => ({
+// Mocking the BodyStat Api Class
+jest.mock('@services/api/swagger/BodyStat', () => ({
+  BodyStat: jest.fn().mockImplementation(() => ({
     postStat: jest
       .fn()
       // For first test
@@ -20,7 +20,7 @@ jest.mock('@services/api/Functions', () => ({
   HandleSwaggerValidationError: jest.fn(),
 }));
 
-describe('Stat Api Tests', () => {
+describe('Body Stat Api Tests', () => {
   beforeEach(() => {
     // Clears 'toHaveBeenCalledTimes' cache
     jest.clearAllMocks();

@@ -1,7 +1,7 @@
 import {convertStats} from '@utils/Conversion';
 import {
-  StatCreateSchema,
-  StatType,
+  BodyStatCreateSchema,
+  BodyStatType,
   WeightUnit,
 } from '@services/api/swagger/data-contracts';
 
@@ -10,11 +10,11 @@ describe('convertStats', () => {
     // Arrange
     const stats = [
       {
-        stat_type: StatType.Weight,
+        stat_type: BodyStatType.Weight,
         unit: WeightUnit.Kg,
         user_id: 1,
         value: 1,
-      } as StatCreateSchema,
+      } as BodyStatCreateSchema,
     ];
 
     // Act
@@ -26,22 +26,22 @@ describe('convertStats', () => {
     // Assert
     expect(result).toEqual([
       {
-        stat_type: StatType.Weight,
+        stat_type: BodyStatType.Weight,
         unit: WeightUnit.Lbs,
         user_id: 1,
         value: 2.2,
-      } as StatCreateSchema,
+      } as BodyStatCreateSchema,
     ]);
   });
   it('Converts weight from kg to stone', () => {
     // Arrange
     const stats = [
       {
-        stat_type: StatType.Weight,
+        stat_type: BodyStatType.Weight,
         unit: WeightUnit.Kg,
         user_id: 1,
         value: 1,
-      } as StatCreateSchema,
+      } as BodyStatCreateSchema,
     ];
 
     // Act
@@ -53,11 +53,11 @@ describe('convertStats', () => {
     // Assert
     expect(result).toEqual([
       {
-        stat_type: StatType.Weight,
+        stat_type: BodyStatType.Weight,
         unit: WeightUnit.Stone,
         user_id: 1,
         value: 0.16,
-      } as StatCreateSchema,
+      } as BodyStatCreateSchema,
     ]);
   });
 });

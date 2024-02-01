@@ -7,8 +7,8 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {
-  StatCreateSchema,
-  StatUpdateSchema,
+  BodyStatCreateSchema,
+  BodyStatUpdateSchema,
   MoodUpdateSchema,
   MoodCreateSchema,
   MoodTagCreateSchema,
@@ -28,7 +28,7 @@ import {
  * @description A schema for data that can be synchronized during a create operation.
  */
 export type SyncCreateSchemas =
-  | StatCreateSchema
+  | BodyStatCreateSchema
   | MoodCreateSchema
   | MoodTagCreateSchema
   | MoodTagLinkCreateSchema
@@ -43,7 +43,7 @@ export type SyncCreateSchemas =
  * @description A schema for data that can be synchronized during an update operation.
  */
 export type SyncUpdateSchemas =
-  | StatUpdateSchema
+  | BodyStatUpdateSchema
   | MoodUpdateSchema
   | MoodTagUpdateSchema
   | MoodTagLinkUpdateSchema
@@ -123,8 +123,8 @@ export interface SyncTableFunctions<
  */
 export interface SyncApiFunctions {
   [syncDbTables.statTable]: SyncTableFunctions<
-    StatCreateSchema,
-    StatUpdateSchema
+    BodyStatCreateSchema,
+    BodyStatUpdateSchema
   >;
   [syncDbTables.moodTable]: SyncTableFunctions<
     MoodCreateSchema,

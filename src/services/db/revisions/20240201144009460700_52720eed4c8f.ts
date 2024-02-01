@@ -1,6 +1,6 @@
 export const revisionID = '52720eed4c8f';
 
-export const sqlCommands_30012024152302300449_52720eed4c8f: string[] = [
+export const sqlCommands_20240201144009460700_52720eed4c8f: string[] = [
   'ALTER TABLE mood ADD COLUMN value INTEGER NOT NULL;',
   'ALTER TABLE mood ADD COLUMN label VARCHAR(50) NOT NULL;',
   'ALTER TABLE mood DROP COLUMN mood_value;',

@@ -8,14 +8,14 @@ import {fontSizes, margins} from '@styles/Main';
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 // Services
-import {getUserStats} from '@services/api/blueprints/stat/Functions';
+import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 // Utils
 import {convertStats} from '@utils/Conversion';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {
-  StatCreateSchema,
-  StatType,
+  BodyStatCreateSchema,
+  BodyStatType,
   WaterUnit,
 } from '@services/api/swagger/data-contracts';
 
@@ -31,12 +31,13 @@ import {
  * <WaterProgress navigation={navigation}/>
  */
 const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
-  const [data, setData] = useState<StatCreateSchema[]>([]);
+  const [data, setData] = useState<BodyStatCreateSchema[]>([]);
   useEffect(() => {
     const getUserWater = async () => {
       // NOTE: This is a temporary solution until we have a user profile page
       const waterUnitPref = WaterUnit.Ml;
-      let user_water = await getUserStats({statType: StatType.Water});
+      // fix later
+      let user_water = await getUserStats({bodyStatType: BodyStatType.Water});
       let stats: any[] = [];
       if (user_water !== undefined) {
         stats = convertStats({stats: user_water, targetUnit: waterUnitPref});

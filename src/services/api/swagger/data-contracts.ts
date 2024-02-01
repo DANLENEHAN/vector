@@ -9,6 +9,130 @@
  */
 
 /**
+ * BodyBodyStatCreateSchema
+ * Validation schema for the BodyStat model.
+ */
+export interface BodyBodyStatCreateSchema {
+  /**
+   * Body Stat Id
+   * ID for the body body_stat entry
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  body_stat_id: string;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Note
+   * The note of the body body_stat
+   * @default null
+   * @example "Big weight in today!"
+   */
+  note?: string | null;
+  /**
+   * The type of the body_stat
+   * @example "weight"
+   */
+  stat_type: BodyStatType;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Unit
+   * The unit of the body body_stat
+   * @example "kg"
+   */
+  unit: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Id
+   * The ID for the user tracking the body body_stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the body body_stat
+   * @min 0
+   * @example 1
+   */
+  value: number;
+}
+
+/**
+ * BodyStatType
+ * Body BodyStat types.
+ */
+export enum BodyStatType {
+  Height = 'height',
+  Weight = 'weight',
+  BodyMeasurement = 'body_measurement',
+}
+
+/**
+ * BodyBodyStatUpdateSchema
+ * A class representing the schema for updating statistics,
+ * inheriting from BodyBodyStatCreateSchema and SyncUpdateSchema.
+ */
+export interface BodyBodyStatUpdateSchema {
+  /**
+   * Body Stat Id
+   * ID for the body body_stat entry
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  body_stat_id: string;
+  /**
+   * Note
+   * The note of the body body_stat
+   * @default null
+   * @example "Big weight in today!"
+   */
+  note?: string | null;
+  /**
+   * The type of the body_stat
+   * @example "weight"
+   */
+  stat_type: BodyStatType;
+  /**
+   * Unit
+   * The unit of the body body_stat
+   * @example "kg"
+   */
+  unit: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Id
+   * The ID for the user tracking the body body_stat
+   * @example 1
+   */
+  user_id: number;
+  /**
+   * Value
+   * The value of the body body_stat
+   * @min 0
+   * @example 1
+   */
+  value: number;
+}
+
+/**
  * BodypartCreateSchema
  * Schema for validating the full exercise_bodypart schema
  */
@@ -843,7 +967,7 @@ export interface MoodCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the user recording the mood
    * @example 1
    */
   user_id: number;
@@ -933,7 +1057,7 @@ export interface MoodTagCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the body_stat
    * @example 1
    */
   user_id: number;
@@ -1043,7 +1167,7 @@ export interface MoodTagUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the body_stat
    * @example 1
    */
   user_id: number;
@@ -1080,7 +1204,7 @@ export interface MoodUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the user recording the mood
    * @example 1
    */
   user_id: number;
@@ -1169,7 +1293,7 @@ export interface NutritionCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the user recording the nurtition
    * @example 1
    */
   user_id: number;
@@ -1198,7 +1322,7 @@ export enum NutritionType {
 /**
  * NutritionUpdateSchema
  * A class representing the schema for updating nutrition entries,
- * inheriting from StatCreateSchema and SyncUpdateSchema.
+ * inheriting from BodyBodyStatCreateSchema and SyncUpdateSchema.
  */
 export interface NutritionUpdateSchema {
   /**
@@ -1227,7 +1351,7 @@ export interface NutritionUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the stat
+   * The user_id of the user recording the nurtition
    * @example 1
    */
   user_id: number;
@@ -1573,7 +1697,7 @@ export interface QuerySchema {
    * Filters
    * The filters to apply to the query
    * @default {}
-   * @example {"stat_id":{"eq":1}}
+   * @example {"body_stat_id":{"eq":1}}
    */
   filters?: object;
   /**
@@ -2355,136 +2479,6 @@ export enum SeverityLevel {
   Value2 = 2,
   Value3 = 3,
 }
-
-/**
- * StatCreateSchema
- * Validation schema for the Stat model.
- */
-export interface StatCreateSchema {
-  /**
-   * Created At
-   * @format date-time
-   * @example "2024-12-18T12:00:00.000Z"
-   */
-  created_at: string;
-  /**
-   * Note
-   * The note of the stat
-   * @default null
-   * @example "I feel great!"
-   */
-  note?: string | null;
-  /**
-   * Stat Id
-   * Unique uuid for a stat entry
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  stat_id: string;
-  /**
-   * The type of the stat
-   * @example "weight"
-   */
-  stat_type: StatType;
-  /**
-   * Timezone
-   * @example "UTC"
-   */
-  timezone: string;
-  /**
-   * Unit
-   * The unit of the stat
-   * @maxLength 50
-   * @example "kg"
-   */
-  unit: CaloriesUnit | HeightUnit | StepsUnit | WaterUnit | WeightUnit;
-  /**
-   * Updated At
-   * @default null
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at?: string | null;
-  /**
-   * User Id
-   * The user_id of the stat
-   * @example 1
-   */
-  user_id: number;
-  /**
-   * Value
-   * The value of the stat
-   * @min 0
-   * @example 1
-   */
-  value: number;
-}
-
-/**
- * StatType
- * Stat types.
- */
-export enum StatType {
-  Height = 'height',
-  Weight = 'weight',
-  Steps = 'steps',
-}
-
-/**
- * StatUpdateSchema
- * A class representing the schema for updating statistics,
- * inheriting from StatCreateSchema and SyncUpdateSchema.
- */
-export interface StatUpdateSchema {
-  /**
-   * Note
-   * The note of the stat
-   * @default null
-   * @example "I feel great!"
-   */
-  note?: string | null;
-  /**
-   * Stat Id
-   * Unique uuid for a stat entry
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  stat_id: string;
-  /**
-   * The type of the stat
-   * @example "weight"
-   */
-  stat_type: StatType;
-  /**
-   * Unit
-   * The unit of the stat
-   * @maxLength 50
-   * @example "kg"
-   */
-  unit: CaloriesUnit | HeightUnit | StepsUnit | WaterUnit | WeightUnit;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at: string;
-  /**
-   * User Id
-   * The user_id of the stat
-   * @example 1
-   */
-  user_id: number;
-  /**
-   * Value
-   * The value of the stat
-   * @min 0
-   * @example 1
-   */
-  value: number;
-}
-
-/**
- * StepsUnit
- * Steps units.
- */
-export type StepsUnit = 'steps';
 
 /**
  * SubMuscleGroup

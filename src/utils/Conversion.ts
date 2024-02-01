@@ -1,7 +1,7 @@
 // Types
 import {Unit} from 'convert-units';
 import {
-  StatCreateSchema,
+  BodyStatCreateSchema,
   WaterUnit,
   WeightUnit,
 } from '@services/api/swagger/data-contracts';
@@ -16,10 +16,10 @@ const STONE_TO_POUNDS = 14;
  *
  * @interface convertUnitParams
  *
- * @property {StatCreateSchema['unit']} unit  The unit to be converted.
+ * @property {BodyStatCreateSchema['unit']} unit  The unit to be converted.
  */
 interface convertUnitParams {
-  unit: StatCreateSchema['unit'];
+  unit: BodyStatCreateSchema['unit'];
 }
 
 /**
@@ -55,13 +55,13 @@ const convertUnit = ({unit}: convertUnitParams): Unit => {
  * @interface convertValueParams
  *
  * @property {number} value  The value to be converted.
- * @property {StatCreateSchema['unit']} fromUnit  The unit of the value.
- * @property {StatCreateSchema['unit']} toUnit  The target unit.
+ * @property {BodyStatCreateSchema['unit']} fromUnit  The unit of the value.
+ * @property {BodyStatCreateSchema['unit']} toUnit  The target unit.
  */
 interface convertValueParams {
   value: number;
-  fromUnit: StatCreateSchema['unit'];
-  toUnit: StatCreateSchema['unit'];
+  fromUnit: BodyStatCreateSchema['unit'];
+  toUnit: BodyStatCreateSchema['unit'];
 }
 
 /**
@@ -123,12 +123,12 @@ const convertValue = ({
  *
  * @interface unitConversion
  *
- * @property {StatCreateSchema[]} stats  The stats to be converted.
- * @property {StatCreateSchema['unit']} targetUnit  The target unit.
+ * @property {BodyStatCreateSchema[]} stats  The stats to be converted.
+ * @property {BodyStatCreateSchema['unit']} targetUnit  The target unit.
  */
 interface unitConversion {
-  stats: StatCreateSchema[];
-  targetUnit: StatCreateSchema['unit'];
+  stats: BodyStatCreateSchema[];
+  targetUnit: BodyStatCreateSchema['unit'];
 }
 
 /**
@@ -138,28 +138,28 @@ interface unitConversion {
  * @example
  * const stats = [
  *  {
- *   stat_type: StatType.Weight,
+ *   stat_type: BodyStatType.Weight,
  *   unit: WeightUnit.Kg,
  *   user_id: 1,
  *   value: 1,
- *  } as StatCreateSchema,
+ *  } as BodyStatCreateSchema,
  * ];
  * convertStats({stats: stats, targetUnit: WeightUnit.Lbs});
  * // Returns the converted stats.
  *
  * @param {unitConversion} {stats, targetUnit} The stats to be converted and the target unit.
- * @returns {StatCreateSchema[]} The converted stats.
+ * @returns {BodyStatCreateSchema[]} The converted stats.
  */
 export const convertStats = ({
   stats,
   targetUnit,
-}: unitConversion): StatCreateSchema[] => {
-  return stats.map(stat => ({
-    ...stat,
+}: unitConversion): BodyStatCreateSchema[] => {
+  return stats.map(bodyStat => ({
+    ...bodyStat,
     value: Number(
       convertValue({
-        value: stat.value,
-        fromUnit: stat.unit,
+        value: bodyStat.value,
+        fromUnit: bodyStat.unit,
         toUnit: targetUnit,
       }).toFixed(2),
     ),

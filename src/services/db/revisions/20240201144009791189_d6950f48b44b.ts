@@ -1,6 +1,6 @@
 export const revisionID = 'd6950f48b44b';
 
-export const sqlCommands_31012024155638031155_d6950f48b44b: string[] = [
+export const sqlCommands_20240201144009791189_d6950f48b44b: string[] = [
   `CREATE TABLE nutrition (
 	    nutrition_id VARCHAR(36) NOT NULL,
 	    user_id INTEGER NOT NULL,

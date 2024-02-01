@@ -24,9 +24,9 @@ import {
   Keyboard,
 } from 'react-native';
 // Services
-import {createNewStat} from '@services/api/blueprints/stat/Functions';
+import {createNewStat} from '@services/api/blueprints/bodyStat/Functions';
 // Types
-import {StatType, WeightUnit} from '@services/api/swagger/data-contracts';
+import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
 import {ScreenProps} from '@screens/Types';
 // Logger
 import logger from '@utils/Logger';
@@ -66,7 +66,7 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
       value: parsedWeight,
       unitValue: activeUnit.toLowerCase() as WeightUnit,
       navigation: navigation,
-      statType: StatType.Weight,
+      bodyStatType: BodyStatType.Weight,
     });
   };
 
