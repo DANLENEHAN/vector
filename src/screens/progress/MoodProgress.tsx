@@ -51,6 +51,7 @@ const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
 
   useEffect(() => {
     const getUserMoods = async () => {
+      // BROKEN
       let user_mood = await getUserStats({bodyStatType: BodyStatType.Feeling});
 
       setData(user_mood ?? []);

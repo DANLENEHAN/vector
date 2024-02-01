@@ -36,7 +36,7 @@ const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
     const getUserWater = async () => {
       // NOTE: This is a temporary solution until we have a user profile page
       const waterUnitPref = WaterUnit.Ml;
-      // fix later
+      // BROKEN
       let user_water = await getUserStats({bodyStatType: BodyStatType.Water});
       let stats: any[] = [];
       if (user_water !== undefined) {
