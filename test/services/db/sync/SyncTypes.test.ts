@@ -49,7 +49,7 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
 // Mocking the BodyStat Api Class
 jest.mock('@services/api/swagger/BodyStat', () => ({
   BodyStat: jest.fn().mockImplementation(() => ({
-    postStat: jest.fn().mockResolvedValue({
+    postBodyStat: jest.fn().mockResolvedValue({
       // Should be the sampleStat var.
       // Probaly could be if defining mock in test worked...
       data: [

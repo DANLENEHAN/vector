@@ -6,7 +6,7 @@ import {getStats} from '@services/api/blueprints/bodyStat/Api';
 // Mocking the BodyStat Api Class
 jest.mock('@services/api/swagger/BodyStat', () => ({
   BodyStat: jest.fn().mockImplementation(() => ({
-    postStat: jest
+    postBodyStat: jest
       .fn()
       // For first test
       .mockResolvedValueOnce({status: 201, data: {Test: true}})

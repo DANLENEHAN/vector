@@ -5,7 +5,7 @@ import {HandleSwaggerValidationError} from '@services/api/Functions';
 // Components
 import {BodyStat} from '@services/api/swagger/BodyStat';
 // Types
-import {BodyStatCreateSchema} from '@services/api//swagger/data-contracts';
+import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
 
 const BodyStatApi = new BodyStat(api);
