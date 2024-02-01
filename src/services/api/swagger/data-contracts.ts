@@ -57,6 +57,193 @@ export enum CaloriesUnit {
 }
 
 /**
+ * ClientSessionEventCreateSchema
+ * Validation schema for the Plan model.
+ */
+export interface ClientSessionEventCreateSchema {
+  /**
+   * Application Version
+   * The version of the application the client hardware is running
+   * @maxLength 50
+   * @default null
+   * @example "1.0"
+   */
+  application_version?: string;
+  /**
+   * Brand
+   * The brand of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "Apple"
+   */
+  brand?: string;
+  /**
+   * Client Session Event Id
+   * ID of the user triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  client_session_event_id: string;
+  /**
+   * Enums relating to the clients
+   * connecting to the backend.
+   */
+  client_type: ClientType;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Device Id
+   * ID of the client_hardware
+   * @maxLength 100
+   * @default null
+   * @example "iPhone7,2"
+   */
+  device_id?: string;
+  /**
+   * Enum representing client
+   * session event types.
+   */
+  event_type: ClientSessionEventType;
+  /**
+   * System Version
+   * The system version of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "11.0"
+   */
+  system_version?: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Agent
+   * The user agent of the client_hardware
+   * @maxLength 500
+   * @default null
+   * @example "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143"
+   */
+  user_agent?: string;
+  /**
+   * User Id
+   * ID of the user triggering the event
+   * @example 1
+   */
+  user_id: number;
+}
+
+/**
+ * ClientSessionEventType
+ * Enum representing client
+ * session event types.
+ */
+export enum ClientSessionEventType {
+  LoggedIn = 'logged_in',
+  Logout = 'logout',
+  AppOpen = 'app_open',
+  AppClose = 'app_close',
+}
+
+/**
+ * ClientSessionEventUpdateSchema
+ * Validation schema for the Mood model.
+ */
+export interface ClientSessionEventUpdateSchema {
+  /**
+   * Application Version
+   * The version of the application the client hardware is running
+   * @maxLength 50
+   * @default null
+   * @example "1.0"
+   */
+  application_version?: string;
+  /**
+   * Brand
+   * The brand of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "Apple"
+   */
+  brand?: string;
+  /**
+   * Client Session Event Id
+   * ID of the user triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  client_session_event_id: string;
+  /**
+   * Enums relating to the clients
+   * connecting to the backend.
+   */
+  client_type: ClientType;
+  /**
+   * Device Id
+   * ID of the client_hardware
+   * @maxLength 100
+   * @default null
+   * @example "iPhone7,2"
+   */
+  device_id?: string;
+  /**
+   * Enum representing client
+   * session event types.
+   */
+  event_type: ClientSessionEventType;
+  /**
+   * System Version
+   * The system version of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "11.0"
+   */
+  system_version?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Agent
+   * The user agent of the client_hardware
+   * @maxLength 500
+   * @default null
+   * @example "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143"
+   */
+  user_agent?: string;
+  /**
+   * User Id
+   * ID of the user triggering the event
+   * @example 1
+   */
+  user_id: number;
+}
+
+/**
+ * ClientType
+ * Enums relating to the clients
+ * connecting to the backend.
+ */
+export enum ClientType {
+  TRAINER_APP_DEVICE = 'TRAINER_APP_DEVICE',
+  TRAINER_APP_WEB = 'TRAINER_APP_WEB',
+  USER_APP_DEVICE = 'USER_APP_DEVICE',
+  USER_APP_WEB = 'USER_APP_WEB',
+}
+
+/**
  * DateFormat
  * Accepted date formats.
  */
