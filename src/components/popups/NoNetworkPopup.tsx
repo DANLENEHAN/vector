@@ -10,6 +10,7 @@ import {
   marginSizes,
   borderRadius,
   fonts,
+  buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -136,8 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: marginSizes.medium,
   },
   retryButton: {
-    // Override default button width
-    minWidth: 225,
+    ...buttonStyles.medium,
   },
 });
 

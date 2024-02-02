@@ -9,6 +9,7 @@ import {
   marginSizes,
   borderRadius,
   fontSizes,
+  buttonStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.large,
   },
   closeButton: {
-    width: 225,
+    ...buttonStyles.medium,
   },
 });
 
