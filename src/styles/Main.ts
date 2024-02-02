@@ -3,8 +3,12 @@
 */
 
 // Types
-import {ViewStyle} from 'react-native';
-import {FontTypes, FontWeights} from '@styles/Types';
+import {
+  FontTypes,
+  FontWeights,
+  ButtonStyles,
+  LayoutStyles,
+} from '@styles/Types';
 
 const black = '#333333';
 const white = '#FFFFFF';
@@ -114,7 +118,7 @@ export const iconSizes = {
   xxLarge: 35,
 };
 
-export const buttonStyles: {[key: string]: ViewStyle} = {
+export const buttonStyles: ButtonStyles = {
   small: {
     height: 50,
     width: 160,
@@ -129,7 +133,7 @@ export const buttonStyles: {[key: string]: ViewStyle} = {
   },
 };
 
-export const layoutStyles: {[key: string]: ViewStyle} = {
+export const layoutStyles: LayoutStyles = {
   centerContent: {
     alignItems: 'center',
     justifyContent: 'center',

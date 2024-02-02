@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.primary,
     fontSize: fontSizes.title,
-    marginSizes: 10,
+    margin: 10,
   },
 });
 

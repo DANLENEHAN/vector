@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
   },
   numberInput: {
-    marginSizes: marginSizes.small,
+    margin: marginSizes.small,
   },
 });
 

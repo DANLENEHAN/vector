@@ -1,3 +1,5 @@
+import {ViewStyle} from 'react-native';
+
 export type FontTypes =
   | 'ultraLight'
   | 'thin'
@@ -19,3 +21,20 @@ export type FontWeights =
   | 'bold'
   | '800'
   | '900';
+
+export interface LayoutStyles {
+  centerContent: ViewStyle;
+  centerHorizontally: ViewStyle;
+  centerVertically: ViewStyle;
+  absolutePosition: ViewStyle;
+  spaceAroundHorizontal: ViewStyle;
+  spaceBetweenHorizontal: ViewStyle;
+  spaceAroundVertical: ViewStyle;
+  spaceBetweenVertical: ViewStyle;
+}
+
+export interface ButtonStyles {
+  small: ViewStyle;
+  medium: ViewStyle;
+  large: ViewStyle;
+}
