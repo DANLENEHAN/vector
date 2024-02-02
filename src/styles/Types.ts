@@ -23,10 +23,8 @@ export type FontWeights =
   | '900';
 
 export interface LayoutStyles {
-  centerContent: ViewStyle;
   centerHorizontally: ViewStyle;
   centerVertically: ViewStyle;
-  absolutePosition: ViewStyle;
   spaceAroundHorizontal: ViewStyle;
   spaceBetweenHorizontal: ViewStyle;
   spaceAroundVertical: ViewStyle;

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   unitOption: {
     flex: 3,
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
   },
   unitText: {
     fontSize: fontSizes.medium,

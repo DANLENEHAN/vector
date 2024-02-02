@@ -185,7 +185,7 @@ const LoginScreen: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
     paddingLeft: paddingSizes.large,
     paddingRight: paddingSizes.large,
   },

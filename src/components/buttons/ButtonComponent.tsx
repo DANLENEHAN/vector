@@ -77,7 +77,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
     ...buttonStyles.small,
     padding: paddingSizes.small,
     borderRadius: borderRadius.medium,

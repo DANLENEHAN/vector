@@ -134,18 +134,15 @@ export const buttonStyles: ButtonStyles = {
 };
 
 export const layoutStyles: LayoutStyles = {
-  centerContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   centerHorizontally: {
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
   },
   centerVertically: {
+    alignItems: 'center',
     justifyContent: 'center',
-  },
-  absolutePosition: {
-    position: 'absolute',
+    flexDirection: 'column'
   },
   spaceAroundHorizontal: {
     flexDirection: 'row',

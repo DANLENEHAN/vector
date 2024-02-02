@@ -52,15 +52,13 @@ const NumberInput: React.FC<NumberInputProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const handleChange = (text: string) => {
-    let validatedText = text;
-
     // Allow only numbers and, if allowFloat is true, a single dot for float values
     if (allowFloat) {
-      validatedText = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+      text = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
     } else {
-      validatedText = text.replace(/[^0-9]/g, '');
+      text = text.replace(/[^0-9]/g, '');
     }
-    setInputValue(validatedText);
+    setInputValue(text);
   };
 
   const handleFocus = () => {
@@ -90,12 +88,8 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
 const styles = StyleSheet.create({
   textInput: {
-    height: 60,
-    width: 120,
-    textAlign: 'center',
     fontFamily: fonts.primary,
     fontSize: fontSizes.title,
-    margin: 10,
   },
 });
 

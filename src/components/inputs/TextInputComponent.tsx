@@ -19,6 +19,7 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -173,13 +174,10 @@ const TextInputComponent: React.FC<TextInputProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...layoutStyles.centerVertically
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    ...layoutStyles.centerHorizontally,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
     padding: paddingSizes.small,

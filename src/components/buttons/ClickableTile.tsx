@@ -139,16 +139,16 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.medium,
     width: '45%',
     height: 120,
-    ...layoutStyles.spaceBetweenVertical,
+    ...layoutStyles.spaceAroundVertical,
   },
   iconContainer: {
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
   },
   tileLabelContainer: {
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
   },
   tileCurrentValue: {
-    ...layoutStyles.centerContent,
+    ...layoutStyles.centerVertically,
   },
   buttonText: {
     fontSize: fontSizes.medium,
