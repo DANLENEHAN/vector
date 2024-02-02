@@ -137,12 +137,12 @@ export const layoutStyles: LayoutStyles = {
   centerHorizontally: {
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   centerVertically: {
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   spaceAroundHorizontal: {
     flexDirection: 'row',

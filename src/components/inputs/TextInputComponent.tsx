@@ -174,7 +174,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    ...layoutStyles.centerVertically
+    ...layoutStyles.centerVertically,
   },
   inputContainer: {
     ...layoutStyles.centerHorizontally,
