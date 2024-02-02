@@ -131,49 +131,36 @@ export const buttonStyles: {[key: string]: ViewStyle} = {
 
 export const layoutStyles: {[key: string]: ViewStyle} = {
   centerContent: {
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   centerHorizontally: {
-    display: 'flex',
     alignItems: 'center',
   },
   centerVertically: {
-    display: 'flex',
     justifyContent: 'center',
   },
   absolutePosition: {
     position: 'absolute',
   },
   spaceAroundHorizontal: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  spaceBetweenHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   spaceAroundVertical: {
-    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  customFlex: {
-    display: 'flex',
-    flex: 6,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  flexWrap: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-  },
-  defaultFlexContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
+  spaceBetweenVertical: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
 };

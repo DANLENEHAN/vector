@@ -1,8 +1,16 @@
-// React Import
+// React Imports
 import React from 'react';
+
 // Components
-import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+
 // Styling
 import {
   fontSizes,
@@ -14,6 +22,7 @@ import {
   lightThemeColors,
   iconSizes,
   fonts,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -24,7 +33,7 @@ import {useSystem} from '@context/SystemContext';
  *
  * @param {() => void} onPress - Function to be called when the tile is pressed
  * @param {string} label - The label text for the tile
- * @param {object} style - Additional styles for the tile (optional)
+ * @param {ViewStyle} style - Additional styles for the tile (optional)
  * @param {string} icon - The icon for the tile
  * @param {string} backgroundColor - The background color of the tile
  * @param {string} lastTracked - The last tracked date for the tile (optional)
@@ -32,7 +41,7 @@ import {useSystem} from '@context/SystemContext';
 interface ClickableTileProps {
   onPress: () => void;
   label: string;
-  style?: object;
+  style?: ViewStyle;
   icon: string;
   backgroundColor: string;
   lastTracked?: string;
@@ -53,7 +62,7 @@ export interface TileData {
   label: string;
   icon: string;
   backgroundColor?: string;
-  // NOTE: This needs to be changed to the be subtext for the tile.
+  // NOTE: This needs to be changed to be subtext for the tile.
   lastTracked?: string;
   route: string;
 }
@@ -85,49 +94,39 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const subText = lastTracked ? lastTracked : 'Start Tracking!';
+  const displayText = lastTracked ? lastTracked : 'Start Tracking!';
 
   return (
     <TouchableOpacity
       style={[
         styles.tile,
         style,
-        {backgroundColor: backgroundColor, shadowColor: currentTheme.shadow},
+        {backgroundColor, shadowColor: currentTheme.shadow},
       ]}
       onPress={onPress}
       activeOpacity={0.7}>
-      <View style={styles.tileContent}>
-        <View style={styles.tileTop}>
-          <View style={styles.iconContainer}>
-            <Icon
-              solid
-              name={icon}
-              size={iconSizes.xLarge}
-              color={currentTheme.text}
-            />
-          </View>
-        </View>
-        <View style={styles.tileBottom}>
-          <View style={styles.tileBottomContent}>
-            <View style={styles.tileLabelContainer}>
-              <Text style={[styles.tileLabel, {color: currentTheme.text}]}>
-                {label}
-              </Text>
-            </View>
-            <View style={styles.tileCurrentValue}>
-              {lastTracked && (
-                <Text
-                  style={[styles.tileSubtext, {color: currentTheme.lightText}]}>
-                  Last Tracked:
-                </Text>
-              )}
-              <Text
-                style={[styles.tileSubtext, {color: currentTheme.lightText}]}>
-                {subText}
-              </Text>
-            </View>
-          </View>
-        </View>
+      <View style={styles.iconContainer}>
+        <Icon
+          solid
+          name={icon}
+          size={iconSizes.xLarge}
+          color={currentTheme.text}
+        />
+      </View>
+      <View style={styles.tileLabelContainer}>
+        <Text style={[styles.tileLabel, {color: currentTheme.text}]}>
+          {label}
+        </Text>
+      </View>
+      <View style={styles.tileCurrentValue}>
+        {lastTracked && (
+          <Text style={[styles.tileSubtext, {color: currentTheme.lightText}]}>
+            Last Tracked:
+          </Text>
+        )}
+        <Text style={[styles.tileSubtext, {color: currentTheme.lightText}]}>
+          {displayText}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -135,54 +134,25 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
 
 const styles = StyleSheet.create({
   tile: {
-    flexDirection: 'row',
+    marginVertical: marginSizes.small,
     padding: paddingSizes.small,
     borderRadius: borderRadius.medium,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: '45%',
+    width: '45%',
     height: 120,
-    marginVertical: marginSizes.small,
-    shadowRadius: 3,
-    elevation: 3,
-    shadowOpacity: 1.0,
-  },
-  tileContent: {
-    flex: 1,
-    alignItems: 'center',
-  },
-
-  // Left Icon
-  tileTop: {
-    flex: 4,
-    alignItems: 'center',
+    ...layoutStyles.spaceBetweenVertical,
   },
   iconContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'black',
+    ...layoutStyles.centerContent,
   },
-
-  // Right Content
-  tileBottom: {
-    flex: 6,
-    justifyContent: 'center',
+  tileLabelContainer: {
+    ...layoutStyles.centerContent,
   },
-  tileBottomContent: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  tileCurrentValue: {
+    ...layoutStyles.centerContent,
   },
   buttonText: {
     fontSize: fontSizes.medium,
     fontWeight: fontWeights.bold,
-  },
-  tileLabelContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
   },
   tileLabel: {
     fontSize: fontSizes.large,
@@ -193,12 +163,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.small,
     fontWeight: fontWeights.normal,
     fontFamily: fonts.secondary,
-  },
-  tileCurrentValue: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

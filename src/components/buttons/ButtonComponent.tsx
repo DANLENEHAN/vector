@@ -12,6 +12,7 @@ import {
   darkThemeColors,
   lightThemeColors,
   buttonStyles,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -76,11 +77,10 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
+    ...layoutStyles.centerContent,
     ...buttonStyles.small,
     padding: paddingSizes.small,
     borderRadius: borderRadius.medium,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginHorizontal: marginSizes.small,
   },
   buttonText: {
