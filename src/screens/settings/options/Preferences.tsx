@@ -7,7 +7,7 @@ import Header from '@components/navbar/Header';
 // Types
 import {ScreenProps} from '@screens/Types';
 // Theme
-import {lightThemeColors, darkThemeColors, margins} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, marginSizes} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsSection: {
-    marginTop: margins.xxLarge,
+    marginTop: marginSizes.xxLarge,
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',

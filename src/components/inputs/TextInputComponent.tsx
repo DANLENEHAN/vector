@@ -11,8 +11,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
 import {
-  paddings,
-  margins,
+  paddingSizes,
+  marginSizes,
   borderRadius,
   borderWidth,
   darkThemeColors,
@@ -106,11 +106,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
     }
   }, [enableErrors, value, validation]);
 
-  // Fixing the Height of the Error Container and adjusting margins
+  // Fixing the Height of the Error Container and adjusting marginSizes
   // to prevent movement on error popup
   const errorContainerHeight = 16;
-  const defaultMarginBottom = style?.marginBottom || margins.xLarge;
-  const errorContainerMarginTop = margins.xSmall;
+  const defaultMarginBottom = style?.marginBottom || marginSizes.xLarge;
+  const errorContainerMarginTop = marginSizes.xSmall;
   const errorContainerMarginBottom =
     defaultMarginBottom - errorContainerHeight - errorContainerMarginTop;
 
@@ -182,20 +182,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
-    padding: paddings.small,
+    padding: paddingSizes.small,
   },
   input: {
     flex: 1,
-    marginLeft: margins.small,
+    marginLeft: marginSizes.small,
     fontFamily: fonts.primary,
   },
   showHideButton: {
-    paddingRight: paddings.small,
+    paddingRight: paddingSizes.small,
     fontFamily: fonts.primary,
   },
   icon: {
-    paddingRight: paddings.small,
-    paddingLeft: paddings.small,
+    paddingRight: paddingSizes.small,
+    paddingLeft: paddingSizes.small,
   },
 });
 

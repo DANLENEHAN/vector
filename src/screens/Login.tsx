@@ -23,8 +23,10 @@ import {
   fontWeights,
   darkThemeColors,
   lightThemeColors,
-  paddings,
-  margins,
+  paddingSizes,
+  marginSizes,
+  layoutStyles,
+  buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
@@ -183,29 +185,26 @@ const LoginScreen: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft: paddings.large,
-    paddingRight: paddings.large,
+    ...layoutStyles.centerContent,
+    paddingLeft: paddingSizes.large,
+    paddingRight: paddingSizes.large,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginBottom: margins.xxxLarge,
+    marginBottom: marginSizes.xxxLarge,
   },
   title: {
     fontSize: fontSizes.title,
     fontWeight: fontWeights.bold,
-    marginBottom: margins.xxxLarge,
+    marginBottom: marginSizes.xxxLarge,
   },
   createAccButton: {
-    // Override default button width
-    minWidth: 225,
+    ...buttonStyles.medium,
   },
   inputContainers: {
-    marginBottom: margins.xxxLarge,
+    marginBottom: marginSizes.xxxLarge,
   },
 });
 

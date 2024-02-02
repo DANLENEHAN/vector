@@ -11,7 +11,7 @@ import {
   fontWeights,
   lightThemeColors,
   darkThemeColors,
-  paddings,
+  paddingSizes,
   borderWidth,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: fontSizes.medium,
     fontFamily: fonts.primary,
-    padding: paddings.medium,
+    padding: paddingSizes.medium,
     fontWeight: fontWeights.bold,
   },
 });

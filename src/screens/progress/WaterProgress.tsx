@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, margins} from '@styles/Main';
+import {fontSizes, marginSizes} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
   },
   statItem: {
-    marginBottom: margins.small,
+    marginBottom: marginSizes.small,
   },
 });
 

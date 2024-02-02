@@ -8,7 +8,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
+  marginSizes,
 } from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
@@ -252,8 +252,8 @@ const styles = StyleSheet.create({
   unitSelector: {
     height: 25,
     width: '90%',
-    marginTop: margins.xSmall,
-    marginBottom: margins.medium,
+    marginTop: marginSizes.xSmall,
+    marginBottom: marginSizes.medium,
   },
 });
 

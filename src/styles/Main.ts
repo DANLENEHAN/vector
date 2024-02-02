@@ -1,13 +1,16 @@
-// Common styling used throughout the app
+/*
+  Common styling used throughout the app
+*/
+
+// Types
+import {ViewStyle} from 'react-native';
+import {FontTypes, FontWeights} from '@styles/Types';
 
 const black = '#333333';
 const white = '#FFFFFF';
 const blue = '#3498db';
 const purple = '#9b59b6';
 export const gray = 'gray';
-
-export const buttonHeight = 50;
-export const buttonWidth = 160;
 
 export const fonts = {
   primary: 'Montserrat',
@@ -22,28 +25,6 @@ export const fontSizes = {
   xLarge: 24,
   title: 32,
 };
-
-export type FontTypes =
-  | 'ultraLight'
-  | 'thin'
-  | 'light'
-  | 'normal'
-  | 'medium'
-  | 'semiBold'
-  | 'bold'
-  | 'extraBold'
-  | 'ultraBold';
-
-export type FontWeights =
-  | '100'
-  | '200'
-  | '300'
-  | 'normal'
-  | '500'
-  | '600'
-  | 'bold'
-  | '800'
-  | '900';
 
 export const fontWeights: Record<FontTypes, FontWeights> = {
   ultraLight: '100',
@@ -91,7 +72,7 @@ export const darkThemeColors = {
   lowOpacityBackground: 'rgba(255, 255, 255, 0.5)',
 };
 
-export const paddings = {
+export const paddingSizes = {
   xSmall: 5,
   small: 10,
   medium: 15,
@@ -99,7 +80,7 @@ export const paddings = {
   xLarge: 25,
 };
 
-export const margins = {
+export const marginSizes = {
   xSmall: 5,
   small: 10,
   medium: 15,
@@ -131,4 +112,68 @@ export const iconSizes = {
   large: 25,
   xLarge: 30,
   xxLarge: 35,
+};
+
+export const buttonStyles: {[key: string]: ViewStyle} = {
+  small: {
+    height: 50,
+    width: 160,
+  },
+  medium: {
+    width: 225,
+    height: 50,
+  },
+  large: {
+    width: 300,
+    height: 50,
+  },
+};
+
+export const layoutStyles: {[key: string]: ViewStyle} = {
+  centerContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centerHorizontally: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  centerVertically: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  absolutePosition: {
+    position: 'absolute',
+  },
+  spaceAroundHorizontal: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  spaceAroundVertical: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  customFlex: {
+    display: 'flex',
+    flex: 6,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  flexWrap: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  defaultFlexContainer: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
 };

@@ -8,7 +8,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   fontWeights,
-  margins,
+  marginSizes,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
   },
   numberInput: {
-    margin: margins.small,
+    marginSizes: marginSizes.small,
   },
 });
 

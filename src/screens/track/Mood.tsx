@@ -12,7 +12,7 @@ import {ScreenProps} from '@screens/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
+import {marginSizes, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 // Constants
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     flex: 1,
-    marginTop: margins.large,
+    marginTop: marginSizes.large,
   },
   contentSection: {
     flex: 9,
@@ -155,12 +155,12 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center',
     textAlignVertical: 'center',
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
   slider: {
     width: 300,
     height: 40,
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
   moodText: {
     fontSize: fontSizes.xLarge,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
   },
   moodIcon: {
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
 });
 

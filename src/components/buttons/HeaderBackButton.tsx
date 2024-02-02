@@ -10,8 +10,8 @@ import {useSystem} from '@context/SystemContext';
 import {
   lightThemeColors,
   darkThemeColors,
-  margins,
-  paddings,
+  marginSizes,
+  paddingSizes,
   iconSizes,
 } from '@styles/Main';
 
@@ -60,8 +60,8 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
 
 const styles = StyleSheet.create({
   headerBackButton: {
-    marginLeft: margins.small,
-    padding: paddings.small,
+    marginLeft: marginSizes.small,
+    padding: paddingSizes.small,
   },
 });
 

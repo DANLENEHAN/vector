@@ -4,7 +4,7 @@ import React from 'react';
 import {Appearance, View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
 import OptionGroup from '@components/settings/OptionGroup';
-import {margins} from '@styles/Main';
+import {marginSizes} from '@styles/Main';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsSection: {
-    marginTop: margins.xxLarge,
+    marginTop: marginSizes.xxLarge,
     flex: 1,
     width: '100%',
   },

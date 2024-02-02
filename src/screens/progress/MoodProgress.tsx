@@ -7,7 +7,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
+  marginSizes,
 } from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
   unitSelector: {
     height: 25,
     width: '90%',
-    marginTop: margins.xSmall,
-    marginBottom: margins.medium,
+    marginTop: marginSizes.xSmall,
+    marginBottom: marginSizes.medium,
   },
 });
 

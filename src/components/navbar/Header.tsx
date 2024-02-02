@@ -6,7 +6,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
+  marginSizes,
   fontWeights,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -24,7 +24,7 @@ import {ScreenNavigationProp} from '@navigation/Types';
  * @param {ScreenNavigationProp} navigation - Navigation prop for the screen
  * @param {string} label - Label for the header
  * @param {boolean} includeBackArrow - Whether or not to include the back arrow
- * @param {boolean} includeTopMargin - Whether or not to include top margin (If the header is the first item on the screen)
+ * @param {boolean} includeTopMargin - Whether or not to include top marginSizes (If the header is the first item on the screen)
  */
 interface HeaderProps {
   navigation: ScreenNavigationProp;
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
-    marginTop: margins.xSmall,
+    marginTop: marginSizes.xSmall,
     fontWeight: fontWeights.bold,
     alignContent: 'center',
     justifyContent: 'center',

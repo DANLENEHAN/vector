@@ -7,9 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import {
   fontSizes,
   fontWeights,
-  paddings,
+  paddingSizes,
   borderRadius,
-  margins,
+  marginSizes,
   darkThemeColors,
   lightThemeColors,
   iconSizes,
@@ -136,13 +136,13 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
 const styles = StyleSheet.create({
   tile: {
     flexDirection: 'row',
-    padding: paddings.small,
+    padding: paddingSizes.small,
     borderRadius: borderRadius.medium,
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: '45%',
     height: 120,
-    marginVertical: margins.small,
+    marginVertical: marginSizes.small,
     shadowRadius: 3,
     elevation: 3,
     shadowOpacity: 1.0,

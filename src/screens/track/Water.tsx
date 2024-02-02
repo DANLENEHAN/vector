@@ -19,7 +19,7 @@ import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
+import {marginSizes, fontSizes, fonts, fontWeights} from '@styles/Main';
 // Services
 import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
@@ -113,7 +113,7 @@ const WaterScreen: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   headerSection: {
     flex: 1,
-    marginTop: margins.large,
+    marginTop: marginSizes.large,
   },
   contentSection: {
     flex: 9,
@@ -127,16 +127,16 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     textAlign: 'center',
     textAlignVertical: 'center',
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
   waterIcon: {
-    marginBottom: margins.medium,
+    marginBottom: marginSizes.medium,
   },
   numberInput: {
-    marginBottom: margins.medium,
+    marginBottom: marginSizes.medium,
   },
   unitSelector: {
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
 });
 

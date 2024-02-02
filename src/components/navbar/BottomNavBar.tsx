@@ -8,7 +8,7 @@ import {BottomBarProps} from '@components/navbar/Types';
 import {
   lightThemeColors,
   darkThemeColors,
-  paddings,
+  paddingSizes,
   borderWidth,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -54,8 +54,8 @@ const BottomNavBar: React.FC<BottomBarProps> = ({
           shadowColor: currentTheme.shadow,
           borderTopColor: currentTheme.borders,
           paddingBottom: insets.bottom,
-          paddingLeft: paddings.xSmall,
-          paddingRight: paddings.xSmall,
+          paddingLeft: paddingSizes.xSmall,
+          paddingRight: paddingSizes.xSmall,
           height: 55 + insets.bottom,
         },
       ]}>
