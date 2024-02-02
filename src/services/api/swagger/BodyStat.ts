@@ -66,11 +66,7 @@ export class BodyStat<SecurityDataType = unknown> {
    * @response `400` `void` BodyStat validation error
    * @response `404` `void` BodyStat not found
    */
-  deleteStringObjectIdDelete = (
-    bodyStatId: string,
-    objectId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/body_stat/delete/{string${objectId}}`,
       method: 'DELETE',
@@ -88,11 +84,7 @@ export class BodyStat<SecurityDataType = unknown> {
    * @response `200` `BodyStatCreateSchema` BodyStat for user retrieved successfully
    * @response `404` `void` BodyStat not found
    */
-  getStringObjectIdList = (
-    bodyStatId: string,
-    objectId: string,
-    params: RequestParams = {},
-  ) =>
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
     this.http.request<BodyStatCreateSchema, void>({
       path: `/body_stat/get/{string${objectId}}`,
       method: 'GET',

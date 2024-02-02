@@ -58,17 +58,17 @@ export class Mood<SecurityDataType = unknown> {
    * @description Delete a Mood.
    *
    * @tags Mood
-   * @name DeleteStringMoodIdDelete
+   * @name DeleteStringObjectIdDelete
    * @summary Delete a Mood.
-   * @request DELETE:/mood/delete/{string:mood_id}
+   * @request DELETE:/mood/delete/{string:object_id}
    * @secure
    * @response `204` `void` Mood deleted successfully
    * @response `400` `void` Mood validation error
    * @response `404` `void` Mood not found
    */
-  deleteStringMoodIdDelete = (moodId: string, params: RequestParams = {}) =>
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/mood/delete/{string${moodId}}`,
+      path: `/mood/delete/{string${objectId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -77,16 +77,16 @@ export class Mood<SecurityDataType = unknown> {
    * @description Get specific Mood for a user.
    *
    * @tags Mood
-   * @name GetStringMoodIdList
+   * @name GetStringObjectIdList
    * @summary Get a specific Mood for a user.
-   * @request GET:/mood/get/{string:mood_id}
+   * @request GET:/mood/get/{string:object_id}
    * @secure
    * @response `200` `MoodCreateSchema` Mood for user retrieved successfully
    * @response `404` `void` Mood not found
    */
-  getStringMoodIdList = (moodId: string, params: RequestParams = {}) =>
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
     this.http.request<MoodCreateSchema, void>({
-      path: `/mood/get/{string${moodId}}`,
+      path: `/mood/get/{string${objectId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
