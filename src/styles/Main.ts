@@ -8,6 +8,7 @@ import {
   FontWeights,
   ButtonStyles,
   LayoutStyles,
+  TitleStyles,
 } from '@styles/Types';
 
 const black = '#333333';
@@ -133,6 +134,14 @@ export const buttonStyles: ButtonStyles = {
   },
 };
 
+export const titleStyles: TitleStyles = {
+  titleOne: {
+    fontSize: fontSizes.xLarge,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.bold,
+  },
+};
+
 export const layoutStyles: LayoutStyles = {
   centerHorizontally: {
     alignItems: 'center',
@@ -161,6 +170,16 @@ export const layoutStyles: LayoutStyles = {
   },
   spaceBetweenVertical: {
     flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  flexStartHorizontal: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  flexStartVertical: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },

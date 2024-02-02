@@ -51,12 +51,7 @@ const WaterProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label="Water"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="Water" navigation={navigation} includeBackArrow={true} />
       <View style={styles.content}>
         <ScrollView>
           {data.map(item => (

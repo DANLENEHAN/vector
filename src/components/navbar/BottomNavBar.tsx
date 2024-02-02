@@ -10,6 +10,7 @@ import {
   darkThemeColors,
   paddingSizes,
   borderWidth,
+  layoutStyles,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSystem} from '@context/SystemContext';
@@ -54,8 +55,6 @@ const BottomNavBar: React.FC<BottomBarProps> = ({
           shadowColor: currentTheme.shadow,
           borderTopColor: currentTheme.borders,
           paddingBottom: insets.bottom,
-          paddingLeft: paddingSizes.xSmall,
-          paddingRight: paddingSizes.xSmall,
           height: 55 + insets.bottom,
         },
       ]}>
@@ -95,15 +94,15 @@ const BottomNavBar: React.FC<BottomBarProps> = ({
 
 const styles = StyleSheet.create({
   navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    // Added shadow
+    ...layoutStyles.spaceAroundHorizontal,
+    paddingLeft: paddingSizes.xSmall,
+    paddingRight: paddingSizes.xSmall,
     borderTopWidth: borderWidth.small,
+    // Shadow
     shadowOffset: {width: 0, height: -2},
     shadowRadius: 5,
     shadowOpacity: 1.0,
-    elevation: 5, // for android shadow
+    elevation: 5, // for Android shadow
   },
 });
 

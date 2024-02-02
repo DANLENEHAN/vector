@@ -62,7 +62,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({
           />
           <SettingsOption
             icon="question"
-            onPress={() => logger.log('Pressed Support')}
+            onPress={() => logger.info('Pressed Support')}
             label="Support"
             caret={true}
           />

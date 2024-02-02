@@ -49,7 +49,6 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
         label="Health & Wellness"
         navigation={navigation}
         includeBackArrow={false}
-        includeTopMargin={false}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.content} testID="wellness-progress-screen">

@@ -64,11 +64,7 @@ const WaterScreen: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header navigation={navigation} includeBackArrow={true} />
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.contentSection}>
           <Text

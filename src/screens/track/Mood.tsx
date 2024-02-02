@@ -91,12 +91,7 @@ const MoodScreen: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label=""
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="" navigation={navigation} includeBackArrow={true} />
       <View style={styles.contentSection}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
           What's your mood?

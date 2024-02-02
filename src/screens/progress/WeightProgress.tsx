@@ -195,12 +195,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label="Weight"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="Weight" navigation={navigation} includeBackArrow={true} />
 
       <View style={styles.content}>
         <UnitSelector

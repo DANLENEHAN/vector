@@ -63,12 +63,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label="Mood"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="Mood" navigation={navigation} includeBackArrow={true} />
       <View style={styles.content}>
         <UnitSelector
           units={Object.values(dateOptions)}

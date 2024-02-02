@@ -1,4 +1,5 @@
 import {ViewStyle} from 'react-native';
+import {TextStyle} from 'react-native';
 
 export type FontTypes =
   | 'ultraLight'
@@ -29,10 +30,16 @@ export interface LayoutStyles {
   spaceBetweenHorizontal: ViewStyle;
   spaceAroundVertical: ViewStyle;
   spaceBetweenVertical: ViewStyle;
+  flexStartHorizontal: ViewStyle;
+  flexStartVertical: ViewStyle;
 }
 
 export interface ButtonStyles {
   small: ViewStyle;
   medium: ViewStyle;
   large: ViewStyle;
+}
+
+export interface TitleStyles {
+  titleOne: TextStyle;
 }

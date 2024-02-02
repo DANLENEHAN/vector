@@ -46,7 +46,6 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({
         label="Nutrition"
         navigation={navigation}
         includeBackArrow={false}
-        includeTopMargin={false}
       />
 
       <ScrollView style={styles.scrollView}>
