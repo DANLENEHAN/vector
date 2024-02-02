@@ -29,7 +29,10 @@ type AnimatedTextProps = Omit<TextInputProps, 'editable' | 'value'> & {
  * @param {Object} props - Component Animated Text Props
  * @returns {React.FC<AnimatedTextProps>} - React Component
  */
-export function AnimatedText({text, ...rest}: AnimatedTextProps) {
+export function AnimatedText({
+  text,
+  ...rest
+}: AnimatedTextProps): React.ReactElement {
   const animProps = useAnimatedProps(() => {
     return {
       text: text.value,

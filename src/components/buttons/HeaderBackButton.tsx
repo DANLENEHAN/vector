@@ -36,8 +36,10 @@ interface HeaderBackButtonProps {
  * @param {Object} props - Component props
  * @returns {React.FC<HeaderBackButtonProps>} - React Component
  */
-const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({navigation}) => {
-  //Setup theme for the component
+const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
+  navigation,
+}: HeaderBackButtonProps): React.ReactElement<HeaderBackButtonProps> => {
+  // Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (

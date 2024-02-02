@@ -33,7 +33,9 @@ interface ScreenWrapperProps {
  * @param {Object} props - Component Screen Wrapper Props
  * @returns {React.FC<ScreenWrapperProps>} - React Component
  */
-const ScreenWrapper: React.FC<ScreenWrapperProps> = ({children}) => {
+const ScreenWrapper: React.FC<ScreenWrapperProps> = ({
+  children,
+}: ScreenWrapperProps): React.ReactElement<ScreenWrapperProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const insets = useSafeAreaInsets();

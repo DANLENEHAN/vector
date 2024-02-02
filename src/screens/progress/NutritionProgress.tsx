@@ -32,7 +32,9 @@ const tile_data: TileData[] = [
  * @example
  * <NutritionProgressScreen navigation={navigation}/>
  */
-const NutritionProgressScreen: React.FC<ScreenProps> = ({navigation}) => {
+const NutritionProgressScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

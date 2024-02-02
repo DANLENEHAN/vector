@@ -44,6 +44,18 @@ interface SystemContextType {
   migrationsComplete: boolean;
 }
 
+/**
+ * Defines the props for the SystemProvider component.
+ *
+ * @interface SystemProviderProps
+ *
+ * @param {ReactNode} children - The child components to be wrapped by the SystemProvider.
+ *                               These are the components that will have access to the system-wide variables.
+ */
+interface SystemProviderProps {
+  children: ReactNode;
+}
+
 const SystemContext = createContext<SystemContextType>(null!);
 export const useSystem = () => useContext(SystemContext);
 
@@ -61,7 +73,9 @@ export const useSystem = () => useContext(SystemContext);
  * @param {ReactNode} children - The children components to be wrapped by the provider
  * @returns {React.FC<{children: ReactNode}>} - React Component
  */
-export const SystemProvider: React.FC<{children: ReactNode}> = ({children}) => {
+export const SystemProvider: React.FC<{children: ReactNode}> = ({
+  children,
+}: SystemProviderProps): React.ReactElement<SystemProviderProps> => {
   // useState will not reset the variables on re-render
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [userPreferenceTheme, setUserPreferenceTheme] = useState<

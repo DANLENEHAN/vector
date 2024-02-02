@@ -25,7 +25,9 @@ import logger from '@utils/Logger';
  * @example
  * <SettingsScreen navigation={navigation}/>
  */
-const SettingsScreen: React.FC<ScreenProps> = ({navigation}) => {
+const SettingsScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

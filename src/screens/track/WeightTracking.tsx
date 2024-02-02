@@ -42,7 +42,9 @@ import logger from '@utils/Logger';
  * @example
  * <WeightTracking navigation={navigation}/>
  */
-const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
+const WeightTracking: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -73,7 +75,6 @@ const WeightTracking: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <Header
-        label=""
         navigation={navigation}
         includeBackArrow={true}
         includeTopMargin={true}

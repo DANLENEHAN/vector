@@ -38,7 +38,10 @@ const hiddenRoutes = ['Settings', 'Search'];
  * @param {Object} props - Component Props
  * @returns {React.FC<BottomBarProps>} - React Component
  */
-const BottomNavBar: React.FC<BottomBarProps> = ({navigation, state}) => {
+const BottomNavBar: React.FC<BottomBarProps> = ({
+  navigation,
+  state,
+}: BottomBarProps): React.ReactElement<BottomBarProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const insets = useSafeAreaInsets();

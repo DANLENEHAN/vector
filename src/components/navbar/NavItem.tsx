@@ -53,7 +53,7 @@ const NavItem: React.FC<NavItemProps> = ({
   label,
   onPress,
   isActive = false,
-}) => {
+}: NavItemProps): React.ReactElement<NavItemProps> => {
   //Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

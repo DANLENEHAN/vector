@@ -30,7 +30,9 @@ import {
  * @example
  * <WaterProgress navigation={navigation}/>
  */
-const WaterProgress: React.FC<ScreenProps> = ({navigation}) => {
+const WaterProgress: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [data, setData] = useState<BodyStatCreateSchema[]>([]);
   useEffect(() => {
     const getUserWater = async () => {

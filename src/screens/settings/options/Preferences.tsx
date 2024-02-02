@@ -22,7 +22,9 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
  * @example
  * <Preferences navigation={navigation}/>
  */
-const Preferences: React.FC<ScreenProps> = ({navigation}) => {
+const Preferences: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (

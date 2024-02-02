@@ -94,7 +94,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
   averageLabel,
   averageValue,
   unit,
-}) => {
+}: LineGraphProps): React.ReactElement<LineGraphProps> => {
   //// Variables
   // Needed for chart press state
   const INIT_STATE = {x: 0, y: {value: 0}} as const;

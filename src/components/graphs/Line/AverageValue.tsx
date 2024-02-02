@@ -48,7 +48,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
   currentValue,
   currentDate,
   unit,
-}) => {
+}: AverageValueText): React.ReactElement<AverageValueText> => {
   // Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -108,7 +108,6 @@ export const AverageValueText: React.FC<AverageValueText> = ({
 
 const styles = StyleSheet.create({
   chartView: {
-    //height: 200,
     flex: 1,
   },
   averageLabel: {
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
   averageWeightContainer: {
     width: '90%',
     height: 100,
-    //backgroundColor: 'red',
   },
   averageWeightLabel: {
     fontSize: fontSizes.medium,

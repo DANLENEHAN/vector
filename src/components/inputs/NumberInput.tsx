@@ -48,7 +48,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   inputValue,
   setInputValue,
   style,
-}) => {
+}: NumberInputProps): React.ReactElement<NumberInputProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const handleChange = (text: string) => {

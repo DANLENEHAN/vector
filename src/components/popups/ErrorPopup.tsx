@@ -19,7 +19,11 @@ interface ErrorPopupProps {
   onClose: () => void;
 }
 
-const ErrorPopup: React.FC<ErrorPopupProps> = ({visible, message, onClose}) => {
+const ErrorPopup: React.FC<ErrorPopupProps> = ({
+  visible,
+  message,
+  onClose,
+}: ErrorPopupProps): React.ReactElement<ErrorPopupProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (

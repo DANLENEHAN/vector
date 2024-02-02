@@ -28,7 +28,7 @@ import NetInfo from '@react-native-community/netinfo';
  * @example
  * <NoNetworkPopup />
  */
-const NoNetworkPopup: React.FC = () => {
+const NoNetworkPopup: React.FC = (): React.ReactElement => {
   const {theme, isConnected} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

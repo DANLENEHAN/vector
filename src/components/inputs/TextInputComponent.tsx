@@ -84,7 +84,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   enableErrors = false,
   secureTextEntry = false,
   autoCapitalize = false,
-}) => {
+}: TextInputProps): React.ReactElement<TextInputProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [isSecureEntry, setIsSecureEntry] = useState<boolean>(secureTextEntry);

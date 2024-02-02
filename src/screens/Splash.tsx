@@ -39,7 +39,9 @@ import {runSyncProcess} from '@services/db/sync/SyncProcess';
  * @example
  * <Splash navigation={navigation} />
  */
-const Splash: React.FC<ScreenProps> = ({navigation}) => {
+const Splash: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {isConnected, systemVarsLoaded, migrationsComplete, theme} =
     useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

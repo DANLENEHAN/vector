@@ -28,7 +28,7 @@ import {ScreenNavigationProp} from '@navigation/Types';
  */
 interface HeaderProps {
   navigation: ScreenNavigationProp;
-  label: string;
+  label?: string;
   includeBackArrow: boolean;
   includeTopMargin: boolean;
 }
@@ -50,9 +50,9 @@ interface HeaderProps {
  */
 const Header: React.FC<HeaderProps> = ({
   navigation,
-  label,
+  label = '',
   includeBackArrow,
-}) => {
+}: HeaderProps): React.ReactElement<HeaderProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (

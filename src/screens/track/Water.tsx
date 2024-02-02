@@ -37,7 +37,9 @@ import logger from '@utils/Logger';
  * @example
  * <WaterScreen navigation={navigation}/>
  */
-const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
+const WaterScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -63,7 +65,6 @@ const WaterScreen: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <ScreenWrapper>
       <Header
-        label=""
         navigation={navigation}
         includeBackArrow={true}
         includeTopMargin={true}
