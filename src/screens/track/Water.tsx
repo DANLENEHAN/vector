@@ -1,7 +1,13 @@
 // React imports
 import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // Components
-import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import UnitSelector from '@components/buttons/UnitSelector';
@@ -61,38 +67,40 @@ const WaterScreen: React.FC<ScreenProps> = ({
       <View style={styles.headerSection}>
         <Header navigation={navigation} includeBackArrow={true} />
       </View>
-      <View style={styles.content}>
-        <Text
-          style={[
-            styles.title,
-            {
-              color: currentTheme.text,
-            },
-          ]}>
-          Hydration is key!
-        </Text>
-        <Icon
-          name={'glass-water'}
-          solid
-          size={250}
-          color={currentTheme.primary}
-        />
-        <NumberInput
-          allowFloat={false}
-          inputValue={waterValue}
-          setInputValue={setWaterValue}
-        />
-        <UnitSelector
-          units={Object.values(WaterUnit)}
-          activeUnit={activeUnit}
-          setActiveUnit={setActiveUnit}
-        />
-        <ButtonComponent
-          text="Track"
-          disabled={waterValue === '0' || waterValue === ''}
-          onPress={handleSavedWater}
-        />
-      </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.content}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: currentTheme.text,
+              },
+            ]}>
+            Hydration is key!
+          </Text>
+          <Icon
+            name={'glass-water'}
+            solid
+            size={250}
+            color={currentTheme.primary}
+          />
+          <NumberInput
+            allowFloat={false}
+            inputValue={waterValue}
+            setInputValue={setWaterValue}
+          />
+          <UnitSelector
+            units={Object.values(WaterUnit)}
+            activeUnit={activeUnit}
+            setActiveUnit={setActiveUnit}
+          />
+          <ButtonComponent
+            text="Track"
+            disabled={waterValue === '0' || waterValue === ''}
+            onPress={handleSavedWater}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </ScreenWrapper>
   );
 };

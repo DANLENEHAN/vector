@@ -16,7 +16,13 @@ import Header from '@components/navbar/Header';
 import UnitSelector from '@components/buttons/UnitSelector';
 import NumberInput from '@components/inputs/NumberInput';
 import ButtonComponent from '@components/buttons/ButtonComponent';
-import {View, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // Services
 import {createNewStat} from '@services/api/blueprints/bodyStat/Functions';
 // Types
@@ -71,28 +77,30 @@ const WeightTracking: React.FC<ScreenProps> = ({
       <View style={styles.headerSection}>
         <Header navigation={navigation} includeBackArrow={true} />
       </View>
-      <View style={styles.content}>
-        <Text style={[styles.title, {color: currentTheme.text}]}>
-          What is your current weight?
-        </Text>
-        <NumberInput
-          allowFloat={true}
-          inputValue={weightValue}
-          setInputValue={setWeightValue}
-        />
-        <UnitSelector
-          units={Object.values(WeightUnit)}
-          activeUnit={activeUnit}
-          setActiveUnit={setActiveUnit}
-        />
-        <ButtonComponent
-          text="Track"
-          disabled={
-            weightValue === '0' || weightValue === '' || weightValue === '0.0'
-          }
-          onPress={handleSaveWeight}
-        />
-      </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.content}>
+          <Text style={[styles.title, {color: currentTheme.text}]}>
+            What is your current weight?
+          </Text>
+          <NumberInput
+            allowFloat={true}
+            inputValue={weightValue}
+            setInputValue={setWeightValue}
+          />
+          <UnitSelector
+            units={Object.values(WeightUnit)}
+            activeUnit={activeUnit}
+            setActiveUnit={setActiveUnit}
+          />
+          <ButtonComponent
+            text="Track"
+            disabled={
+              weightValue === '0' || weightValue === '' || weightValue === '0.0'
+            }
+            onPress={handleSaveWeight}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </ScreenWrapper>
   );
 };

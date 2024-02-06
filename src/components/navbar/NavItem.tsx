@@ -13,6 +13,7 @@ import {
   darkThemeColors,
   iconSizes,
   fontWeights,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -85,8 +86,7 @@ const NavItem: React.FC<NavItemProps> = ({
 const styles = StyleSheet.create({
   navItem: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
     padding: paddingSizes.xSmall,
     paddingBottom: paddingSizes.xSmall,
     marginLeft: marginSizes.xSmall,
