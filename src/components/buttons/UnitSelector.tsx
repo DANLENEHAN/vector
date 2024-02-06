@@ -89,11 +89,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: '80%',
     borderRadius: borderRadius.medium,
-    flexDirection: 'row',
+    ...layoutStyles.flexStretchHorizontal,
   },
   unitOption: {
-    flex: 3,
-    ...layoutStyles.centerVertically,
+    flex: 1,
+    ...layoutStyles.centerHorizontally,
   },
   unitText: {
     fontSize: fontSizes.medium,

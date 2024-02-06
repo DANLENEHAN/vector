@@ -32,6 +32,8 @@ export interface LayoutStyles {
   spaceBetweenVertical: ViewStyle;
   flexStartHorizontal: ViewStyle;
   flexStartVertical: ViewStyle;
+  flexStretchVertical: ViewStyle;
+  flexStretchHorizontal: ViewStyle;
 }
 
 export interface ButtonStyles {

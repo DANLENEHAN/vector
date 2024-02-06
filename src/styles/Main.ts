@@ -188,4 +188,14 @@ export const layoutStyles: LayoutStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  flexStretchVertical: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  flexStretchHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
 };
