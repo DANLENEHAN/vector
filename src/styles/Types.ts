@@ -41,5 +41,6 @@ export interface ButtonStyles {
 }
 
 export interface TitleStyles {
-  titleOne: TextStyle;
+  titlePrimary: TextStyle;
+  titleSecondary: TextStyle;
 }

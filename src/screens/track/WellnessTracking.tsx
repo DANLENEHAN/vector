@@ -1,11 +1,16 @@
 // React imports
 import React from 'react';
+import {Text} from 'react-native';
 // Styling
-import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  layoutStyles,
+  titleStyles,
+} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
-import Header from '@components/navbar/Header';
 import {View, StyleSheet, ScrollView} from 'react-native';
 // Types
 import {ScreenProps} from '@screens/Types';
@@ -41,21 +46,21 @@ const WellnessTracking: React.FC<ScreenProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View
-      style={[styles.wrapper, {backgroundColor: currentTheme.background}]}
+      style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="wellness-tracking-screen">
-      <Header
-        label="Health & Wellness"
-        navigation={navigation}
-        includeBackArrow={false}
-      />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.content}>
+      <View style={styles.header}>
+        <Text style={[titleStyles.titlePrimary, {color: currentTheme.text}]}>
+          Health & Wellness
+        </Text>
+      </View>
+      <View style={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scroll}>
           {tile_data.map((tile, index) => (
             <ClickableTile
               key={index}
               onPress={() =>
                 navigation.navigate(
-                  tile.route as 'WeightTracking' | 'MoodTracking',
+                  tile.route as 'WeightProgress' | 'MoodProgress',
                 )
               }
               label={tile.label}
@@ -64,25 +69,25 @@ const WellnessTracking: React.FC<ScreenProps> = ({
               backgroundColor={tile.backgroundColor ?? currentTheme.primary}
             />
           ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  mainContainer: {
     flex: 1,
   },
-  content: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-  },
-  scrollView: {
+  header: {
     flex: 1,
-    width: '100%',
+    ...layoutStyles.centerVertically,
+  },
+  scrollContainer: {
+    flex: 9,
+  },
+  scroll: {
+    ...layoutStyles.spaceAroundHorizontal,
   },
 });
 

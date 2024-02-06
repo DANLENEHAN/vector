@@ -4,11 +4,11 @@ import React, {useState} from 'react';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {
-  fontSizes,
   lightThemeColors,
   darkThemeColors,
-  fontWeights,
   marginSizes,
+  layoutStyles,
+  titleStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -16,13 +16,7 @@ import Header from '@components/navbar/Header';
 import UnitSelector from '@components/buttons/UnitSelector';
 import NumberInput from '@components/inputs/NumberInput';
 import ButtonComponent from '@components/buttons/ButtonComponent';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 // Services
 import {createNewStat} from '@services/api/blueprints/bodyStat/Functions';
 // Types
@@ -74,70 +68,46 @@ const WeightTracking: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header navigation={navigation} includeBackArrow={true} />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.content}>
-          <View style={styles.titleContainer}>
-            <Text style={[styles.title, {color: currentTheme.text}]}>
-              What is your current weight?
-            </Text>
-          </View>
-
-          <View style={styles.trackContainer}>
-            <NumberInput
-              style={styles.numberInput}
-              allowFloat={true}
-              inputValue={weightValue}
-              setInputValue={setWeightValue}
-            />
-            <UnitSelector
-              units={Object.values(WeightUnit)}
-              activeUnit={activeUnit}
-              setActiveUnit={setActiveUnit}
-            />
-            <ButtonComponent
-              text="Track"
-              disabled={
-                weightValue === '0' ||
-                weightValue === '' ||
-                weightValue === '0.0'
-              }
-              onPress={handleSaveWeight}
-            />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.headerSection}>
+        <Header navigation={navigation} includeBackArrow={true} />
+      </View>
+      <View style={styles.content}>
+        <Text style={[styles.title, {color: currentTheme.text}]}>
+          What is your current weight?
+        </Text>
+        <NumberInput
+          allowFloat={true}
+          inputValue={weightValue}
+          setInputValue={setWeightValue}
+        />
+        <UnitSelector
+          units={Object.values(WeightUnit)}
+          activeUnit={activeUnit}
+          setActiveUnit={setActiveUnit}
+        />
+        <ButtonComponent
+          text="Track"
+          disabled={
+            weightValue === '0' || weightValue === '' || weightValue === '0.0'
+          }
+          onPress={handleSaveWeight}
+        />
+      </View>
     </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: fontSizes.xLarge,
-    fontWeight: fontWeights.bold,
-  },
-  titleContainer: {
-    flex: 2,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  trackContainer: {
-    flex: 8,
-    width: '100%',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
+  headerSection: {
+    flex: 1,
   },
   content: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
+    flex: 9,
+    ...layoutStyles.spaceAroundVertical,
   },
-  numberInput: {
-    margin: marginSizes.small,
+  title: {
+    ...titleStyles.titleSecondary,
+    marginBottom: marginSizes.xxLarge,
   },
 });
 

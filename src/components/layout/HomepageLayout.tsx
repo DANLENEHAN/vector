@@ -2,14 +2,11 @@
 import React from 'react';
 // Components
 import TopNavBar from '@components/navbar/TopNavBar';
-import {View} from 'react-native';
 // Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeParamList, RootStackParamList} from '@navigation/Types';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
-// Styling
-import {layoutStyles} from '@styles/Main';
 
 /**
  * HomepageLayout
@@ -45,10 +42,8 @@ const HomepageLayout: React.FC<HomepageLayoutProps> = ({
 }: HomepageLayoutProps): React.ReactElement<HomepageLayoutProps> => {
   return (
     <ScreenWrapper>
-      <View style={layoutStyles.centerVertically}>
-        {<TopNavBar navigation={navigation} />}
-        {children}
-      </View>
+      {<TopNavBar navigation={navigation} />}
+      {children}
     </ScreenWrapper>
   );
 };

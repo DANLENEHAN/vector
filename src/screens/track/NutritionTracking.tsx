@@ -47,7 +47,9 @@ const NutritionTracking: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="nutrition-tracking-screen">
       <View style={styles.header}>
-        <Text style={titleStyles.titleOne}>Nutrition</Text>
+        <Text style={[titleStyles.titlePrimary, {color: currentTheme.text}]}>
+          Nutrition
+        </Text>
       </View>
       <View style={styles.scrollContainer}>
         <ScrollView contentContainerStyle={styles.scroll}>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 9,
   },
   scroll: {
-    ...layoutStyles.centerVertically,
+    ...layoutStyles.spaceAroundHorizontal,
   },
 });
 

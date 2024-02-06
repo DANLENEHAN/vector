@@ -1,15 +1,19 @@
 // React imports
 import React from 'react';
 // Styling
-import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  layoutStyles,
+  titleStyles,
+} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
-import Header from '@components/navbar/Header';
 import {ScreenProps} from '@screens/Types';
 import {TileData} from '@components/buttons/ClickableTile';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, Text} from 'react-native';
 
 // Data
 const tile_data: TileData[] = [
@@ -44,14 +48,16 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View style={[styles.wrapper, {backgroundColor: currentTheme.background}]}>
-      <Header
-        label="Health & Wellness"
-        navigation={navigation}
-        includeBackArrow={false}
-      />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.content} testID="wellness-progress-screen">
+    <View
+      style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
+      testID="wellness-progress-screen">
+      <View style={styles.header}>
+        <Text style={[titleStyles.titlePrimary, {color: currentTheme.text}]}>
+          Health & Wellness
+        </Text>
+      </View>
+      <View style={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scroll}>
           {tile_data.map((tile, index) => (
             <ClickableTile
               key={index}
@@ -66,25 +72,25 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
               backgroundColor={tile.backgroundColor ?? currentTheme.primary}
             />
           ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  mainContainer: {
     flex: 1,
   },
-  content: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-  },
-  scrollView: {
+  header: {
     flex: 1,
-    width: '100%',
+    ...layoutStyles.centerVertically,
+  },
+  scrollContainer: {
+    flex: 9,
+  },
+  scroll: {
+    ...layoutStyles.spaceAroundHorizontal,
   },
 });
 

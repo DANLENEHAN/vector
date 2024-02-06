@@ -135,8 +135,13 @@ export const buttonStyles: ButtonStyles = {
 };
 
 export const titleStyles: TitleStyles = {
-  titleOne: {
+  titlePrimary: {
     fontSize: fontSizes.xLarge,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.bold,
+  },
+  titleSecondary: {
+    fontSize: fontSizes.large,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
   },

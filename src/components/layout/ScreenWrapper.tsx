@@ -1,5 +1,6 @@
 // React Import
 import React from 'react';
+import {View, StyleSheet} from 'react-native';
 // Theme
 import {darkThemeColors, lightThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -53,9 +54,15 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({
           paddingRight: insets.right,
         },
       ]}>
-      {children}
+      <View style={styles.parentContainer}>{children}</View>
     </SafeAreaProvider>
   );
 };
 
+const styles = StyleSheet.create({
+  parentContainer: {
+    width: '100%',
+    flex: 1,
+  },
+});
 export default ScreenWrapper;

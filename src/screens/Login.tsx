@@ -19,13 +19,11 @@ import ErrorPopup from '@components/popups/ErrorPopup';
 
 // Styling
 import {
-  fontSizes,
-  fontWeights,
   darkThemeColors,
   lightThemeColors,
   paddingSizes,
-  marginSizes,
   layoutStyles,
+  titleStyles,
   buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -97,50 +95,64 @@ const LoginScreen: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <View style={styles.container} testID="login-screen">
-        <Text style={[styles.title, {color: currentTheme.text}]}>
-          {isLogin ? 'Login' : 'Create Account'}
-        </Text>
-        <TextInputComponent
-          placeholder="Enter your email"
-          value={email}
-          onChangeText={(textInput: string, inputValid: boolean) =>
-            setEmail(textInput, inputValid)
-          }
-          iconName="envelope"
-          style={{...styles.inputContainers}}
-          validation={
-            new TextValidation('Email', LoginValidationSchema.email, {
-              pattern: 'Please enter a valid email address',
-            })
-          }
-          enableErrors={isEmailFilled}
-        />
-        <TextInputComponent
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={(textInput: string, inputValid: boolean) =>
-            setPassword(textInput, inputValid)
-          }
-          iconName="lock"
-          secureTextEntry={true}
-          style={{...styles.inputContainers}}
-          validation={
-            new TextValidation('Password', LoginValidationSchema.password)
-          }
-          enableErrors={isPasswordFilled}
-        />
-        <View style={styles.buttonContainer}>
-          {isLogin ? (
-            <>
+      <View style={styles.pageWrapper} testID="login-screen">
+        <View style={styles.content}>
+          <Text style={[styles.title, {color: currentTheme.text}]}>
+            {isLogin ? 'Login' : 'Create Account'}
+          </Text>
+          <TextInputComponent
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={(textInput: string, inputValid: boolean) =>
+              setEmail(textInput, inputValid)
+            }
+            iconName="envelope"
+            validation={
+              new TextValidation('Email', LoginValidationSchema.email, {
+                pattern: 'Please enter a valid email address',
+              })
+            }
+            enableErrors={isEmailFilled}
+          />
+          <TextInputComponent
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={(textInput: string, inputValid: boolean) =>
+              setPassword(textInput, inputValid)
+            }
+            iconName="lock"
+            secureTextEntry={true}
+            validation={
+              new TextValidation('Password', LoginValidationSchema.password)
+            }
+            enableErrors={isPasswordFilled}
+          />
+          <View style={styles.buttonContainer}>
+            {isLogin ? (
+              <>
+                <ButtonComponent
+                  text="Forgot Password"
+                  disabled={false}
+                  onPress={() => null}
+                />
+                <ButtonComponent
+                  onPress={() => {
+                    handleLoginResponse();
+                  }}
+                  disabled={
+                    !isEmailFilled ||
+                    !isPasswordFilled ||
+                    !emailValid ||
+                    !passwordValid
+                  }
+                  text="Login"
+                />
+              </>
+            ) : (
               <ButtonComponent
-                text="Forgot Password"
-                disabled={false}
-                onPress={() => null}
-              />
-              <ButtonComponent
+                style={styles.createAccButton}
                 onPress={() => {
-                  handleLoginResponse();
+                  handleCreateAccountResponse();
                 }}
                 disabled={
                   !isEmailFilled ||
@@ -148,32 +160,18 @@ const LoginScreen: React.FC<ScreenProps> = ({
                   !emailValid ||
                   !passwordValid
                 }
-                text="Login"
+                text="Create Account"
               />
-            </>
-          ) : (
-            <ButtonComponent
-              style={styles.createAccButton}
-              onPress={() => {
-                handleCreateAccountResponse();
-              }}
-              disabled={
-                !isEmailFilled ||
-                !isPasswordFilled ||
-                !emailValid ||
-                !passwordValid
-              }
-              text="Create Account"
-            />
-          )}
+            )}
+          </View>
+          <ClickableLink
+            textStyle={{color: currentTheme.text}}
+            onPress={() => setIsLogin(prev => !prev)}
+            text={viewLinkText}
+          />
+          {!isConnected && <NoNetworkPopup />}
         </View>
-        <ClickableLink
-          textStyle={{color: currentTheme.text}}
-          onPress={() => setIsLogin(prev => !prev)}
-          text={viewLinkText}
-        />
       </View>
-      {!isConnected && <NoNetworkPopup />}
       <ErrorPopup
         visible={!!formError}
         message={formError}
@@ -184,27 +182,24 @@ const LoginScreen: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
+  pageWrapper: {
+    flex: 1,
     ...layoutStyles.centerVertically,
+  },
+  content: {
+    height: '50%',
+    ...layoutStyles.spaceAroundVertical,
     paddingLeft: paddingSizes.large,
     paddingRight: paddingSizes.large,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: marginSizes.xxxLarge,
+    ...layoutStyles.spaceBetweenHorizontal,
   },
   title: {
-    fontSize: fontSizes.title,
-    fontWeight: fontWeights.bold,
-    marginBottom: marginSizes.xxxLarge,
+    ...titleStyles.titlePrimary,
   },
   createAccButton: {
     ...buttonStyles.medium,
-  },
-  inputContainers: {
-    marginBottom: marginSizes.xxxLarge,
   },
 });
 
