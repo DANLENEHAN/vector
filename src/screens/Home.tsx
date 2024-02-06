@@ -18,7 +18,9 @@ import {ScreenProps} from '@screens/Types';
  * @example
  * <HomeScreen navigation={navigation}/>
  */
-const HomeScreen: React.FC<ScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   return (
     <HomepageLayout navigation={navigation}>
       <View style={styles.content}>

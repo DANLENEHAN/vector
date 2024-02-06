@@ -42,7 +42,7 @@ const BottomTabBar = (props: BottomBarProps) => <BottomNavBar {...props} />;
  *
  * @returns {React.FC} - React Component
  */
-const AppNavigator: React.FC = () => {
+const AppNavigator: React.FC = (): React.ReactElement => {
   return (
     <AppHomeTabStack.Navigator
       screenOptions={{headerShown: false}}
@@ -85,7 +85,7 @@ const AppNavigator: React.FC = () => {
  *
  * @returns {React.FC} - React Component
  */
-const AuthNavigator: React.FC = () => {
+const AuthNavigator: React.FC = (): React.ReactElement => {
   return (
     <NavigationContainer>
       <AppStack.Navigator>

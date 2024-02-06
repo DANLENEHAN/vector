@@ -32,7 +32,9 @@ import {BodyStatType} from '@services/api/swagger/data-contracts';
  * @example
  * <WeightProgress navigation={navigation}/>
  */
-const MoodProgress: React.FC<ScreenProps> = ({navigation}) => {
+const MoodProgress: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [setData] = useState<any>({});
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

@@ -10,6 +10,8 @@ import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
+// Types
+import {ScreenProps} from '@screens/Types';
 
 /**
  * Theme Screen
@@ -22,7 +24,9 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
  * @example
  * <ThemeScreen navigation={navigation}/>
  */
-const ThemeScreen: React.FC<any> = ({navigation}) => {
+const ThemeScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const {setTheme, userPreferenceTheme, setUserPreferenceTheme} = useSystem();
 
   const options = [

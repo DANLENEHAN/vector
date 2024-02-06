@@ -28,7 +28,9 @@ import logger from '@utils/Logger';
  * @example
  * <AccountSettings navigation={navigation}/>
  */
-const AccountSettings: React.FC<ScreenProps> = ({navigation}) => {
+const AccountSettings: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const handleLogout = async () => {
     const response = await logoutUser();
     if (response instanceof SwaggerValidationError) {

@@ -40,7 +40,7 @@ interface HomepageLayoutProps {
 const HomepageLayout: React.FC<HomepageLayoutProps> = ({
   children,
   navigation,
-}) => {
+}: HomepageLayoutProps): React.ReactElement<HomepageLayoutProps> => {
   return (
     <ScreenWrapper>
       <View style={styles.container}>

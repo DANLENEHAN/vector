@@ -67,7 +67,9 @@ const moods: MoodsDictionary = {
  * @example
  * <MoodScreen navigation={navigation}/>
  */
-const MoodScreen: React.FC<ScreenProps> = ({navigation}) => {
+const MoodScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [moodValue, setMoodValue] = useState<number>(3);
 
   const {theme} = useSystem();

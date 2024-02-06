@@ -49,7 +49,7 @@ const ToolTip: React.FC<ToolTipProps> = ({
   bottom,
   lineColor,
   indicatorColor,
-}) => {
+}: ToolTipProps): React.ReactElement<ToolTipProps> => {
   // Start and end points of the line
   /**
    * useDerivedValue: The useDerivedValue hook is used to

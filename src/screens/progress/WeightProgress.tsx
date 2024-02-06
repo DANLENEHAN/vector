@@ -39,7 +39,9 @@ import logger from '@utils/Logger';
  * @example
  * <WeightProgress navigation={navigation}/>
  */
-const WeightProgress: React.FC<ScreenProps> = ({navigation}) => {
+const WeightProgress: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [data, setData] = useState<any>({});
   const {theme} = useSystem();
 

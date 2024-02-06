@@ -53,7 +53,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   disabled = false,
   text,
   style,
-}) => {
+}: ButtonProps): React.ReactElement<ButtonProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

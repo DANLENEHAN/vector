@@ -50,7 +50,7 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
   activeUnit,
   setActiveUnit,
   style,
-}) => {
+}: UnitSelectorProps): React.ReactElement<UnitSelectorProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

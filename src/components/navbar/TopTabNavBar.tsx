@@ -32,7 +32,7 @@ const TopTabNavBar: React.FC<TopBarProps> = ({
   navigation,
   state,
   descriptors,
-}) => {
+}: TopBarProps): React.ReactElement<TopBarProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const insets = useSafeAreaInsets();

@@ -43,7 +43,9 @@ import {LoginValidationSchema} from '@validation/Schemas';
  * @example
  * <LoginScreen navigation={navigation}/>
  */
-const LoginScreen: React.FC<ScreenProps> = ({navigation}) => {
+const LoginScreen: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [email, setEmailState] = useState('');
   const [emailValid, setEmailValid] = useState(false);
   const [password, setPasswordState] = useState('');

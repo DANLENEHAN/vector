@@ -8,6 +8,20 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
+// Types
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '@navigation/Types';
+
+/**
+ * Props for the WorkoutProgressScreen component.
+ *
+ * @interface WorkoutProgressScreenProps
+ *
+ * @param {RouteProp<RootStackParamList, any>} route - Route object for the screen.
+ */
+interface WorkoutProgressScreenProps {
+  route: RouteProp<RootStackParamList>;
+}
 
 /**
  *  Workout Progress screen
@@ -20,7 +34,9 @@ import {useSystem} from '@context/SystemContext';
  * @example
  * <WorkoutProgress route={route}/>
  */
-const WokroutProgressScreen: React.FC<any> = ({route}) => {
+const WokroutProgressScreen: React.FC<WorkoutProgressScreenProps> = ({
+  route,
+}: WorkoutProgressScreenProps): React.ReactElement<WorkoutProgressScreenProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

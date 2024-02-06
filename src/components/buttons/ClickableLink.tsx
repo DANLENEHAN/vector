@@ -36,7 +36,7 @@ const ClickableLink: React.FC<ClickableLinkProps> = ({
   onPress,
   text,
   textStyle,
-}) => {
+}: ClickableLinkProps): React.ReactElement<ClickableLinkProps> => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Text style={textStyle}>{text}</Text>

@@ -60,7 +60,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
   fontColor,
   caret,
   logo_circle_color,
-}) => {
+}: SettingsOptionProps): React.ReactElement<SettingsOptionProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

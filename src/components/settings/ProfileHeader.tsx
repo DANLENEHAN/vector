@@ -47,7 +47,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImageUrl,
   userName,
   userUsername,
-}) => {
+}: ProfileHeaderProps): React.ReactElement<ProfileHeaderProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 

@@ -65,7 +65,7 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
   options,
   selectedOption,
   onOptionPress,
-}) => {
+}: OptionGroupProps): React.ReactElement<OptionGroupProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
