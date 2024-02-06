@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    ...titleStyles.titleSecondary,
+    ...titleStyles.headingSecondary,
     marginBottom: marginSizes.xxLarge,
   },
 });

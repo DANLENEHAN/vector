@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceBetweenHorizontal,
   },
   title: {
-    ...titleStyles.titlePrimary,
+    ...titleStyles.headingPrimary,
   },
   createAccButton: {
     ...buttonStyles.medium,

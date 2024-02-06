@@ -52,7 +52,7 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="wellness-progress-screen">
       <View style={styles.header}>
-        <Text style={[titleStyles.titlePrimary, {color: currentTheme.text}]}>
+        <Text style={[titleStyles.headingPrimary, {color: currentTheme.text}]}>
           Health & Wellness
         </Text>
       </View>

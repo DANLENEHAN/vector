@@ -48,7 +48,7 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="nutrition-progess-screen">
       <View style={styles.header}>
-        <Text style={[titleStyles.titlePrimary, {color: currentTheme.text}]}>
+        <Text style={[titleStyles.headingPrimary, {color: currentTheme.text}]}>
           Nutrition
         </Text>
       </View>

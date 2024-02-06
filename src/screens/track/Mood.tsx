@@ -95,13 +95,14 @@ const MoodScreen: React.FC<ScreenProps> = ({
         <Header navigation={navigation} includeBackArrow={true} />
       </View>
       <View style={styles.content}>
-        <Text style={[titleStyles.titleSecondary, {color: currentTheme.text}]}>
+        <Text
+          style={[titleStyles.headingSecondary, {color: currentTheme.text}]}>
           What's your mood?
         </Text>
         <Icon name={mood.icon} solid size={300} color={mood.color} />
         <Text
           style={[
-            titleStyles.titleSecondary,
+            titleStyles.headingSecondary,
             {color: currentTheme.text, shadowColor: currentTheme.shadow},
           ]}>
           {mood.label}
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    ...titleStyles.titleSecondary,
+    ...titleStyles.headingSecondary,
     marginBottom: marginSizes.xxLarge,
   },
   slider: {
