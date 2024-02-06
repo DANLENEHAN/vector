@@ -10,6 +10,7 @@ import {
   darkThemeColors,
   lightThemeColors,
   fonts,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -69,7 +70,6 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
           key={unit}
           style={[
             styles.unitOption,
-            {width: `${100 / units.length}%`},
             activeUnit === unit && {backgroundColor: currentTheme.primary},
             index === 0 && styles.firstUnit,
             index === units.length - 1 && styles.lastUnit,
@@ -86,19 +86,14 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
 
 const styles = StyleSheet.create({
   unitSelector: {
-    height: 50,
-    width: '60%',
+    height: 60,
+    width: '80%',
     borderRadius: borderRadius.medium,
-    flexDirection: 'row',
-    shadowRadius: 3,
-    elevation: 3,
-    shadowOpacity: 1.0,
+    ...layoutStyles.flexStretchHorizontal,
   },
   unitOption: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
+    ...layoutStyles.centerHorizontally,
   },
   unitText: {
     fontSize: fontSizes.medium,
@@ -106,12 +101,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.primary,
   },
   firstUnit: {
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: borderRadius.medium,
+    borderBottomLeftRadius: borderRadius.medium,
   },
   lastUnit: {
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
+    borderTopRightRadius: borderRadius.medium,
+    borderBottomRightRadius: borderRadius.medium,
   },
 });
 

@@ -8,8 +8,8 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
-  paddings,
+  marginSizes,
+  paddingSizes,
   borderRadius,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -78,25 +78,25 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: paddings.large,
+    padding: paddingSizes.large,
     flex: 1,
   },
   profileImage: {
     width: 75,
     height: 75,
     borderRadius: borderRadius.circle,
-    marginBottom: margins.small,
+    marginBottom: marginSizes.small,
   },
   userName: {
     fontSize: fontSizes.medium,
     fontFamily: fonts.primary,
     fontWeight: 'bold',
-    marginBottom: margins.small,
+    marginBottom: marginSizes.small,
   },
   userUsername: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    marginBottom: margins.xSmall,
+    marginBottom: marginSizes.xSmall,
   },
 });
 

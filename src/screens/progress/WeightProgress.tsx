@@ -8,7 +8,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
+  marginSizes,
 } from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
@@ -195,12 +195,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label="Weight"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="Weight" navigation={navigation} includeBackArrow={true} />
 
       <View style={styles.content}>
         <UnitSelector
@@ -252,8 +247,8 @@ const styles = StyleSheet.create({
   unitSelector: {
     height: 25,
     width: '90%',
-    marginTop: margins.xSmall,
-    marginBottom: margins.medium,
+    marginTop: marginSizes.xSmall,
+    marginBottom: marginSizes.medium,
   },
 });
 

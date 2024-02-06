@@ -1,7 +1,7 @@
 // React imports
 import React from 'react';
 // Components
-import {View, StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 // Layouts
 import HomepageLayout from '@components/layout/HomepageLayout';
 // Types
@@ -23,20 +23,9 @@ const HomeScreen: React.FC<ScreenProps> = ({
 }: ScreenProps): React.ReactElement<ScreenProps> => {
   return (
     <HomepageLayout navigation={navigation}>
-      <View style={styles.content}>
-        <Text>Home</Text>
-      </View>
+      <Text>Home</Text>
     </HomepageLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default HomeScreen;

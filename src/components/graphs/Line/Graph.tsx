@@ -7,7 +7,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  margins,
+  marginSizes,
 } from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
@@ -163,17 +163,17 @@ const LineGraph: React.FC<LineGraphProps> = ({
           curve="linear"
           // Padding within the chart
           domainPadding={{
-            left: margins.large,
-            right: margins.large,
-            top: margins.large,
-            bottom: margins.xSmall,
+            left: marginSizes.large,
+            right: marginSizes.large,
+            top: marginSizes.large,
+            bottom: marginSizes.xSmall,
           }}
           // Padding outside the chart
           padding={{
-            top: margins.large,
-            bottom: margins.large,
-            left: margins.large,
-            right: margins.large,
+            top: marginSizes.large,
+            bottom: marginSizes.large,
+            left: marginSizes.large,
+            right: marginSizes.large,
           }}
           chartPressState={[firstPress]}
           axisOptions={{

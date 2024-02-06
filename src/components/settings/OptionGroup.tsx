@@ -6,7 +6,7 @@ import {
   fontSizes,
   lightThemeColors,
   darkThemeColors,
-  paddings,
+  paddingSizes,
   borderWidth,
   iconSizes,
 } from '@styles/Main';
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   option: {
     flexDirection: 'row',
-    padding: paddings.small,
+    padding: paddingSizes.small,
   },
   optionLabel: {
     flex: 7,

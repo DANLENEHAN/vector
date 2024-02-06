@@ -6,9 +6,10 @@ import {useSystem} from '@context/SystemContext';
 import {
   darkThemeColors,
   lightThemeColors,
-  margins,
+  marginSizes,
   borderRadius,
   fontSizes,
+  buttonStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -70,13 +71,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    marginLeft: margins.large,
-    marginRight: margins.large,
-    marginBottom: margins.xxLarge,
+    marginLeft: marginSizes.large,
+    marginRight: marginSizes.large,
+    marginBottom: marginSizes.xxLarge,
     fontSize: fontSizes.large,
   },
   closeButton: {
-    width: 225,
+    ...buttonStyles.medium,
   },
 });
 

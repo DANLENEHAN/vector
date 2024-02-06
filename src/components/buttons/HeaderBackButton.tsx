@@ -10,8 +10,8 @@ import {useSystem} from '@context/SystemContext';
 import {
   lightThemeColors,
   darkThemeColors,
-  margins,
-  paddings,
+  marginSizes,
+  paddingSizes,
   iconSizes,
 } from '@styles/Main';
 
@@ -39,7 +39,6 @@ interface HeaderBackButtonProps {
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
   navigation,
 }: HeaderBackButtonProps): React.ReactElement<HeaderBackButtonProps> => {
-  // Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
@@ -60,8 +59,8 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
 
 const styles = StyleSheet.create({
   headerBackButton: {
-    marginLeft: margins.small,
-    padding: paddings.small,
+    marginLeft: marginSizes.small,
+    padding: paddingSizes.small,
   },
 });
 

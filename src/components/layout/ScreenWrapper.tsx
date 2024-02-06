@@ -1,7 +1,6 @@
 // React Import
 import React from 'react';
-// Components
-import {StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 // Theme
 import {darkThemeColors, lightThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -10,6 +9,8 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+// Styling
+import {layoutStyles} from '@styles/Main';
 
 /**
  * Interface for the ScreenWrapper component
@@ -43,7 +44,7 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({
   return (
     <SafeAreaProvider
       style={[
-        styles.screenWrapper,
+        layoutStyles.centerVertically,
         {
           backgroundColor: currentTheme.background,
           // Paddings to handle safe area
@@ -53,17 +54,15 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({
           paddingRight: insets.right,
         },
       ]}>
-      {children}
+      <View style={styles.parentContainer}>{children}</View>
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  screenWrapper: {
+  parentContainer: {
+    width: '100%',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
-
 export default ScreenWrapper;

@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, margins} from '@styles/Main';
+import {fontSizes, marginSizes} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
@@ -51,12 +51,7 @@ const WaterProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label="Water"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <Header label="Water" navigation={navigation} includeBackArrow={true} />
       <View style={styles.content}>
         <ScrollView>
           {data.map(item => (
@@ -81,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xLarge,
   },
   statItem: {
-    marginBottom: margins.small,
+    marginBottom: marginSizes.small,
   },
 });
 

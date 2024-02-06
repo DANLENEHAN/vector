@@ -4,7 +4,7 @@ import React from 'react';
 import {
   darkThemeColors,
   lightThemeColors,
-  margins,
+  marginSizes,
   fontSizes,
   fontWeights,
 } from '@styles/Main';
@@ -68,7 +68,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
       <Text
         style={[
           styles.averageLabel,
-          {color: currentTheme.lightText, marginBottom: margins.xSmall},
+          {color: currentTheme.lightText, marginBottom: marginSizes.xSmall},
         ]}>
         Average:
       </Text>
@@ -98,7 +98,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
           styles.averageWeightLabel,
           {
             color: currentTheme.lightText,
-            marginTop: -margins.small,
+            marginTop: -marginSizes.small,
           },
         ]}
       />
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   averageWeightAndUnitContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: margins.small,
+    marginBottom: marginSizes.small,
   },
   averageValue: {
     fontSize: fontSizes.title,

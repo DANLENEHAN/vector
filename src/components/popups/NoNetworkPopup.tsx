@@ -6,10 +6,11 @@ import {
   fontWeights,
   darkThemeColors,
   lightThemeColors,
-  paddings,
-  margins,
+  paddingSizes,
+  marginSizes,
   borderRadius,
   fonts,
+  buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -100,8 +101,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   overlayTitleContainer: {
-    marginTop: margins.medium,
-    padding: paddings.small,
+    marginTop: marginSizes.medium,
+    padding: paddingSizes.small,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -116,12 +117,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     alignSelf: 'center',
-    marginVertical: margins.medium,
+    marginVertical: marginSizes.medium,
   },
   overlayMessage: {
     width: '100%',
     justifyContent: 'center',
-    padding: paddings.medium,
+    padding: paddingSizes.medium,
     flexWrap: 'wrap',
     fontSize: fontSizes.medium,
     fontWeight: fontWeights.light,
@@ -133,11 +134,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginBottom: margins.medium,
+    marginBottom: marginSizes.medium,
   },
   retryButton: {
-    // Override default button width
-    minWidth: 225,
+    ...buttonStyles.medium,
   },
 });
 

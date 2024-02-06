@@ -16,6 +16,8 @@ import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Logger
 import logger from '@utils/Logger';
+// Styling
+import {layoutStyles} from '@styles/Main';
 
 /**
  * Account Settings Screen
@@ -50,7 +52,6 @@ const AccountSettings: React.FC<ScreenProps> = ({
           label="Account Settings"
           navigation={navigation}
           includeBackArrow={true}
-          includeTopMargin={true}
         />
       </View>
       <View style={styles.settingsSection}>
@@ -69,18 +70,15 @@ const AccountSettings: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   headerSection: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   settingsSection: {
     flex: 8,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    ...layoutStyles.flexStartHorizontal,
   },
 });
 

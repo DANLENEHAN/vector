@@ -1,13 +1,21 @@
-// Common styling used throughout the app
+/*
+  Common styling used throughout the app
+*/
+
+// Types
+import {
+  FontTypes,
+  FontWeights,
+  ButtonStyles,
+  LayoutStyles,
+  TitleStyles,
+} from '@styles/Types';
 
 const black = '#333333';
 const white = '#FFFFFF';
 const blue = '#3498db';
 const purple = '#9b59b6';
 export const gray = 'gray';
-
-export const buttonHeight = 50;
-export const buttonWidth = 160;
 
 export const fonts = {
   primary: 'Montserrat',
@@ -22,28 +30,6 @@ export const fontSizes = {
   xLarge: 24,
   title: 32,
 };
-
-export type FontTypes =
-  | 'ultraLight'
-  | 'thin'
-  | 'light'
-  | 'normal'
-  | 'medium'
-  | 'semiBold'
-  | 'bold'
-  | 'extraBold'
-  | 'ultraBold';
-
-export type FontWeights =
-  | '100'
-  | '200'
-  | '300'
-  | 'normal'
-  | '500'
-  | '600'
-  | 'bold'
-  | '800'
-  | '900';
 
 export const fontWeights: Record<FontTypes, FontWeights> = {
   ultraLight: '100',
@@ -91,7 +77,7 @@ export const darkThemeColors = {
   lowOpacityBackground: 'rgba(255, 255, 255, 0.5)',
 };
 
-export const paddings = {
+export const paddingSizes = {
   xSmall: 5,
   small: 10,
   medium: 15,
@@ -99,7 +85,7 @@ export const paddings = {
   xLarge: 25,
 };
 
-export const margins = {
+export const marginSizes = {
   xSmall: 5,
   small: 10,
   medium: 15,
@@ -131,4 +117,85 @@ export const iconSizes = {
   large: 25,
   xLarge: 30,
   xxLarge: 35,
+};
+
+export const buttonStyles: ButtonStyles = {
+  small: {
+    height: 50,
+    width: 160,
+  },
+  medium: {
+    width: 225,
+    height: 50,
+  },
+  large: {
+    width: 300,
+    height: 50,
+  },
+};
+
+export const titleStyles: TitleStyles = {
+  headingPrimary: {
+    fontSize: fontSizes.xLarge,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.bold,
+  },
+  headingSecondary: {
+    fontSize: fontSizes.large,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.bold,
+  },
+};
+
+export const layoutStyles: LayoutStyles = {
+  centerHorizontally: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  centerVertically: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  spaceAroundHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  spaceBetweenHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  spaceAroundVertical: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  spaceBetweenVertical: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  flexStartHorizontal: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  flexStartVertical: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  flexStretchVertical: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  flexStretchHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
 };

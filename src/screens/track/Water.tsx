@@ -1,13 +1,13 @@
 // React imports
 import React, {useState} from 'react';
-// Components
 import {
   View,
-  Text,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+// Components
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import UnitSelector from '@components/buttons/UnitSelector';
@@ -19,7 +19,7 @@ import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
+import {marginSizes, layoutStyles, titleStyles} from '@styles/Main';
 // Services
 import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
@@ -64,13 +64,11 @@ const WaterScreen: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
+      <View style={styles.headerSection}>
+        <Header navigation={navigation} includeBackArrow={true} />
+      </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.contentSection}>
+        <View style={styles.content}>
           <Text
             style={[
               styles.title,
@@ -81,20 +79,17 @@ const WaterScreen: React.FC<ScreenProps> = ({
             Hydration is key!
           </Text>
           <Icon
-            style={styles.waterIcon}
             name={'glass-water'}
             solid
             size={250}
             color={currentTheme.primary}
           />
           <NumberInput
-            style={styles.numberInput}
             allowFloat={false}
             inputValue={waterValue}
             setInputValue={setWaterValue}
           />
           <UnitSelector
-            style={styles.unitSelector}
             units={Object.values(WaterUnit)}
             activeUnit={activeUnit}
             setActiveUnit={setActiveUnit}
@@ -113,30 +108,14 @@ const WaterScreen: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   headerSection: {
     flex: 1,
-    marginTop: margins.large,
   },
-  contentSection: {
+  content: {
     flex: 9,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    width: '100%',
+    ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginBottom: margins.xxLarge,
-  },
-  waterIcon: {
-    marginBottom: margins.medium,
-  },
-  numberInput: {
-    marginBottom: margins.medium,
-  },
-  unitSelector: {
-    marginBottom: margins.xxLarge,
+    ...titleStyles.headingSecondary,
+    marginBottom: marginSizes.xxLarge,
   },
 });
 

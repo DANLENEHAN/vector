@@ -7,12 +7,13 @@ import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {
   fonts,
   fontSizes,
-  paddings,
-  margins,
+  paddingSizes,
+  marginSizes,
   lightThemeColors,
   darkThemeColors,
   iconSizes,
   fontWeights,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -85,17 +86,16 @@ const NavItem: React.FC<NavItemProps> = ({
 const styles = StyleSheet.create({
   navItem: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: paddings.xSmall,
-    paddingBottom: paddings.xSmall,
-    marginLeft: margins.xSmall,
-    marginRight: margins.xSmall,
+    ...layoutStyles.centerVertically,
+    padding: paddingSizes.xSmall,
+    paddingBottom: paddingSizes.xSmall,
+    marginLeft: marginSizes.xSmall,
+    marginRight: marginSizes.xSmall,
   },
   navLabel: {
     fontSize: fontSizes.small,
     fontFamily: fonts.secondary,
-    marginTop: margins.xSmall,
+    marginTop: marginSizes.xSmall,
     fontWeight: fontWeights.semiBold,
   },
 });

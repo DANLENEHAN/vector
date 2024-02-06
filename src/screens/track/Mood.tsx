@@ -12,7 +12,7 @@ import {ScreenProps} from '@screens/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {margins, fontSizes, fonts, fontWeights} from '@styles/Main';
+import {marginSizes, layoutStyles, titleStyles} from '@styles/Main';
 // Services
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 // Constants
@@ -91,27 +91,19 @@ const MoodScreen: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header
-        label=""
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
-      <View style={styles.contentSection}>
-        <Text style={[styles.title, {color: currentTheme.text}]}>
+      <View style={styles.headerSection}>
+        <Header navigation={navigation} includeBackArrow={true} />
+      </View>
+      <View style={styles.content}>
+        <Text
+          style={[titleStyles.headingSecondary, {color: currentTheme.text}]}>
           What's your mood?
         </Text>
-        <Icon
-          style={styles.moodIcon}
-          name={mood.icon}
-          solid
-          size={300}
-          color={mood.color}
-        />
+        <Icon name={mood.icon} solid size={300} color={mood.color} />
         <Text
           style={[
+            titleStyles.headingSecondary,
             {color: currentTheme.text, shadowColor: currentTheme.shadow},
-            styles.moodText,
           ]}>
           {mood.label}
         </Text>
@@ -137,38 +129,20 @@ const MoodScreen: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
   headerSection: {
     flex: 1,
-    marginTop: margins.large,
   },
-  contentSection: {
+  content: {
     flex: 9,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginBottom: margins.xxLarge,
+    ...titleStyles.headingSecondary,
+    marginBottom: marginSizes.xxLarge,
   },
   slider: {
     width: 300,
-    height: 40,
-    marginBottom: margins.xxLarge,
-  },
-  moodText: {
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
-  },
-  moodIcon: {
-    marginBottom: margins.xxLarge,
+    marginBottom: marginSizes.xxLarge,
   },
 });
 

@@ -4,12 +4,11 @@ import React from 'react';
 import {Appearance, View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
 import OptionGroup from '@components/settings/OptionGroup';
-import {margins} from '@styles/Main';
+import {darkThemeColors, lightThemeColors, layoutStyles} from '@styles/Main';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
-import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Types
 import {ScreenProps} from '@screens/Types';
 
@@ -27,7 +26,9 @@ import {ScreenProps} from '@screens/Types';
 const ThemeScreen: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const {setTheme, userPreferenceTheme, setUserPreferenceTheme} = useSystem();
+  const {theme, setTheme, userPreferenceTheme, setUserPreferenceTheme} =
+    useSystem();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const options = [
     {value: 'system', label: 'System Preferences'},
@@ -51,14 +52,10 @@ const ThemeScreen: React.FC<ScreenProps> = ({
     AsyncStorage.setItem(AsyncStorageKeys.UserThemePreference, selectedTheme);
   };
   return (
-    <ScreenWrapper>
-      <Header
-        label="Theme"
-        navigation={navigation}
-        includeBackArrow={true}
-        includeTopMargin={true}
-      />
-
+    <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
+      <View style={styles.headerSection}>
+        <Header label="Theme" navigation={navigation} includeBackArrow={true} />
+      </View>
       <View style={styles.settingsSection}>
         <OptionGroup
           options={options}
@@ -66,19 +63,21 @@ const ThemeScreen: React.FC<ScreenProps> = ({
           onOptionPress={handleOptionPress}
         />
       </View>
-    </ScreenWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
+  },
+  headerSection: {
+    flex: 2,
+    ...layoutStyles.centerVertically,
   },
   settingsSection: {
-    marginTop: margins.xxLarge,
-    flex: 1,
+    flex: 8,
     width: '100%',
   },
 });

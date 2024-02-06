@@ -6,13 +6,13 @@ import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {
   fontSizes,
   fontWeights,
-  paddings,
+  paddingSizes,
   borderRadius,
-  margins,
+  marginSizes,
   darkThemeColors,
   lightThemeColors,
-  buttonHeight,
-  buttonWidth,
+  buttonStyles,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -77,13 +77,11 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    padding: paddings.small,
+    ...layoutStyles.centerVertically,
+    ...buttonStyles.small,
+    padding: paddingSizes.small,
     borderRadius: borderRadius.medium,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: margins.small,
-    minWidth: buttonWidth,
-    minHeight: buttonHeight,
+    marginHorizontal: marginSizes.small,
   },
   buttonText: {
     fontSize: fontSizes.medium,
