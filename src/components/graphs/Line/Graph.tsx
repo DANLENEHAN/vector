@@ -9,7 +9,7 @@ import {
   darkThemeColors,
   marginSizes,
 } from '@styles/Main';
-//Services
+// Services
 import {useSystem} from '@context/SystemContext';
 // Components
 import {View, StyleSheet} from 'react-native';
@@ -95,8 +95,6 @@ const LineGraph: React.FC<LineGraphProps> = ({
   averageValue,
   unit,
 }: LineGraphProps): React.ReactElement<LineGraphProps> => {
-  //// Variables
-  // Needed for chart press state
   const INIT_STATE = {x: 0, y: {value: 0}} as const;
   const {state: firstPress, isActive: isFirstPressActive} =
     useChartPressState(INIT_STATE);
@@ -146,22 +144,21 @@ const LineGraph: React.FC<LineGraphProps> = ({
    *
    *  */
   return (
-    <>
-      <View style={styles.AverageValueTextContainer}>
+    <View style={styles.componentWrapper}>
+      <View style={styles.averageValueContainer}>
         <AverageValueText
           currentValue={currentValue}
           currentDate={currentDate}
           unit={unit}
         />
       </View>
-      <View style={styles.ChartContainer}>
+      <View style={styles.chartContainer}>
         <CartesianChart
           data={data}
           xKey="date"
           yKeys={['value']}
           // Curve type
           curve="linear"
-          // Padding within the chart
           domainPadding={{
             left: marginSizes.large,
             right: marginSizes.large,
@@ -187,16 +184,14 @@ const LineGraph: React.FC<LineGraphProps> = ({
           renderOutside={({chartBounds}) => (
             <>
               {isFirstPressActive && (
-                <>
-                  <ToolTip
-                    xPosition={firstPress.x.position}
-                    yPosition={firstPress.y.value.position}
-                    bottom={chartBounds.bottom}
-                    top={chartBounds.top}
-                    lineColor={currentTheme.secondary}
-                    indicatorColor={currentTheme.secondary}
-                  />
-                </>
+                <ToolTip
+                  xPosition={firstPress.x.position}
+                  yPosition={firstPress.y.value.position}
+                  bottom={chartBounds.bottom}
+                  top={chartBounds.top}
+                  lineColor={currentTheme.secondary}
+                  indicatorColor={currentTheme.secondary}
+                />
               )}
             </>
           )}>
@@ -235,18 +230,20 @@ const LineGraph: React.FC<LineGraphProps> = ({
           )}
         </CartesianChart>
       </View>
-    </>
+    </View>
   );
 };
 
 export default LineGraph;
 
 const styles = StyleSheet.create({
-  AverageValueTextContainer: {
-    alignItems: 'center',
-    height: 90,
+  componentWrapper: {
+    flex: 1,
   },
-  ChartContainer: {
-    flex: 8,
+  averageValueContainer: {
+    flex: 2,
+  },
+  chartContainer: {
+    flex: 13,
   },
 });

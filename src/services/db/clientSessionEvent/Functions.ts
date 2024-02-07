@@ -26,21 +26,26 @@ export const insertClientSessionEvent = async (
 ): Promise<void> => {
   const sessionEventDeviceInfo = await getDeviceInfo();
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-  const userId = await getUserDetails('user_id');
 
-  const clientSessionEvent: ClientSessionEventCreateSchema = {
-    user_id: userId,
-    event_type: eventType,
-    application_version: sessionEventDeviceInfo?.version,
-    brand: sessionEventDeviceInfo?.brand,
-    client_session_event_id: uuidv4(),
-    client_type: ClientType.USER_APP_DEVICE,
-    created_at: timestampTimezone.timestamp,
-    device_id: sessionEventDeviceInfo?.deviceId,
-    system_version: sessionEventDeviceInfo?.systemVersion,
-    timezone: timestampTimezone.timezone,
-    user_agent: sessionEventDeviceInfo?.userAgent,
-  };
-
-  await insertRows(syncDbTables.clientSessionEventTable, [clientSessionEvent]);
+  try {
+    const userId = await getUserDetails('user_id');
+    const clientSessionEvent: ClientSessionEventCreateSchema = {
+      user_id: userId,
+      event_type: eventType,
+      application_version: sessionEventDeviceInfo?.version,
+      brand: sessionEventDeviceInfo?.brand,
+      client_session_event_id: uuidv4(),
+      client_type: ClientType.USER_APP_DEVICE,
+      created_at: timestampTimezone.timestamp,
+      device_id: sessionEventDeviceInfo?.deviceId,
+      system_version: sessionEventDeviceInfo?.systemVersion,
+      timezone: timestampTimezone.timezone,
+      user_agent: sessionEventDeviceInfo?.userAgent,
+    };
+    await insertRows(syncDbTables.clientSessionEventTable, [
+      clientSessionEvent,
+    ]);
+  } catch (error) {
+    console.info("Don't have user details yet skipping...");
+  }
 };

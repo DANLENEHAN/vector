@@ -1,25 +1,18 @@
 // React imports
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {
-  fontSizes,
-  lightThemeColors,
-  darkThemeColors,
-  marginSizes,
-} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
-import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {BodyStatType} from '@services/api/swagger/data-contracts';
 
 /**
  *  Weight progress screen
@@ -35,7 +28,6 @@ import {BodyStatType} from '@services/api/swagger/data-contracts';
 const MoodProgress: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const [setData] = useState<any>({});
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -51,33 +43,29 @@ const MoodProgress: React.FC<ScreenProps> = ({
     {value: 3, date: new Date('2021-01-06').valueOf()},
   ];
 
-  useEffect(() => {
-    const getUserMoods = async () => {
-      // BROKEN
-      let user_mood = await getUserStats({bodyStatType: BodyStatType.Feeling});
-
-      setData(user_mood ?? []);
-    };
-    getUserMoods();
-  });
-
   return (
     <ScreenWrapper>
-      <Header label="Mood" navigation={navigation} includeBackArrow={true} />
-      <View style={styles.content}>
-        <UnitSelector
-          units={Object.values(dateOptions)}
-          activeUnit={activePeriod}
-          setActiveUnit={setActivePeriod}
-          style={[
-            styles.unitSelector,
-            {
-              color: currentTheme.text,
-            },
-          ]}
-        />
-
-        <View style={styles.chartContainer}>
+      <View style={styles.pageWrapper}>
+        <View style={styles.headerSection}>
+          <Header
+            label="Mood"
+            navigation={navigation}
+            includeBackArrow={true}
+          />
+        </View>
+        <View style={styles.unitSelectorSection}>
+          <UnitSelector
+            units={Object.values(dateOptions)}
+            activeUnit={activePeriod}
+            setActiveUnit={setActivePeriod}
+            style={[
+              {
+                color: currentTheme.text,
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.graphSection}>
           <LineGraph
             data={fakeData}
             averageLabel={'test'}
@@ -91,25 +79,18 @@ const MoodProgress: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  content: {
+  pageWrapper: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
   },
-  chartContainer: {
+  headerSection: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: 300,
   },
-  unitSelector: {
-    height: 25,
-    width: '90%',
-    marginTop: marginSizes.xSmall,
-    marginBottom: marginSizes.medium,
+  unitSelectorSection: {
+    flex: 2,
+    ...layoutStyles.centerHorizontally,
+  },
+  graphSection: {
+    flex: 10,
   },
 });
 

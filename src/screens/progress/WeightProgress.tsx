@@ -4,7 +4,7 @@ import {useFocusEffect} from '@react-navigation/native';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
@@ -190,32 +190,35 @@ const WeightProgress: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header label="Weight" navigation={navigation} includeBackArrow={true} />
-
-      <View style={styles.content}>
-        <UnitSelector
-          units={Object.values(dateOptions)}
-          activeUnit={activePeriod}
-          setActiveUnit={setActivePeriod}
-          style={[
-            styles.unitSelector,
-            {
-              color: currentTheme.text,
-            },
-          ]}
-        />
-
-        <View style={styles.chartContainerContainer}>
-          <View>
-            {data && activePeriod && data[activePeriod] && (
-              <LineGraph
-                data={data[activePeriod].data}
-                averageLabel={data[activePeriod].averagePeriodLabel}
-                averageValue={data[activePeriod].averageValue}
-                unit={data[activePeriod].unit}
-              />
-            )}
-          </View>
+      <View style={styles.pageWrapper}>
+        <View style={styles.headerSection}>
+          <Header
+            label="Weight"
+            navigation={navigation}
+            includeBackArrow={true}
+          />
+        </View>
+        <View style={styles.unitSelectorSection}>
+          <UnitSelector
+            units={Object.values(dateOptions)}
+            activeUnit={activePeriod}
+            setActiveUnit={setActivePeriod}
+            style={[
+              {
+                color: currentTheme.text,
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.graphSection}>
+          {data && activePeriod && data[activePeriod] && (
+            <LineGraph
+              data={data[activePeriod].data}
+              averageLabel={data[activePeriod].averagePeriodLabel}
+              averageValue={data[activePeriod].averageValue}
+              unit={data[activePeriod].unit}
+            />
+          )}
         </View>
       </View>
     </ScreenWrapper>
@@ -223,16 +226,18 @@ const WeightProgress: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  content: {
+  pageWrapper: {
     flex: 1,
   },
-  chartContainerContainer: {
-    width: '100%',
-    height: 300,
+  headerSection: {
+    flex: 1,
   },
-  unitSelector: {
-    height: 25,
-    width: '90%',
+  unitSelectorSection: {
+    flex: 2,
+    ...layoutStyles.centerHorizontally,
+  },
+  graphSection: {
+    flex: 10,
   },
 });
 
