@@ -5,7 +5,7 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
 // Types
@@ -47,9 +47,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
+    ...layoutStyles.centerVertically,
   },
 });
 

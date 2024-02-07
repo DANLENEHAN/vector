@@ -5,7 +5,7 @@ import {View, StyleSheet, Text} from 'react-native';
 // Layouts
 import HomepageLayout from '@components/layout/HomepageLayout';
 // Styling
-import {fontSizes, lightThemeColors, darkThemeColors} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**
@@ -34,10 +34,7 @@ const Generic: React.FC<any> = ({navigation, route}) => {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
+    ...layoutStyles.centerVertically,
   },
 });
 

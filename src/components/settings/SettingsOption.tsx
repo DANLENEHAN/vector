@@ -5,13 +5,14 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
 import {
-  fonts,
-  fontSizes,
   lightThemeColors,
   darkThemeColors,
   iconSizes,
   borderRadius,
   borderWidth,
+  layoutStyles,
+  textStyles,
+  paddingSizes,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -68,42 +69,32 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
     <TouchableOpacity
       style={[
         styles.settingsOption,
+        {borderColor: currentTheme.borders},
         {backgroundColor: currentTheme.background},
       ]}
       onPress={onPress}>
-      <View style={styles.logoHolder}>
-        <View
-          style={[
-            styles.logoCircle,
-            {
-              backgroundColor: logo_circle_color
-                ? logo_circle_color
-                : currentTheme.primary,
-            },
-          ]}>
-          <Icon
-            name={icon}
-            solid
-            size={iconSizes.small}
-            color={currentTheme.background}
-          />
-        </View>
-      </View>
-      <View style={styles.labelHolder}>
-        <Text
-          style={[
-            styles.labelText,
-            {
-              color: fontColor ? fontColor : currentTheme.text,
-              fontSize: fontSizes.medium,
-              fontFamily: fonts.secondary,
-            },
-          ]}>
-          {label}
-        </Text>
+      <View
+        style={[
+          styles.iconContainer,
+          {
+            backgroundColor: logo_circle_color
+              ? logo_circle_color
+              : currentTheme.primary,
+          },
+        ]}>
+        <Icon
+          name={icon}
+          solid
+          size={iconSizes.small}
+          color={currentTheme.background}
+        />
       </View>
 
-      <View style={styles.logoHolder}>
+      <Text style={[styles.labelHolder, {color: currentTheme.text}]}>
+        {label}
+      </Text>
+
+      <View style={styles.iconContainer}>
         {caret && (
           <Icon
             name="caret-right"
@@ -113,44 +104,26 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
           />
         )}
       </View>
-
-      <View
-        style={[styles.bottomBorder, {backgroundColor: currentTheme.borders}]}
-      />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   settingsOption: {
-    flexDirection: 'row',
-    padding: 10,
-  },
-  logoHolder: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.spaceBetweenHorizontal,
+    borderBottomWidth: borderWidth.xSmall,
+    padding: paddingSizes.small,
+    width: '85%',
   },
   labelHolder: {
-    flex: 6,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    ...textStyles.bodyPrimaryMedium,
+    width: '75%',
   },
-  labelText: {},
-  logoText: {},
-  bottomBorder: {
-    position: 'absolute',
-    bottom: 0,
-    left: '5%',
-    right: '5%',
-    height: borderWidth.xSmall,
-  },
-  logoCircle: {
-    width: 25,
-    height: 25,
+  iconContainer: {
+    ...layoutStyles.centerHorizontally,
     borderRadius: borderRadius.small,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: iconSizes.large,
+    height: iconSizes.large,
   },
 });
 

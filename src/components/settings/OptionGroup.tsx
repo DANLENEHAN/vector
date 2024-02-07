@@ -7,6 +7,8 @@ import {
   iconSizes,
   layoutStyles,
   textStyles,
+  borderWidth,
+  paddingSizes,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -91,7 +93,6 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
           </Text>
           {selectedOption === index && (
             <Icon
-              style={styles.optionTick}
               name="check"
               size={iconSizes.medium}
               color={currentTheme.text}
@@ -106,21 +107,16 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
 const styles = StyleSheet.create({
   componentWrapper: {
     ...layoutStyles.flexStartVertical,
-    width: '100%',
-    height: '20%',
+    width: '90%',
   },
   option: {
-    borderBottomWidth: 1,
-    flex: 1,
-    width: '90%',
     ...layoutStyles.spaceBetweenHorizontal,
+    borderBottomWidth: borderWidth.xSmall,
+    padding: paddingSizes.small,
   },
   optionText: {
     ...textStyles.bodyPrimaryMedium,
     flex: 9,
-  },
-  optionTick: {
-    flex: 1,
   },
 });
 
