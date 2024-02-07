@@ -11,7 +11,6 @@ import {useSystem} from '@context/SystemContext';
 // Types
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/Types';
-
 /**
  * Props for the WorkoutScreen component.
  *

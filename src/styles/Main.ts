@@ -8,7 +8,8 @@ import {
   FontWeights,
   ButtonStyles,
   LayoutStyles,
-  TitleStyles,
+  HeadingStyles,
+  ParagraphStyles,
 } from '@styles/Types';
 
 const black = '#333333';
@@ -134,7 +135,7 @@ export const buttonStyles: ButtonStyles = {
   },
 };
 
-export const titleStyles: TitleStyles = {
+export const headingStyles: HeadingStyles = {
   headingPrimary: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
@@ -144,6 +145,19 @@ export const titleStyles: TitleStyles = {
     fontSize: fontSizes.large,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
+  },
+};
+
+export const paragraphStyles: ParagraphStyles = {
+  primaryText: {
+    fontSize: fontSizes.small,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.normal,
+  },
+  secondaryText: {
+    fontSize: fontSizes.small,
+    fontFamily: fonts.secondary,
+    fontWeight: fontWeights.normal,
   },
 };
 

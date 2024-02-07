@@ -12,7 +12,7 @@ import {ScreenProps} from '@screens/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {marginSizes, layoutStyles, titleStyles} from '@styles/Main';
+import {marginSizes, layoutStyles, headingStyles} from '@styles/Main';
 // Services
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 // Constants
@@ -96,13 +96,13 @@ const MoodScreen: React.FC<ScreenProps> = ({
       </View>
       <View style={styles.content}>
         <Text
-          style={[titleStyles.headingSecondary, {color: currentTheme.text}]}>
+          style={[headingStyles.headingPrimary, {color: currentTheme.text}]}>
           What's your mood?
         </Text>
         <Icon name={mood.icon} solid size={300} color={mood.color} />
         <Text
           style={[
-            titleStyles.headingSecondary,
+            headingStyles.headingSecondary,
             {color: currentTheme.text, shadowColor: currentTheme.shadow},
           ]}>
           {mood.label}
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    ...titleStyles.headingSecondary,
+    ...headingStyles.headingSecondary,
     marginBottom: marginSizes.xxLarge,
   },
   slider: {

@@ -5,7 +5,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   layoutStyles,
-  titleStyles,
+  headingStyles,
 } from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
@@ -52,7 +52,8 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="wellness-progress-screen">
       <View style={styles.header}>
-        <Text style={[titleStyles.headingPrimary, {color: currentTheme.text}]}>
+        <Text
+          style={[headingStyles.headingPrimary, {color: currentTheme.text}]}>
           Health & Wellness
         </Text>
       </View>

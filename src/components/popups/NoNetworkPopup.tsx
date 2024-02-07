@@ -1,20 +1,17 @@
 // React Imports
 import React from 'react';
+import {View, Modal, Text, StyleSheet} from 'react-native';
 // Styling
 import {
-  fontSizes,
-  fontWeights,
   darkThemeColors,
   lightThemeColors,
-  paddingSizes,
-  marginSizes,
+  headingStyles,
+  layoutStyles,
+  paragraphStyles,
   borderRadius,
-  fonts,
-  buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
-import {View, Text, StyleSheet} from 'react-native';
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -34,42 +31,29 @@ const NoNetworkPopup: React.FC = (): React.ReactElement => {
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View
-      testID="no-network-popup"
-      style={[
-        styles.overlayContainer,
-        {
-          backgroundColor: currentTheme.lowOpacityBackground,
-        },
-      ]}>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      onRequestClose={async () => {
+        await NetInfo.refresh();
+      }}
+      visible={!isConnected}>
       <View
         style={[
-          styles.overlayTop,
-          {
-            backgroundColor: currentTheme.lowOpacityBackground,
-          },
-        ]}
-      />
-      <View
-        style={[
-          styles.overlayContent,
-          {backgroundColor: currentTheme.background},
+          styles.modalBackGround,
+          {backgroundColor: currentTheme.lowOpacityBackground},
         ]}>
-        <View style={[styles.overlayTitleContainer]}>
-          <Text style={[styles.overlayTitle, {color: currentTheme.text}]}>
+        <View
+          style={[styles.content, {backgroundColor: currentTheme.background}]}>
+          <Text
+            style={{color: currentTheme.text, ...headingStyles.headingPrimary}}>
             No Internet
           </Text>
-        </View>
-        <View style={styles.overlayMessageContainer}>
-          <Text
-            style={[styles.overlayMessage, {color: currentTheme.lightText}]}>
+          <Text style={styles.textBody}>
             Oops! It looks like you're offline. We can't reach our servers at
             the moment. Please check your internet connection and try again.
           </Text>
-        </View>
-        <View style={styles.buttonContainer}>
           <ButtonComponent
-            style={[styles.retryButton]}
             onPress={async () => {
               await NetInfo.refresh();
             }}
@@ -78,66 +62,28 @@ const NoNetworkPopup: React.FC = (): React.ReactElement => {
           />
         </View>
       </View>
-    </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  overlayContainer: {
-    position: 'absolute', // Position the red view absolutely
-    bottom: 0, // Position it at the bottom of the parent view
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    zIndex: 1,
-  },
-  overlayTop: {
+  modalBackGround: {
+    ...layoutStyles.centerVertically,
     flex: 1,
   },
-  overlayContent: {
+  content: {
+    ...layoutStyles.spaceAroundVertical,
     height: 300,
     borderTopRightRadius: borderRadius.xLarge,
     borderTopLeftRadius: borderRadius.xLarge,
-    justifyContent: 'space-around',
-  },
-  overlayTitleContainer: {
-    marginTop: marginSizes.medium,
-    padding: paddingSizes.small,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overlayTitle: {
-    fontSize: fontSizes.xLarge,
-    fontWeight: fontWeights.bold,
-    fontFamily: fonts.primary,
-  },
-  overlayMessageContainer: {
-    height: 'auto',
     width: '100%',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    alignSelf: 'center',
-    marginVertical: marginSizes.medium,
+    position: 'absolute',
+    bottom: 0,
   },
-  overlayMessage: {
-    width: '100%',
-    justifyContent: 'center',
-    padding: paddingSizes.medium,
-    flexWrap: 'wrap',
-    fontSize: fontSizes.medium,
-    fontWeight: fontWeights.light,
-    fontFamily: fonts.secondary,
+  textBody: {
+    ...paragraphStyles.primaryText,
+    width: '90%',
     textAlign: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: marginSizes.medium,
-  },
-  retryButton: {
-    ...buttonStyles.medium,
   },
 });
 

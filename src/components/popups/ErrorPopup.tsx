@@ -10,6 +10,7 @@ import {
   borderRadius,
   fontSizes,
   buttonStyles,
+  layoutStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -60,15 +61,13 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   popupContainer: {
     flex: 0.2,
     width: '95%',
     borderRadius: borderRadius.large,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...layoutStyles.centerVertically,
   },
   errorText: {
     marginLeft: marginSizes.large,

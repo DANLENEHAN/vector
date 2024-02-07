@@ -42,7 +42,12 @@ export interface ButtonStyles {
   large: ViewStyle;
 }
 
-export interface TitleStyles {
+export interface HeadingStyles {
   headingPrimary: TextStyle;
   headingSecondary: TextStyle;
+}
+
+export interface ParagraphStyles {
+  primaryText: TextStyle;
+  secondaryText: TextStyle;
 }

@@ -86,14 +86,14 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
 
 const styles = StyleSheet.create({
   unitSelector: {
+    ...layoutStyles.flexStretchHorizontal,
     height: 60,
     width: '80%',
     borderRadius: borderRadius.medium,
-    ...layoutStyles.flexStretchHorizontal,
   },
   unitOption: {
-    flex: 1,
     ...layoutStyles.centerHorizontally,
+    flex: 1,
   },
   unitText: {
     fontSize: fontSizes.medium,

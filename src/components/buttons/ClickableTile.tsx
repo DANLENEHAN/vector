@@ -15,14 +15,13 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import {
   fontSizes,
   fontWeights,
-  paddingSizes,
   borderRadius,
-  marginSizes,
   darkThemeColors,
   lightThemeColors,
   iconSizes,
-  fonts,
   layoutStyles,
+  headingStyles,
+  paragraphStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -134,12 +133,10 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
 
 const styles = StyleSheet.create({
   tile: {
-    marginVertical: marginSizes.small,
-    padding: paddingSizes.small,
-    borderRadius: borderRadius.medium,
-    width: '45%',
-    height: 120,
     ...layoutStyles.spaceAroundVertical,
+    width: '45%',
+    height: 110,
+    borderRadius: borderRadius.medium,
   },
   iconContainer: {
     ...layoutStyles.centerVertically,
@@ -155,14 +152,10 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
   },
   tileLabel: {
-    fontSize: fontSizes.large,
-    fontWeight: fontWeights.bold,
-    fontFamily: fonts.primary,
+    ...headingStyles.headingSecondary,
   },
   tileSubtext: {
-    fontSize: fontSizes.small,
-    fontWeight: fontWeights.normal,
-    fontFamily: fonts.secondary,
+    ...paragraphStyles.secondaryText,
   },
 });
 
