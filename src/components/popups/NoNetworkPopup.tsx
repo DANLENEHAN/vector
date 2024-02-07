@@ -32,6 +32,7 @@ const NoNetworkPopup: React.FC = (): React.ReactElement => {
 
   return (
     <Modal
+      testID="no-network-popup"
       animationType="fade"
       transparent={true}
       onRequestClose={async () => {
