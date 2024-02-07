@@ -16,6 +16,7 @@ import {
   fontSizes,
   fonts,
   fontWeights,
+  layoutStyles,
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
@@ -96,8 +97,7 @@ const Splash: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   logoText: {
     fontSize: fontSizes.title,

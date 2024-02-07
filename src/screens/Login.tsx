@@ -23,7 +23,7 @@ import {
   lightThemeColors,
   paddingSizes,
   layoutStyles,
-  titleStyles,
+  headingStyles,
   buttonStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -169,7 +169,6 @@ const LoginScreen: React.FC<ScreenProps> = ({
             onPress={() => setIsLogin(prev => !prev)}
             text={viewLinkText}
           />
-          {!isConnected && <NoNetworkPopup />}
         </View>
       </View>
       <ErrorPopup
@@ -177,6 +176,7 @@ const LoginScreen: React.FC<ScreenProps> = ({
         message={formError}
         onClose={() => setFormError('')}
       />
+      {!isConnected && <NoNetworkPopup />}
     </ScreenWrapper>
   );
 };
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
   content: {
     height: '50%',
-    ...layoutStyles.spaceAroundVertical,
+    ...layoutStyles.spaceBetweenVertical,
     paddingLeft: paddingSizes.large,
     paddingRight: paddingSizes.large,
   },
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceBetweenHorizontal,
   },
   title: {
-    ...titleStyles.headingPrimary,
+    ...headingStyles.headingPrimary,
   },
   createAccButton: {
     ...buttonStyles.medium,

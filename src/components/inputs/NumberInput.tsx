@@ -3,12 +3,7 @@ import React from 'react';
 // Components
 import {TextInput, StyleSheet} from 'react-native';
 // Styling
-import {
-  darkThemeColors,
-  lightThemeColors,
-  fontSizes,
-  fonts,
-} from '@styles/Main';
+import {darkThemeColors, lightThemeColors, headingStyles} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
 /**
@@ -88,8 +83,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
 const styles = StyleSheet.create({
   textInput: {
-    fontFamily: fonts.primary,
-    fontSize: fontSizes.title,
+    ...headingStyles.headingTitle,
   },
 });
 

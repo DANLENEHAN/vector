@@ -6,7 +6,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   layoutStyles,
-  titleStyles,
+  headingStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
@@ -47,9 +47,9 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({
     <View
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="nutrition-progress-screen">
-      nutrition-progess-screen
       <View style={styles.header}>
-        <Text style={[titleStyles.headingPrimary, {color: currentTheme.text}]}>
+        <Text
+          style={[headingStyles.headingPrimary, {color: currentTheme.text}]}>
           Nutrition
         </Text>
       </View>

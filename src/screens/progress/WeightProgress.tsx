@@ -4,12 +4,7 @@ import {useFocusEffect} from '@react-navigation/native';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {
-  fontSizes,
-  lightThemeColors,
-  darkThemeColors,
-  marginSizes,
-} from '@styles/Main';
+import {lightThemeColors, darkThemeColors} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import LineGraph from '@components/graphs/Line/Graph';
@@ -211,7 +206,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
         />
 
         <View style={styles.chartContainerContainer}>
-          <View style={styles.chartContainer}>
+          <View>
             {data && activePeriod && data[activePeriod] && (
               <LineGraph
                 data={data[activePeriod].data}
@@ -230,25 +225,14 @@ const WeightProgress: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
   },
   chartContainerContainer: {
     width: '100%',
     height: 300,
   },
-  chartContainer: {
-    flex: 1,
-    alignContent: 'center',
-    justifyContent: 'center',
-  },
   unitSelector: {
     height: 25,
     width: '90%',
-    marginTop: marginSizes.xSmall,
-    marginBottom: marginSizes.medium,
   },
 });
 

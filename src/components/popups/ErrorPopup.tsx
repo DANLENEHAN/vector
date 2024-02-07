@@ -8,8 +8,9 @@ import {
   lightThemeColors,
   marginSizes,
   borderRadius,
-  fontSizes,
   buttonStyles,
+  layoutStyles,
+  textStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -43,7 +44,7 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({
             styles.popupContainer,
             {backgroundColor: currentTheme.background},
           ]}>
-          <Text style={[styles.errorText, {color: currentTheme.text}]}>
+          <Text style={[styles.ctaText, {color: currentTheme.text}]}>
             {message}
           </Text>
           <ButtonComponent
@@ -60,21 +61,19 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   popupContainer: {
     flex: 0.2,
     width: '95%',
     borderRadius: borderRadius.large,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...layoutStyles.centerVertically,
   },
-  errorText: {
+  ctaText: {
+    ...textStyles.ctaText,
     marginLeft: marginSizes.large,
     marginRight: marginSizes.large,
     marginBottom: marginSizes.xxLarge,
-    fontSize: fontSizes.large,
   },
   closeButton: {
     ...buttonStyles.medium,

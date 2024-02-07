@@ -8,7 +8,8 @@ import {
   FontWeights,
   ButtonStyles,
   LayoutStyles,
-  TitleStyles,
+  HeadingStyles,
+  TextStyles,
 } from '@styles/Types';
 
 const black = '#333333';
@@ -25,6 +26,7 @@ export const fonts = {
 export const fontSizes = {
   // explore allowFontScaling for accessability
   small: 12,
+  default: 14,
   medium: 16,
   large: 20,
   xLarge: 24,
@@ -134,7 +136,12 @@ export const buttonStyles: ButtonStyles = {
   },
 };
 
-export const titleStyles: TitleStyles = {
+export const headingStyles: HeadingStyles = {
+  headingTitle: {
+    fontSize: fontSizes.title,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.bold,
+  },
   headingPrimary: {
     fontSize: fontSizes.xLarge,
     fontFamily: fonts.primary,
@@ -144,6 +151,44 @@ export const titleStyles: TitleStyles = {
     fontSize: fontSizes.large,
     fontFamily: fonts.primary,
     fontWeight: fontWeights.bold,
+  },
+};
+
+export const textStyles: TextStyles = {
+  bodyPrimarySmall: {
+    fontSize: fontSizes.small,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.normal,
+  },
+  bodyPrimaryMedium: {
+    fontSize: fontSizes.medium,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.normal,
+  },
+  bodySecondarySmall: {
+    fontSize: fontSizes.small,
+    fontFamily: fonts.secondary,
+    fontWeight: fontWeights.normal,
+  },
+  bodySecondaryMedium: {
+    fontSize: fontSizes.medium,
+    fontFamily: fonts.secondary,
+    fontWeight: fontWeights.normal,
+  },
+  buttonText: {
+    fontSize: fontSizes.medium,
+    fontFamily: fonts.secondary,
+    fontWeight: fontWeights.bold,
+  },
+  inputText: {
+    fontSize: fontSizes.default,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.normal,
+  },
+  ctaText: {
+    fontSize: fontSizes.medium,
+    fontFamily: fonts.primary,
+    fontWeight: fontWeights.normal,
   },
 };
 
@@ -179,12 +224,12 @@ export const layoutStyles: LayoutStyles = {
     alignItems: 'center',
   },
   flexStartHorizontal: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   flexStartVertical: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
   },

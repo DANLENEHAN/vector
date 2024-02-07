@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   settingsSection: {
     flex: 8,
-    ...layoutStyles.flexStartHorizontal,
+    ...layoutStyles.flexStartVertical,
   },
 });
 

@@ -6,13 +6,12 @@ import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {TopBarProps} from '@components/navbar/Types';
 // Styling
 import {
-  fonts,
-  fontSizes,
-  fontWeights,
   lightThemeColors,
   darkThemeColors,
   paddingSizes,
   borderWidth,
+  layoutStyles,
+  headingStyles,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
@@ -99,17 +98,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    ...layoutStyles.spaceBetweenHorizontal,
     height: 60,
     borderBottomWidth: borderWidth.small,
   },
   label: {
-    fontSize: fontSizes.medium,
-    fontFamily: fonts.primary,
     padding: paddingSizes.medium,
-    fontWeight: fontWeights.bold,
+    ...headingStyles.headingSecondary,
   },
 });
 

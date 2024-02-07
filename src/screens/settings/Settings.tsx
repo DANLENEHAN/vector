@@ -8,7 +8,7 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Types
 import {ScreenProps} from '@screens/Types';
 // Theme
-import {lightThemeColors, darkThemeColors} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Logger
 import logger from '@utils/Logger';
@@ -75,18 +75,13 @@ const SettingsScreen: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
   },
   profileSection: {
     flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   settingsSection: {
     flex: 7,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
 });
 

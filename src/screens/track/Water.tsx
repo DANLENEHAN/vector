@@ -19,7 +19,7 @@ import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
-import {marginSizes, layoutStyles, titleStyles} from '@styles/Main';
+import {layoutStyles, headingStyles} from '@styles/Main';
 // Services
 import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
@@ -114,8 +114,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    ...titleStyles.headingSecondary,
-    marginBottom: marginSizes.xxLarge,
+    ...headingStyles.headingSecondary,
   },
 });
 
