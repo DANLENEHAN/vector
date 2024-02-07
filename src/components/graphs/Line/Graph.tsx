@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   averageValueContainer: {
-    flex: 1,
+    flex: 2,
   },
   chartContainer: {
     flex: 19,
