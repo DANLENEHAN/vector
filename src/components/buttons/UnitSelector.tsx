@@ -4,13 +4,11 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
-  fontSizes,
-  fontWeights,
   borderRadius,
   darkThemeColors,
   lightThemeColors,
-  fonts,
   layoutStyles,
+  textStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -96,9 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   unitText: {
-    fontSize: fontSizes.medium,
-    fontWeight: fontWeights.bold,
-    fontFamily: fonts.primary,
+    ...textStyles.buttonText,
   },
   firstUnit: {
     borderTopLeftRadius: borderRadius.medium,

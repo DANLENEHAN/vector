@@ -2,13 +2,11 @@
 import React from 'react';
 // Theme
 import {
-  fonts,
-  fontSizes,
   lightThemeColors,
   darkThemeColors,
   marginSizes,
-  fontWeights,
   layoutStyles,
+  headingStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -81,10 +79,8 @@ const styles = StyleSheet.create({
     marginRight: marginSizes.large,
   },
   logoText: {
+    ...headingStyles.headingPrimary,
     flex: 8,
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
   },
 });
 

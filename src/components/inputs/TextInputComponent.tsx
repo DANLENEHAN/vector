@@ -18,8 +18,8 @@ import {
   darkThemeColors,
   lightThemeColors,
   iconSizes,
-  fonts,
   layoutStyles,
+  textStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -92,11 +92,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleTextChange = (text: string) => {
-    const error: string | null = validation.validate(text)
+    const validationError: string | null = validation.validate(text)
       ? null
       : validation.error;
     if (enableErrors) {
-      setError(error);
+      setError(validationError);
     }
     onChangeText(text, error ? false : true);
   };
@@ -127,7 +127,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
       <View
         style={[
           styles.inputContainer,
-          {borderColor: error ? 'red' : currentTheme.borders},
+          {borderColor: error ? currentTheme.error : currentTheme.borders},
         ]}>
         <Icon
           name={iconName}
@@ -165,7 +165,10 @@ const TextInputComponent: React.FC<TextInputProps> = ({
             height: errorContainerHeight,
           }}
           testID="text-input-error">
-          <Text style={{color: currentTheme.error}}>{error}</Text>
+          <Text
+            style={[textStyles.bodyPrimarySmall, {color: currentTheme.error}]}>
+            {error}
+          </Text>
         </View>
       ) : null}
     </View>
@@ -183,13 +186,13 @@ const styles = StyleSheet.create({
     padding: paddingSizes.small,
   },
   input: {
+    ...textStyles.inputText,
     flex: 1,
     marginLeft: marginSizes.small,
-    fontFamily: fonts.primary,
   },
   showHideButton: {
     paddingRight: paddingSizes.small,
-    fontFamily: fonts.primary,
+    ...textStyles.inputText,
   },
   icon: {
     paddingRight: paddingSizes.small,

@@ -11,6 +11,7 @@ import {
   darkThemeColors,
   borderWidth,
   iconSizes,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -76,9 +77,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
 
 const styles = StyleSheet.create({
   navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    ...layoutStyles.spaceAroundHorizontal,
     height: 60,
     borderBottomWidth: borderWidth.small,
     shadowOffset: {width: 0, height: 2},
@@ -87,14 +86,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   iconContainer: {
+    ...layoutStyles.centerHorizontally,
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   logoContainer: {
+    ...layoutStyles.centerHorizontally,
     flex: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   logoText: {
     fontSize: fontSizes.xLarge,

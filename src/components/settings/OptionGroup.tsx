@@ -2,13 +2,11 @@
 import React from 'react';
 // Styling
 import {
-  fonts,
-  fontSizes,
   lightThemeColors,
   darkThemeColors,
-  paddingSizes,
-  borderWidth,
   iconSizes,
+  layoutStyles,
+  textStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -76,41 +74,29 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
   };
 
   return (
-    <View style={styles.optionGroup}>
+    <View style={styles.componentWrapper}>
       {options.map((option, index) => (
         <TouchableOpacity
-          style={[styles.option]}
+          style={[{borderColor: currentTheme.borders}, styles.option]}
           key={index}
           onPress={() => handleOptionPress(index)}>
-          <View style={styles.optionLabel}>
-            <Text
-              style={[
-                {
-                  color: currentTheme.text,
-                  fontSize: fontSizes.medium,
-                  fontFamily: fonts.secondary,
-                },
-              ]}>
-              {option.label}
-            </Text>
-          </View>
-
-          <View style={styles.optionTick}>
-            {selectedOption === index && (
-              <Icon
-                name="check"
-                size={iconSizes.medium}
-                color={currentTheme.text}
-              />
-            )}
-          </View>
-
-          <View
+          <Text
             style={[
-              styles.bottomBorder,
-              {backgroundColor: currentTheme.borders},
-            ]}
-          />
+              styles.optionText,
+              {
+                color: currentTheme.text,
+              },
+            ]}>
+            {option.label}
+          </Text>
+          {selectedOption === index && (
+            <Icon
+              style={styles.optionTick}
+              name="check"
+              size={iconSizes.medium}
+              color={currentTheme.text}
+            />
+          )}
         </TouchableOpacity>
       ))}
     </View>
@@ -118,30 +104,23 @@ const OptionGroup: React.FC<OptionGroupProps> = ({
 };
 
 const styles = StyleSheet.create({
-  optionGroup: {
-    flex: 1,
-    flexDirection: 'column',
+  componentWrapper: {
+    ...layoutStyles.flexStartVertical,
+    width: '100%',
+    height: '20%',
   },
   option: {
-    flexDirection: 'row',
-    padding: paddingSizes.small,
+    borderBottomWidth: 1,
+    flex: 1,
+    width: '90%',
+    ...layoutStyles.spaceBetweenHorizontal,
   },
-  optionLabel: {
-    flex: 7,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  optionText: {
+    ...textStyles.bodyPrimaryMedium,
+    flex: 9,
   },
   optionTick: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottomBorder: {
-    position: 'absolute',
-    bottom: 0,
-    left: '3%',
-    right: '3%',
-    height: borderWidth.xSmall,
+    flex: 1,
   },
 });
 

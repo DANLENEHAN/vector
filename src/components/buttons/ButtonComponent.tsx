@@ -4,8 +4,6 @@ import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 // Styling
 import {
-  fontSizes,
-  fontWeights,
   paddingSizes,
   borderRadius,
   marginSizes,
@@ -13,6 +11,7 @@ import {
   lightThemeColors,
   buttonStyles,
   layoutStyles,
+  textStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -84,8 +83,7 @@ const styles = StyleSheet.create({
     marginHorizontal: marginSizes.small,
   },
   buttonText: {
-    fontSize: fontSizes.medium,
-    fontWeight: fontWeights.bold,
+    ...textStyles.buttonText,
   },
 });
 

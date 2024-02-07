@@ -13,15 +13,13 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 // Styling
 import {
-  fontSizes,
-  fontWeights,
   borderRadius,
   darkThemeColors,
   lightThemeColors,
   iconSizes,
   layoutStyles,
   headingStyles,
-  paragraphStyles,
+  textStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -148,14 +146,13 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   buttonText: {
-    fontSize: fontSizes.medium,
-    fontWeight: fontWeights.bold,
+    ...textStyles.buttonText,
   },
   tileLabel: {
     ...headingStyles.headingSecondary,
   },
   tileSubtext: {
-    ...paragraphStyles.secondaryText,
+    ...textStyles.bodySecondarySmall,
   },
 });
 

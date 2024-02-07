@@ -7,7 +7,7 @@ import {
   lightThemeColors,
   headingStyles,
   layoutStyles,
-  paragraphStyles,
+  textStyles,
   borderRadius,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   textBody: {
-    ...paragraphStyles.primaryText,
+    ...textStyles.bodyPrimarySmall,
     width: '90%',
     textAlign: 'center',
   },

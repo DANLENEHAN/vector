@@ -8,9 +8,9 @@ import {
   lightThemeColors,
   marginSizes,
   borderRadius,
-  fontSizes,
   buttonStyles,
   layoutStyles,
+  textStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -44,7 +44,7 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({
             styles.popupContainer,
             {backgroundColor: currentTheme.background},
           ]}>
-          <Text style={[styles.errorText, {color: currentTheme.text}]}>
+          <Text style={[styles.ctaText, {color: currentTheme.text}]}>
             {message}
           </Text>
           <ButtonComponent
@@ -69,11 +69,11 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.large,
     ...layoutStyles.centerVertically,
   },
-  errorText: {
+  ctaText: {
+    ...textStyles.ctaText,
     marginLeft: marginSizes.large,
     marginRight: marginSizes.large,
     marginBottom: marginSizes.xxLarge,
-    fontSize: fontSizes.large,
   },
   closeButton: {
     ...buttonStyles.medium,

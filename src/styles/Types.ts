@@ -43,11 +43,17 @@ export interface ButtonStyles {
 }
 
 export interface HeadingStyles {
+  headingTitle: TextStyle;
   headingPrimary: TextStyle;
   headingSecondary: TextStyle;
 }
 
-export interface ParagraphStyles {
-  primaryText: TextStyle;
-  secondaryText: TextStyle;
+export interface TextStyles {
+  bodyPrimarySmall: TextStyle;
+  bodyPrimaryMedium: TextStyle;
+  bodySecondarySmall: TextStyle;
+  bodySecondaryMedium: TextStyle;
+  buttonText: TextStyle;
+  inputText: TextStyle;
+  ctaText: TextStyle;
 }
