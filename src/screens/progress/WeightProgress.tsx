@@ -15,7 +15,6 @@ import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 import {useSystem} from '@context/SystemContext';
 // Utils
 import {convertStats} from '@utils/Conversion';
-import {parse} from 'date-fns';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
@@ -63,119 +62,43 @@ const WeightProgress: React.FC<ScreenProps> = ({
         });
         // Inside your useEffect
         if (user_weights) {
-          // const graphData = user_weights.map(d => ({
-          //   date: new Date(d.created_at).valueOf(),
-          //   value: d.value,
-          // })) as graphData[];
           const tempData = new GraphPlotData(
             [
               {
-                date: parse('2023-01-01', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-01T11:35:36.961Z',
                 value: 70,
               },
               {
-                date: parse('2023-01-02', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-02T11:35:36.961Z',
                 value: 71,
               },
               {
-                date: parse('2023-01-03', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-03T11:35:36.961Z',
                 value: 70,
               },
               {
-                date: parse('2023-01-04', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-04T11:35:36.961Z',
                 value: null,
               },
               {
-                date: parse('2023-01-05', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-05T11:35:36.961Z',
                 value: 70,
               },
               {
-                date: parse('2023-01-06', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-06T11:35:36.961Z',
                 value: 65,
               },
               {
-                date: parse('2023-01-07', 'yyyy-MM-dd', new Date()).valueOf(),
+                date: '2024-01-07T11:35:36.961Z',
                 value: 64,
-              },
-              {
-                date: parse('2023-01-08', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-09', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-10', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-11', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-12', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-13', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: null,
-              },
-              {
-                date: parse('2023-01-14', 'yyyy-MM-dd', new Date()).valueOf(),
-                value: 80,
               },
             ],
             weightUnitPref,
           );
 
           const graphData = {
-            D: new GraphPlotData(
-              [
-                {
-                  date: parse('2023-01-01', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 70,
-                },
-                {
-                  date: parse('2023-01-02', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 71,
-                },
-                {
-                  date: parse('2023-01-03', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 70,
-                },
-                {
-                  date: parse('2023-01-04', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 50,
-                },
-                {
-                  date: parse('2023-01-05', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 70,
-                },
-                {
-                  date: parse('2023-01-06', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: 65,
-                },
-              ],
-              weightUnitPref,
-            ),
-            W: new GraphPlotData(
-              [
-                {
-                  date: parse('2023-01-01', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: null,
-                },
-                {
-                  date: parse('2023-01-02', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: null,
-                },
-                {
-                  date: parse('2023-01-03', 'yyyy-MM-dd', new Date()).valueOf(),
-                  value: null,
-                },
-              ],
-              weightUnitPref,
-            ),
+            D: tempData,
+            W: tempData,
             M: tempData,
             '6M': tempData,
             Y: tempData,
@@ -213,7 +136,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
         <View style={styles.graphSection}>
           {data && activePeriod && data[activePeriod] && (
             <LineGraph
-              data={data[activePeriod].data}
+              data={data[activePeriod].graphData}
               averageLabel={data[activePeriod].averagePeriodLabel}
               averageValue={data[activePeriod].averageValue}
               unit={data[activePeriod].unit}

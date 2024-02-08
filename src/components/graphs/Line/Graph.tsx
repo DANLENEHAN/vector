@@ -45,36 +45,6 @@ interface LineGraphProps {
 }
 
 /**
- * Function to format the date for the tooltip
- *
- * @function formatDate
- * @example
- * const date = formatDate(1620000000000);
- * logger.info(date); // 1 Jan 2021
- *
- * @param {number} ms - The date in milliseconds
- * @param {Intl.DateTimeFormatOptions} [options] - Optional formatting options
- * @returns {string} - The formatted date string
- */
-const formatDate = (
-  ms: number,
-  options?: Intl.DateTimeFormatOptions,
-): string => {
-  'worklet';
-
-  const date = new Date(ms);
-  const defaultOptions: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-  };
-
-  const mergedOptions = {...defaultOptions, ...options};
-  const dateFormatter = new Intl.DateTimeFormat('en-GB', mergedOptions);
-
-  return dateFormatter.format(date);
-};
-
-/**
  *  Line Graph Component
  *
  * @component LineGraph
@@ -123,11 +93,10 @@ const LineGraph: React.FC<LineGraphProps> = ({
   const currentDate = useDerivedValue(() => {
     // If graph clicked
     if (isFirstPressActive) {
-      const idx = firstPress.x.value.value;
-      if (idx === undefined || idx === null) {
+      const currDate = data[firstPress.x.value.value].dateStr;
+      if (currDate === undefined || currDate === null) {
         return '-';
       }
-      const currDate = formatDate(idx, {year: 'numeric'});
       return currDate;
     }
     // If graph not clicked
@@ -177,8 +146,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
             font: font,
             lineColor: currentTheme.borders,
             labelColor: {x: currentTheme.text, y: currentTheme.text},
-            // Function converts the date to a string
-            formatXLabel: ms => formatDate(ms),
+            formatXLabel: ms => data[ms].dateStr,
           }}
           // Render the tooltip if the graph is clicked
           renderOutside={({chartBounds}) => (

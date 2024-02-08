@@ -1,109 +1,90 @@
-// Type definitions for graph data
-// Utils
-import {format} from 'date-fns';
+import {parseDate, formatDate} from '@services/date/Functions';
+import {TimestampFormat, DateFormat} from '@shared/Enums';
 
-/**
- * @description A class that represents a single point of data for a graph.
- * It contains a date and a value.
- * @param {number} date The date of the data point.
- * @param {number | null} value The value of the data point.
- */
+export type graphInputData = {
+  date: string;
+  value: number | null;
+};
+
 export type graphDataPoint = {
-  date: number;
+  date: number; // Necessary for Victory, but documented for clarity
+  dateStr: string;
   value: number | null;
 };
 
 /**
- * @description A class that represents a single point of data for a graph.
- * It contains a date and a value.
- *
- * @class GraphPlotData
- *
- * @property {graphDataPoint[]} data: an array of graphDataPoints
- * @property {string} unit: the unit of the data
- * @property {number} averageValue: the average value of the data
- * @property {string} averagePeriodLabel; the average period label of the data
+ * Class to prepare and analyze graph data.
+ * Handles transformation, sorting of input data, and calculation of average metrics.
  */
 export class GraphPlotData {
-  data: graphDataPoint[];
   unit: string;
-  averageValue: number;
+  graphData: graphDataPoint[];
   averagePeriodLabel: string;
+  averageValue: number;
 
   /**
-   * getAverageValue calculates the average value of the data
-   * @param data an array of graphDataPoints
-   * @returns the average value of the data
-   *
-   * @example
-   * // returns 1.5
-   * getAverageValue([
-   * { date: new Date(2020, 0, 1), value: 1 },
-   * { date: new Date(2020, 12, 31), value: 2 }
-   * ]);
+   * Constructor to initialize graph data and calculate metrics.
+   * @param data Array of input data including dates and values.
+   * @param unit Measurement unit for the values.
    */
-  getAverageValue() {
+  constructor(data: graphInputData[], unit: string) {
+    this.unit = unit;
+    this.graphData = this.validateAndTransformInputData(data);
+    this.averagePeriodLabel = this.calculateAveragePeriodLabel(this.graphData);
+    this.averageValue = this.calculateAverageValue(this.graphData);
+  }
+
+  /**
+   * Validates input data and transforms it into sorted graph data points.
+   * @param inputData Array of raw input data.
+   * @returns Array of transformed and sorted graph data points.
+   */
+  private validateAndTransformInputData(
+    inputData: graphInputData[],
+  ): graphDataPoint[] {
+    const validatedData = inputData.filter(
+      data => !isNaN(Date.parse(data.date)),
+    );
+    const sortedInputData = validatedData.sort(
+      (a, b) =>
+        parseDate(a.date, TimestampFormat.ISO8601WithMilliseconds) -
+        parseDate(b.date, TimestampFormat.ISO8601WithMilliseconds),
+    );
+    return sortedInputData.map((dataPoint, index) => ({
+      date: index,
+      dateStr: formatDate(dataPoint.date, DateFormat.MMDDWithSlash),
+      value: dataPoint.value,
+    }));
+  }
+
+  /**
+   * Calculates the average value of the graph data points.
+   * @param graphData Array of graph data points.
+   * @returns The average value, excluding nulls.
+   */
+  private calculateAverageValue(graphData: graphDataPoint[]): number {
     let sum = 0;
     let count = 0;
-    for (let i = 0; i < this.data.length; i++) {
-      let current = this.data[i].value;
-      // If the value is null, do not include it in the average
-      if (current !== null) {
-        sum += current;
+    graphData.forEach(dataPoint => {
+      if (dataPoint.value !== null) {
+        sum += dataPoint.value;
+        count++;
       }
-      count++;
-    }
-    return sum / count;
+    });
+    return count > 0 ? sum / count : 0;
   }
 
   /**
-   * getAveragePeriodLabel calculates the average period label of the data
-   * Assumes that the data is sorted by date
-   *
-   * @param data an array of graphDataPoints
-   * @returns the average period label of the data
-   *
-   * @example
-   * // returns '1 Jan - 31 Dec 2020'
-   * getAveragePeriodLabel([
-   *  { date: new Date(2020, 0, 1), value: 1 },
-   * { date: new Date(2020, 12, 31), value: 2 }
-   * ]);
-   *
-   * */
-  getAveragePeriodLabel() {
-    // If there is no data, return empty string
-    if (this.data.length === 0) {
+   * Generates a label representing the period covered by the graph data.
+   * @param graphData Array of graph data points.
+   * @returns A string label for the period, or an empty string if no data.
+   */
+  private calculateAveragePeriodLabel(graphData: graphDataPoint[]): string {
+    if (graphData.length === 0) {
       return '';
     }
-    // If there is only one data point, return the date
-    if (this.data.length === 1) {
-      return `${format(this.data[0].date, 'd MMM yyyy')}`;
-    }
-    // If there are multiple data points, return the first and last date
-    const firstDate = this.data[0].date;
-    const lastDate = this.data[this.data.length - 1].date;
-    return `${format(firstDate, 'd MMM')} - ${format(lastDate, 'd MMM yyyy')}`;
-  }
-
-  /**
-   * @description The constructor for the GraphPlotData class.
-   * @param {graphDataPoint[]} data An array of graphDataPoints.
-   * @param {string} unit The unit of the data.
-   *
-   * @example
-   * // Example usage:
-   * const data = [
-   *  { date: new Date(2020, 0, 1), value: 1 },
-   *  { date: new Date(2020, 12, 31), value: 2 }
-   * ];
-   * const unit = 'kg';
-   * const graphPlotData = new GraphPlotData(data, unit);
-   */
-  constructor(data: graphDataPoint[], unit: string) {
-    this.unit = unit;
-    this.data = data;
-    this.averageValue = this.getAverageValue();
-    this.averagePeriodLabel = this.getAveragePeriodLabel();
+    const firstDateStr = graphData[0].dateStr;
+    const lastDateStr = graphData[graphData.length - 1].dateStr;
+    return `${firstDateStr} - ${lastDateStr}`;
   }
 }

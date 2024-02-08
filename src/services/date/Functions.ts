@@ -4,25 +4,6 @@ import {getTimeZone} from 'react-native-localize';
 import {TimestampTimezone} from './Type';
 
 /**
- * Converts a Unix timestamp in milliseconds to a formatted date string.
- *
- * @param {number} timestamp - The Unix timestamp in milliseconds.
- * @returns {string} - A formatted date string in the format 'YYYY-MM-DDTHH:mm:ss.SSS'.
- *
- * @example
- * const timestamp = 1620000000000;
- * const formattedDate = millisecondsToDate(timestamp);
- * logger.info(formattedDate); // Example output: '2021-05-03T12:34:56.789'
- */
-const millisecondsToDate = (timestamp: number): string => {
-  // If you wish to interact with the date as a UTC date, use moment.utc:
-  // This results in a date with a utc offset of +0:00:
-  const date: moment.Moment = moment.utc(timestamp);
-  const formattedDate: string = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-  return formattedDate;
-};
-
-/**
  * Generates the current UTC timestamp as a formatted date string.
  *
  * @returns {string} - A formatted date string representing the current UTC timestamp in the format 'YYYY-MM-DDTHH:mm:ss.SSS'.
@@ -31,12 +12,15 @@ const millisecondsToDate = (timestamp: number): string => {
  * const currentUtcTimestamp = utcTimestampNow();
  * logger.info(currentUtcTimestamp); // Example output: '2022-01-18T15:42:30.123'
  */
-const utcTimestampNow = (): string => {
+export const utcTimestampNow = (): string => {
   // Get the current timestamp in milliseconds
   const millisecondsNow: number = new Date().getTime();
 
   // Convert the current timestamp to a formatted date string
-  const timestampNow: string = millisecondsToDate(millisecondsNow);
+  const timestampNow: string = formatDate(
+    millisecondsNow,
+    'YYYY-MM-DDTHH:mm:ss.SSS',
+  );
 
   return timestampNow;
 };
@@ -56,4 +40,32 @@ export const getCurrentTimestampTimezone = (): TimestampTimezone => {
     timestamp: utcTimestampNow(),
     timezone: getTimeZone(),
   };
+};
+
+/**
+ * Formats a timestamp into a UTC date string with a specified format.
+ *
+ * @param timestamp - The timestamp to be formatted. Can be a number (for Unix timestamp), a date string, or a Moment object.
+ * @param format - The format of the output date string.
+ * @returns A string representing the formatted date in UTC.
+ */
+export const formatDate = (
+  timestamp: number | string | moment.Moment,
+  format: string,
+): string => {
+  const date = moment.utc(timestamp);
+  const formattedDate = date.format(format);
+  return formattedDate;
+};
+
+/**
+ * Parses a formatted date string into a Unix timestamp (number of milliseconds since the Unix Epoch).
+ *
+ * @param formattedDate - The date string to parse.
+ * @param format - The format of the input date string.
+ * @returns The Unix timestamp corresponding to the given date string.
+ */
+export const parseDate = (formattedDate: string, format: string): number => {
+  const parsedDate = moment.utc(formattedDate, format);
+  return parsedDate.valueOf();
 };
