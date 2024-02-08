@@ -47,12 +47,12 @@ export class GraphPlotData {
     );
     const sortedInputData = validatedData.sort(
       (a, b) =>
-        parseDate(a.date, TimestampFormat.ISO8601WithMilliseconds) -
-        parseDate(b.date, TimestampFormat.ISO8601WithMilliseconds),
+        parseDate(a.date, TimestampFormat.YYYYMMDDHHMMssSSS) -
+        parseDate(b.date, TimestampFormat.YYYYMMDDHHMMssSSS),
     );
     return sortedInputData.map((dataPoint, index) => ({
       date: index,
-      dateStr: formatDate(dataPoint.date, DateFormat.MMDDWithSlash),
+      dateStr: formatDate(dataPoint.date, DateFormat.DDMM),
       value: dataPoint.value,
     }));
   }

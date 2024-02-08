@@ -27,8 +27,13 @@ export const insertClientSessionEvent = async (
   const sessionEventDeviceInfo = await getDeviceInfo();
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
 
+  let userId = null;
   try {
-    const userId = await getUserDetails('user_id');
+    userId = await getUserDetails('user_id');
+  } catch (error) {
+    console.info("Don't have user details yet skipping...");
+  }
+  if (userId) {
     const clientSessionEvent: ClientSessionEventCreateSchema = {
       user_id: userId,
       event_type: eventType,
@@ -45,7 +50,5 @@ export const insertClientSessionEvent = async (
     await insertRows(syncDbTables.clientSessionEventTable, [
       clientSessionEvent,
     ]);
-  } catch (error) {
-    console.info("Don't have user details yet skipping...");
   }
 };

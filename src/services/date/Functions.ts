@@ -2,6 +2,7 @@ import moment from 'moment';
 import {getTimeZone} from 'react-native-localize';
 
 import {TimestampTimezone} from './Type';
+import {TimestampFormat} from '@shared/Enums';
 
 /**
  * Generates the current UTC timestamp as a formatted date string.
@@ -19,7 +20,7 @@ export const utcTimestampNow = (): string => {
   // Convert the current timestamp to a formatted date string
   const timestampNow: string = formatDate(
     millisecondsNow,
-    'YYYY-MM-DDTHH:mm:ss.SSS',
+    TimestampFormat.YYYYMMDDHHMMssSSS,
   );
 
   return timestampNow;
