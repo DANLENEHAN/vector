@@ -13,6 +13,7 @@ import UnitSelector from '@components/buttons/UnitSelector';
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
+import {GraphPlotData} from '@components/graphs/Line/Types';
 
 /**
  *  Weight progress screen
@@ -34,14 +35,17 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
 
-  const fakeData = [
-    {value: 4, date: new Date('2021-01-01').valueOf()},
-    {value: 3, date: new Date('2021-01-02').valueOf()},
-    {value: 3, date: new Date('2021-01-03').valueOf()},
-    {value: 2, date: new Date('2021-01-04').valueOf()},
-    {value: 1, date: new Date('2021-01-05').valueOf()},
-    {value: 3, date: new Date('2021-01-06').valueOf()},
-  ];
+  const graphData = new GraphPlotData(
+    [
+      {value: 4, date: '2024-01-01T11:35:36.961Z'},
+      {value: 3, date: '2024-01-02T11:35:36.961Z'},
+      {value: 3, date: '2024-01-03T11:35:36.961Z'},
+      {value: 2, date: '2024-01-04T11:35:36.961Z'},
+      {value: 1, date: '2024-01-05T11:35:36.961Z'},
+      {value: 3, date: '2024-01-06T11:35:36.961Z'},
+    ],
+    'Feeling',
+  );
 
   return (
     <ScreenWrapper>
@@ -67,10 +71,10 @@ const MoodProgress: React.FC<ScreenProps> = ({
         </View>
         <View style={styles.graphSection}>
           <LineGraph
-            data={fakeData}
-            averageLabel={'test'}
-            averageValue={5}
-            unit={''}
+            data={graphData.graphData}
+            averageLabel={graphData.averagePeriodLabel}
+            averageValue={graphData.averageValue}
+            unit={graphData.unit}
           />
         </View>
       </View>
