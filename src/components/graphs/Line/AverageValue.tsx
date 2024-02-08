@@ -6,7 +6,9 @@ import {
   lightThemeColors,
   marginSizes,
   fontSizes,
-  fontWeights,
+  textStyles,
+  headingStyles,
+  layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -64,19 +66,20 @@ export const AverageValueText: React.FC<AverageValueText> = ({
    * These values are animated using the AnimatedText component
    */
   return (
-    <View style={styles.averageWeightContainer}>
+    <View style={styles.componentWrapper}>
       <Text
         style={[
-          styles.averageLabel,
+          styles.header,
           {color: currentTheme.lightText, marginBottom: marginSizes.xSmall},
         ]}>
         Average:
       </Text>
-      <View style={styles.averageWeightAndUnitContainer}>
+
+      <View style={styles.averageContainer}>
         <AnimatedText
           text={currentValue}
           style={[
-            styles.averageValue,
+            styles.averageValueLabel,
             {
               color: currentTheme.text,
             },
@@ -84,21 +87,19 @@ export const AverageValueText: React.FC<AverageValueText> = ({
         />
         <Text
           style={[
-            styles.averageWeightLabel,
+            styles.unitLabel,
             {color: currentTheme.lightText, fontSize: fontSizes.large},
           ]}>
-          {' '}
-          {unit}
+          {` ${unit}`}
         </Text>
       </View>
 
       <AnimatedText
         text={currentDate}
         style={[
-          styles.averageWeightLabel,
+          styles.unitLabel,
           {
             color: currentTheme.lightText,
-            marginTop: -marginSizes.small,
           },
         ]}
       />
@@ -107,33 +108,20 @@ export const AverageValueText: React.FC<AverageValueText> = ({
 };
 
 const styles = StyleSheet.create({
-  chartView: {
+  componentWrapper: {
     flex: 1,
+    ...layoutStyles.centerVertically,
   },
-  averageLabel: {
-    fontSize: fontSizes.small,
+  header: {
+    ...textStyles.bodyPrimarySmall,
   },
-  valueContainer: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  averageContainer: {
+    ...layoutStyles.centerHorizontally,
   },
-  averageWeightContainer: {
-    width: '90%',
-    height: 100,
+  unitLabel: {
+    ...textStyles.bodySecondarySmall,
   },
-  averageWeightLabel: {
-    fontSize: fontSizes.medium,
-  },
-  averageWeightAndUnitContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: marginSizes.small,
-  },
-  averageValue: {
-    fontSize: fontSizes.title,
-    fontWeight: fontWeights.ultraBold,
-    color: 'black',
+  averageValueLabel: {
+    ...headingStyles.headingTitle,
   },
 });

@@ -50,7 +50,7 @@ const NoNetworkPopup: React.FC = (): React.ReactElement => {
             style={{color: currentTheme.text, ...headingStyles.headingPrimary}}>
             No Internet
           </Text>
-          <Text style={styles.textBody}>
+          <Text style={[styles.textBody, {color: currentTheme.text}]}>
             Oops! It looks like you're offline. We can't reach our servers at
             the moment. Please check your internet connection and try again.
           </Text>

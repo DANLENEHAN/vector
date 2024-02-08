@@ -17,6 +17,8 @@ NetInfo.configure({
   reachabilityLongTimeout: 60 * 1000,
   // Wait if previous reachability check failed (60s)
   reachabilityShortTimeout: 60 * 1000,
+  reachabilityShouldRun: () => true,
+  useNativeReachability: false,
 });
 
 function App(): JSX.Element {

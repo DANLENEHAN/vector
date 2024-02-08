@@ -1,83 +1,102 @@
 // React imports
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {fontSizes, marginSizes} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
+import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import LineGraph from '@components/graphs/Line/Graph';
+import UnitSelector from '@components/buttons/UnitSelector';
 // Services
-import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
-// Utils
-import {convertStats} from '@utils/Conversion';
+import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {
-  BodyStatCreateSchema,
-  BodyStatType,
-  WaterUnit,
-} from '@services/api/swagger/data-contracts';
+import {GraphPlotData} from '@components/graphs/Line/Types';
+import {WaterUnit} from '@services/api/swagger/data-contracts';
 
 /**
- *  Water progress screen
+ *  Weight progress screen
  *
- * @component WaterProgress
+ * @component WeightProgress
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
- * @returns {React.FC} - Returns the water progress screen component
+ * @returns {React.FC} - Returns the weight progress screen component
  *
  * @example
- * <WaterProgress navigation={navigation}/>
+ * <WeightProgress navigation={navigation}/>
  */
-const WaterProgress: React.FC<ScreenProps> = ({
+const MoodProgress: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const [data, setData] = useState<BodyStatCreateSchema[]>([]);
-  useEffect(() => {
-    const getUserWater = async () => {
-      // NOTE: This is a temporary solution until we have a user profile page
-      const waterUnitPref = WaterUnit.Ml;
-      // BROKEN
-      let user_water = await getUserStats({bodyStatType: BodyStatType.Water});
-      let stats: any[] = [];
-      if (user_water !== undefined) {
-        stats = convertStats({stats: user_water, targetUnit: waterUnitPref});
-      }
-      setData(stats ?? []);
-    };
-    getUserWater();
-  });
+  const {theme} = useSystem();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
+  const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
+  const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
+
+  const graphData = new GraphPlotData(
+    [
+      {value: 4000, date: '2024-01-01T11:35:36.961Z'},
+      {value: 3000, date: '2024-01-02T11:35:36.961Z'},
+      {value: 3500, date: '2024-01-03T11:35:36.961Z'},
+      {value: 2000, date: '2024-01-04T11:35:36.961Z'},
+      {value: 1000, date: '2024-01-05T11:35:36.961Z'},
+      {value: 3666, date: '2024-01-06T11:35:36.961Z'},
+    ],
+    WaterUnit.Ml,
+  );
 
   return (
     <ScreenWrapper>
-      <Header label="Water" navigation={navigation} includeBackArrow={true} />
-      <View style={styles.content}>
-        <ScrollView>
-          {data.map(item => (
-            <View style={styles.statItem}>
-              <Text>Unit: {item.unit}</Text>
-              <Text>Created At: {item.created_at}</Text>
-              <Text>Value: {item.value}</Text>
-            </View>
-          ))}
-        </ScrollView>
+      <View style={styles.pageWrapper}>
+        <View style={styles.headerSection}>
+          <Header
+            label="Water"
+            navigation={navigation}
+            includeBackArrow={true}
+          />
+        </View>
+        <View style={styles.unitSelectorSection}>
+          <UnitSelector
+            units={Object.values(dateOptions)}
+            activeUnit={activePeriod}
+            setActiveUnit={setActivePeriod}
+            style={[
+              {
+                color: currentTheme.text,
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.graphSection}>
+          <LineGraph
+            data={graphData.graphData}
+            averageLabel={graphData.averagePeriodLabel}
+            averageValue={graphData.averageValue}
+            unit={graphData.unit}
+          />
+        </View>
       </View>
     </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  pageWrapper: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: fontSizes.xLarge,
   },
-  statItem: {
-    marginBottom: marginSizes.small,
+  headerSection: {
+    flex: 1,
+  },
+  unitSelectorSection: {
+    flex: 2,
+    ...layoutStyles.centerHorizontally,
+  },
+  graphSection: {
+    flex: 10,
   },
 });
 
-export default WaterProgress;
+export default MoodProgress;

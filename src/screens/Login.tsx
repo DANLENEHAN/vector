@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   content: {
-    height: '50%',
+    height: '45%',
     ...layoutStyles.spaceBetweenVertical,
     paddingLeft: paddingSizes.large,
     paddingRight: paddingSizes.large,
