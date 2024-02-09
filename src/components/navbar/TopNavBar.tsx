@@ -48,7 +48,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
         <Icon
           name={'magnifying-glass'}
           solid
-          size={iconSizes.large}
+          size={iconSizes.medium}
           color={currentTheme.text}
           onPress={() => logger.info('Pressed Search')}
         />
@@ -62,7 +62,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
         <Icon
           name={'user'}
           solid
-          size={iconSizes.large}
+          size={iconSizes.medium}
           color={currentTheme.text}
           onPress={() =>
             navigation.navigate('Settings', {screen: 'SettingsHome'})
