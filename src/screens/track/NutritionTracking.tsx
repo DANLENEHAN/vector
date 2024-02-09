@@ -33,9 +33,6 @@ const tile_data: TileData[] = [
  * @param {ScreenProps} navigation - Stack Navigation
  *
  * @returns {React.FC} - Nutrition Tracking Screen Component
- *
- * @example
- * <NutritionTracking navigation={navigation}/>
  */
 const NutritionTracking: React.FC<ScreenProps> = ({
   navigation,

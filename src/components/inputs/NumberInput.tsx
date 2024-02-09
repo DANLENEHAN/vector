@@ -27,14 +27,6 @@ interface NumberInputProps {
  * Number Input Component
  *
  * @component NumberInput
- * @example
- * <NumberInput
- *     allowFloat={true}
- *     inputValue={inputValue}
- *     setInputValue={setInputValue}
- *     style={{color: 'red'}}
- * />
- *
  * @param {Object} props - Component Number Input Props
  * @returns {React.FC<NumberInputProps>} - React Component
  */

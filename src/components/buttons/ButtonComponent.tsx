@@ -36,14 +36,6 @@ interface ButtonProps {
  * Button Component
  *
  * @component ButtonComponent
- * @example
- * <ButtonComponent
- *     onPress={() => logger.info('Button Pressed')}
- *     disabled={false}
- *     text={'Button Text'}
- *     style={{backgroundColor: 'red'}}
- * />
- *
  * @param {Object} props - Component Button Props
  * @returns {React.FC<ButtonProps>} - React Component
  */

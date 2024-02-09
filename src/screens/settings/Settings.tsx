@@ -21,9 +21,6 @@ import logger from '@utils/Logger';
  * @param {ScreenProps} navigation - Stack Navigation
  *
  * @returns {React.FC} - Settings Screen Component
- *
- * @example
- * <SettingsScreen navigation={navigation}/>
  */
 const SettingsScreen: React.FC<ScreenProps> = ({
   navigation,

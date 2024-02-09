@@ -33,8 +33,6 @@ export interface CreateNewMoodParams {
  * @param {Object} CreateNewMoodParams  The interface parameters.
  * @returns {Promise<void>} A promise that resolves when the mood is successfully created.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- *
- * @example
  */
 export const createNewMood = async ({
   value,

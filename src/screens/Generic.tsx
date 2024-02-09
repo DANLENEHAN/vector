@@ -12,9 +12,6 @@ import {useSystem} from '@context/SystemContext';
  * Generic Screen
  *
  * @component Generic
- * @example
- * <Generic navigation={navigation} route={route} />
- *
  * @param {Object} props - Component props
  * @returns {React.FC<any>} - React Component
  */

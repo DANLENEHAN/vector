@@ -23,11 +23,6 @@ const UserApi = new User(api);
  * @function createUser
  * @param {UserCreateSchema} userData  The data for creating the user.
  * @returns {Promise<void>} A promise that resolves when the user is successfully created.
- *
- * @example
- * // Example usage:
- * const userData = { /* user data object * / };
- * await createUser(userData);
  */
 export const createUser = async (
   userData: UserCreateSchema,
@@ -98,10 +93,6 @@ export const loginUser = async (data: {
  * @function logoutUser
  *
  * @returns {Promise<void>} A promise that resolves when the user is successfully logged out.
- *
- * @example
- * // Example usage:
- * await logoutUser();
  */
 export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
   try {
@@ -124,10 +115,6 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
  * @function testAuthentication
  *
  * @returns {Promise<void>} A promise that resolves when the user is successfully authenticated.
- *
- * @example
- * // Example usage:
- * await testAuthentication();
  */
 export const testAuthentication =
   async (): Promise<void | SwaggerValidationError> => {
@@ -151,11 +138,6 @@ export const testAuthentication =
  * @function getUserDetails
  *
  * @returns {Promise<UserGetSchema>} A promise that resolves with the user details.
- *
- * @example
- * // Example usage:
- * await getUserDetails();
- * // Returns the user details.
  */
 export const getUserDetails = async (): Promise<
   UserGetSchema | SwaggerValidationError

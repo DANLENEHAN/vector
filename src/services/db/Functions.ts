@@ -21,10 +21,6 @@ import logger from '@utils/Logger';
  * @description Retrieves the document directory path using React Native File System (RNFS).
  *
  * @returns {void} This function doesn't return a value; it logs the document directory path.
- *
- * @example
- * // Example usage:
- * getDocumentDirectoryPath();
  */
 const getDocumentDirectoryPath = (): void => {
   try {
@@ -39,13 +35,6 @@ const getDocumentDirectoryPath = (): void => {
  * @description Represents the SQLite database instance.
  *
  * @type {SQLiteDatabase}
- *
- * @example
- * // Example usage:
- * // Access the database instance using the 'db' constant.
- * db.transaction((tx: Transaction) => {
- *   // Perform transactions or execute SQL commands here.
- * });
  */
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: dbName},
@@ -60,11 +49,6 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
  *
  * @param startKey The key from which to start retrieving values. If null, retrieves all values.
  * @returns {Object} An object representing key-value pairs from revisionObject starting from the specified key.
- *
- * @example
- * // Example usage:
- * const startingKey: string | null = '123';
- * const subset = getKeyValuesStartingFrom(startingKey);
  */
 export const getKeyValuesStartingFrom = (
   startKey: string | null,
@@ -93,11 +77,6 @@ export const getKeyValuesStartingFrom = (
  * @returns {Promise<void>} A promise that resolves when all migrations are successfully completed.
  *
  * @throws {Error} If an error occurs during the migration process, the promise is rejected with the corresponding error.
- *
- * @example
- * // Example usage:
- * const startingRevisionId: string | null = '123';
- * await runMigrations(startingRevisionId);
  */
 export const runMigrations = async (
   revisionId: string | null,
@@ -175,10 +154,6 @@ export const runMigrations = async (
  *
  * @throws {Error} If an error occurs during the process, the promise is rejected with the
  * corresponding error.
- *
- * @example
- * // Example usage:
- * await runDbMigrationProcess();
  */
 export const runDbMigrationProcess = async (): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -212,10 +187,6 @@ export const runDbMigrationProcess = async (): Promise<void> => {
  * This function retrieves all table names, generates DROP TABLE queries, and executes them.
  *
  * @returns {void} This function doesn't return a promise as it operates synchronously.
- *
- * @example
- * // Example usage:
- * deleteDB();
  */
 export const deleteDB = (): void => {
   logger.info('Deleting DB tables. Hold on tight!');
@@ -259,12 +230,6 @@ export const deleteDB = (): void => {
  * Optionally, it can insert UUIDs for each row if the `insert_uuid` parameter is true (default).
  * The function throws an error if no data is provided for insertion or if there is an issue
  * with the SQL execution, providing detailed information in the SQLError.
- *
- * @example
- * // Example usage:
- * const tableName = syncDbTables.myTable;
- * const data: RowData[] = [...]; // An array of RowData representing rows
- * await insertRows(tableName, data);
  */
 export const insertRows = async (
   tableName: syncDbTables,
@@ -328,13 +293,6 @@ export const insertRows = async (
  * timestamp to retrieve ('created_at' or 'updated_at'). The function returns the timestamp
  * if the row is found, otherwise, it resolves with null. It throws an error if there is an issue
  * fetching the timestamp from the database.
- *
- * @example
- * // Example usage:
- * const tableName = syncDbTables.statTable;
- * const timestampField = timestampFields.updatedAt;
- * const uuid = 'some_uuid';
- * const timestamp: string | null = await getTimestampForRow(tableName, timestampField, uuid);
  */
 const getTimestampForRow = async (
   tableName: syncDbTables,
@@ -377,12 +335,6 @@ const getTimestampForRow = async (
  * This function updates rows in the specified database table based on the provided data.
  * It determines whether to replace a row or skip it based on the timestamp comparison
  * with the existing row in the database.
- *
- * @example
- * // Example usage:
- * const tableName = syncDbTables.statTable;
- * const data: RowData[] = [...]; // An array of RowData representing rows
- * await updateRows(tableName, data);
  */
 export const updateRows = async (
   tableName: syncDbTables,

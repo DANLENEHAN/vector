@@ -30,9 +30,6 @@ interface WorkoutProgressScreenProps {
  * @param {any} route - Route object for the screen
  *
  * @returns {React.FC} - Returns the workout progress screen component
- *
- * @example
- * <WorkoutProgress route={route}/>
  */
 const WokroutProgressScreen: React.FC<WorkoutProgressScreenProps> = ({
   route,

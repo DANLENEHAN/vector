@@ -34,13 +34,6 @@ interface HeaderProps {
  * Header Component
  *
  * @component Header
- * @example
- * <Header
- *    label={'Preferences'}
- *    navigation={navigation}
- *    includeBackArrow={true}
- * />
- *
  * @param {Object} props - Component Header Props
  * @returns {React.FC<HeaderProps>} - React Component
  */

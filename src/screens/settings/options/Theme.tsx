@@ -19,9 +19,6 @@ import {ScreenProps} from '@screens/Types';
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
  * @returns {React.FC} - Returns the theme screen component
- *
- * @example
- * <ThemeScreen navigation={navigation}/>
  */
 const ThemeScreen: React.FC<ScreenProps> = ({
   navigation,

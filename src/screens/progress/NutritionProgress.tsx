@@ -29,13 +29,8 @@ const tile_data: TileData[] = [
  * Nutrition Progress Screen
  *
  * @component NutritionProgressScreen
- *
  * @param {ScreenProps} navigation - Stack Navigation
- *
  * @returns {React.FC} - Nutrition Progress Screen Component
- *
- * @example
- * <NutritionProgressScreen navigation={navigation}/>
  */
 const NutritionProgressScreen: React.FC<ScreenProps> = ({
   navigation,

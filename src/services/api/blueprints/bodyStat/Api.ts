@@ -16,10 +16,6 @@ const BodyStatApi = new BodyStat(api);
  * @param {any} statQuery - The query parameters for retrieving stats.
  * @returns {Promise<BodyStatCreateSchema[]>} A promise that resolves with the retrieved stats.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- * @example
- * // Example usage:
- * const statQuery = { /* query parameters * / };
- * await getStats(statQuery);
  */
 export const getStats = async (
   statQuery: any,

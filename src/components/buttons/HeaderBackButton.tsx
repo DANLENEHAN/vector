@@ -30,9 +30,6 @@ interface HeaderBackButtonProps {
  * Header Back Button Component
  *
  * @component HeaderBackButton
- * @example
- * <HeaderBackButton navigation={navigation} />
- *
  * @param {Object} props - Component props
  * @returns {React.FC<HeaderBackButtonProps>} - React Component
  */

@@ -65,11 +65,6 @@ export const useSystem = () => useContext(SystemContext);
  * such as the theme, network status, etc.
  *
  * @component SystemProvider
- * @example
- * <SystemProvider>
- *    <App />
- * </SystemProvider>
- *
  * @param {ReactNode} children - The children components to be wrapped by the provider
  * @returns {React.FC<{children: ReactNode}>} - React Component
  */

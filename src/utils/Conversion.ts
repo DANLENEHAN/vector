@@ -24,15 +24,8 @@ interface convertUnitParams {
 
 /**
  * @description Convert the unit to a format that the convert-units package can understand.
- *
  * @param {convertUnitParams} unit  The unit to be converted.
  * @returns {Unit} The converted unit.
- *
- * @example
- * // Example usage:
- * const unit = 'kg';
- * convertUnit({unit: unit});
- * // Returns the converted unit.
  */
 const convertUnit = ({unit}: convertUnitParams): Unit => {
   switch (unit) {
@@ -66,17 +59,8 @@ interface convertValueParams {
 
 /**
  * @description Convert the value to the target unit.
- *
  * @param {convertValueParams} {value, fromUnit, toUnit}  The value to be converted, the unit of the value, and the target unit.
  * @returns {number} The converted value.
- *
- * @example
- * // Example usage:
- * const value = 1;
- * const fromUnit = 'kg';
- * const toUnit = 'lbs';
- * convertValue({value: value, fromUnit: fromUnit, toUnit: toUnit});
- * // Returns the converted value.
  */
 const convertValue = ({
   value,
@@ -135,18 +119,6 @@ interface unitConversion {
  * Convert the stats to the target unit.
  *
  * @function convertStats
- * @example
- * const stats = [
- *  {
- *   stat_type: BodyStatType.Weight,
- *   unit: WeightUnit.Kg,
- *   user_id: 1,
- *   value: 1,
- *  } as BodyStatCreateSchema,
- * ];
- * convertStats({stats: stats, targetUnit: WeightUnit.Lbs});
- * // Returns the converted stats.
- *
  * @param {unitConversion} {stats, targetUnit} The stats to be converted and the target unit.
  * @returns {BodyStatCreateSchema[]} The converted stats.
  */

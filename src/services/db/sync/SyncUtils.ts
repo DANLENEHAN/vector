@@ -102,17 +102,8 @@ export function convertListToSyncUpdateSchemas(
  *
  * @param lastSynced - The last synced timestamp for the table. Pass `null` if no previous synchronization has occurred.
  * @param syncOperation - The synchronization operation to determine the timestamp field (creates or updates).
- *
  * @returns A Promise that resolves to a QuerySchema representing the conditions for retrieving rows from the table.
- *
  * @throws {Error} If an unexpected error occurs during the query schema generation.
- *
- * @example
- * // Example usage:
- * const lastSyncedTimestamp = '2023-01-01T00:00:00Z';
- * const syncOperation = SyncOperation.Creates;
- * const querySchema = await getQueryObjForTable(lastSyncedTimestamp, syncOperation);
- * // Output: { filters: { created_at: { gt: '2023-01-01T00:00:00Z' } }, sort: ['created_at:asc'] }
  */
 export const getQueryObjForTable = async (
   lastSynced: string | null,

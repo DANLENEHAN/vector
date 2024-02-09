@@ -68,15 +68,6 @@ export interface TileData {
  *  Clickable Tile Component
  *
  * @component ClickableTile
- * @example
- * <ClickableTile
- *   onPress={() => logger.info('Tile Pressed')}
- *   label={'Tile Label'}
- *   icon={'tile-icon'}
- *   backgroundColor={'red'}
- *   lastTracked={'Last Tracked'}
- * />
- *
  * @param {Object} props - Component ClickableTile Props
  * @returns {React.FC<ClickableTileProps>} - React Component
  */

@@ -8,10 +8,6 @@ import {TimestampFormat} from '@shared/Enums';
  * Generates the current UTC timestamp as a formatted date string.
  *
  * @returns {string} - A formatted date string representing the current UTC timestamp in the format 'YYYY-MM-DDTHH:mm:ss.SSS'.
- *
- * @example
- * const currentUtcTimestamp = utcTimestampNow();
- * logger.info(currentUtcTimestamp); // Example output: '2022-01-18T15:42:30.123'
  */
 export const utcTimestampNow = (): string => {
   // Get the current timestamp in milliseconds
@@ -30,11 +26,6 @@ export const utcTimestampNow = (): string => {
  * Retrieves the current UTC timestamp and the timezone.
  *
  * @returns {TimestampTimezone} - An object containing the current UTC timestamp and the timezone.
- *
- * @example
- * const currentTimestampTimezone = getCurrentTimestampTimezone();
- * logger.info(currentTimestampTimezone);
- * // Example output: { timestamp: '2022-01-18T15:42:30.123', timezone: 'America/New_York' }
  */
 export const getCurrentTimestampTimezone = (): TimestampTimezone => {
   return {

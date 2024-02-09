@@ -16,9 +16,6 @@ const SettingsStack = createNativeStackNavigator();
  *
  * @component SettingsStackNavigator
  * @description A stack navigator for the settings screens
- * @example
- * <SettingsStackNavigator />
- *
  * @returns {React.FC} A stack navigator for the settings screens
  */
 const SettingsStackNavigator: React.FC = (): React.ReactElement => {

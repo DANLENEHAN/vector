@@ -41,16 +41,6 @@ interface SettingsOptionProps {
  * Settings Option Component
  *
  * @component SettingsOption
- * @example
- * <SettingsOption
- *     icon={'home'}
- *     label={'Home'}
- *     onPress={() => logger.info('SettingsOption Pressed')}
- *     fontColor={'red'}
- *     caret={true}
- *     logo_circle_color={'blue'}
- * />
- *
  * @param {Object} props - Component SettingsOption Props
  * @returns {React.FC<SettingsOptionProps>} - React Component
  */

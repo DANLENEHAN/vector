@@ -20,11 +20,7 @@ import NetInfo from '@react-native-community/netinfo';
  * This component is used to display a popup when the user is not connected to the internet
  *
  * @component NoNetworkPopup
- *
  * @returns {React.FC} - Returns the no network popup component
- *
- * @example
- * <NoNetworkPopup />
  */
 const NoNetworkPopup: React.FC = (): React.ReactElement => {
   const {theme, isConnected} = useSystem();

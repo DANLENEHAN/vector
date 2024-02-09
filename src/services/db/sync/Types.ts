@@ -56,12 +56,6 @@ export type SyncUpdateSchemas =
  * @interface SyncObject
  *
  * @property {boolean} isSync - A flag indicating whether the object is synchronized.
- *
- * @example
- * // Example usage:
- * const syncData: SyncObject = {
- *   isSync: true,
- * };
  */
 export interface SyncObject {
   isSync: boolean;

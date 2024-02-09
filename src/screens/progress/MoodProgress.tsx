@@ -20,11 +20,7 @@ import {GraphPlotData} from '@components/graphs/Line/Types';
  *
  * @component WeightProgress
  * @param {ScreenProps} navigation - Navigation object for the screen
- *
  * @returns {React.FC} - Returns the weight progress screen component
- *
- * @example
- * <WeightProgress navigation={navigation}/>
  */
 const MoodProgress: React.FC<ScreenProps> = ({
   navigation,

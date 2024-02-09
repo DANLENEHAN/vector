@@ -33,14 +33,6 @@ interface UnitSelectorProps {
  * Unit Selector Component
  *
  * @component UnitSelector
- * @example
- * <UnitSelector
- *     units={['lbs', 'kg']}
- *     activeUnit={'lbs'}
- *     setActiveUnit={(unit) => logger.info(unit)}
- *     style={{backgroundColor: 'red'}}
- * />
- *
  * @param {Object} props - Component Unit Selector Props
  * @returns {React.FC<UnitSelectorProps>} - React Component
  */

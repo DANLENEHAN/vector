@@ -63,9 +63,6 @@ const moods: MoodsDictionary = {
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
  * @returns {React.FC} - Returns the mood tracking screen component
- *
- * @example
- * <MoodScreen navigation={navigation}/>
  */
 const MoodScreen: React.FC<ScreenProps> = ({
   navigation,

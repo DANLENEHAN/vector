@@ -35,13 +35,6 @@ interface AverageValueText {
  * Average Value Text Component
  *
  * @component AverageValueText
- * @example
- * <AverageValueText
- *    unit={'lbs'}
- *    currentValue={currentValue}
- *    currentDate={currentDate}
- * />
- *
  * @param {Object} props - Component Average Value Text Props
  * @returns {React.FC<AverageValueText>} - React Component
  */

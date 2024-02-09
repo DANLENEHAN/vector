@@ -20,12 +20,6 @@ type AnimatedTextProps = Omit<TextInputProps, 'editable' | 'value'> & {
  * Animated Text Component
  *
  * @component AnimatedText
- * @example
- * <AnimatedText
- *   text={text}
- *   style={{color: 'red'}}
- * />
- *
  * @param {Object} props - Component Animated Text Props
  * @returns {React.FC<AnimatedTextProps>} - React Component
  */

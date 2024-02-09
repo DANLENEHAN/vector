@@ -33,19 +33,11 @@ import logger from '@utils/Logger';
  * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
  * @returns {Promise<void>} A promise that resolves when the synchronization pull operation is completed.
  * @throws {Error} Throws an error if there is an issue with the synchronization process.
- *
  * @description
  * The `processSyncTypePull` function orchestrates synchronization pull operations for a specific table.
  * It retrieves data from the backend using the provided sync functions and performs the required sync operation
  * (Creates or Updates). The function ensures that the sync process is completed successfully and logs relevant
  * information. If any error occurs during the process, it is thrown.
- *
- * @example
- * // Example usage:
- * const tableName = syncDbTables.statTable;
- * const syncFunctions = { Gets: yourGetFunction };
- * const syncOperation = SyncOperation.Creates;
- * await processSyncTypePull(tableName, syncFunctions, syncOperation);
  */
 export const processSyncTypePull = async (
   tableName: syncDbTables,
@@ -128,18 +120,10 @@ export const processSyncTypePull = async (
  * @param {SyncTableFunctions} tableFunctions - Functions for creating and updating records in the table.
  * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
  * @throws {Error} If there are issues with retrieving data, sending requests, or updating the sync table.
- *
  * @description
  * The `processSyncTypePush` function synchronizes data push operations for a specific table.
  * It retrieves rows to sync, sends requests to the backend, and updates the sync table accordingly.
  * Throws an error if there are issues with data retrieval, request sending, or sync table updates.
- *
- * @example
- * // Example usage:
- * const tableName = syncDbTables.statTable;
- * const tableFunctions = { Creates: yourCreateFunction, Updates: yourUpdateFunction };
- * const syncOperation = SyncOperation.Creates;
- * await processSyncTypePush(tableName, tableFunctions, syncOperation);
  */
 export const processSyncTypePush = async (
   tableName: syncDbTables,
