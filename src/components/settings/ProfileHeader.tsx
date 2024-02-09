@@ -33,13 +33,6 @@ interface ProfileHeaderProps {
  * Profile Header Component
  *
  * @component ProfileHeader
- * @example
- * <ProfileHeader
- *     profileImageUrl={'https://picsum.photos/200'}
- *     userName={'John Smith'}
- *     userUsername={'@johnsmith'}
- * />
- *
  * @param {Object} props - Component ProfileHeader Props
  * @returns {React.FC<ProfileHeaderProps>} - React Component
  */

@@ -12,11 +12,7 @@ import {ScreenProps} from '@screens/Types';
  *
  * @component HomeScreen
  * @param {ScreenProps} navigation - Navigation object for the screen
- *
  * @returns {React.FC} - Returns the home screen component
- *
- * @example
- * <HomeScreen navigation={navigation}/>
  */
 const HomeScreen: React.FC<ScreenProps> = ({
   navigation,

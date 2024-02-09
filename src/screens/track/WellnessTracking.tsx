@@ -35,9 +35,6 @@ const tile_data: TileData[] = [
  *
  * @param {ScreenProps} props - Navigation object for the screen
  * @returns {React.FC} - Returns the wellness tracking screen component
- *
- * @example
- * <WellnessTracking navigation={navigation}/>
  */
 const WellnessTracking: React.FC<ScreenProps> = ({
   navigation,

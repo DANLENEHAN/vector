@@ -33,9 +33,6 @@ import logger from '@utils/Logger';
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
  * @returns {React.FC} - Returns the water tracking screen component
- *
- * @example
- * <WaterScreen navigation={navigation}/>
  */
 const WaterScreen: React.FC<ScreenProps> = ({
   navigation,

@@ -56,19 +56,11 @@ export const getRowsToSyncQuery = (
 
 /**
  * Constructs a SQL query to retrieve a row by its UUID from a specified table.
- *
  * @param tableName - The name of the table from which to retrieve the row.
  * @param uuid - The UUID of the row to be retrieved.
  * @param idColumn - Optional. The column representing the UUID in the table.
  *                   Defaults to `${tableName}_id` if not provided.
  * @returns A SQL query string with placeholders for parameters.
- *
- * @example
- * // Example usage:
- * const tableName = 'my_table';
- * const uuid = 'some-uuid';
- * const query = getRowByIdQuery(tableName, uuid);
- * // Execute the query using your database library and provide the UUID as a parameter.
  */
 export const getRowByIdQuery = (
   tableName: string,

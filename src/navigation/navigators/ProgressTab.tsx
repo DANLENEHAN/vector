@@ -20,9 +20,6 @@ const ProgressTabBar = (props: TopBarProps) => <TopTabNavBar {...props} />;
  * ProgressTabNavigator Component
  *
  * @component ProgressTabNavigator
- * @example
- * <ProgressTabNavigator />
- *
  * @returns {React.FC} - React Component
  */
 const ProgressTabNavigator: React.FC = (): React.ReactElement => {

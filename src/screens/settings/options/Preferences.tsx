@@ -17,9 +17,6 @@ import {useSystem} from '@context/SystemContext';
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
  * @returns {React.FC} - Returns the preferences screen component
- *
- * @example
- * <Preferences navigation={navigation}/>
  */
 const Preferences: React.FC<ScreenProps> = ({
   navigation,

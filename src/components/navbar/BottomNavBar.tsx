@@ -30,12 +30,6 @@ const hiddenRoutes = ['Settings', 'Search'];
  *  BottomNavBar
  *
  * @component BottomNavBar
- * @example
- *  <BottomNavBar
- *   navigation={navigation}
- *   state={state}
- * />
- *
  * @param {Object} props - Component Props
  * @returns {React.FC<BottomBarProps>} - React Component
  */

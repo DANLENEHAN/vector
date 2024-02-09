@@ -22,9 +22,6 @@ import logger from '@utils/Logger';
  * TopNavBar Component
  *
  * @component TopNavBar
- * @example
- * <TopNavBar navigation={navigation} />
- *
  * @param {Object} props - Component TopNavBar Props
  * @returns {React.FC<NavBarProps>} - React Component
  */

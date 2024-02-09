@@ -38,8 +38,6 @@ export interface CreateNewNutritionParams {
  * @param {Object} CreateNewNutritionParams  The interface parameters.
  * @returns {Promise<void>} A promise that resolves when the nutrition is successfully created.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- *
- * @example
  */
 export const createNewNutrition = async ({
   value,

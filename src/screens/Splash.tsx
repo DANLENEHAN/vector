@@ -31,13 +31,8 @@ import {runSyncProcess} from '@services/db/sync/SyncProcess';
  * If the user is not logged in, it will redirect them to the login screen
  *
  * @component Splash
- *
  * @param {ScreenProps} props - navigation object to allow for redirection
- *
  * @returns {React.FC<ScreenProps>} - React Component
- *
- * @example
- * <Splash navigation={navigation} />
  */
 const Splash: React.FC<ScreenProps> = ({
   navigation,

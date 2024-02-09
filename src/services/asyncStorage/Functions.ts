@@ -26,11 +26,6 @@ export const SyncErrorDumpApi = new SyncErrorDump(api);
  * @param {string} field_name - The name of the field to retrieve.
  * @returns {Promise<string>} A promise that resolves with the value of the field.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- * @example
- * // Example usage:
- * const field_name = 'username';
- * await getUserDetails(field_name);
- * // Returns the value of the username field.
  **/
 export async function getUserDetails(field_name: string): Promise<any> {
   try {
@@ -58,13 +53,6 @@ export async function getUserDetails(field_name: string): Promise<any> {
  * @param failedSyncPushErrors - An array of failed synchronization items to be stored.
  * @returns A promise that resolves when the storage operation is successful.
  * @throws If there is an error retrieving, parsing, or storing synchronization push errors.
- *
- * @example
- * const failedCreates: SyncCreateSchemas[] = [
- *   { id: 1, name: 'John' },
- *   { id: 2, name: 'Jane' },
- * ];
- * await storeFailedSyncPushErrors<SyncCreateSchemas>('myTable', SyncOperation.Creates, failedCreates);
  */
 export const storeFailedSyncPushErrors = async <
   T extends SyncCreateSchemas | SyncUpdateSchemas,
@@ -145,8 +133,6 @@ export const storeFailedSyncPushErrors = async <
  * @param syncOperation - The type of synchronization operation (e.g., Creates, Updates).
  * @returns A promise that resolves to an array of failed synchronization items.
  * @throws If there is an error retrieving or parsing synchronization push errors.
- * @example
- * const failedCreates = await getFailedSyncPushesForTable<SyncCreateSchemas>('myTable', SyncOperation.Creates);
  */
 const getFailedSyncPushesForTable = async <T>(
   tableName: syncDbTables,
@@ -195,8 +181,6 @@ const getFailedSyncPushesForTable = async <T>(
  * @param tableName - The name of the synchronization table.
  * @returns A promise that resolves to an array of failed synchronization creates.
  * @throws If there is an error retrieving or parsing synchronization push errors.
- * @example
- * const failedCreates = await getFailedSyncPushesCreatesForTable('myTable');
  */
 export const getFailedSyncPushesCreatesForTable = async (
   tableName: syncDbTables,
@@ -212,8 +196,6 @@ export const getFailedSyncPushesCreatesForTable = async (
  * @param tableName - The name of the synchronization table.
  * @returns A promise that resolves to an array of failed synchronization updates.
  * @throws If there is an error retrieving or parsing synchronization push errors.
- * @example
- * const failedUpdates = await getFailedSyncPushesUpdatesForTable('myTable');
  */
 export const getFailedSyncPushesUpdatesForTable = async (
   tableName: syncDbTables,

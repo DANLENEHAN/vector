@@ -35,14 +35,6 @@ interface NavItemProps {
  * NavItem Component
  *
  * @component NavItem
- * @example
- * <NavItem
- *     icon={'home'}
- *     label={'Home'}
- *     onPress={() => logger.info('NavItem Pressed')}
- *     isActive={true}
- * />
- *
  * @param {Object} props - Component NavItem Props
  * @returns {React.FC<NavItemProps>} - React Component
  */

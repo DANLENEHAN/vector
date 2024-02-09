@@ -38,15 +38,6 @@ export interface CreateNewStatParams {
  * @param {Object} CreateNewStatParams  The interface parameters.
  * @returns {Promise<void>} A promise that resolves when the bodyStat is successfully created.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- *
- * @example
- * // Example usage:
- * const value = 42;
- * const navigation = { /* navigation object * / };
- * const bodyStatType = 'weight';
- * const unitValue = 'kg';
- * await createNewStat({value: value, navigation: navigation, bodyStatType: bodyStatType, unitValue: unitValue});
- *
  */
 export const createNewStat = async ({
   value,
@@ -89,11 +80,6 @@ export interface GetUserStatsParams {
  * @param {Object} GetUserStatsParams  The interface parameters.
  * @returns {Promise<BodyStatCreateSchema[] | undefined>} A promise that resolves with the stats.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
- *
- * @example
- * // Example usage:
- * await getStat();
- *
  */
 
 export const getUserStats = async ({

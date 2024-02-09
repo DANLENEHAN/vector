@@ -27,11 +27,7 @@ import logger from '@utils/Logger';
  *
  * @component WeightProgress
  * @param {ScreenProps} navigation - Navigation object for the screen
- *
  * @returns {React.FC} - Returns the weight progress screen component
- *
- * @example
- * <WeightProgress navigation={navigation}/>
  */
 const WeightProgress: React.FC<ScreenProps> = ({
   navigation,

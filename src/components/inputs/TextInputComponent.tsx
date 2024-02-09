@@ -61,18 +61,6 @@ interface TextInputProps {
  * TextInput Component
  *
  * @component TextInputComponent
- * @example
- * <TextInputComponent
- *     placeholder={'Placeholder Text'}
- *     value={inputValue}
- *     onChangeText={(emailInput: string, emailValid: boolean) => setEmail(emailInput, emailValid)}
- *     secureTextEntry={true}
- *     autoCapitalize={true}
- *     iconName={'lock'}
- *     validation={textValidationInstance}
- *     enableErrors={true}
- * />
- *
  * @param {Object} props - Component TextInput Props
  * @returns {React.FC<TextInputProps>} - React Component
  */

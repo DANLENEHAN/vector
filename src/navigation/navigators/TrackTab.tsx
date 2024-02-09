@@ -20,11 +20,6 @@ const TrackTabBar = (props: TopBarProps) => <TopTabNavBar {...props} />;
  * TrackTabNavigator Component
  *
  * @component TrackTabNavigator
- * @example
- * return (
- *   <TrackTabNavigator />
- * )
- *
  * @returns {React.FC} - React Component
  */
 const TrackTabNavigator: React.FC = (): React.ReactElement => {

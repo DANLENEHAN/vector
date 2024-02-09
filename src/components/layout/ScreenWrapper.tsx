@@ -26,11 +26,6 @@ interface ScreenWrapperProps {
  * Screen Wrapper Component
  *
  * @component ScreenWrapper
- * @example
- * <ScreenWrapper>
- *    <Text>Example</Text>
- * </ScreenWrapper>
- *
  * @param {Object} props - Component Screen Wrapper Props
  * @returns {React.FC<ScreenWrapperProps>} - React Component
  */

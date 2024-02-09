@@ -38,11 +38,7 @@ import {LoginValidationSchema} from '@validation/Schemas';
  *
  * @component LoginScreen
  * @param {ScreenProps} navigation - Navigation object for the screen
- *
  * @returns {React.FC} - Returns the login screen component
- *
- * @example
- * <LoginScreen navigation={navigation}/>
  */
 const LoginScreen: React.FC<ScreenProps> = ({
   navigation,

@@ -24,15 +24,6 @@ interface HomepageLayoutProps {
  * HomepageLayout
  *
  * @component HomepageLayout
- * @example
- * <HomepageLayout
- *    navigation={navigation}
- * >
- *    <View>
- *      <Text>Example</Text>
- *    </View>
- * </HomepageLayout>
- *
  * @param {Object} props - Component Props
  * @returns {React.FC<HomepageLayoutProps>} - React Component
  */

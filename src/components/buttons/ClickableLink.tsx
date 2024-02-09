@@ -22,13 +22,6 @@ interface ClickableLinkProps {
  *  ClickableLink Component
  *
  * @component ClickableLink
- * @example
- * <ClickableLink
- *    onPress={() => logger.info('Link Pressed')}
- *    text={'Link Text'}
- *    textStyle={{color: 'red'}}
- * />
- *
  * @param {Object} props - Component ClickableLink Props
  * @returns {React.FC<ClickableLinkProps>} - React Component
  */

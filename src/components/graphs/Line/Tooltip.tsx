@@ -29,16 +29,6 @@ interface ToolTipProps {
  * ToolTip Component
  *
  * @component ToolTip
- * @example
- * <ToolTip
- *   xPosition={xPosition}
- *   yPosition={yPosition}
- *   bottom={bottom}
- *   top={top}
- *   lineColor={lineColor}
- *   indicatorColor={indicatorColor}
- * />
- *
  * @param {Object} props - Component ToolTip Props
  * @returns {React.FC<ToolTipProps>} - React Component
  */

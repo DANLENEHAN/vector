@@ -47,17 +47,6 @@ interface OptionGroupProps {
  * OptionGroup Component
  *
  * @component OptionGroup
- * @example
- * <OptionGroup
- *     options={[
- *         {value: 'option1', label: 'Option 1'},
- *         {value: 'option2', label: 'Option 2'},
- *         {value: 'option3', label: 'Option 3'},
- *     ]}
- *     selectedOption={0}
- *     onOptionPress={(index) => logger.info(index)}
- * />
- *
  * @param {Object} props - Component OptionGroup Props
  * @returns {React.FC<OptionGroupProps>} - React Component
  */

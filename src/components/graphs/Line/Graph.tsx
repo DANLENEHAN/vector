@@ -48,14 +48,6 @@ interface LineGraphProps {
  *  Line Graph Component
  *
  * @component LineGraph
- * @example
- * <LineGraph
- *   data={data}
- *   averageValue={averageValue}
- *   averageLabel={averageLabel}
- *   unit={unit}
- * />
- *
  * @param {Object} props - Component Line Graph Props
  * @returns {React.FC<LineGraphProps>} - React Component
  */

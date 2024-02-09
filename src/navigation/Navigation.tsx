@@ -37,9 +37,6 @@ const BottomTabBar = (props: BottomBarProps) => <BottomNavBar {...props} />;
  * Navigation for the entire app
  *
  * @component AppNavigator
- * @example
- * <AppNavigator />
- *
  * @returns {React.FC} - React Component
  */
 const AppNavigator: React.FC = (): React.ReactElement => {
@@ -80,9 +77,6 @@ const AppNavigator: React.FC = (): React.ReactElement => {
  * Navigation for the entire app
  *
  * @component AuthNavigator
- * @example
- * <AuthNavigator />
- *
  * @returns {React.FC} - React Component
  */
 const AuthNavigator: React.FC = (): React.ReactElement => {

@@ -26,9 +26,6 @@ import {layoutStyles} from '@styles/Main';
  * @param {ScreenProps} navigation - Navigation object for the screen
  *
  * @returns {React.FC} - Returns the account settings screen component
- *
- * @example
- * <AccountSettings navigation={navigation}/>
  */
 const AccountSettings: React.FC<ScreenProps> = ({
   navigation,

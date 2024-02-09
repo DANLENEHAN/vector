@@ -14,9 +14,6 @@ import {
  *
  * @throws {Error} - Error thrown if the status code received is not one of the expected ones.
  * @throws {Error} - Error thrown if the Requests suffers from a Network specific error.
- *
- * @example
- * const validationError: SwaggerValidationError = HandleSwaggerValidationError(error, {400: 'Bad Request'});
  */
 export const HandleSwaggerValidationError = (
   error: unknown,
