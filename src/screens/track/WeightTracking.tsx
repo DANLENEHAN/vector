@@ -8,7 +8,7 @@ import {
   darkThemeColors,
   marginSizes,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceAroundVertical,
   },
   title: {
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.small,
     marginBottom: marginSizes.xxLarge,
   },
 });

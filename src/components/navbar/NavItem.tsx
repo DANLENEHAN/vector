@@ -5,15 +5,12 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 // Styling
 import {
-  fonts,
-  fontSizes,
-  paddingSizes,
   marginSizes,
   lightThemeColors,
   darkThemeColors,
   iconSizes,
-  fontWeights,
   layoutStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -87,16 +84,10 @@ const styles = StyleSheet.create({
   navItem: {
     flex: 1,
     ...layoutStyles.centerVertically,
-    padding: paddingSizes.xSmall,
-    paddingBottom: paddingSizes.xSmall,
-    marginLeft: marginSizes.xSmall,
-    marginRight: marginSizes.xSmall,
   },
   navLabel: {
-    fontSize: fontSizes.small,
-    fontFamily: fonts.secondary,
     marginTop: marginSizes.xSmall,
-    fontWeight: fontWeights.semiBold,
+    ...ctaTextStyles.xSmall,
   },
 });
 

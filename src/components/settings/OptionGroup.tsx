@@ -6,7 +6,7 @@ import {
   darkThemeColors,
   iconSizes,
   layoutStyles,
-  textStyles,
+  bodyTextStyles,
   borderWidth,
   paddingSizes,
 } from '@styles/Main';
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     padding: paddingSizes.small,
   },
   optionText: {
-    ...textStyles.bodyPrimaryMedium,
+    ...bodyTextStyles.small,
     flex: 9,
   },
 });

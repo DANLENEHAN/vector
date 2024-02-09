@@ -5,9 +5,8 @@ import {
   darkThemeColors,
   lightThemeColors,
   marginSizes,
-  fontSizes,
-  textStyles,
-  headingStyles,
+  bodyTextStyles,
+  headingTextStyles,
   layoutStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -85,11 +84,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
             },
           ]}
         />
-        <Text
-          style={[
-            styles.unitLabel,
-            {color: currentTheme.lightText, fontSize: fontSizes.large},
-          ]}>
+        <Text style={[styles.unitLabel, {color: currentTheme.lightText}]}>
           {` ${unit}`}
         </Text>
       </View>
@@ -97,7 +92,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
       <AnimatedText
         text={currentDate}
         style={[
-          styles.unitLabel,
+          styles.averageDatePeriod,
           {
             color: currentTheme.lightText,
           },
@@ -113,15 +108,18 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   header: {
-    ...textStyles.bodyPrimarySmall,
+    ...bodyTextStyles.small,
   },
   averageContainer: {
     ...layoutStyles.centerHorizontally,
   },
   unitLabel: {
-    ...textStyles.bodySecondarySmall,
+    ...bodyTextStyles.small,
+  },
+  averageDatePeriod: {
+    ...bodyTextStyles.small,
   },
   averageValueLabel: {
-    ...headingStyles.headingTitle,
+    ...headingTextStyles.small,
   },
 });

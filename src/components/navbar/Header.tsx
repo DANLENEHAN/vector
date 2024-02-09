@@ -6,7 +6,7 @@ import {
   darkThemeColors,
   marginSizes,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginRight: marginSizes.large,
   },
   logoText: {
-    ...headingStyles.headingPrimary,
+    ...headingTextStyles.small,
     flex: 8,
   },
 });

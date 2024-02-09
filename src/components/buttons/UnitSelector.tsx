@@ -8,7 +8,7 @@ import {
   darkThemeColors,
   lightThemeColors,
   layoutStyles,
-  textStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   unitText: {
-    ...textStyles.buttonText,
+    ...ctaTextStyles.small,
   },
   firstUnit: {
     borderTopLeftRadius: borderRadius.medium,

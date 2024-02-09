@@ -19,7 +19,8 @@ import {
   lightThemeColors,
   iconSizes,
   layoutStyles,
-  textStyles,
+  bodyTextStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -165,8 +166,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
             height: errorContainerHeight,
           }}
           testID="text-input-error">
-          <Text
-            style={[textStyles.bodyPrimarySmall, {color: currentTheme.error}]}>
+          <Text style={[bodyTextStyles.xSmall, {color: currentTheme.error}]}>
             {error}
           </Text>
         </View>
@@ -186,13 +186,13 @@ const styles = StyleSheet.create({
     padding: paddingSizes.small,
   },
   input: {
-    ...textStyles.inputText,
+    ...bodyTextStyles.small,
     flex: 1,
     marginLeft: marginSizes.small,
   },
   showHideButton: {
     paddingRight: paddingSizes.small,
-    ...textStyles.inputText,
+    ...ctaTextStyles.small,
   },
   icon: {
     paddingRight: paddingSizes.small,

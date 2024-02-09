@@ -11,7 +11,7 @@ import {
   lightThemeColors,
   buttonStyles,
   layoutStyles,
-  textStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginHorizontal: marginSizes.small,
   },
   buttonText: {
-    ...textStyles.buttonText,
+    ...ctaTextStyles.small,
   },
 });
 

@@ -6,7 +6,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
@@ -48,8 +48,7 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="nutrition-progress-screen">
       <View style={styles.header}>
-        <Text
-          style={[headingStyles.headingPrimary, {color: currentTheme.text}]}>
+        <Text style={[styles.pageHeading, {color: currentTheme.text}]}>
           Nutrition
         </Text>
       </View>
@@ -78,6 +77,9 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     ...layoutStyles.centerVertically,
+  },
+  pageHeading: {
+    ...headingTextStyles.small,
   },
   scrollContainer: {
     flex: 9,

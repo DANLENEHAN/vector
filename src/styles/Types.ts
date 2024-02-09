@@ -1,27 +1,9 @@
 import {ViewStyle} from 'react-native';
 import {TextStyle} from 'react-native';
 
-export type FontTypes =
-  | 'ultraLight'
-  | 'thin'
-  | 'light'
-  | 'normal'
-  | 'medium'
-  | 'semiBold'
-  | 'bold'
-  | 'extraBold'
-  | 'ultraBold';
+export type FontTypes = 'normal' | 'semiBold' | 'bold' | 'ultraBold';
 
-export type FontWeights =
-  | '100'
-  | '200'
-  | '300'
-  | 'normal'
-  | '500'
-  | '600'
-  | 'bold'
-  | '800'
-  | '900';
+export type FontWeights = 'normal' | '600' | 'bold' | '900';
 
 export interface LayoutStyles {
   centerHorizontally: ViewStyle;
@@ -42,18 +24,21 @@ export interface ButtonStyles {
   large: ViewStyle;
 }
 
-export interface HeadingStyles {
-  headingTitle: TextStyle;
-  headingPrimary: TextStyle;
-  headingSecondary: TextStyle;
+export interface HeadingTextStyles {
+  xSmall: TextStyle;
+  small: TextStyle;
+  medium: TextStyle;
+  large: TextStyle;
 }
 
-export interface TextStyles {
-  bodyPrimarySmall: TextStyle;
-  bodyPrimaryMedium: TextStyle;
-  bodySecondarySmall: TextStyle;
-  bodySecondaryMedium: TextStyle;
-  buttonText: TextStyle;
-  inputText: TextStyle;
-  ctaText: TextStyle;
+export interface BodyTextStyles {
+  xSmall: TextStyle;
+  small: TextStyle;
+  medium: TextStyle;
+  large: TextStyle;
+}
+
+export interface CtaTextStyles {
+  xSmall: TextStyle;
+  small: TextStyle;
 }

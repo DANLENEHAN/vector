@@ -23,8 +23,9 @@ import {
   lightThemeColors,
   paddingSizes,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
   buttonStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Types
@@ -165,7 +166,7 @@ const LoginScreen: React.FC<ScreenProps> = ({
             )}
           </View>
           <ClickableLink
-            textStyle={{color: currentTheme.text}}
+            textStyle={[styles.clickableLink, {color: currentTheme.text}]}
             onPress={() => setIsLogin(prev => !prev)}
             text={viewLinkText}
           />
@@ -196,10 +197,13 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceBetweenHorizontal,
   },
   title: {
-    ...headingStyles.headingPrimary,
+    ...headingTextStyles.medium,
   },
   createAccButton: {
     ...buttonStyles.medium,
+  },
+  clickableLink: {
+    ...ctaTextStyles.xSmall,
   },
 });
 

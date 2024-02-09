@@ -9,7 +9,7 @@ import {
   borderWidth,
   iconSizes,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 6,
   },
   logoText: {
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.medium,
   },
 });
 

@@ -11,7 +11,7 @@ import {
   borderRadius,
   borderWidth,
   layoutStyles,
-  textStyles,
+  bodyTextStyles,
   paddingSizes,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     width: '85%',
   },
   labelHolder: {
-    ...textStyles.bodyPrimaryMedium,
+    ...bodyTextStyles.small,
     width: '75%',
   },
   iconContainer: {

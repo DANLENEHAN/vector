@@ -13,10 +13,9 @@ import {useSystem} from '@context/SystemContext';
 import {
   lightThemeColors,
   darkThemeColors,
-  fontSizes,
-  fonts,
-  fontWeights,
   layoutStyles,
+  headingTextStyles,
+  bodyTextStyles,
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
@@ -100,14 +99,10 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   logoText: {
-    fontSize: fontSizes.title,
-    fontWeight: fontWeights.ultraBold,
-    fontFamily: fonts.primary,
+    ...headingTextStyles.large,
   },
   versionText: {
-    fontSize: fontSizes.small,
-    fontWeight: fontWeights.semiBold,
-    fontFamily: fonts.secondary,
+    ...bodyTextStyles.xSmall,
   },
 });
 
