@@ -2,7 +2,7 @@
 import React from 'react';
 // Styling
 // @ts-ignore
-import Montserrat from '../../../../assets/fonts/Montserrat-SemiBold.ttf';
+import Lato from '../../../../assets/fonts/Lato-Regular.ttf';
 import {
   fontSizes,
   lightThemeColors,
@@ -72,7 +72,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   // Needed for font for Victory Charts
-  const font = useFont(Montserrat, fontSizes.small);
+  const font = useFont(Lato, fontSizes.xxSmall);
 
   //// Functions
   // Function sets the current value for the average value text component

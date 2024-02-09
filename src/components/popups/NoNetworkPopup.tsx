@@ -5,9 +5,9 @@ import {View, Modal, Text, StyleSheet} from 'react-native';
 import {
   darkThemeColors,
   lightThemeColors,
-  headingStyles,
+  headingTextStyles,
   layoutStyles,
-  textStyles,
+  bodyTextStyles,
   borderRadius,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
@@ -46,8 +46,7 @@ const NoNetworkPopup: React.FC = (): React.ReactElement => {
         ]}>
         <View
           style={[styles.content, {backgroundColor: currentTheme.background}]}>
-          <Text
-            style={{color: currentTheme.text, ...headingStyles.headingPrimary}}>
+          <Text style={{color: currentTheme.text, ...headingTextStyles.small}}>
             No Internet
           </Text>
           <Text style={[styles.textBody, {color: currentTheme.text}]}>
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   textBody: {
-    ...textStyles.bodyPrimarySmall,
+    ...bodyTextStyles.small,
     width: '90%',
     textAlign: 'center',
   },

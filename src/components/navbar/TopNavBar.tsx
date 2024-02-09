@@ -9,7 +9,7 @@ import {
   borderWidth,
   iconSizes,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -48,7 +48,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
         <Icon
           name={'magnifying-glass'}
           solid
-          size={iconSizes.medium}
+          size={iconSizes.large}
           color={currentTheme.text}
           onPress={() => logger.info('Pressed Search')}
         />
@@ -62,7 +62,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
         <Icon
           name={'user'}
           solid
-          size={iconSizes.medium}
+          size={iconSizes.large}
           color={currentTheme.text}
           onPress={() =>
             navigation.navigate('Settings', {screen: 'SettingsHome'})
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 6,
   },
   logoText: {
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.medium,
   },
 });
 

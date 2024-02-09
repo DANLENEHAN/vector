@@ -8,8 +8,9 @@ import {
   FontWeights,
   ButtonStyles,
   LayoutStyles,
-  HeadingStyles,
-  TextStyles,
+  HeadingTextStyles,
+  BodyTextStyles,
+  CtaTextStyles,
 } from '@styles/Types';
 
 const black = '#333333';
@@ -19,29 +20,25 @@ const purple = '#9b59b6';
 export const gray = 'gray';
 
 export const fonts = {
-  primary: 'Montserrat',
-  secondary: 'Lato',
+  heading: 'Montserrat',
+  cta: 'Oswald',
+  body: 'Lato',
 };
 
 export const fontSizes = {
-  // explore allowFontScaling for accessability
-  small: 12,
-  default: 14,
-  medium: 16,
-  large: 20,
-  xLarge: 24,
-  title: 32,
+  xxSmall: 12,
+  xSmall: 14, // also the default
+  small: 16,
+  medium: 19,
+  large: 23,
+  xLarge: 28,
+  xxLarge: 33,
 };
 
 export const fontWeights: Record<FontTypes, FontWeights> = {
-  ultraLight: '100',
-  thin: '200',
-  light: '300',
   normal: 'normal',
-  medium: '500',
   semiBold: '600',
   bold: 'bold',
-  extraBold: '800',
   ultraBold: '900',
 };
 
@@ -136,59 +133,62 @@ export const buttonStyles: ButtonStyles = {
   },
 };
 
-export const headingStyles: HeadingStyles = {
-  headingTitle: {
-    fontSize: fontSizes.title,
-    fontFamily: fonts.primary,
+export const headingTextStyles: HeadingTextStyles = {
+  xSmall: {
+    fontSize: fontSizes.medium,
+    fontFamily: fonts.heading,
     fontWeight: fontWeights.bold,
   },
-  headingPrimary: {
-    fontSize: fontSizes.xLarge,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.bold,
-  },
-  headingSecondary: {
+  small: {
     fontSize: fontSizes.large,
-    fontFamily: fonts.primary,
+    fontFamily: fonts.heading,
+    fontWeight: fontWeights.bold,
+  },
+  medium: {
+    fontSize: fontSizes.xLarge,
+    fontFamily: fonts.heading,
+    fontWeight: fontWeights.bold,
+  },
+  large: {
+    fontSize: fontSizes.xxLarge,
+    fontFamily: fonts.heading,
     fontWeight: fontWeights.bold,
   },
 };
 
-export const textStyles: TextStyles = {
-  bodyPrimarySmall: {
+export const bodyTextStyles: BodyTextStyles = {
+  xSmall: {
+    fontSize: fontSizes.xSmall,
+    fontFamily: fonts.body,
+    fontWeight: fontWeights.normal,
+  },
+  small: {
     fontSize: fontSizes.small,
-    fontFamily: fonts.primary,
+    fontFamily: fonts.body,
     fontWeight: fontWeights.normal,
   },
-  bodyPrimaryMedium: {
+  medium: {
     fontSize: fontSizes.medium,
-    fontFamily: fonts.primary,
+    fontFamily: fonts.body,
     fontWeight: fontWeights.normal,
   },
-  bodySecondarySmall: {
-    fontSize: fontSizes.small,
-    fontFamily: fonts.secondary,
+  large: {
+    fontSize: fontSizes.large,
+    fontFamily: fonts.body,
     fontWeight: fontWeights.normal,
   },
-  bodySecondaryMedium: {
-    fontSize: fontSizes.medium,
-    fontFamily: fonts.secondary,
-    fontWeight: fontWeights.normal,
-  },
-  buttonText: {
-    fontSize: fontSizes.medium,
-    fontFamily: fonts.secondary,
+};
+
+export const ctaTextStyles: CtaTextStyles = {
+  xSmall: {
+    fontSize: fontSizes.xSmall,
+    fontFamily: fonts.cta,
     fontWeight: fontWeights.bold,
   },
-  inputText: {
-    fontSize: fontSizes.default,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.normal,
-  },
-  ctaText: {
-    fontSize: fontSizes.medium,
-    fontFamily: fonts.primary,
-    fontWeight: fontWeights.normal,
+  small: {
+    fontSize: fontSizes.small,
+    fontFamily: fonts.cta,
+    fontWeight: fontWeights.bold,
   },
 };
 

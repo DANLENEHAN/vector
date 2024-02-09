@@ -9,8 +9,8 @@ import {
   marginSizes,
   borderRadius,
   layoutStyles,
-  headingStyles,
-  textStyles,
+  headingTextStyles,
+  bodyTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -74,17 +74,17 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   profileImage: {
-    width: 75,
-    height: 75,
+    width: 80,
+    height: 80,
     borderRadius: borderRadius.circle,
     marginBottom: marginSizes.medium,
   },
   userName: {
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.small,
     marginBottom: marginSizes.medium,
   },
   userUsername: {
-    ...textStyles.bodyPrimarySmall,
+    ...bodyTextStyles.xSmall,
   },
 });
 

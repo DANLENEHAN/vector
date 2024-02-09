@@ -6,7 +6,7 @@ import {
   lightThemeColors,
   darkThemeColors,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -49,8 +49,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({
       style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
       testID="wellness-tracking-screen">
       <View style={styles.header}>
-        <Text
-          style={[headingStyles.headingPrimary, {color: currentTheme.text}]}>
+        <Text style={[styles.pageHeading, {color: currentTheme.text}]}>
           Health & Wellness
         </Text>
       </View>
@@ -83,6 +82,9 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     ...layoutStyles.centerVertically,
+  },
+  pageHeading: {
+    ...headingTextStyles.small,
   },
   scrollContainer: {
     flex: 9,

@@ -10,7 +10,7 @@ import {
   borderRadius,
   buttonStyles,
   layoutStyles,
-  textStyles,
+  ctaTextStyles,
 } from '@styles/Main';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   ctaText: {
-    ...textStyles.ctaText,
+    ...ctaTextStyles.small,
     marginLeft: marginSizes.large,
     marginRight: marginSizes.large,
     marginBottom: marginSizes.xxLarge,

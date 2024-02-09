@@ -18,8 +18,8 @@ import {
   lightThemeColors,
   iconSizes,
   layoutStyles,
-  headingStyles,
-  textStyles,
+  headingTextStyles,
+  bodyTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -145,14 +145,11 @@ const styles = StyleSheet.create({
   tileCurrentValue: {
     ...layoutStyles.centerVertically,
   },
-  buttonText: {
-    ...textStyles.buttonText,
-  },
   tileLabel: {
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.small,
   },
   tileSubtext: {
-    ...textStyles.bodySecondarySmall,
+    ...bodyTextStyles.small,
   },
 });
 

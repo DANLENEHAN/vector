@@ -8,10 +8,9 @@ import {TopBarProps} from '@components/navbar/Types';
 import {
   lightThemeColors,
   darkThemeColors,
-  paddingSizes,
   borderWidth,
   layoutStyles,
-  headingStyles,
+  headingTextStyles,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
@@ -98,13 +97,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   navBar: {
-    ...layoutStyles.spaceBetweenHorizontal,
+    ...layoutStyles.spaceAroundHorizontal,
     height: 60,
     borderBottomWidth: borderWidth.small,
   },
   label: {
-    padding: paddingSizes.medium,
-    ...headingStyles.headingSecondary,
+    ...headingTextStyles.xSmall,
   },
 });
 
