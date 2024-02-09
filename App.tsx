@@ -9,6 +9,8 @@ import NetInfo from '@react-native-community/netinfo';
 import {apiBaseUrl} from '@services/api/ApiService';
 // Types
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
+// Constants
+const config = require('./app.config.js');
 
 NetInfo.configure({
   reachabilityUrl: apiBaseUrl + '/health',
@@ -37,5 +39,10 @@ function App(): JSX.Element {
     </SystemProvider>
   );
 }
+let AppEntryPoint = App;
 
-export default App;
+if (config.extra.storybookEnabled === true) {
+  AppEntryPoint = require('./.storybook').default;
+}
+
+export default AppEntryPoint;

@@ -8,7 +8,6 @@ generate({
   configPath: path.resolve(__dirname, './.storybook'),
 });
 
-/** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
 config.transformer.unstable_allowRequireContext = true;
