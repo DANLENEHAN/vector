@@ -1,4 +1,6 @@
 import {AxiosResponse} from 'axios';
+
+// Typing
 import {
   ClientSessionEventCreateSchema,
   ClientSessionEventUpdateSchema,
@@ -19,6 +21,7 @@ import {
   NutritionUpdateSchema,
   QuerySchema,
 } from '@services/api/swagger/data-contracts';
+import {timestampFields} from '@shared/Constants';
 
 /**
  * Represents a schema for data that can be synchronized during a create operation.
@@ -157,4 +160,27 @@ export interface SyncTable {
   last_synced?: string | null;
   sync_type: SyncType;
   sync_operation: SyncOperation;
+}
+
+/**
+ * Defines the structure for storing the last synchronized timestamps for a specific table or data entity.
+ *
+ * This interface represents the timestamps indicating the last synchronization time for creation and update operations.
+ * If no synchronization has occurred yet, the timestamps default to the Unix Epoch ('1970-01-01T00:00:00Z'),
+ * representing a baseline date and time from which time is measured.
+ *
+ * Properties:
+ * - `[timestampFields.createdAt]`: The timestamp of the last creation operation synchronized. Defaults to the Unix Epoch
+ *   if no creation synchronization has occurred yet.
+ *
+ * - `[timestampFields.updatedAt]`: The timestamp of the last update operation synchronized. Defaults to the Unix Epoch
+ *   if no update synchronization has occurred yet.
+ *
+ * Note: `timestampFields` is expected to be an object or enumeration that provides keys (e.g., 'createdAt', 'updatedAt')
+ * for accessing specific timestamp fields. These keys should correspond to the fields used in the database or data source
+ * being synchronized. The Unix Epoch is used as a default value to indicate the absence of prior synchronization.
+ */
+export interface LastSyncedTimestamps {
+  [timestampFields.createdAt]: string;
+  [timestampFields.updatedAt]: string;
 }

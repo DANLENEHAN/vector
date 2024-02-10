@@ -1,5 +1,10 @@
 // Typing
-import {SyncTable, SyncCreateSchemas, SyncUpdateSchemas} from './Types';
+import {
+  SyncTable,
+  SyncCreateSchemas,
+  SyncUpdateSchemas,
+  LastSyncedTimestamps,
+} from './Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
@@ -9,31 +14,37 @@ import {RowData} from '@services/db/Types';
 import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
 import {
   getLastSyncedForTableQuery,
-  getRowsToSyncQuery,
+  getRowsToSyncPushQuery,
 } from '@services/db/sync/Queries';
 
 // Constants
 import {unixEpoch} from '@shared/Constants';
 
 /**
- * Retrieve the last synced timestamp for a specific table based on sync type and operation.
+ * Retrieves the last synced timestamps for the specified table and synchronization type.
  *
- * @param {string} tableName - The name of the table to retrieve the last synced timestamp for.
- * @param {SyncType} syncType - The type of synchronization (e.g., Push, Pull).
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @returns {Promise<string>} A promise that resolves to the last synced timestamp as a string.
- * @throws {Error} If there is an issue with the database transaction or SQL execution.
+ * @param {syncDbTables} tableName - The name of the table to retrieve last synced timestamps for.
+ * @param {SyncType} syncType - The type of synchronization (e.g., 'pull', 'push').
+ * @returns {Promise<LastSyncedTimestamps>} A Promise that resolves with an object containing the last synced timestamps.
  */
 export const getLastSyncedForTable = async (
   tableName: syncDbTables,
   syncType: SyncType,
-  syncOperation: SyncOperation,
-): Promise<string | null> => {
+): Promise<LastSyncedTimestamps> => {
   const response: RowData[] = await runSqlSelect(
-    getLastSyncedForTableQuery(tableName, syncType, syncOperation),
+    getLastSyncedForTableQuery(tableName, syncType),
     [],
   );
-  return response.length > 0 ? response[0].last_synced : null;
+
+  return response.length > 0
+    ? {
+        [timestampFields.createdAt]: response[0].last_synced,
+        [timestampFields.updatedAt]: response[1].last_synced,
+      }
+    : {
+        [timestampFields.createdAt]: unixEpoch,
+        [timestampFields.updatedAt]: unixEpoch,
+      };
 };
 
 /**
@@ -46,13 +57,21 @@ export const getLastSyncedForTable = async (
  *   of schemas representing rows to be synchronized.
  * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
  */
-export const getRowsToSync = async (
+export const getRowsToSyncPush = async (
   tableName: syncDbTables,
   syncOperation: SyncOperation,
-  lastSyncTime: string | null,
+  lastSyncedCreates: string,
+  lastSyncedUpdates: string,
+  syncStart: string,
 ): Promise<SyncCreateSchemas[]> => {
   return await runSqlSelect(
-    getRowsToSyncQuery(tableName, syncOperation, lastSyncTime),
+    getRowsToSyncPushQuery(
+      tableName,
+      syncOperation,
+      lastSyncedCreates,
+      lastSyncedUpdates,
+      syncStart,
+    ),
     [],
   );
 };
@@ -85,6 +104,12 @@ export const insertSyncUpdate = async (
   }
 };
 
+/**
+ * Converts an array of SyncCreateSchemas to an array of SyncUpdateSchemas by removing 'created_at' and 'timezone' fields.
+ *
+ * @param {SyncCreateSchemas[]} createSchemasList - The array of SyncCreateSchemas to be converted.
+ * @returns {SyncUpdateSchemas[]} The array of SyncUpdateSchemas.
+ */
 export function convertListToSyncUpdateSchemas(
   createSchemasList: SyncCreateSchemas[],
 ): SyncUpdateSchemas[] {
@@ -98,34 +123,98 @@ export function convertListToSyncUpdateSchemas(
 }
 
 /**
- * Asynchronously generates a query schema based on the last synced timestamp and the specified synchronization operation.
+ * Generates a query object for retrieving data from the database table based on the specified synchronization criteria.
  *
- * @param lastSynced - The last synced timestamp for the table. Pass `null` if no previous synchronization has occurred.
- * @param syncOperation - The synchronization operation to determine the timestamp field (creates or updates).
- * @returns A Promise that resolves to a QuerySchema representing the conditions for retrieving rows from the table.
- * @throws {Error} If an unexpected error occurs during the query schema generation.
+ * @param {string} lastSyncedCreates - The timestamp of the last sync for creations.
+ * @param {string} lastSyncedUpdates - The timestamp of the last sync for updates.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @param {string} syncStart - The timestamp representing the start of the synchronization process.
+ * @returns {Promise<QuerySchema>} A Promise that resolves with the query object for retrieving data.
  */
 export const getQueryObjForTable = async (
-  lastSynced: string | null,
+  lastSyncedCreates: string,
+  lastSyncedUpdates: string,
   syncOperation: SyncOperation,
+  syncStart: string,
 ): Promise<QuerySchema> => {
-  // Get the last synced timestamp for the table
-
-  // Determine the timestamp field based on the sync type
   const timestampField =
     syncOperation === SyncOperation.Creates
       ? timestampFields.createdAt
       : timestampFields.updatedAt;
 
-  // Define the condition for the timestamp field
-  lastSynced = lastSynced === null ? unixEpoch : lastSynced;
-  const condition = lastSynced === undefined ? {ne: null} : {gt: lastSynced};
+  let filter_obj = {};
 
-  // Construct and return the query schema
+  if (syncOperation === SyncOperation.Creates) {
+    filter_obj = {
+      and: {
+        // Caputring rows created between the last sync and the
+        // the start of this current sync process
+        [timestampFields.createdAt]: {
+          gt: lastSyncedCreates,
+          le: syncStart,
+        },
+      },
+    };
+  } else {
+    filter_obj = {
+      and: {
+        // Caputring rows updated between the last sync and the
+        // the start of this current sync process
+        [timestampFields.updatedAt]: {
+          gt: lastSyncedUpdates,
+          le: syncStart,
+        },
+        // Excluding rows that have been created within the timeframe of last sync
+        // and the current one as they will already have been pulled.
+        [timestampFields.createdAt]: {le: lastSyncedCreates},
+      },
+    };
+  }
+
   return {
-    filters: {
-      [timestampField]: condition,
-    },
+    filters: filter_obj,
     sort: [`${timestampField}:asc`],
   } as QuerySchema;
+};
+
+/**
+ * Filters out rows from the given array that already exist in the database table based on their unique identifiers.
+ *
+ * @param {string} tableName - The name of the database table to check for existing rows.
+ * @param {SyncCreateSchemas[]} rowsToSync - The array of rows to be filtered.
+ * @returns {Promise<SyncCreateSchemas[]>} A Promise that resolves with the array of rows that need to be inserted into the database.
+ */
+export const filterRowsForInsertion = async (
+  tableName: string,
+  rowsToSync: SyncCreateSchemas[],
+): Promise<SyncCreateSchemas[]> => {
+  // Construct placeholders for SQL query parameters
+  const placeholders = rowsToSync.map(() => '?').join(',');
+  // Determine the ID field based on the table name
+  const table_id_field = `${tableName}_id`;
+  // Extract UUIDs from the rows to sync
+  const tableUuids = rowsToSync.map(
+    item => item[table_id_field as keyof (typeof rowsToSync)[0]],
+  );
+
+  // Fetch existing UUIDs from the database
+  const existingUuids: RowData[] = await runSqlSelect(
+    `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`,
+    tableUuids,
+  );
+
+  // Extract UUIDs from the fetched rows
+  const existingUuidList = existingUuids.map(
+    item => item[table_id_field as keyof (typeof existingUuids)[0]],
+  );
+
+  // Filter out rows that already exist in the database
+  const rowsToInsert = rowsToSync.filter(
+    item =>
+      !existingUuidList.includes(
+        item[table_id_field as keyof (typeof rowsToSync)[0]],
+      ),
+  );
+
+  return rowsToInsert;
 };

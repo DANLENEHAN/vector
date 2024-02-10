@@ -4,7 +4,8 @@ import {
   SyncTableFunctions,
   SyncCreateSchemas,
   SyncUpdateSchemas,
-} from './Types';
+  LastSyncedTimestamps,
+} from '@services/db/sync/Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables, timestampFields} from '@shared/Constants';
@@ -12,11 +13,12 @@ import {syncDbTables, timestampFields} from '@shared/Constants';
 // Functions
 import {
   getLastSyncedForTable,
-  getRowsToSync,
+  getRowsToSyncPush,
   getQueryObjForTable,
   insertSyncUpdate,
+  filterRowsForInsertion,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows, runSqlSelect} from '@services/db/Functions';
+import {insertRows, updateRows} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
@@ -26,34 +28,31 @@ import {
 import logger from '@utils/Logger';
 
 /**
- * Process a synchronization pull operation for a specific table.
+ * Processes synchronization pull operation for the specified table and sync operation type.
  *
- * @param {syncDbTables} tableName - The name of the table to sync.
- * @param {SyncTableFunctions} syncFunctions - Object containing sync functions for the table.
+ * @param {syncDbTables} tableName - The name of the table to synchronize.
+ * @param {SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>} syncFunctions - Object containing functions for synchronization operations.
  * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
- * @returns {Promise<void>} A promise that resolves when the synchronization pull operation is completed.
- * @throws {Error} Throws an error if there is an issue with the synchronization process.
- * @description
- * The `processSyncTypePull` function orchestrates synchronization pull operations for a specific table.
- * It retrieves data from the backend using the provided sync functions and performs the required sync operation
- * (Creates or Updates). The function ensures that the sync process is completed successfully and logs relevant
- * information. If any error occurs during the process, it is thrown.
+ * @param {string} syncStart - The timestamp representing the start of the synchronization process.
+ * @returns {Promise<void>} A Promise that resolves when the synchronization pull process is completed.
+ * @throws {Error} If an error occurs during the synchronization pull process.
  */
 export const processSyncTypePull = async (
   tableName: syncDbTables,
   syncFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
   syncOperation: SyncOperation,
+  syncStart: string,
 ): Promise<void> => {
-  const lastSynced: string | null = await getLastSyncedForTable(
+  const lastSynced: LastSyncedTimestamps = await getLastSyncedForTable(
     tableName,
     SyncType.Pull,
-    syncOperation,
   );
 
-  // Get query schema for the table and sync operation
   const tableQuerySchema: QuerySchema = await getQueryObjForTable(
-    lastSynced,
+    lastSynced.created_at,
+    lastSynced.updated_at,
     syncOperation,
+    syncStart,
   );
 
   // Retrieve data from the backend using the specified sync function
@@ -70,25 +69,7 @@ export const processSyncTypePull = async (
   } else {
     if (syncOperation === SyncOperation.Creates) {
       // Removing any existing rows to avoid errors
-      const placeholders = rowsToSync.map(() => '?').join(',');
-      const table_id_field = `${tableName}_id`;
-      const tableUuids = rowsToSync.map(
-        item => item[table_id_field as keyof SyncCreateSchemas],
-      );
-      const existingUuids = await runSqlSelect(
-        `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`,
-        tableUuids,
-      );
-      const existingUuidList = existingUuids.map(
-        item => item[table_id_field as keyof SyncCreateSchemas],
-      );
-      const rowsToInsert = rowsToSync.filter(
-        item =>
-          !existingUuidList.includes(
-            item[table_id_field as keyof SyncCreateSchemas],
-          ),
-      );
-
+      const rowsToInsert = await filterRowsForInsertion(tableName, rowsToSync);
       if (rowsToInsert.length > 0) {
         await insertRows(tableName, rowsToInsert);
       }
@@ -99,6 +80,9 @@ export const processSyncTypePull = async (
     // Update the synchronization log
     await insertSyncUpdate({
       table_name: tableName,
+      // IMPORTANT:
+      // This 'last_synced' must the timestamp of the last sync'd
+      // row as this allows us to sync in batches. See 'syncBatchLimit'.
       last_synced:
         syncOperation === SyncOperation.Creates
           ? rowsToSync.slice(-1)[0][timestampFields.createdAt]
@@ -114,33 +98,34 @@ export const processSyncTypePull = async (
 };
 
 /**
- * Process synchronization push operation for a specific table.
+ * Processes synchronization push operation for the specified table and sync operation type.
  *
- * @param {keyof typeof syncDbTables} tableName - The name of the table to synchronize.
- * @param {SyncTableFunctions} tableFunctions - Functions for creating and updating records in the table.
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @throws {Error} If there are issues with retrieving data, sending requests, or updating the sync table.
- * @description
- * The `processSyncTypePush` function synchronizes data push operations for a specific table.
- * It retrieves rows to sync, sends requests to the backend, and updates the sync table accordingly.
- * Throws an error if there are issues with data retrieval, request sending, or sync table updates.
+ * @param {syncDbTables} tableName - The name of the table to synchronize.
+ * @param {SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>} syncFunctions - Object containing functions for synchronization operations.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @param {string} syncStart - The timestamp representing the start of the synchronization process.
+ * @returns {Promise<void>} A Promise that resolves when the synchronization push process is completed.
+ * @throws {Error} If an error occurs during the synchronization push process.
  */
+
 export const processSyncTypePush = async (
   tableName: syncDbTables,
   syncFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
   syncOperation: SyncOperation,
+  syncStart: string,
 ): Promise<void> => {
   try {
-    const lastSynced: string | null = await getLastSyncedForTable(
+    const lastSynced: LastSyncedTimestamps | null = await getLastSyncedForTable(
       tableName,
-      SyncType.Push,
-      syncOperation,
+      SyncType.Pull,
     );
 
-    const rowsToSync: SyncCreateSchemas[] = await getRowsToSync(
+    const rowsToSync: SyncCreateSchemas[] = await getRowsToSyncPush(
       tableName,
       syncOperation,
-      lastSynced,
+      lastSynced.created_at,
+      lastSynced.updated_at,
+      syncStart,
     );
 
     if (syncOperation === SyncOperation.Creates) {
