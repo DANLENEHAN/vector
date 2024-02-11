@@ -117,7 +117,7 @@ export const processSyncTypePush = async (
   try {
     const lastSynced: LastSyncedTimestamps | null = await getLastSyncedForTable(
       tableName,
-      SyncType.Pull,
+      SyncType.Push,
     );
 
     const rowsToSync: SyncCreateSchemas[] = await getRowsToSyncPush(

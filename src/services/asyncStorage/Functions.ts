@@ -88,7 +88,7 @@ export const storeFailedSyncPushErrors = async <
       const rowUuid = syncError[`${tableName}_id`];
 
       if (rowUuid in tableSyncPushErrors) {
-        if (tableSyncPushErrors[rowUuid].retries === maxSyncPushRetry) {
+        if (tableSyncPushErrors[rowUuid].retries >= maxSyncPushRetry) {
           const row: T = tableSyncPushErrors[rowUuid].data;
           await SyncErrorDumpApi.createCreate({
             table_name: tableName,
@@ -147,7 +147,7 @@ const getFailedSyncPushesForTable = async <T>(
     );
 
     if (syncPushErrorsStore === null) {
-      logger.warn(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
+      logger.log(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
     } else {
       const parsedData: FailedSyncPushError<T> =
         JSON.parse(syncPushErrorsStore);

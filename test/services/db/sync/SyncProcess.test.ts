@@ -11,6 +11,10 @@ import {
   processSyncTypePull,
   processSyncTypePush,
 } from '@services/db/sync/SyncTypes';
+import * as DateFunctions from '@services/date/Functions';
+
+// Objects
+import {sampleTimestampOne, sampleTimezone} from '../../../Objects';
 
 jest.mock('@services/db/sync/SyncTypes', () => ({
   processSyncTypePush: jest.fn(),
@@ -23,6 +27,11 @@ describe('Sync Process Tests', () => {
   });
   test('runSyncProcess', async () => {
     // Arrange
+    jest.spyOn(DateFunctions, 'getCurrentTimestampTimezone').mockReturnValue({
+      timestamp: sampleTimestampOne,
+      timezone: sampleTimezone,
+    });
+
     // Act
     await runSyncProcess();
 
@@ -30,32 +39,45 @@ describe('Sync Process Tests', () => {
     expect(processSyncTypePull).toHaveBeenCalledTimes(
       Object.entries(apiFunctions).length * 2,
     );
-    for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
-      expect(processSyncTypePull).toHaveBeenCalledWith(
-        tableName as syncDbTables,
-        tableFunctions,
-        SyncOperation.Creates,
-      );
-      expect(processSyncTypePull).toHaveBeenCalledWith(
-        tableName as syncDbTables,
-        tableFunctions,
-        SyncOperation.Updates,
-      );
-    }
 
     expect(processSyncTypePush).toHaveBeenCalledTimes(
       Object.entries(apiFunctions).length * 2,
     );
-    for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
-      expect(processSyncTypePush).toHaveBeenCalledWith(
+
+    for (let [index, [tableName, tableFunctions]] of Object.entries(
+      apiFunctions,
+    ).entries()) {
+      let call = (index + 1) * 2;
+      expect(processSyncTypePull).toHaveBeenNthCalledWith(
+        call - 1,
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Creates,
+        sampleTimestampOne,
       );
-      expect(processSyncTypePush).toHaveBeenCalledWith(
+
+      expect(processSyncTypePull).toHaveBeenNthCalledWith(
+        call,
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Updates,
+        sampleTimestampOne,
+      );
+
+      expect(processSyncTypePush).toHaveBeenNthCalledWith(
+        call - 1,
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Creates,
+        sampleTimestampOne,
+      );
+
+      expect(processSyncTypePush).toHaveBeenNthCalledWith(
+        call,
+        tableName as syncDbTables,
+        tableFunctions,
+        SyncOperation.Updates,
+        sampleTimestampOne,
       );
     }
   });

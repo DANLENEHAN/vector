@@ -13,9 +13,9 @@ export const getLastSyncedForTableQuery = (
   tableName: string,
   syncType: SyncType,
 ): string => `
-    SELECT last_synced
+    SELECT last_synced, sync_operation
     FROM sync_table
-    WHERE table_name = '${tableName}' AND sync_type = '${syncType}' ORDER BY sync_operation ASC;
+    WHERE table_name = '${tableName}' AND sync_type = '${syncType}' ORDER BY sync_operation;
 `;
 
 /**

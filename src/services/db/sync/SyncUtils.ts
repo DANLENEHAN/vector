@@ -36,15 +36,20 @@ export const getLastSyncedForTable = async (
     [],
   );
 
-  return response.length > 0
-    ? {
-        [timestampFields.createdAt]: response[0].last_synced,
-        [timestampFields.updatedAt]: response[1].last_synced,
-      }
-    : {
-        [timestampFields.createdAt]: unixEpoch,
-        [timestampFields.updatedAt]: unixEpoch,
-      };
+  let lastCreatedAt: string = unixEpoch;
+  let lastUpdatedAt: string = unixEpoch;
+  for (let row of response) {
+    if (row.sync_operation === SyncOperation.Creates) {
+      lastCreatedAt = row.last_synced;
+    } else if (row.sync_operation === SyncOperation.Updates) {
+      lastUpdatedAt = row.last_synced;
+    }
+  }
+
+  return {
+    [timestampFields.createdAt]: lastCreatedAt,
+    [timestampFields.updatedAt]: lastUpdatedAt,
+  };
 };
 
 /**
