@@ -39,7 +39,7 @@ const ClientSessionEventApi = new ClientSessionEvent(api);
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
   // BodyStat
-  [syncDbTables.statTable]: {
+  [syncDbTables.bodyStatTable]: {
     [SyncOperation.Creates]: (
       data: BodyStatCreateSchema,
       query?: SyncObject,

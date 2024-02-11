@@ -116,10 +116,10 @@ export interface SyncTableFunctions<
  *
  * @interface SyncApiFunctions
  *
- * @property {SyncTableFunctions} statTable - API functions for the 'statTable' table.
+ * @property {SyncTableFunctions} bodyStatTable - API functions for the 'bodyStatTable' table.
  */
 export interface SyncApiFunctions {
-  [syncDbTables.statTable]: SyncTableFunctions<
+  [syncDbTables.bodyStatTable]: SyncTableFunctions<
     BodyStatCreateSchema,
     BodyStatUpdateSchema
   >;

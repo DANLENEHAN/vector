@@ -37,7 +37,7 @@ export const sampleUpdatedStat = {
 } as BodyStatUpdateSchema;
 
 export const sampleSyncRow = {
-  table_name: syncDbTables.statTable,
+  table_name: syncDbTables.bodyStatTable,
   last_synced: sampleTimestampTwo,
   sync_type: SyncType.Pull,
   sync_operation: SyncOperation.Creates,
