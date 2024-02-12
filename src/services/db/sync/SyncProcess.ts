@@ -28,7 +28,7 @@ export const runSyncProcess = async (): Promise<void> => {
     // Iterate through each table in apiFunctions
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
       logger.info(
-        `Processing sync type '${SyncType.Pull}' for table: '${tableName}'`,
+        `Processing Sync type '${SyncType.Pull}' for table: '${tableName}'`,
       );
 
       // Need a sync stsrt time here to make sure we don't miss out on any data created during thr sync process
@@ -58,7 +58,7 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       logger.info(
-        `Processing sync type '${SyncType.Push}' for table: '${tableName}'`,
+        `Processing Sync type '${SyncType.Push}' for table: '${tableName}'`,
       );
 
       // Trigger synchronization push for create operation

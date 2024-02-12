@@ -28,7 +28,7 @@ import {
 import logger from '@utils/Logger';
 
 /**
- * Processes synchronization pull operation for the specified table and sync operation type.
+ * Processes synchronization pull operation for the specified table and Sync operation type.
  *
  * @param {syncDbTables} tableName - The name of the table to synchronize.
  * @param {SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>} syncFunctions - Object containing functions for synchronization operations.
@@ -60,13 +60,10 @@ export const processSyncTypePull = async (
     SyncType.Pull
   ](tableQuerySchema);
 
-  // Process synchronization based on the sync operation type
-  const rowsToSync = response.data;
-  if (rowsToSync.length === 0) {
-    logger.info(
-      `No rows to sync for table '${tableName}' sync type '${SyncType.Pull}' sync operation '${syncOperation}'.`,
-    );
-  } else {
+  // Process synchronization based on the Sync operation type
+  const rowsToSync = response.data || [];
+
+  if (response.status === 201 && rowsToSync.length > 0) {
     if (syncOperation === SyncOperation.Creates) {
       // Removing any existing rows to avoid errors
       const rowsToInsert = await filterRowsForInsertion(tableName, rowsToSync);
@@ -94,11 +91,19 @@ export const processSyncTypePull = async (
     logger.info(
       `Sync type '${SyncType.Pull}' operation '${syncOperation}' completed successfully on table: '${tableName}'`,
     );
+  } else if (response.status !== 201) {
+    logger.error(
+      `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed due to unexpected response status code: '${response.status}'`,
+    );
+  } else {
+    logger.info(
+      `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has received no rows to sync.`,
+    );
   }
 };
 
 /**
- * Processes synchronization push operation for the specified table and sync operation type.
+ * Processes synchronization push operation for the specified table and Sync operation type.
  *
  * @param {syncDbTables} tableName - The name of the table to synchronize.
  * @param {SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>} syncFunctions - Object containing functions for synchronization operations.

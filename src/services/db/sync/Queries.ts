@@ -2,7 +2,7 @@ import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncBatchLimit, timestampFields} from '@shared/Constants';
 
 /**
- * Generates a SQL query to retrieve the last synced timestamp for a given table and sync type.
+ * Generates a SQL query to retrieve the last synced timestamp for a given table and Sync type.
  *
  * @param {string} tableName - The name of the table to retrieve last synced timestamp for.
  * @param {SyncType} syncType - The type of synchronization (e.g., 'full', 'incremental').
@@ -25,7 +25,7 @@ export const getLastSyncedForTableQuery = (
  * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
  * @param {string} lastSyncedCreates - The timestamp of the last sync for creations.
  * @param {string} lastSyncedUpdates - The timestamp of the last sync for updates.
- * @param {string} syncStart - The timestamp representing the start of the current sync operation.
+ * @param {string} syncStart - The timestamp representing the start of the current Sync operation.
  * @returns {string} SQL query to retrieve rows for push synchronization.
  */
 

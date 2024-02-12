@@ -32,7 +32,7 @@ export const processUpdatesSyncTypePush = async (
   const failedPushes: SyncUpdateSchemas[] = [];
   if (rows.length === 0) {
     logger.info(
-      `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Updates}'.`,
+      `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Updates}'.`,
     );
   } else {
     // Convert the CreateSchemas to UpdateSchemas
@@ -95,7 +95,7 @@ export const processCreatesSyncTypePush = async (
   const failedPushes: SyncCreateSchemas[] = [];
   if (rowsToSync.length === 0) {
     logger.info(
-      `No rows to sync for table '${tableName}' sync type '${SyncType.Push}' sync operation '${SyncOperation.Creates}'.`,
+      `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Creates}'.`,
     );
   } else {
     // Use the last (Latest Updated) row as the 'lastRow' not the last

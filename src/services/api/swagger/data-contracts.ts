@@ -2597,7 +2597,7 @@ export interface SyncErrorDumpCreateSchema {
   row_id: string;
   /**
    * Enum relating to the type of
-   * sync operation being processed.
+   * Sync operation being processed.
    * Can either be 'creates' realting
    * to newly created rows not yet synced
    * or 'updates', being newly updated rows
@@ -2633,7 +2633,7 @@ export interface SyncErrorDumpCreateSchema {
 /**
  * SyncOperation
  * Enum relating to the type of
- * sync operation being processed.
+ * Sync operation being processed.
  * Can either be 'creates' realting
  * to newly created rows not yet synced
  * or 'updates', being newly updated rows

@@ -46,7 +46,7 @@ export async function getUserDetails(field_name: string): Promise<any> {
 }
 
 /**
- * Stores failed synchronization push errors in AsyncStorage for a specific table and sync operation.
+ * Stores failed synchronization push errors in AsyncStorage for a specific table and Sync operation.
  *
  * @param tableName - The name of the synchronization table.
  * @param syncOperation - The type of synchronization operation (e.g., Creates, Updates).
@@ -128,7 +128,7 @@ export const storeFailedSyncPushErrors = async <
 };
 
 /**
- * Retrieves a list of failed synchronization pushes for a specific table and sync operation.
+ * Retrieves a list of failed synchronization pushes for a specific table and Sync operation.
  * @param tableName - The name of the synchronization table.
  * @param syncOperation - The type of synchronization operation (e.g., Creates, Updates).
  * @returns A promise that resolves to an array of failed synchronization items.
@@ -164,7 +164,7 @@ const getFailedSyncPushesForTable = async <T>(
         }
       } else {
         logger.info(
-          `No failed Sync Pushes for table '${tableName}' sync operation '${syncOperation}'`,
+          `No failed Sync Pushes for table '${tableName}' Sync operation '${syncOperation}'`,
         );
       }
     }
