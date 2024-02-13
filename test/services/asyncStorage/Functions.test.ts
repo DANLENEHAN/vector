@@ -95,7 +95,7 @@ describe('getUserDetails', () => {
 
     // Act
     await storeFailedSyncPushErrors(
-      syncDbTables.statTable,
+      syncDbTables.bodyStatTable,
       SyncOperation.Creates,
       failedSyncPushErrors,
     );
@@ -110,7 +110,7 @@ describe('getUserDetails', () => {
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(
       AsyncStorageKeys.SyncPushErrors,
       JSON.stringify({
-        [syncDbTables.statTable]: {
+        [syncDbTables.bodyStatTable]: {
           [SyncOperation.Creates]: {
             [sampleStat.body_stat_id]: {
               retries: 1,
@@ -129,7 +129,7 @@ describe('getUserDetails', () => {
     const failedSyncPushErrors: SyncCreateSchemas[] = [sampleStat];
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
       JSON.stringify({
-        [syncDbTables.statTable]: {
+        [syncDbTables.bodyStatTable]: {
           [SyncOperation.Creates]: {
             [sampleStat.body_stat_id]: {
               retries: 3,
@@ -145,7 +145,7 @@ describe('getUserDetails', () => {
 
     // Act
     await storeFailedSyncPushErrors(
-      syncDbTables.statTable,
+      syncDbTables.bodyStatTable,
       SyncOperation.Creates,
       failedSyncPushErrors,
     );
@@ -160,7 +160,7 @@ describe('getUserDetails', () => {
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(
       AsyncStorageKeys.SyncPushErrors,
       JSON.stringify({
-        [syncDbTables.statTable]: {
+        [syncDbTables.bodyStatTable]: {
           [SyncOperation.Creates]: {},
         },
       }),
@@ -169,7 +169,7 @@ describe('getUserDetails', () => {
     // Assert
     expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledTimes(1);
     expect(SyncErrorDumpApi.createCreate).toHaveBeenCalledWith({
-      table_name: syncDbTables.statTable,
+      table_name: syncDbTables.bodyStatTable,
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
       row_id: sampleStat.body_stat_id,
@@ -184,7 +184,7 @@ describe('getUserDetails', () => {
     // Arrange
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
       JSON.stringify({
-        [syncDbTables.statTable]: {
+        [syncDbTables.bodyStatTable]: {
           [SyncOperation.Creates]: {
             [sampleStat.body_stat_id]: {
               retries: 3,
@@ -199,7 +199,7 @@ describe('getUserDetails', () => {
 
     // Act
     const response: SyncCreateSchemas[] =
-      await getFailedSyncPushesCreatesForTable(syncDbTables.statTable);
+      await getFailedSyncPushesCreatesForTable(syncDbTables.bodyStatTable);
 
     // Assert
     expect(response).toEqual([sampleStat]);
@@ -211,7 +211,7 @@ describe('getUserDetails', () => {
 
     // Act
     const response: SyncCreateSchemas[] =
-      await getFailedSyncPushesCreatesForTable(syncDbTables.statTable);
+      await getFailedSyncPushesCreatesForTable(syncDbTables.bodyStatTable);
 
     // Assert
     expect(response).toEqual([]);
@@ -221,7 +221,7 @@ describe('getUserDetails', () => {
     // Arrange
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
       JSON.stringify({
-        [syncDbTables.statTable]: {
+        [syncDbTables.bodyStatTable]: {
           [SyncOperation.Updates]: {
             [sampleUpdatedStat.body_stat_id]: {
               retries: 3,
@@ -236,7 +236,7 @@ describe('getUserDetails', () => {
 
     // Act
     const response: SyncUpdateSchemas[] =
-      await getFailedSyncPushesUpdatesForTable(syncDbTables.statTable);
+      await getFailedSyncPushesUpdatesForTable(syncDbTables.bodyStatTable);
 
     // Assert
     expect(response).toEqual([sampleUpdatedStat]);
@@ -248,7 +248,7 @@ describe('getUserDetails', () => {
 
     // Act
     const response: SyncUpdateSchemas[] =
-      await getFailedSyncPushesUpdatesForTable(syncDbTables.statTable);
+      await getFailedSyncPushesUpdatesForTable(syncDbTables.bodyStatTable);
 
     // Assert
     expect(response).toEqual([]);

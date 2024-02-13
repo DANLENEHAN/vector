@@ -2,55 +2,55 @@ import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncBatchLimit, timestampFields} from '@shared/Constants';
 
 /**
- * Generate a SQL query to retrieve the last synced timestamp for a specific table, sync type, and sync operation.
+ * Generates a SQL query to retrieve the last synced timestamp for a given table and Sync type.
  *
- * @param {string} tableName - The name of the table to retrieve the last synced timestamp for.
- * @param {SyncType} syncType - The type of synchronization (e.g., Push, Pull).
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @returns {string} A SQL query string.
+ * @param {string} tableName - The name of the table to retrieve last synced timestamp for.
+ * @param {SyncType} syncType - The type of synchronization (e.g., 'full', 'incremental').
+ * @returns {string} SQL query to retrieve last synced timestamp.
  */
+
 export const getLastSyncedForTableQuery = (
   tableName: string,
   syncType: SyncType,
-  syncOperation: SyncOperation,
 ): string => `
-    SELECT last_synced
-    FROM sync_table
-    WHERE table_name = '${tableName}' AND sync_type = '${syncType}' AND sync_operation = '${syncOperation}';
-`;
+  SELECT last_synced, sync_operation
+  FROM sync_table
+  WHERE table_name = '${tableName}' AND sync_type = '${syncType}' ORDER BY sync_operation;`;
 
 /**
- * Generate a SQL query to retrieve rows for synchronization for a specific table and sync operation.
+ * Generates a SQL query to retrieve rows to sync for push operation based on the specified criteria.
  *
- * @param {string} tableName - The name of the table to retrieve rows for synchronization.
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @param {string | null} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
- * @returns {string} A SQL query string.
+ * @param {string} tableName - The name of the table to retrieve rows from.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @param {string} lastSyncedCreates - The timestamp of the last sync for creations.
+ * @param {string} lastSyncedUpdates - The timestamp of the last sync for updates.
+ * @param {string} syncStart - The timestamp representing the start of the current Sync operation.
+ * @returns {string} SQL query to retrieve rows for push synchronization.
  */
-export const getRowsToSyncQuery = (
+
+export const getRowsToSyncPushQuery = (
   tableName: string,
   syncOperation: SyncOperation,
-  lastSyncTime: string | null,
+  lastSyncedCreates: string,
+  lastSyncedUpdates: string,
+  syncStart: string,
 ): string => {
   let query = `
-    SELECT *
-    FROM ${tableName}
+  SELECT *
+  FROM ${tableName}
   `;
 
-  const timestampField =
-    syncOperation === SyncOperation.Creates
-      ? timestampFields.createdAt
-      : timestampFields.updatedAt;
-
-  if (lastSyncTime !== null) {
-    query += `WHERE ${timestampField} > '${lastSyncTime}' `;
+  if (syncOperation === SyncOperation.Creates) {
+    // Return all the rows created between the last sync and the current sync's time
+    query += `WHERE ${timestampFields.createdAt} > '${lastSyncedCreates}' AND ${timestampFields.createdAt} <= '${syncStart}' `;
+    query += `ORDER BY ${timestampFields.createdAt} ASC LIMIT ${syncBatchLimit};`;
   } else {
-    // In the event there's been no sync for this type yet
-    // Will just get all creates or updates
-    query += `WHERE ${timestampField} IS NOT NULL `;
+    // Return all the rows updated between the last sync and the current sync's time excluding rows that have been created in this
+    // time as they'll already have been pushed
+    query += `WHERE ${timestampFields.updatedAt} > '${lastSyncedUpdates}' `;
+    query += `AND ${timestampFields.createdAt} <= '${lastSyncedCreates}' AND ${timestampFields.updatedAt} <= '${syncStart}' `;
+    query += `ORDER BY ${timestampFields.updatedAt} ASC LIMIT ${syncBatchLimit};`;
   }
-
-  query += ` ORDER BY ${timestampField} ASC LIMIT ${syncBatchLimit};`;
   return query;
 };
 

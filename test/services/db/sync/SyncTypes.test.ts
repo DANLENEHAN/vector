@@ -1,72 +1,26 @@
 // Test Objects
-
-import {syncDbTables} from '@shared/Constants';
-import {SyncType, SyncOperation} from '@shared/Enums';
+import {sampleStat} from '../../../Objects';
+import {
+  sampleCreatedAtTimestamp,
+  sampleUpdatedAtTimestamp,
+  sampleSyncStartTimestamp,
+  getQueryObjForTableSampleResponse,
+  TableFunctionsMock,
+  postBodyStatSpy,
+} from './Objects';
 
 // Functions
-import {
-  getLastSyncedForTable,
-  getQueryObjForTable,
-  insertSyncUpdate,
-  getRowsToSync,
-} from '@services/db/sync/SyncUtils';
+import * as SyncUtilsFunctions from '@services/db/sync/SyncUtils';
 import {
   processSyncTypePush,
   processSyncTypePull,
 } from '@services/db/sync/SyncTypes';
-import {
-  processCreatesSyncTypePush,
-  processUpdatesSyncTypePush,
-} from '@services/db/sync/SyncOperations';
-import * as dbFunctions from '@services/db/Functions';
+import * as SyncOperationFunctions from '@services/db/sync/SyncOperations';
+import * as DbFunctions from '@services/db/Functions';
 
-// Constants
-import {apiFunctions} from '@services/db/sync/Constants';
-import {sampleStat} from '../../../Objects';
-import {SyncCreateSchemas} from '@services/db/sync/Types';
-import {SyncTableFunctions} from '@services/db/sync/Types';
-import {SyncUpdateSchemas} from '@services/db/sync/Types';
-
-jest.mock('@services/db/sync/SyncUtils', () => ({
-  ...jest.requireActual('@services/db/sync/SyncUtils'),
-  insertSyncUpdate: jest.fn(),
-  getQueryObjForTable: jest.fn(),
-  getLastSyncedForTable: jest.fn().mockResolvedValue('2025-01-01T00:00:00.000'),
-  getRowsToSync: jest.fn().mockResolvedValue([
-    {
-      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-      stat_type: 'weight',
-      unit: 'kg',
-      timezone: 'UTC',
-      created_at: '2025-01-01T00:00:00.000',
-      updated_at: '2025-01-01T00:01:00.000',
-      user_id: 1,
-      value: 500,
-    },
-  ]),
-}));
-
-// Mocking the BodyStat Api Class
-jest.mock('@services/api/swagger/BodyStat', () => ({
-  BodyStat: jest.fn().mockImplementation(() => ({
-    postBodyStat: jest.fn().mockResolvedValue({
-      // Should be the sampleStat var.
-      // Probaly could be if defining mock in test worked...
-      data: [
-        {
-          body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
-          stat_type: 'weight',
-          unit: 'kg',
-          timezone: 'UTC',
-          created_at: '2025-01-01T00:00:00.000',
-          updated_at: '2025-01-01T00:01:00.000',
-          user_id: 1,
-          value: 500,
-        },
-      ],
-    }),
-  })),
-}));
+// Types
+import {syncDbTables} from '@shared/Constants';
+import {SyncType, SyncOperation} from '@shared/Enums';
 
 jest.mock('@services/db/sync/SyncOperations', () => ({
   ...jest.requireActual('@services/db/sync/SyncOperations'),
@@ -74,10 +28,19 @@ jest.mock('@services/db/sync/SyncOperations', () => ({
   processUpdatesSyncTypePush: jest.fn(),
 }));
 
+jest.mock('@services/db/sync/SyncUtils', () => ({
+  ...jest.requireActual('@services/db/sync/SyncUtils'),
+  getLastSyncedForTable: jest.fn(),
+  getQueryObjForTable: jest.fn(),
+  filterRowsForInsertion: jest.fn(),
+  insertSyncUpdate: jest.fn(),
+  getRowsToSyncPush: jest.fn(),
+}));
+
 jest.mock('@services/db/Functions', () => ({
   ...jest.requireActual('@services/db/Functions'),
   insertRows: jest.fn(),
-  runSqlSelect: jest.fn(),
+  updateRows: jest.fn(),
 }));
 
 describe('SyncType Tests', () => {
@@ -86,174 +49,303 @@ describe('SyncType Tests', () => {
     jest.clearAllMocks();
   });
 
-  test("processSyncTypePush SyncOperation 'Creates'", async () => {
+  test(`processSyncTypePull SyncOperation '${SyncOperation.Creates}`, async () => {
     // Arrange
-    const tableToSync: syncDbTables = syncDbTables.statTable;
-
-    // Act
-    await processSyncTypePush(
-      tableToSync,
-      apiFunctions[tableToSync] as SyncTableFunctions<
-        SyncCreateSchemas,
-        SyncUpdateSchemas
-      >,
-      SyncOperation.Creates,
-    );
-
-    // Assert
-    expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
-    expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncType.Push,
-      SyncOperation.Creates,
-    );
-
-    expect(getRowsToSync).toHaveBeenCalledTimes(1);
-    expect(getRowsToSync).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
-      '2025-01-01T00:00:00.000',
-    );
-
-    expect(processCreatesSyncTypePush).toHaveBeenCalledTimes(1);
-    expect(processCreatesSyncTypePush).toHaveBeenCalledWith(
-      [sampleStat],
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-    );
-  });
-
-  test("processSyncTypePush SyncOperation 'Updates'", async () => {
-    // Arrange
-    const tableToSync: syncDbTables = syncDbTables.statTable;
-
-    // Act
-    await processSyncTypePush(
-      tableToSync,
-      apiFunctions[tableToSync] as SyncTableFunctions<
-        SyncCreateSchemas,
-        SyncUpdateSchemas
-      >,
-      SyncOperation.Updates,
-    );
-
-    // Assert
-    expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
-    expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncType.Push,
-      SyncOperation.Updates,
-    );
-
-    expect(getRowsToSync).toHaveBeenCalledTimes(1);
-    expect(getRowsToSync).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncOperation.Updates,
-      '2025-01-01T00:00:00.000',
-    );
-
-    expect(processUpdatesSyncTypePush).toHaveBeenCalledTimes(1);
-    expect(processUpdatesSyncTypePush).toHaveBeenCalledWith(
-      [sampleStat],
-      syncDbTables.statTable,
-      apiFunctions[syncDbTables.statTable],
-    );
-  });
-
-  test("processSyncTypePull sync operation 'Creates'", async () => {
-    // Arrange
-    const tableToSync: syncDbTables = syncDbTables.statTable;
-    jest.spyOn(dbFunctions, 'runSqlSelect').mockResolvedValue([]);
-
-    // Act
-    await processSyncTypePull(
-      tableToSync,
-      apiFunctions[tableToSync] as SyncTableFunctions<
-        SyncCreateSchemas,
-        SyncUpdateSchemas
-      >,
-      SyncOperation.Creates,
-    );
-
-    // Assert
-    expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
-    expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      SyncType.Pull,
-      SyncOperation.Creates,
-    );
-
-    expect(getQueryObjForTable).toHaveBeenCalledTimes(1);
-    expect(getQueryObjForTable).toHaveBeenCalledWith(
-      '2025-01-01T00:00:00.000',
-      SyncOperation.Creates,
-    );
-
-    expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT body_stat_id FROM body_stat WHERE body_stat_id IN (?)',
-      ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
-    );
-
-    expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
-    expect(insertSyncUpdate).toHaveBeenCalledWith({
-      last_synced: sampleStat.created_at,
-      sync_operation: SyncOperation.Creates,
-      sync_type: SyncType.Pull,
-      table_name: syncDbTables.statTable,
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
     });
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.insertRows).toHaveBeenCalledWith(
-      syncDbTables.statTable,
-      [sampleStat],
-    );
-  });
 
-  test("processSyncTypePull sync operation 'Creates' row existing", async () => {
-    // Arrange
-    const tableToSync: syncDbTables = syncDbTables.statTable;
     jest
-      .spyOn(dbFunctions, 'runSqlSelect')
-      .mockResolvedValue([{body_stat_id: sampleStat.body_stat_id}]);
+      .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
+
+    postBodyStatSpy.mockResolvedValue({status: 201, data: [sampleStat]});
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'filterRowsForInsertion')
+      .mockResolvedValue([sampleStat]);
 
     // Act
     await processSyncTypePull(
       tableToSync,
-      apiFunctions[tableToSync] as SyncTableFunctions<
-        SyncCreateSchemas,
-        SyncUpdateSchemas
-      >,
+      TableFunctionsMock,
       SyncOperation.Creates,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
-
-    expect(getLastSyncedForTable).toHaveBeenCalledTimes(1);
-    expect(getLastSyncedForTable).toHaveBeenCalledWith(
-      syncDbTables.statTable,
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
       SyncType.Pull,
+    );
+
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledWith(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
       SyncOperation.Creates,
+      sampleSyncStartTimestamp,
     );
 
-    expect(getQueryObjForTable).toHaveBeenCalledTimes(1);
-    expect(getQueryObjForTable).toHaveBeenCalledWith(
-      '2025-01-01T00:00:00.000',
-      SyncOperation.Creates,
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(1);
+    expect(postBodyStatSpy).toHaveBeenCalledWith(
+      getQueryObjForTableSampleResponse,
     );
 
-    expect(dbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      'SELECT body_stat_id FROM body_stat WHERE body_stat_id IN (?)',
-      ['67f6127d-13cc-4c27-b91f-2b1f83c48eeb'],
+    expect(SyncUtilsFunctions.filterRowsForInsertion).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.filterRowsForInsertion).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      [sampleStat],
     );
 
-    expect(insertSyncUpdate).toHaveBeenCalledTimes(1);
-    expect(insertSyncUpdate).toHaveBeenCalledWith({
+    expect(DbFunctions.updateRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.insertRows).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      [sampleStat],
+    );
+
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
       last_synced: sampleStat.created_at,
-      sync_operation: SyncOperation.Creates,
       sync_type: SyncType.Pull,
-      table_name: syncDbTables.statTable,
+      sync_operation: SyncOperation.Creates,
     });
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
+  });
+
+  test(`processSyncTypePull SyncOperation '${SyncOperation.Creates} no rows to sync`, async () => {
+    // Arrange
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
+    });
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
+
+    postBodyStatSpy.mockResolvedValue({status: 201, data: []});
+
+    // Act
+    await processSyncTypePull(
+      tableToSync,
+      TableFunctionsMock,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Pull,
+    );
+
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledWith(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(1);
+    expect(postBodyStatSpy).toHaveBeenCalledWith(
+      getQueryObjForTableSampleResponse,
+    );
+
+    expect(SyncUtilsFunctions.filterRowsForInsertion).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.updateRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+  });
+
+  test(`processSyncTypePull SyncOperation '${SyncOperation.Creates} unexpected status code`, async () => {
+    // Arrange
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
+    });
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
+
+    postBodyStatSpy.mockResolvedValue({status: 500});
+
+    // Act
+    await processSyncTypePull(
+      tableToSync,
+      TableFunctionsMock,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Pull,
+    );
+
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledWith(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(1);
+    expect(postBodyStatSpy).toHaveBeenCalledWith(
+      getQueryObjForTableSampleResponse,
+    );
+
+    expect(SyncUtilsFunctions.filterRowsForInsertion).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.updateRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+  });
+
+  test(`processSyncTypePull SyncOperation '${SyncOperation.Updates}`, async () => {
+    // Arrange
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
+    });
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'filterRowsForInsertion')
+      .mockResolvedValue([sampleStat]);
+
+    postBodyStatSpy.mockResolvedValue({status: 201, data: [sampleStat]});
+
+    // Act
+    await processSyncTypePull(
+      tableToSync,
+      TableFunctionsMock,
+      SyncOperation.Updates,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getLastSyncedForTable).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Pull,
+    );
+
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.getQueryObjForTable).toHaveBeenCalledWith(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      SyncOperation.Updates,
+      sampleSyncStartTimestamp,
+    );
+
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(1);
+    expect(postBodyStatSpy).toHaveBeenCalledWith(
+      getQueryObjForTableSampleResponse,
+    );
+
+    expect(SyncUtilsFunctions.filterRowsForInsertion).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
+
+    expect(DbFunctions.updateRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.updateRows).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      [sampleStat],
+    );
+
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilsFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleStat.updated_at,
+      sync_type: SyncType.Pull,
+      sync_operation: SyncOperation.Updates,
+    });
+  });
+
+  test(`processSyncTypePush SyncOperation '${SyncOperation.Creates}`, async () => {
+    // Arrange
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
+    });
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'getRowsToSyncPush')
+      .mockResolvedValue([sampleStat]);
+
+    // Act
+    await processSyncTypePush(
+      tableToSync,
+      TableFunctionsMock,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(
+      SyncOperationFunctions.processUpdatesSyncTypePush,
+    ).toHaveBeenCalledTimes(0);
+    expect(
+      SyncOperationFunctions.processCreatesSyncTypePush,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      SyncOperationFunctions.processCreatesSyncTypePush,
+    ).toHaveBeenCalledWith(
+      [sampleStat],
+      syncDbTables.bodyStatTable,
+      TableFunctionsMock,
+    );
+  });
+
+  test(`processSyncTypePush SyncOperation '${SyncOperation.Updates}`, async () => {
+    // Arrange
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    jest.spyOn(SyncUtilsFunctions, 'getLastSyncedForTable').mockResolvedValue({
+      created_at: sampleCreatedAtTimestamp,
+      updated_at: sampleUpdatedAtTimestamp,
+    });
+
+    jest
+      .spyOn(SyncUtilsFunctions, 'getRowsToSyncPush')
+      .mockResolvedValue([sampleStat]);
+
+    // Act
+    await processSyncTypePush(
+      tableToSync,
+      TableFunctionsMock,
+      SyncOperation.Updates,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(
+      SyncOperationFunctions.processCreatesSyncTypePush,
+    ).toHaveBeenCalledTimes(0);
+    expect(
+      SyncOperationFunctions.processUpdatesSyncTypePush,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      SyncOperationFunctions.processUpdatesSyncTypePush,
+    ).toHaveBeenCalledWith(
+      [sampleStat],
+      syncDbTables.bodyStatTable,
+      TableFunctionsMock,
+    );
   });
 });

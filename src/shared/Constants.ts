@@ -14,10 +14,10 @@ export enum otherDbTables {
  *
  * @enum {string}
  * @readonly
- * @property {string} statTable - Represents the statistics table.
+ * @property {string} bodyStatTable - Represents the statistics table.
  */
 export enum syncDbTables {
-  statTable = 'body_stat',
+  bodyStatTable = 'body_stat',
   moodTable = 'mood',
   moodTagTable = 'mood_tag',
   moodTagLinkTable = 'mood_tag_link',

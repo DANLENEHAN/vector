@@ -25,7 +25,7 @@ import {useSystem} from '@context/SystemContext';
  * @param {string} text - Text to be displayed on the button
  * @param {object} style - Style object to be applied to the button (optional)
  */
-interface ButtonProps {
+export interface ButtonProps {
   onPress: () => void;
   disabled?: boolean;
   text: string;

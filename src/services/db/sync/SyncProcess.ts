@@ -5,6 +5,7 @@ import {
   processSyncTypePush,
   processSyncTypePull,
 } from '@services/db/sync/SyncTypes';
+import {TimestampTimezone} from '@services/date/Type';
 
 // Constants
 import {apiFunctions} from '@services/db/sync/Constants';
@@ -12,33 +13,35 @@ import {apiFunctions} from '@services/db/sync/Constants';
 // Logger
 import logger from '@utils/Logger';
 
+// Functions
+import {getCurrentTimestampTimezone} from '@services/date/Functions';
+
 /**
- * Process synchronization pull and push for all tables.
+ * Runs the synchronization process for pulling and pushing data between the local and remote databases.
+ * This function iterates through each table in the API functions and performs synchronization operations.
  *
- * This function iterates through the tables defined in the `apiFunctions` object and performs
- * synchronization pull and push operations for both create and update operations.
- *
- * @returns {Promise<void>} A promise that resolves when synchronization pull and push are completed successfully for all tables.
- * @throws {Error} Throws an error if there are issues with processing synchronization operations for any table.
- *
- * @description
- * The `runSyncProcess` function orchestrates synchronization pull and push operations for all tables. It sequentially
- * processes pull and push operations for each table, ensuring that synchronization is completed successfully.
- * If any error occurs during the process, it is logged, and the function throws an error.
+ * @returns {Promise<void>} A Promise that resolves when the synchronization process is completed.
+ * @throws {Error} If an error occurs during the synchronization process.
  */
 export const runSyncProcess = async (): Promise<void> => {
   try {
     // Iterate through each table in apiFunctions
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
       logger.info(
-        `Processing sync type '${SyncType.Pull}' for table: '${tableName}'`,
+        `Processing Sync type '${SyncType.Pull}' for table: '${tableName}'`,
       );
+
+      // Need a sync stsrt time here to make sure we don't miss out on any data created during thr sync process
+      const timestampTimezone: TimestampTimezone =
+        getCurrentTimestampTimezone();
+      const syncStart: string = timestampTimezone.timestamp;
 
       // Process synchronization pull for create operations
       await processSyncTypePull(
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Creates,
+        syncStart,
       );
 
       // Process synchronization pull for update operations
@@ -46,6 +49,7 @@ export const runSyncProcess = async (): Promise<void> => {
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Updates,
+        syncStart,
       );
 
       // Log information about the completion of synchronization pull
@@ -54,7 +58,7 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       logger.info(
-        `Processing sync type '${SyncType.Push}' for table: '${tableName}'`,
+        `Processing Sync type '${SyncType.Push}' for table: '${tableName}'`,
       );
 
       // Trigger synchronization push for create operation
@@ -62,6 +66,7 @@ export const runSyncProcess = async (): Promise<void> => {
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Creates,
+        syncStart,
       );
 
       // Trigger synchronization push for update operation
@@ -69,6 +74,7 @@ export const runSyncProcess = async (): Promise<void> => {
         tableName as syncDbTables,
         tableFunctions,
         SyncOperation.Updates,
+        syncStart,
       );
 
       logger.info(

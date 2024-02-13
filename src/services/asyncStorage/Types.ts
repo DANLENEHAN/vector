@@ -19,7 +19,7 @@ export type SyncPushErrorItem<T> = {
 };
 
 /**
- * Represents an object structure for storing failed synchronization pushes categorized by table and sync operation.
+ * Represents an object structure for storing failed synchronization pushes categorized by table and Sync operation.
  *
  * @typeParam T - The type of data associated with the failed synchronization pushes.
  *
