@@ -178,6 +178,7 @@ describe('Sync Operation Tests', () => {
     jest
       .spyOn(SyncUtilFunctions, 'convertListToSyncUpdateSchemas')
       .mockReturnValueOnce([sampleUpdatedStat]);
+
     jest
       .spyOn(AsyncStorageFunctions, 'getFailedSyncPushesUpdatesForTable')
       .mockResolvedValueOnce([]);
@@ -240,6 +241,10 @@ describe('Sync Operation Tests', () => {
     const rowsToSync: SyncCreateSchemas[] = [];
     const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
 
+    jest
+      .spyOn(AsyncStorageFunctions, 'getFailedSyncPushesUpdatesForTable')
+      .mockResolvedValueOnce([]);
+
     // Act
     await processUpdatesSyncTypePush(
       rowsToSync,
@@ -257,7 +262,10 @@ describe('Sync Operation Tests', () => {
     ).toHaveBeenCalledTimes(0);
     expect(
       AsyncStorageFunctions.getFailedSyncPushesUpdatesForTable,
-    ).toHaveBeenCalledTimes(0);
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesUpdatesForTable,
+    ).toHaveBeenCalledWith(syncDbTables.bodyStatTable);
 
     expect(createCreateSpy).toHaveBeenCalledTimes(0);
     expect(postBodyStatSpy).toHaveBeenCalledTimes(0);

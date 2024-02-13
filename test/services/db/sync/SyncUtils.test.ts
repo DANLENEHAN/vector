@@ -1,180 +1,327 @@
 // Test Objects
-import {sampleStat, sampleTimestampOne, sampleSyncRow} from '../../../Objects';
-
+import {sampleStat} from '../../../Objects';
+import {
+  sampleCreatedAtTimestamp,
+  sampleSyncStartTimestamp,
+  sampleUpdatedAtTimestamp,
+} from './Objects';
 // Functions
 import {
   convertListToSyncUpdateSchemas,
   getLastSyncedForTable,
-  getRowsToSync,
+  getRowsToSyncPush,
   insertSyncUpdate,
   getQueryObjForTable,
+  filterRowsForInsertion,
 } from '@services/db/sync/SyncUtils';
 // Types
-import {syncDbTables} from '@shared/Constants';
+import {syncDbTables, otherDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
-import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
-import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
+import * as DbFunctions from '@services/db/Functions';
+import * as SyncQueries from '@services/db/sync/Queries';
+import {timestampFields} from '@shared/Constants';
+
+// Constants
+import {unixEpoch} from '@shared/Constants';
+import {SyncCreateSchemas} from '@services/db/sync/Types';
 
 // Global Mocks
-
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
-    transaction: jest.fn(),
-  })),
-}));
 
 jest.mock('@services/db/Functions', () => ({
   runSqlSelect: jest.fn(),
   executeSqlNonQuery: jest.fn(),
 }));
 
+jest.mock('@services/db/sync/Queries', () => ({
+  ...jest.requireActual('@services/db/sync/Queries'),
+  getRowsToSyncPushQuery: jest.fn(),
+}));
+
+const getLastSyncedForTableQueryCreateRow = {
+  last_synced: sampleCreatedAtTimestamp,
+  sync_operation: SyncOperation.Creates,
+};
+const getLastSyncedForTableQueryUpdateRow = {
+  last_synced: sampleCreatedAtTimestamp,
+  sync_operation: SyncOperation.Updates,
+};
+
 describe('Sync Utils Tests', () => {
-  test('should convert list of SyncCreateSchemas to SyncUpdateSchemas', () => {
-    // Arrange
-    const createSchemasList = [sampleStat];
-    // Act
-    const result = convertListToSyncUpdateSchemas(createSchemasList);
-    // Assert
-    expect(result).toHaveLength(createSchemasList.length);
-    result.forEach((updateSchema: any, index: any) => {
-      expect(updateSchema).toEqual(
-        expect.objectContaining({
-          updated_at: createSchemasList[index].updated_at,
-          unit: createSchemasList[index].unit,
-        }),
-      );
-      expect(updateSchema.created_at).toBeUndefined();
-      expect(updateSchema.timezone).toBeUndefined();
-      expect(updateSchema.body_stat_id).toBeDefined();
-    });
+  beforeEach(() => {
+    // Clears 'toHaveBeenCalledTimes' cache
+    jest.clearAllMocks();
   });
 
-  test('getLastSyncedForTable parses non-null response', async () => {
+  test('getLastSyncedForTable creates only previously synced', async () => {
     // Arrange
-    const last_synced: string = sampleTimestampOne;
-    const mockedRunSqlSelect = jest.mocked(runSqlSelect);
-    mockedRunSqlSelect.mockReturnValueOnce(
-      Promise.resolve([{last_synced: last_synced}]),
-    );
+    jest
+      .spyOn(DbFunctions, 'runSqlSelect')
+      .mockResolvedValueOnce([getLastSyncedForTableQueryCreateRow]);
+
     // Act
-    const result = await getLastSyncedForTable(
-      syncDbTables.statTable,
+    const response = await getLastSyncedForTable(
+      syncDbTables.bodyStatTable,
       SyncType.Push,
-      SyncOperation.Creates,
-    );
-    // Assert
-    expect(result).toEqual(last_synced);
-  });
-
-  test('getLastSyncedForTable parses null response', async () => {
-    // Arrange
-    const last_synced: null = null;
-    const mockedRunSqlSelect = jest.mocked(runSqlSelect);
-    mockedRunSqlSelect.mockReturnValueOnce(
-      Promise.resolve([{last_synced: last_synced}]),
-    );
-    // Act
-    const result = await getLastSyncedForTable(
-      syncDbTables.statTable,
-      SyncType.Pull,
-      SyncOperation.Updates,
-    );
-    // Assert
-    expect(result).toEqual(last_synced);
-  });
-
-  test('getLastSyncedForTable handles empty array', async () => {
-    // Arrange
-    const mockedRunSqlSelect = jest.mocked(runSqlSelect);
-    mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve([]));
-    // Act
-    const result = await getLastSyncedForTable(
-      syncDbTables.statTable,
-      SyncType.Pull,
-      SyncOperation.Creates,
-    );
-    // Assert
-    expect(result).toEqual(null);
-  });
-
-  test('getRowsToSync handles non empty response', async () => {
-    // Arrange
-    const sampleResponse: BodyStatCreateSchema[] = [sampleStat, sampleStat];
-    const mockedRunSqlSelect = jest.mocked(runSqlSelect);
-    mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
-    // Act
-    const result = await getRowsToSync(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
-      sampleTimestampOne,
-    );
-    // Assert
-    expect(result).toEqual(sampleResponse);
-  });
-
-  test('getRowsToSync handles empty response', async () => {
-    // Arrange
-    const sampleResponse: BodyStatCreateSchema[] = [];
-    const mockedRunSqlSelect = jest.mocked(runSqlSelect);
-    mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(sampleResponse));
-    // Act
-    const result = await getRowsToSync(
-      syncDbTables.statTable,
-      SyncOperation.Creates,
-      sampleTimestampOne,
-    );
-    // Assert
-    expect(result).toEqual(sampleResponse);
-  });
-
-  test('insertSyncUpdate throws error for unsucessful insert', async () => {
-    // Arrange
-    const response: number = 0;
-    const sampleSyncUpdate = sampleSyncRow;
-    const mockedRunSqlSelect = jest.mocked(executeSqlNonQuery);
-    mockedRunSqlSelect.mockReturnValueOnce(Promise.resolve(response));
-    // Act
-    // Assert
-    await expect(insertSyncUpdate(sampleSyncUpdate)).rejects.toThrow(
-      `Failed to insert or replace SyncUpdate. No ${response} rows affected.`,
-    );
-  });
-
-  test('generates correct query schema for Creates sync operation', async () => {
-    // Arrange
-    const lastSyncedTimestamp: string = sampleTimestampOne;
-
-    // Act
-    const result = await getQueryObjForTable(
-      lastSyncedTimestamp,
-      SyncOperation.Creates,
     );
 
     // Assert
-    expect(result).toEqual({
-      filters: {
-        created_at: {gt: lastSyncedTimestamp},
-      },
-      sort: ['created_at:asc'],
+    expect(response).toEqual({
+      [timestampFields.createdAt]:
+        getLastSyncedForTableQueryCreateRow.last_synced,
+      [timestampFields.updatedAt]: unixEpoch,
     });
   });
 
-  test('generates correct query schema for Updates sync operation', async () => {
+  test('getLastSyncedForTable updates only previously synced', async () => {
     // Arrange
-    const lastSyncedTimestamp: string = sampleTimestampOne;
+    jest
+      .spyOn(DbFunctions, 'runSqlSelect')
+      .mockResolvedValueOnce([getLastSyncedForTableQueryUpdateRow]);
 
     // Act
-    const result = await getQueryObjForTable(
-      lastSyncedTimestamp,
-      SyncOperation.Updates,
+    const response = await getLastSyncedForTable(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
     );
 
     // Assert
-    expect(result).toEqual({
-      filters: {
-        updated_at: {gt: lastSyncedTimestamp},
-      },
-      sort: ['updated_at:asc'],
+    expect(response).toEqual({
+      [timestampFields.updatedAt]:
+        getLastSyncedForTableQueryUpdateRow.last_synced,
+      [timestampFields.createdAt]: unixEpoch,
     });
+  });
+
+  test('getLastSyncedForTable updates and creates previously synced', async () => {
+    // Arrange
+    jest
+      .spyOn(DbFunctions, 'runSqlSelect')
+      .mockResolvedValueOnce([
+        getLastSyncedForTableQueryUpdateRow,
+        getLastSyncedForTableQueryCreateRow,
+      ]);
+
+    // Act
+    const response = await getLastSyncedForTable(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    // Assert
+    expect(response).toEqual({
+      [timestampFields.updatedAt]:
+        getLastSyncedForTableQueryUpdateRow.last_synced,
+      [timestampFields.createdAt]:
+        getLastSyncedForTableQueryCreateRow.last_synced,
+    });
+  });
+
+  test('getLastSyncedForTable neither updates or creates previously synced', async () => {
+    // Arrange
+    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([]);
+
+    // Act
+    const response = await getLastSyncedForTable(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    // Assert
+    expect(response).toEqual({
+      [timestampFields.updatedAt]: unixEpoch,
+      [timestampFields.createdAt]: unixEpoch,
+    });
+  });
+
+  test('getRowsToSyncPush uses correct arguements and returns correct response', async () => {
+    // Arrange
+    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([1, 2, 3]);
+    jest
+      .spyOn(SyncQueries, 'getRowsToSyncPushQuery')
+      .mockReturnValueOnce('fakeSQL');
+
+    // Act
+    const response = await getRowsToSyncPush(
+      syncDbTables.bodyStatTable,
+      SyncOperation.Creates,
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      sampleSyncStartTimestamp,
+    );
+
+    // Assert
+    expect(SyncQueries.getRowsToSyncPushQuery).toHaveBeenCalledTimes(1);
+    expect(SyncQueries.getRowsToSyncPushQuery).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncOperation.Creates,
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      sampleSyncStartTimestamp,
+    );
+
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith('fakeSQL', []);
+
+    expect(response).toEqual([1, 2, 3]);
+  });
+
+  test('insertSyncUpdate calls correct query', async () => {
+    // Arrange
+    jest.spyOn(DbFunctions, 'executeSqlNonQuery').mockResolvedValueOnce(1);
+    // Act
+    const response = await insertSyncUpdate({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleCreatedAtTimestamp,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Creates,
+    });
+    // Assert
+    expect(DbFunctions.executeSqlNonQuery).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.executeSqlNonQuery).toHaveBeenCalledWith(
+      `INSERT OR REPLACE INTO ${otherDbTables.syncTable} ('table_name', 'last_synced', 'sync_type', 'sync_operation') VALUES (?, ?, ?, ?);`,
+      [
+        syncDbTables.bodyStatTable,
+        sampleCreatedAtTimestamp,
+        SyncType.Push,
+        SyncOperation.Creates,
+      ],
+    );
+    expect(response).toEqual(undefined);
+  });
+
+  test('convertListToSyncUpdateSchemas removes create only fields from updates', () => {
+    // Arrange
+    const {created_at, timezone, ...rest} = sampleStat;
+    created_at;
+    timezone;
+    // Act
+    const response = convertListToSyncUpdateSchemas([sampleStat]);
+    // Assert
+    expect(response).toEqual([rest]);
+  });
+
+  test(`getQueryObjForTable SyncOperation ${SyncOperation.Creates}`, () => {
+    // Arrange
+    // Act
+    const response = getQueryObjForTable(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      SyncOperation.Creates,
+      sampleSyncStartTimestamp,
+    );
+    // Assert
+    expect(response).toEqual({
+      filters: {
+        and: {
+          [timestampFields.createdAt]: {
+            gt: sampleCreatedAtTimestamp,
+            le: sampleSyncStartTimestamp,
+          },
+        },
+      },
+      sort: [`${timestampFields.createdAt}:asc`],
+    });
+  });
+
+  test(`getQueryObjForTable SyncOperation ${SyncOperation.Updates}`, () => {
+    // Arrange
+    // Act
+    const response = getQueryObjForTable(
+      sampleCreatedAtTimestamp,
+      sampleUpdatedAtTimestamp,
+      SyncOperation.Updates,
+      sampleSyncStartTimestamp,
+    );
+    // Assert
+    expect(response).toEqual({
+      filters: {
+        and: {
+          [timestampFields.updatedAt]: {
+            gt: sampleUpdatedAtTimestamp,
+            le: sampleSyncStartTimestamp,
+          },
+          [timestampFields.createdAt]: {
+            le: sampleCreatedAtTimestamp,
+          },
+        },
+      },
+      sort: [`${timestampFields.updatedAt}:asc`],
+    });
+  });
+
+  test(`filterRowsForInsertion correctly filters single existing row`, async () => {
+    // Arrange
+    const idColumn: string = 'body_stat_id';
+    const bodyStatIdToExclude: string = '67f6127d-13cc-4c27-b91f-2b1f83c48eec';
+    const sampleStatToExclude: SyncCreateSchemas = {
+      ...sampleStat,
+      [idColumn]: bodyStatIdToExclude,
+    };
+    jest
+      .spyOn(DbFunctions, 'runSqlSelect')
+      .mockResolvedValueOnce([{[idColumn]: bodyStatIdToExclude}]);
+
+    // Act
+    const response = await filterRowsForInsertion(syncDbTables.bodyStatTable, [
+      sampleStat,
+      sampleStatToExclude,
+    ]);
+
+    // Assert
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
+      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`,
+      [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
+    );
+    expect(response).toEqual([sampleStat]);
+  });
+
+  test(`filterRowsForInsertion correctly filters both existing rows`, async () => {
+    // Arrange
+    const idColumn: string = 'body_stat_id';
+    const bodyStatIdToExclude: string = '67f6127d-13cc-4c27-b91f-2b1f83c48eec';
+    const sampleStatToExclude: SyncCreateSchemas = {
+      ...sampleStat,
+      [idColumn]: bodyStatIdToExclude,
+    };
+    jest
+      .spyOn(DbFunctions, 'runSqlSelect')
+      .mockResolvedValueOnce([
+        {[idColumn]: bodyStatIdToExclude},
+        {[idColumn]: sampleStat.body_stat_id},
+      ]);
+
+    // Act
+    const response = await filterRowsForInsertion(syncDbTables.bodyStatTable, [
+      sampleStat,
+      sampleStatToExclude,
+    ]);
+
+    // Assert
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
+      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`,
+      [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
+    );
+    expect(response).toEqual([]);
+  });
+
+  test(`filterRowsForInsertion correctly no existing rows to filter`, async () => {
+    // Arrange
+    const idColumn: string = 'body_stat_id';
+    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([]);
+
+    // Act
+    const response = await filterRowsForInsertion(syncDbTables.bodyStatTable, [
+      sampleStat,
+    ]);
+
+    // Assert
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
+      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?)`,
+      [sampleStat.body_stat_id],
+    );
+    expect(response).toEqual([sampleStat]);
   });
 });

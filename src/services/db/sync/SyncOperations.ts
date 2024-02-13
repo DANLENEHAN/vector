@@ -28,9 +28,13 @@ export const processUpdatesSyncTypePush = async (
   tableFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
 ) => {
   let successfulRequests = 0;
-
   const failedPushes: SyncUpdateSchemas[] = [];
-  if (rows.length === 0) {
+
+  // Get any previously failed UpdateSchemas
+  const failedSyncPushesForTable: SyncUpdateSchemas[] =
+    await getFailedSyncPushesUpdatesForTable(tableName);
+
+  if (failedSyncPushesForTable.length === 0 && rows.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Updates}'.`,
     );
@@ -38,10 +42,6 @@ export const processUpdatesSyncTypePush = async (
     // Convert the CreateSchemas to UpdateSchemas
     const rowsToSync: SyncUpdateSchemas[] =
       convertListToSyncUpdateSchemas(rows);
-
-    // Get any previously failed UpdateSchemas
-    const failedSyncPushesForTable: SyncUpdateSchemas[] =
-      await getFailedSyncPushesUpdatesForTable(tableName);
 
     const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
 
@@ -77,7 +77,11 @@ export const processUpdatesSyncTypePush = async (
     }
   }
   logger.info(
-    `Sync type '${SyncType.Push}' operation '${SyncOperation.Updates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rows.length} succeeded.`,
+    `Sync type '${SyncType.Push}' operation '${
+      SyncOperation.Updates
+    }' completed successfully on table: '${tableName}'. ${successfulRequests}/${
+      failedSyncPushesForTable.length + rows.length
+    } succeeded.`,
   );
 };
 
@@ -131,6 +135,6 @@ export const processCreatesSyncTypePush = async (
     }
   }
   logger.info(
-    `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${rowsToSync.length} succeeded.`,
+    `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${allRowsToSync.length} succeeded.`,
   );
 };

@@ -48,7 +48,7 @@ export const processSyncTypePull = async (
     SyncType.Pull,
   );
 
-  const tableQuerySchema: QuerySchema = await getQueryObjForTable(
+  const tableQuerySchema: QuerySchema = getQueryObjForTable(
     lastSynced.created_at,
     lastSynced.updated_at,
     syncOperation,

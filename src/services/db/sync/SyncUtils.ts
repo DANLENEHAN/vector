@@ -53,7 +53,7 @@ export const getLastSyncedForTable = async (
 };
 
 /**
- * Retrieve rows to be synchronized for a specific table and sync operation.
+ * Retrieve rows to be synchronized for a specific table and Sync operation.
  *
  * @param {string} tableName - The name of the table to retrieve rows for synchronization.
  * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
@@ -136,12 +136,12 @@ export function convertListToSyncUpdateSchemas(
  * @param {string} syncStart - The timestamp representing the start of the synchronization process.
  * @returns {Promise<QuerySchema>} A Promise that resolves with the query object for retrieving data.
  */
-export const getQueryObjForTable = async (
+export const getQueryObjForTable = (
   lastSyncedCreates: string,
   lastSyncedUpdates: string,
   syncOperation: SyncOperation,
   syncStart: string,
-): Promise<QuerySchema> => {
+): QuerySchema => {
   const timestampField =
     syncOperation === SyncOperation.Creates
       ? timestampFields.createdAt
@@ -194,7 +194,7 @@ export const filterRowsForInsertion = async (
   rowsToSync: SyncCreateSchemas[],
 ): Promise<SyncCreateSchemas[]> => {
   // Construct placeholders for SQL query parameters
-  const placeholders = rowsToSync.map(() => '?').join(',');
+  const placeholders = rowsToSync.map(() => '?').join(', ');
   // Determine the ID field based on the table name
   const table_id_field = `${tableName}_id`;
   // Extract UUIDs from the rows to sync

@@ -59,7 +59,7 @@ describe('SyncType Tests', () => {
 
     jest
       .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
-      .mockResolvedValue(getQueryObjForTableSampleResponse);
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
 
     postBodyStatSpy.mockResolvedValue({status: 201, data: [sampleStat]});
 
@@ -127,7 +127,7 @@ describe('SyncType Tests', () => {
 
     jest
       .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
-      .mockResolvedValue(getQueryObjForTableSampleResponse);
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
 
     postBodyStatSpy.mockResolvedValue({status: 201, data: []});
 
@@ -175,7 +175,7 @@ describe('SyncType Tests', () => {
 
     jest
       .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
-      .mockResolvedValue(getQueryObjForTableSampleResponse);
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
 
     postBodyStatSpy.mockResolvedValue({status: 500});
 
@@ -223,7 +223,7 @@ describe('SyncType Tests', () => {
 
     jest
       .spyOn(SyncUtilsFunctions, 'getQueryObjForTable')
-      .mockResolvedValue(getQueryObjForTableSampleResponse);
+      .mockReturnValueOnce(getQueryObjForTableSampleResponse);
 
     jest
       .spyOn(SyncUtilsFunctions, 'filterRowsForInsertion')
