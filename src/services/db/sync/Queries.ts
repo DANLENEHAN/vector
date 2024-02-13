@@ -13,10 +13,9 @@ export const getLastSyncedForTableQuery = (
   tableName: string,
   syncType: SyncType,
 ): string => `
-    SELECT last_synced, sync_operation
-    FROM sync_table
-    WHERE table_name = '${tableName}' AND sync_type = '${syncType}' ORDER BY sync_operation;
-`;
+  SELECT last_synced, sync_operation
+  FROM sync_table
+  WHERE table_name = '${tableName}' AND sync_type = '${syncType}' ORDER BY sync_operation;`;
 
 /**
  * Generates a SQL query to retrieve rows to sync for push operation based on the specified criteria.
@@ -37,20 +36,20 @@ export const getRowsToSyncPushQuery = (
   syncStart: string,
 ): string => {
   let query = `
-    SELECT *
-    FROM ${tableName}
+  SELECT *
+  FROM ${tableName}
   `;
 
   if (syncOperation === SyncOperation.Creates) {
     // Return all the rows created between the last sync and the current sync's time
-    query += ` WHERE ${timestampFields.createdAt} > '${lastSyncedCreates}' AND ${timestampFields.createdAt} <= '${syncStart}'`;
-    query += ` ORDER BY ${timestampFields.createdAt} ASC LIMIT ${syncBatchLimit};`;
+    query += `WHERE ${timestampFields.createdAt} > '${lastSyncedCreates}' AND ${timestampFields.createdAt} <= '${syncStart}' `;
+    query += `ORDER BY ${timestampFields.createdAt} ASC LIMIT ${syncBatchLimit};`;
   } else {
     // Return all the rows updated between the last sync and the current sync's time excluding rows that have been created in this
     // time as they'll already have been pushed
-    query += ` WHERE ${timestampFields.updatedAt} > '${lastSyncedUpdates}' `;
-    query += `AND ${timestampFields.createdAt} <= '${lastSyncedCreates}' AND ${timestampFields.updatedAt} <= '${syncStart}'`;
-    query += ` ORDER BY ${timestampFields.updatedAt} ASC LIMIT ${syncBatchLimit};`;
+    query += `WHERE ${timestampFields.updatedAt} > '${lastSyncedUpdates}' `;
+    query += `AND ${timestampFields.createdAt} <= '${lastSyncedCreates}' AND ${timestampFields.updatedAt} <= '${syncStart}' `;
+    query += `ORDER BY ${timestampFields.updatedAt} ASC LIMIT ${syncBatchLimit};`;
   }
   return query;
 };
