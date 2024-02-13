@@ -1,11 +1,17 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+// metro.config.js
+const path = require('path');
+const {getDefaultConfig} = require('@react-native/metro-config');
 
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
-const config = {};
+const {generate} = require('@storybook/react-native/scripts/generate');
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+generate({
+  configPath: path.resolve(__dirname, './.storybook'),
+});
+
+const config = getDefaultConfig(__dirname);
+
+config.transformer.unstable_allowRequireContext = true;
+
+config.resolver.sourceExts.push('mjs');
+
+module.exports = config;
