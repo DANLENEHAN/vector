@@ -10,13 +10,13 @@
  */
 
 import {
-  MoodTagCreateSchema,
-  MoodTagUpdateSchema,
   QuerySchema,
+  SetComponentCreateSchema,
+  SetComponentUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
 
-export class MoodTag<SecurityDataType = unknown> {
+export class SetComponent<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -24,19 +24,19 @@ export class MoodTag<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new MoodTag.
+   * @description Create a new SetComponent.
    *
-   * @tags MoodTag
+   * @tags SetComponent
    * @name CreateCreate
-   * @summary Create a new MoodTag.
-   * @request POST:/mood_tag/create
+   * @summary Create a new SetComponent.
+   * @request POST:/set_component/create
    * @secure
-   * @response `204` `void` MoodTag retrieved successfully
+   * @response `204` `void` SetComponent retrieved successfully
    * @response `400` `void` Bad request
-   * @response `404` `void` MoodTag foreign key constraint not found
+   * @response `404` `void` SetComponent foreign key constraint not found
    */
   createCreate = (
-    data: MoodTagCreateSchema,
+    data: SetComponentCreateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -47,7 +47,7 @@ export class MoodTag<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/mood_tag/create`,
+      path: `/set_component/create`,
       method: 'POST',
       query: query,
       body: data,
@@ -56,57 +56,57 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a MoodTag.
+   * @description Delete a SetComponent.
    *
-   * @tags MoodTag
+   * @tags SetComponent
    * @name DeleteStringObjectIdDelete
-   * @summary Delete a MoodTag.
-   * @request DELETE:/mood_tag/delete/{string:object_id}
+   * @summary Delete a SetComponent.
+   * @request DELETE:/set_component/delete/{string:object_id}
    * @secure
-   * @response `204` `void` MoodTag deleted successfully
-   * @response `400` `void` MoodTag validation error
-   * @response `404` `void` MoodTag not found
+   * @response `204` `void` SetComponent deleted successfully
+   * @response `400` `void` SetComponent validation error
+   * @response `404` `void` SetComponent not found
    */
   deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/mood_tag/delete/{string${objectId}}`,
+      path: `/set_component/delete/{string${objectId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
     });
   /**
-   * @description Get specific MoodTag for a user.
+   * @description Get specific SetComponent for a user.
    *
-   * @tags MoodTag
+   * @tags SetComponent
    * @name GetStringObjectIdList
-   * @summary Get a specific MoodTag for a user.
-   * @request GET:/mood_tag/get/{string:object_id}
+   * @summary Get a specific SetComponent for a user.
+   * @request GET:/set_component/get/{string:object_id}
    * @secure
-   * @response `200` `MoodTagCreateSchema` MoodTag for user retrieved successfully
-   * @response `404` `void` MoodTag not found
+   * @response `200` `SetComponentCreateSchema` SetComponent for user retrieved successfully
+   * @response `404` `void` SetComponent not found
    */
   getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
-    this.http.request<MoodTagCreateSchema, void>({
-      path: `/mood_tag/get/{string${objectId}}`,
+    this.http.request<SetComponentCreateSchema, void>({
+      path: `/set_component/get/{string${objectId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get MoodTag for a user based on query.
+   * @description Get SetComponent for a user based on query.
    *
-   * @tags MoodTag
-   * @name PostMoodTag
-   * @summary Get MoodTag for a user based on query.
-   * @request POST:/mood_tag/get
+   * @tags SetComponent
+   * @name PostSetComponent
+   * @summary Get SetComponent for a user based on query.
+   * @request POST:/set_component/get
    * @secure
-   * @response `204` `(MoodTagCreateSchema)[]` MoodTag for user retrieved successfully
+   * @response `204` `(SetComponentCreateSchema)[]` SetComponent for user retrieved successfully
    * @response `400` `void` Query validation error
    */
-  postMoodTag = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<MoodTagCreateSchema[], void>({
-      path: `/mood_tag/get`,
+  postSetComponent = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<SetComponentCreateSchema[], void>({
+      path: `/set_component/get`,
       method: 'POST',
       body: data,
       secure: true,
@@ -115,19 +115,19 @@ export class MoodTag<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Update a MoodTag for a user.
+   * @description Update a SetComponent for a user.
    *
-   * @tags MoodTag
+   * @tags SetComponent
    * @name UpdateUpdate
-   * @summary Update a MoodTag for a user.
-   * @request PUT:/mood_tag/update
+   * @summary Update a SetComponent for a user.
+   * @request PUT:/set_component/update
    * @secure
-   * @response `201` `void` MoodTag updated successfully
-   * @response `400` `void` MoodTag validation error
-   * @response `404` `void` MoodTag not found or foreign key constraint not found
+   * @response `201` `void` SetComponent updated successfully
+   * @response `400` `void` SetComponent validation error
+   * @response `404` `void` SetComponent not found or foreign key constraint not found
    */
   updateUpdate = (
-    data: MoodTagUpdateSchema,
+    data: SetComponentUpdateSchema,
     query?: {
       /**
        * Tells the creation endpoint if the object's origin is from the frontend via a sync.
@@ -138,7 +138,7 @@ export class MoodTag<SecurityDataType = unknown> {
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/mood_tag/update`,
+      path: `/set_component/update`,
       method: 'PUT',
       query: query,
       body: data,

@@ -11,12 +11,8 @@
 
 import {
   QuerySchema,
-  SetComponentCreateSchema,
-  SetComponentGetSchema,
-  SetComponentUpdateSchema,
   SetCreateSchema,
-  SetGetSchema,
-  SetTreeRootCreateSchema,
+  SetTreeCreateSchema,
   SetUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
@@ -29,140 +25,48 @@ export class Set<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new set component.
+   * @description Create a new Set.
    *
-   * @tags Set Component
-   * @name ComponentCreateCreate
-   * @summary Create a new set component.
-   * @request POST:/set/component/create
-   * @response `204` `void` Set Component created successfully
-   * @response `400` `void` Set Component validation error
-   */
-  componentCreateCreate = (
-    data: SetComponentCreateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/set/component/create`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete a set component
-   *
-   * @tags Set Component
-   * @name ComponentDeleteIntSetComponentIdDelete
-   * @summary Delete a set component
-   * @request DELETE:/set/component/delete/{int:set_component_id}
-   * @response `204` `void` Set Component deleted successfully
-   * @response `400` `void` Set Component ID is required to delete a set component
-   * @response `404` `void` Set Component not found
-   */
-  componentDeleteIntSetComponentIdDelete = (
-    setComponentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/set/component/delete/{int${setComponentId}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get set components from the database
-   *
-   * @tags Set Component
-   * @name ComponentGetCreate
-   * @summary Get set components
-   * @request POST:/set/component/get
+   * @tags Set
+   * @name CreateCreate
+   * @summary Create a new Set.
+   * @request POST:/set/create
    * @secure
-   * @response `204` `void` Set Component found successfully
-   * @response `400` `void` Query validation error
+   * @response `204` `void` Set retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` Set foreign key constraint not found
    */
-  componentGetCreate = (data: QuerySchema, params: RequestParams = {}) =>
+  createCreate = (
+    data: SetCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/set/component/get`,
+      path: `/set/create`,
       method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Get a set component
-   *
-   * @tags Set Component
-   * @name ComponentGetIntSetComponentIdList
-   * @summary Get a set component
-   * @request GET:/set/component/get/{int:set_component_id}
-   * @response `200` `SetComponentGetSchema` Set Component retrieved successfully
-   */
-  componentGetIntSetComponentIdList = (
-    setComponentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<SetComponentGetSchema, any>({
-      path: `/set/component/get/{int${setComponentId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Update a set component
-   *
-   * @tags Set Component
-   * @name ComponentUpdateUpdate
-   * @summary Update a set component
-   * @request PUT:/set/component/update
-   * @response `201` `SetComponentGetSchema` Set Component updated successfully
-   * @response `400` `void` Set Component ID is required to update a set Component
-   * @response `404` `void` Set Component not found
-   */
-  componentUpdateUpdate = (
-    data: SetComponentUpdateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<SetComponentGetSchema, void>({
-      path: `/set/component/update`,
-      method: 'PUT',
-      body: data,
-      type: ContentType.Json,
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Create a set
-   *
-   * @tags Set
-   * @name CreateCreate
-   * @summary Create a set
-   * @request POST:/set/create
-   * @response `201` `void` Set created successfully
-   * @response `400` `void` Set validation error
-   */
-  createCreate = (data: SetCreateSchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/set/create`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Create a new set and all it's child components.
+   * @description Create a new Set and all it's child components.
    *
    * @tags Set
    * @name CreateTreeCreate
-   * @summary Create a full set tree.
+   * @summary Create a Set tree object.
    * @request POST:/set/create/tree
-   * @response `204` `void` Set created successfully
-   * @response `400` `void` Set validation error
+   * @response `204` `void` Set tree created successfully
+   * @response `400` `void` Set tree validation error
    */
-  createTreeCreate = (
-    data: SetTreeRootCreateSchema,
-    params: RequestParams = {},
-  ) =>
+  createTreeCreate = (data: SetTreeCreateSchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/set/create/tree`,
       method: 'POST',
@@ -171,77 +75,94 @@ export class Set<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a set
+   * @description Delete a Set.
    *
    * @tags Set
-   * @name DeleteIntSetIdDelete
-   * @summary Delete a set
-   * @request DELETE:/set/delete/{int:set_id}
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a Set.
+   * @request DELETE:/set/delete/{string:object_id}
+   * @secure
    * @response `204` `void` Set deleted successfully
-   * @response `400` `void` Set ID is required to delete a set
+   * @response `400` `void` Set validation error
    * @response `404` `void` Set not found
    */
-  deleteIntSetIdDelete = (setId?: number, params: RequestParams = {}) =>
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/set/delete/{int${setId}}`,
+      path: `/set/delete/{string${objectId}}`,
       method: 'DELETE',
+      secure: true,
       ...params,
     });
   /**
-   * @description Get a set
+   * @description Get specific Set for a user.
    *
    * @tags Set
-   * @name GetIntSetIdList
-   * @summary Get a set
-   * @request GET:/set/get/{int:set_id}
-   * @response `200` `SetGetSchema` Set retrieved successfully
+   * @name GetStringObjectIdList
+   * @summary Get a specific Set for a user.
+   * @request GET:/set/get/{string:object_id}
+   * @secure
+   * @response `200` `SetCreateSchema` Set for user retrieved successfully
    * @response `404` `void` Set not found
    */
-  getIntSetIdList = (setId?: number, params: RequestParams = {}) =>
-    this.http.request<SetGetSchema, void>({
-      path: `/set/get/{int${setId}}`,
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<SetCreateSchema, void>({
+      path: `/set/get/{string${objectId}}`,
       method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get set from the database
+   * @description Get Set for a user based on query.
    *
    * @tags Set
    * @name PostSet
-   * @summary Get sets
+   * @summary Get Set for a user based on query.
    * @request POST:/set/get
    * @secure
-   * @response `204` `void` Set found successfully
+   * @response `204` `(SetCreateSchema)[]` Set for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postSet = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
+    this.http.request<SetCreateSchema[], void>({
       path: `/set/get`,
       method: 'POST',
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
       ...params,
     });
   /**
-   * @description Update a set
+   * @description Update a Set for a user.
    *
    * @tags Set
    * @name UpdateUpdate
-   * @summary Update a set
+   * @summary Update a Set for a user.
    * @request PUT:/set/update
-   * @response `201` `SetGetSchema` Set updated successfully
+   * @secure
+   * @response `201` `void` Set updated successfully
    * @response `400` `void` Set validation error
-   * @response `404` `void` Set not found
+   * @response `404` `void` Set not found or foreign key constraint not found
    */
-  updateUpdate = (data: SetUpdateSchema, params: RequestParams = {}) =>
-    this.http.request<SetGetSchema, void>({
+  updateUpdate = (
+    data: SetUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
       path: `/set/update`,
       method: 'PUT',
+      query: query,
       body: data,
+      secure: true,
       type: ContentType.Json,
-      format: 'json',
       ...params,
     });
 }

@@ -33,6 +33,7 @@ export class Nutrition<SecurityDataType = unknown> {
    * @secure
    * @response `204` `void` Nutrition retrieved successfully
    * @response `400` `void` Bad request
+   * @response `404` `void` Nutrition foreign key constraint not found
    */
   createCreate = (
     data: NutritionCreateSchema,
@@ -123,7 +124,7 @@ export class Nutrition<SecurityDataType = unknown> {
    * @secure
    * @response `201` `void` Nutrition updated successfully
    * @response `400` `void` Nutrition validation error
-   * @response `404` `void` Nutrition not found
+   * @response `404` `void` Nutrition not found or foreign key constraint not found
    */
   updateUpdate = (
     data: NutritionUpdateSchema,

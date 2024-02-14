@@ -11,13 +11,8 @@
 
 import {
   QuerySchema,
-  WorkoutComponentCreateSchema,
-  WorkoutComponentGetSchema,
-  WorkoutComponentTreeRootCreateSchema,
-  WorkoutComponentUpdateSchema,
   WorkoutCreateSchema,
-  WorkoutGetSchema,
-  WorkoutTreeRootCreateSchema,
+  WorkoutTreeCreateSchema,
   WorkoutUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
@@ -30,160 +25,49 @@ export class Workout<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new workout component.
+   * @description Create a new Workout.
    *
-   * @tags Workout Component
-   * @name ComponentCreateCreate
-   * @summary Create a new workout component.
-   * @request POST:/workout/component/create
-   * @response `204` `void` Workout Component created successfully
-   * @response `400` `void` Workout Component validation error
-   */
-  componentCreateCreate = (
-    data: WorkoutComponentCreateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/workout/component/create`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Create a new workout componet and all it's child components.
-   *
-   * @tags Workout Component
-   * @name ComponentCreateTreeCreate
-   * @summary Create the full workout component tree.
-   * @request POST:/workout/component/create/tree
-   * @response `204` `void` Workout Component created successfully
-   * @response `400` `void` Workout Component validation error
-   */
-  componentCreateTreeCreate = (
-    data: WorkoutComponentTreeRootCreateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/workout/component/create/tree`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete a workout component
-   *
-   * @tags Workout Component
-   * @name ComponentDeleteIntWorkoutComponentDelete
-   * @summary Delete a workout component
-   * @request DELETE:/workout/component/delete/{int:workout_component}
-   * @response `204` `void` Workout Component deleted successfully
-   * @response `400` `void` Workout Component ID is required to delete a workout component
-   * @response `404` `void` Workout Component not found
-   */
-  componentDeleteIntWorkoutComponentDelete = (
-    workoutComponentId: number,
-    workoutComponent: string,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/workout/component/delete/{int${workoutComponent}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get workout components from the database.
-   *
-   * @tags Workout Component
-   * @name ComponentGetCreate
-   * @summary Get workout components
-   * @request POST:/workout/component/get
+   * @tags Workout
+   * @name CreateCreate
+   * @summary Create a new Workout.
+   * @request POST:/workout/create
    * @secure
-   * @response `204` `void` Workout components found successfully
-   * @response `400` `void` Query validation error
+   * @response `204` `void` Workout retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` Workout foreign key constraint not found
    */
-  componentGetCreate = (data: QuerySchema, params: RequestParams = {}) =>
+  createCreate = (
+    data: WorkoutCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/workout/component/get`,
+      path: `/workout/create`,
       method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Get a workout component
-   *
-   * @tags Workout Component
-   * @name ComponentGetIntWorkoutComponentIdList
-   * @summary Get a workout component
-   * @request GET:/workout/component/get/{int:workout_component_id}
-   * @response `200` `WorkoutComponentGetSchema` Workout Component retrieved successfully
-   */
-  componentGetIntWorkoutComponentIdList = (
-    workoutComponentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<WorkoutComponentGetSchema, any>({
-      path: `/workout/component/get/{int${workoutComponentId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Update a workout component
-   *
-   * @tags Workout Component
-   * @name ComponentUpdateUpdate
-   * @summary Update a workout component
-   * @request PUT:/workout/component/update
-   * @response `201` `WorkoutComponentGetSchema` Workout Component updated successfully
-   * @response `400` `void` Workout Component ID is required to update a workout Component
-   * @response `404` `void` Workout Component not found
-   */
-  componentUpdateUpdate = (
-    data: WorkoutComponentUpdateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<WorkoutComponentGetSchema, void>({
-      path: `/workout/component/update`,
-      method: 'PUT',
-      body: data,
-      type: ContentType.Json,
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Create a new workout.
-   *
-   * @tags Workout
-   * @name CreateCreate
-   * @summary Create a new workout.
-   * @request POST:/workout/create
-   * @response `204` `void` Workout created successfully
-   * @response `400` `void` Workout validation error
-   */
-  createCreate = (data: WorkoutCreateSchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/workout/create`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Create a new workout and all it's child components.
+   * @description Create a new Workout and all it's child components.
    *
    * @tags Workout
    * @name CreateTreeCreate
-   * @summary Create a full workout tree.
+   * @summary Create a Workout tree object.
    * @request POST:/workout/create/tree
-   * @response `204` `void` Workout created successfully
-   * @response `400` `void` Workout validation error
+   * @response `204` `void` Workout tree created successfully
+   * @response `400` `void` Workout tree validation error
    */
   createTreeCreate = (
-    data: WorkoutTreeRootCreateSchema,
+    data: WorkoutTreeCreateSchema,
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
@@ -194,84 +78,94 @@ export class Workout<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Delete a workout
+   * @description Delete a Workout.
    *
    * @tags Workout
-   * @name DeleteIntWorkoutIdDelete
-   * @summary Delete a workout
-   * @request DELETE:/workout/delete/{int:workout_id}
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a Workout.
+   * @request DELETE:/workout/delete/{string:object_id}
+   * @secure
    * @response `204` `void` Workout deleted successfully
-   * @response `400` `void` Workout ID is required to delete a workout
+   * @response `400` `void` Workout validation error
    * @response `404` `void` Workout not found
    */
-  deleteIntWorkoutIdDelete = (
-    workoutId: string,
-    query: {
-      /** ID of the workout to delete from the database */
-      workout_id: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/workout/delete/{int${workoutId}}`,
+      path: `/workout/delete/{string${objectId}}`,
       method: 'DELETE',
-      query: query,
+      secure: true,
       ...params,
     });
   /**
-   * @description Get a workout
+   * @description Get specific Workout for a user.
    *
    * @tags Workout
-   * @name GetIntWorkoutIdList
-   * @summary Get a workout
-   * @request GET:/workout/get/{int:workout_id}
-   * @response `200` `WorkoutGetSchema` Workout retrieved successfully
+   * @name GetStringObjectIdList
+   * @summary Get a specific Workout for a user.
+   * @request GET:/workout/get/{string:object_id}
+   * @secure
+   * @response `200` `WorkoutCreateSchema` Workout for user retrieved successfully
+   * @response `404` `void` Workout not found
    */
-  getIntWorkoutIdList = (workoutId: number, params: RequestParams = {}) =>
-    this.http.request<WorkoutGetSchema, any>({
-      path: `/workout/get/{int${workoutId}}`,
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<WorkoutCreateSchema, void>({
+      path: `/workout/get/{string${objectId}}`,
       method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });
   /**
-   * @description Get workouts from the database
+   * @description Get Workout for a user based on query.
    *
    * @tags Workout
    * @name PostWorkout
-   * @summary Get workouts
+   * @summary Get Workout for a user based on query.
    * @request POST:/workout/get
    * @secure
-   * @response `204` `void` Workouts found successfully
+   * @response `204` `(WorkoutCreateSchema)[]` Workout for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postWorkout = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
+    this.http.request<WorkoutCreateSchema[], void>({
       path: `/workout/get`,
       method: 'POST',
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
       ...params,
     });
   /**
-   * @description Update a workout
+   * @description Update a Workout for a user.
    *
    * @tags Workout
    * @name UpdateUpdate
-   * @summary Update a workout
+   * @summary Update a Workout for a user.
    * @request PUT:/workout/update
-   * @response `201` `WorkoutGetSchema` Workout updated successfully
+   * @secure
+   * @response `201` `void` Workout updated successfully
    * @response `400` `void` Workout validation error
-   * @response `404` `void` Workout not found
+   * @response `404` `void` Workout not found or foreign key constraint not found
    */
-  updateUpdate = (data: WorkoutUpdateSchema, params: RequestParams = {}) =>
-    this.http.request<WorkoutGetSchema, void>({
+  updateUpdate = (
+    data: WorkoutUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
       path: `/workout/update`,
       method: 'PUT',
+      query: query,
       body: data,
+      secure: true,
       type: ContentType.Json,
-      format: 'json',
       ...params,
     });
 }

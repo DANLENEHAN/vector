@@ -11,7 +11,6 @@
 
 import {
   ExerciseCreateSchema,
-  ExerciseGetSchema,
   ExerciseUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -25,97 +24,126 @@ export class Exercise<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new exercise.
+   * @description Create a new Exercise.
    *
    * @tags Exercise
    * @name CreateCreate
-   * @summary Create a new exercise.
+   * @summary Create a new Exercise.
    * @request POST:/exercise/create
-   * @response `204` `void` Exercise created successfully
-   * @response `400` `void` Exercise validation error
+   * @secure
+   * @response `204` `void` Exercise retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` Exercise foreign key constraint not found
    */
-  createCreate = (data: ExerciseCreateSchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/exercise/create`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete an exercise
-   *
-   * @tags Exercise
-   * @name DeleteIntExerciseIdDelete
-   * @summary Delete an exercise
-   * @request DELETE:/exercise/delete/{int:exercise_id}
-   * @response `204` `void` Exercise deleted successfully
-   * @response `400` `void` Exercise ID is required to delete an exercise
-   * @response `404` `void` Exercise not found
-   */
-  deleteIntExerciseIdDelete = (
-    exerciseId: number,
+  createCreate = (
+    data: ExerciseCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
-      path: `/exercise/delete/{int${exerciseId}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get an exercise
-   *
-   * @tags Exercise
-   * @name GetIntExerciseIdList
-   * @summary Get an exercise
-   * @request GET:/exercise/get/{int:exercise_id}
-   * @response `200` `ExerciseGetSchema` Exercise retrieved successfully
-   */
-  getIntExerciseIdList = (exerciseId: number, params: RequestParams = {}) =>
-    this.http.request<ExerciseGetSchema, any>({
-      path: `/exercise/get/{int${exerciseId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Get exercises from the database
-   *
-   * @tags Exercise
-   * @name PostExercise
-   * @summary Get exercises
-   * @request POST:/exercise/get
-   * @secure
-   * @response `204` `void` Exercise found successfully
-   * @response `400` `void` Query validation error
-   */
-  postExercise = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/exercise/get`,
+      path: `/exercise/create`,
       method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Update an exercise
+   * @description Delete a Exercise.
    *
    * @tags Exercise
-   * @name UpdateUpdate
-   * @summary Update an exercise
-   * @request PUT:/exercise/update
-   * @response `201` `ExerciseGetSchema` Exercise updated successfully
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a Exercise.
+   * @request DELETE:/exercise/delete/{string:object_id}
+   * @secure
+   * @response `204` `void` Exercise deleted successfully
    * @response `400` `void` Exercise validation error
    * @response `404` `void` Exercise not found
    */
-  updateUpdate = (data: ExerciseUpdateSchema, params: RequestParams = {}) =>
-    this.http.request<ExerciseGetSchema, void>({
-      path: `/exercise/update`,
-      method: 'PUT',
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<void, void>({
+      path: `/exercise/delete/{string${objectId}}`,
+      method: 'DELETE',
+      secure: true,
+      ...params,
+    });
+  /**
+   * @description Get specific Exercise for a user.
+   *
+   * @tags Exercise
+   * @name GetStringObjectIdList
+   * @summary Get a specific Exercise for a user.
+   * @request GET:/exercise/get/{string:object_id}
+   * @secure
+   * @response `200` `ExerciseCreateSchema` Exercise for user retrieved successfully
+   * @response `404` `void` Exercise not found
+   */
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<ExerciseCreateSchema, void>({
+      path: `/exercise/get/{string${objectId}}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get Exercise for a user based on query.
+   *
+   * @tags Exercise
+   * @name PostExercise
+   * @summary Get Exercise for a user based on query.
+   * @request POST:/exercise/get
+   * @secure
+   * @response `204` `(ExerciseCreateSchema)[]` Exercise for user retrieved successfully
+   * @response `400` `void` Query validation error
+   */
+  postExercise = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<ExerciseCreateSchema[], void>({
+      path: `/exercise/get`,
+      method: 'POST',
       body: data,
+      secure: true,
       type: ContentType.Json,
       format: 'json',
+      ...params,
+    });
+  /**
+   * @description Update a Exercise for a user.
+   *
+   * @tags Exercise
+   * @name UpdateUpdate
+   * @summary Update a Exercise for a user.
+   * @request PUT:/exercise/update
+   * @secure
+   * @response `201` `void` Exercise updated successfully
+   * @response `400` `void` Exercise validation error
+   * @response `404` `void` Exercise not found or foreign key constraint not found
+   */
+  updateUpdate = (
+    data: ExerciseUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
+      path: `/exercise/update`,
+      method: 'PUT',
+      query: query,
+      body: data,
+      secure: true,
+      type: ContentType.Json,
       ...params,
     });
 }
