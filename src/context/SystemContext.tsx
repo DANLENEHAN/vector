@@ -18,7 +18,9 @@ import {
 // Logger
 import logger from '@utils/Logger';
 // Functions
-import {runDbMigrationProcess} from '@services/db/Functions';
+import {runDbMigrationProcess} from '@services/db/Utils';
+// Constants
+import {revisionObject} from '@services/db/VectorRevisions';
 
 /**
  * System Context
@@ -111,7 +113,7 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({
         setIsLoaded(true);
       });
 
-    runDbMigrationProcess().finally(() => {
+    runDbMigrationProcess(revisionObject).finally(() => {
       setMigrationsComplete(true);
     });
 

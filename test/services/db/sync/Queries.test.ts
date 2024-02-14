@@ -18,11 +18,6 @@ import {
 } from './Objects';
 
 describe('Sync Queries Tests', () => {
-  beforeEach(() => {
-    // Clears 'toHaveBeenCalledTimes' cache
-    jest.clearAllMocks();
-  });
-
   test('getLastSyncedForTableQuery returns proper query string', () => {
     // Arrange
     // Act

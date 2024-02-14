@@ -4,14 +4,14 @@ import {
   SyncCreateSchemas,
   SyncUpdateSchemas,
   LastSyncedTimestamps,
-} from './Types';
+} from '@services/db/sync/Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
-import {RowData} from '@services/db/Types';
+import {RowData, SqlQuery, ExecutionResult} from '@services/db/Types';
 
 // Functions
-import {runSqlSelect, executeSqlNonQuery} from '@services/db/Functions';
+import {executeSqlBatch} from '@services/db/TransactionFunctions';
 import {
   getLastSyncedForTableQuery,
   getRowsToSyncPushQuery,
@@ -20,25 +20,27 @@ import {
 // Constants
 import {unixEpoch} from '@shared/Constants';
 
-/**
- * Retrieves the last synced timestamps for the specified table and synchronization type.
- *
- * @param {syncDbTables} tableName - The name of the table to retrieve last synced timestamps for.
- * @param {SyncType} syncType - The type of synchronization (e.g., 'pull', 'push').
- * @returns {Promise<LastSyncedTimestamps>} A Promise that resolves with an object containing the last synced timestamps.
- */
 export const getLastSyncedForTable = async (
   tableName: syncDbTables,
   syncType: SyncType,
 ): Promise<LastSyncedTimestamps> => {
-  const response: RowData[] = await runSqlSelect(
-    getLastSyncedForTableQuery(tableName, syncType),
-    [],
-  );
+  const query: SqlQuery = {
+    sqlStatement: getLastSyncedForTableQuery(tableName, syncType),
+  };
 
+  const executionResult: ExecutionResult<any>[] = await executeSqlBatch([
+    query,
+  ]);
+
+  if (executionResult[0].error) {
+    console.error('Error executing SQL query:', executionResult[0]?.error);
+  }
+
+  const rows: RowData[] = executionResult[0].result;
   let lastCreatedAt: string = unixEpoch;
   let lastUpdatedAt: string = unixEpoch;
-  for (let row of response) {
+
+  for (const row of rows) {
     if (row.sync_operation === SyncOperation.Creates) {
       lastCreatedAt = row.last_synced;
     } else if (row.sync_operation === SyncOperation.Updates) {
@@ -52,16 +54,6 @@ export const getLastSyncedForTable = async (
   };
 };
 
-/**
- * Retrieve rows to be synchronized for a specific table and Sync operation.
- *
- * @param {string} tableName - The name of the table to retrieve rows for synchronization.
- * @param {SyncOperation} syncOperation - The synchronization operation (e.g., Creates, Updates).
- * @param {string | null} lastSyncTime - Optional timestamp to filter rows updated since the last sync.
- * @returns {Promise<(SyncCreateSchemas | SyncUpdateSchemas)[]>} A promise that resolves to an array
- *   of schemas representing rows to be synchronized.
- * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
- */
 export const getRowsToSyncPush = async (
   tableName: syncDbTables,
   syncOperation: SyncOperation,
@@ -69,42 +61,52 @@ export const getRowsToSyncPush = async (
   lastSyncedUpdates: string,
   syncStart: string,
 ): Promise<SyncCreateSchemas[]> => {
-  return await runSqlSelect(
-    getRowsToSyncPushQuery(
+  const query: SqlQuery = {
+    sqlStatement: getRowsToSyncPushQuery(
       tableName,
       syncOperation,
       lastSyncedCreates,
       lastSyncedUpdates,
       syncStart,
     ),
-    [],
-  );
+  };
+
+  const executionResult: ExecutionResult<any>[] = await executeSqlBatch([
+    query,
+  ]);
+
+  if (executionResult[0].error) {
+    console.error(
+      'Error executing getRowsToSyncPush SQL query:',
+      executionResult[0].error,
+    );
+    return [];
+  }
+  return executionResult[0].result;
 };
 
-/**
- * Insert or replace a synchronization update record into the sync table.
- *
- * @param {SyncTable} syncUpdate - The synchronization update to be inserted or replaced.
- * @returns {Promise<void>} A promise that resolves when the insertion or replacement is successful.
- * @throws {Error} If there is an issue with the database transaction, SQL execution, or logging.
- */
 export const insertSyncUpdate = async (
   syncUpdate: SyncTable,
 ): Promise<void> => {
-  const columns = `(${Object.keys(syncUpdate)
+  const columns = Object.keys(syncUpdate)
     .map(key => `'${key}'`)
-    .join(', ')})`;
-  const insertValues = `(${Object.keys(syncUpdate)
+    .join(', ');
+  const insertValues = Object.keys(syncUpdate)
     .map(() => '?')
-    .join(', ')})`;
+    .join(', ');
 
-  const response: number = await executeSqlNonQuery(
-    `INSERT OR REPLACE INTO ${otherDbTables.syncTable} ${columns} VALUES ${insertValues};`,
-    Object.values(syncUpdate),
-  );
-  if (response !== 1) {
+  const query: SqlQuery = {
+    sqlStatement: `INSERT OR REPLACE INTO ${otherDbTables.syncTable} (${columns}) VALUES (${insertValues});`,
+    params: Object.values(syncUpdate),
+  };
+
+  const executionResult: ExecutionResult<number>[] = await executeSqlBatch([
+    query,
+  ]);
+
+  if (executionResult[0].error) {
     throw new Error(
-      `Failed to insert or replace SyncUpdate. No ${response} rows affected.`,
+      `Failed to insert or replace SyncUpdate: ${executionResult[0].error}`,
     );
   }
 };
@@ -182,13 +184,6 @@ export const getQueryObjForTable = (
   } as QuerySchema;
 };
 
-/**
- * Filters out rows from the given array that already exist in the database table based on their unique identifiers.
- *
- * @param {string} tableName - The name of the database table to check for existing rows.
- * @param {SyncCreateSchemas[]} rowsToSync - The array of rows to be filtered.
- * @returns {Promise<SyncCreateSchemas[]>} A Promise that resolves with the array of rows that need to be inserted into the database.
- */
 export const filterRowsForInsertion = async (
   tableName: string,
   rowsToSync: SyncCreateSchemas[],
@@ -203,21 +198,31 @@ export const filterRowsForInsertion = async (
   );
 
   // Fetch existing UUIDs from the database
-  const existingUuids: RowData[] = await runSqlSelect(
-    `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`,
-    tableUuids,
-  );
+  const sqlStatement = `SELECT ${table_id_field} FROM ${tableName} WHERE ${table_id_field} IN (${placeholders})`;
+  const query: SqlQuery = {
+    sqlStatement,
+    params: tableUuids,
+  };
 
-  // Extract UUIDs from the fetched rows
-  const existingUuidList = existingUuids.map(
-    item => item[table_id_field as keyof (typeof existingUuids)[0]],
+  const executionResult: ExecutionResult<any>[] = await executeSqlBatch([
+    query,
+  ]);
+
+  if (executionResult[0].error) {
+    throw new Error(
+      `Error fetching existing UUIDs from ${tableName}: ${executionResult[0].error}`,
+    );
+  }
+
+  const existingUuids: string[] = executionResult[0].result.map(
+    (item: any) => item[table_id_field],
   );
 
   // Filter out rows that already exist in the database
   const rowsToInsert = rowsToSync.filter(
     item =>
-      !existingUuidList.includes(
-        item[table_id_field as keyof (typeof rowsToSync)[0]],
+      !existingUuids.includes(
+        item[table_id_field as keyof (typeof rowsToSync)[0]] as string,
       ),
   );
 

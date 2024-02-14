@@ -18,7 +18,7 @@ import {
   insertSyncUpdate,
   filterRowsForInsertion,
 } from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '@services/db/Functions';
+import {insertRows, updateRows} from '@services/db/Utils';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
@@ -120,7 +120,7 @@ export const processSyncTypePush = async (
   syncStart: string,
 ): Promise<void> => {
   try {
-    const lastSynced: LastSyncedTimestamps | null = await getLastSyncedForTable(
+    const lastSynced: LastSyncedTimestamps = await getLastSyncedForTable(
       tableName,
       SyncType.Push,
     );

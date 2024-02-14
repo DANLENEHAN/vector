@@ -16,7 +16,7 @@ import {
   processSyncTypePull,
 } from '@services/db/sync/SyncTypes';
 import * as SyncOperationFunctions from '@services/db/sync/SyncOperations';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Utils';
 
 // Types
 import {syncDbTables} from '@shared/Constants';
@@ -37,8 +37,8 @@ jest.mock('@services/db/sync/SyncUtils', () => ({
   getRowsToSyncPush: jest.fn(),
 }));
 
-jest.mock('@services/db/Functions', () => ({
-  ...jest.requireActual('@services/db/Functions'),
+jest.mock('@services/db/Utils', () => ({
+  ...jest.requireActual('@services/db/Utils'),
   insertRows: jest.fn(),
   updateRows: jest.fn(),
 }));

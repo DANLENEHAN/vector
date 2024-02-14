@@ -2,7 +2,7 @@
 import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Utils';
 
 /**
  * @description Inserts an array of stats into the body_stat table.
