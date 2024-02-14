@@ -33,6 +33,7 @@ export class BodyStat<SecurityDataType = unknown> {
    * @secure
    * @response `204` `void` BodyStat retrieved successfully
    * @response `400` `void` Bad request
+   * @response `404` `void` BodyStat foreign key constraint not found
    */
   createCreate = (
     data: BodyStatCreateSchema,
@@ -123,7 +124,7 @@ export class BodyStat<SecurityDataType = unknown> {
    * @secure
    * @response `201` `void` BodyStat updated successfully
    * @response `400` `void` BodyStat validation error
-   * @response `404` `void` BodyStat not found
+   * @response `404` `void` BodyStat not found or foreign key constraint not found
    */
   updateUpdate = (
     data: BodyStatUpdateSchema,

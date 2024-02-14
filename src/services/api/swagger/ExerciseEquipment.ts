@@ -11,7 +11,6 @@
 
 import {
   ExerciseEquipmentCreateSchema,
-  ExerciseEquipmentGetSchema,
   ExerciseEquipmentUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -25,106 +24,126 @@ export class ExerciseEquipment<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new exercise_equipment.
+   * @description Create a new ExerciseEquipment.
    *
    * @tags ExerciseEquipment
    * @name CreateCreate
-   * @summary Create a new exercise_equipment.
+   * @summary Create a new ExerciseEquipment.
    * @request POST:/exercise_equipment/create
-   * @response `204` `void` ExerciseEquipment created successfully
-   * @response `400` `void` ExerciseEquipment validation error
+   * @secure
+   * @response `204` `void` ExerciseEquipment retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` ExerciseEquipment foreign key constraint not found
    */
   createCreate = (
     data: ExerciseEquipmentCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
       path: `/exercise_equipment/create`,
       method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete an exercise_equipment
-   *
-   * @tags ExerciseEquipment
-   * @name DeleteIntExerciseEquipmentIdDelete
-   * @summary Delete an exercise_equipment
-   * @request DELETE:/exercise_equipment/delete/{int:exercise_equipment_id}
-   * @response `204` `void` ExerciseEquipment deleted successfully
-   * @response `400` `void` ExerciseEquipment ID is required to delete an exercise_equipment
-   * @response `404` `void` ExerciseEquipment not found
-   */
-  deleteIntExerciseEquipmentIdDelete = (
-    exerciseEquipmentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/exercise_equipment/delete/{int${exerciseEquipmentId}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get an exercise_equipment
-   *
-   * @tags ExerciseEquipment
-   * @name GetIntExerciseEquipmentIdList
-   * @summary Get an exercise_equipment
-   * @request GET:/exercise_equipment/get/{int:exercise_equipment_id}
-   * @response `200` `ExerciseEquipmentGetSchema` ExerciseEquipment retrieved successfully
-   */
-  getIntExerciseEquipmentIdList = (
-    exerciseEquipmentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<ExerciseEquipmentGetSchema, any>({
-      path: `/exercise_equipment/get/{int${exerciseEquipmentId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Get exercise equipments from the database
-   *
-   * @tags ExerciseEquipment
-   * @name PostExerciseEquipment
-   * @summary Get exercise equipments
-   * @request POST:/exercise_equipment/get
-   * @secure
-   * @response `204` `void` Exercise equipment found successfully
-   * @response `400` `void` Query validation error
-   */
-  postExerciseEquipment = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/exercise_equipment/get`,
-      method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Update an exercise_equipment
+   * @description Delete a ExerciseEquipment.
    *
    * @tags ExerciseEquipment
-   * @name UpdateUpdate
-   * @summary Update an exercise_equipment
-   * @request PUT:/exercise_equipment/update
-   * @response `201` `ExerciseEquipmentGetSchema` ExerciseEquipment updated successfully
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a ExerciseEquipment.
+   * @request DELETE:/exercise_equipment/delete/{string:object_id}
+   * @secure
+   * @response `204` `void` ExerciseEquipment deleted successfully
    * @response `400` `void` ExerciseEquipment validation error
    * @response `404` `void` ExerciseEquipment not found
    */
-  updateUpdate = (
-    data: ExerciseEquipmentUpdateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<ExerciseEquipmentGetSchema, void>({
-      path: `/exercise_equipment/update`,
-      method: 'PUT',
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<void, void>({
+      path: `/exercise_equipment/delete/{string${objectId}}`,
+      method: 'DELETE',
+      secure: true,
+      ...params,
+    });
+  /**
+   * @description Get specific ExerciseEquipment for a user.
+   *
+   * @tags ExerciseEquipment
+   * @name GetStringObjectIdList
+   * @summary Get a specific ExerciseEquipment for a user.
+   * @request GET:/exercise_equipment/get/{string:object_id}
+   * @secure
+   * @response `200` `ExerciseEquipmentCreateSchema` ExerciseEquipment for user retrieved successfully
+   * @response `404` `void` ExerciseEquipment not found
+   */
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<ExerciseEquipmentCreateSchema, void>({
+      path: `/exercise_equipment/get/{string${objectId}}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get ExerciseEquipment for a user based on query.
+   *
+   * @tags ExerciseEquipment
+   * @name PostExerciseEquipment
+   * @summary Get ExerciseEquipment for a user based on query.
+   * @request POST:/exercise_equipment/get
+   * @secure
+   * @response `204` `(ExerciseEquipmentCreateSchema)[]` ExerciseEquipment for user retrieved successfully
+   * @response `400` `void` Query validation error
+   */
+  postExerciseEquipment = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<ExerciseEquipmentCreateSchema[], void>({
+      path: `/exercise_equipment/get`,
+      method: 'POST',
       body: data,
+      secure: true,
       type: ContentType.Json,
       format: 'json',
+      ...params,
+    });
+  /**
+   * @description Update a ExerciseEquipment for a user.
+   *
+   * @tags ExerciseEquipment
+   * @name UpdateUpdate
+   * @summary Update a ExerciseEquipment for a user.
+   * @request PUT:/exercise_equipment/update
+   * @secure
+   * @response `201` `void` ExerciseEquipment updated successfully
+   * @response `400` `void` ExerciseEquipment validation error
+   * @response `404` `void` ExerciseEquipment not found or foreign key constraint not found
+   */
+  updateUpdate = (
+    data: ExerciseEquipmentUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
+      path: `/exercise_equipment/update`,
+      method: 'PUT',
+      query: query,
+      body: data,
+      secure: true,
+      type: ContentType.Json,
       ...params,
     });
 }

@@ -11,7 +11,6 @@
 
 import {
   PlanComponentCreateSchema,
-  PlanComponentGetSchema,
   PlanComponentUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -25,107 +24,144 @@ export class PlanComponent<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a plan_component
+   * @description Create a new PlanComponent.
    *
-   * @tags Plan Component
+   * @tags PlanComponent
    * @name CreateCreate
-   * @summary Create a plan_component
+   * @summary Create a new PlanComponent.
    * @request POST:/plan_component/create
-   * @response `201` `void` Plan created successfully
-   * @response `400` `void` Plan validation error
+   * @secure
+   * @response `204` `void` PlanComponent retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` PlanComponent foreign key constraint not found
    */
   createCreate = (
     data: PlanComponentCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
       path: `/plan_component/create`,
       method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete a plan_component
-   *
-   * @tags Plan Component
-   * @name DeleteIntPlanComponentIdDelete
-   * @summary Delete a plan_component
-   * @request DELETE:/plan_component/delete/{int:plan_component_id}
-   * @response `204` `void` Plan Component deleted successfully
-   * @response `400` `void` Plan Component ID is required to delete a plan_component
-   * @response `404` `void` Plan Component not found
-   */
-  deleteIntPlanComponentIdDelete = (
-    planComponentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/plan_component/delete/{int${planComponentId}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get a plan_component
-   *
-   * @tags Plan Component
-   * @name GetIntPlanComponentIdList
-   * @summary Get a plan_component
-   * @request GET:/plan_component/get/{int:plan_component_id}
-   * @response `200` `PlanComponentGetSchema` Plan Component retrieved successfully
-   * @response `404` `void` Plan Component not found
-   */
-  getIntPlanComponentIdList = (
-    planComponentId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<PlanComponentGetSchema, void>({
-      path: `/plan_component/get/{int${planComponentId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Get plan components from the database
-   *
-   * @tags Plan Component
-   * @name PostPlanComponent
-   * @summary Get plan components
-   * @request POST:/plan_component/get
-   * @secure
-   * @response `204` `void` Plan Component found successfully
-   * @response `400` `void` Query validation error
-   */
-  postPlanComponent = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/plan_component/get`,
-      method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Update a plan_component
+   * @description Create a new PlanComponent and all it's child components.
    *
-   * @tags Plan Component
+   * @tags PlanComponent
+   * @name CreateTreeCreate
+   * @summary Create a PlanComponent tree object.
+   * @request POST:/plan_component/create/tree
+   * @response `204` `void` PlanComponent tree created successfully
+   * @response `400` `void` PlanComponent tree validation error
+   */
+  createTreeCreate = (data: any, params: RequestParams = {}) =>
+    this.http.request<void, void>({
+      path: `/plan_component/create/tree`,
+      method: 'POST',
+      body: data,
+      type: ContentType.Json,
+      ...params,
+    });
+  /**
+   * @description Delete a PlanComponent.
+   *
+   * @tags PlanComponent
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a PlanComponent.
+   * @request DELETE:/plan_component/delete/{string:object_id}
+   * @secure
+   * @response `204` `void` PlanComponent deleted successfully
+   * @response `400` `void` PlanComponent validation error
+   * @response `404` `void` PlanComponent not found
+   */
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<void, void>({
+      path: `/plan_component/delete/{string${objectId}}`,
+      method: 'DELETE',
+      secure: true,
+      ...params,
+    });
+  /**
+   * @description Get specific PlanComponent for a user.
+   *
+   * @tags PlanComponent
+   * @name GetStringObjectIdList
+   * @summary Get a specific PlanComponent for a user.
+   * @request GET:/plan_component/get/{string:object_id}
+   * @secure
+   * @response `200` `PlanComponentCreateSchema` PlanComponent for user retrieved successfully
+   * @response `404` `void` PlanComponent not found
+   */
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<PlanComponentCreateSchema, void>({
+      path: `/plan_component/get/{string${objectId}}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get PlanComponent for a user based on query.
+   *
+   * @tags PlanComponent
+   * @name PostPlanComponent
+   * @summary Get PlanComponent for a user based on query.
+   * @request POST:/plan_component/get
+   * @secure
+   * @response `204` `(PlanComponentCreateSchema)[]` PlanComponent for user retrieved successfully
+   * @response `400` `void` Query validation error
+   */
+  postPlanComponent = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<PlanComponentCreateSchema[], void>({
+      path: `/plan_component/get`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Update a PlanComponent for a user.
+   *
+   * @tags PlanComponent
    * @name UpdateUpdate
-   * @summary Update a plan_component
+   * @summary Update a PlanComponent for a user.
    * @request PUT:/plan_component/update
-   * @response `201` `PlanComponentGetSchema` Plan Component updated successfully
-   * @response `400` `void` Plan Component validation error
-   * @response `404` `void` Plan Component not found
+   * @secure
+   * @response `201` `void` PlanComponent updated successfully
+   * @response `400` `void` PlanComponent validation error
+   * @response `404` `void` PlanComponent not found or foreign key constraint not found
    */
   updateUpdate = (
     data: PlanComponentUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
     params: RequestParams = {},
   ) =>
-    this.http.request<PlanComponentGetSchema, void>({
+    this.http.request<void, void>({
       path: `/plan_component/update`,
       method: 'PUT',
+      query: query,
       body: data,
+      secure: true,
       type: ContentType.Json,
-      format: 'json',
       ...params,
     });
 }

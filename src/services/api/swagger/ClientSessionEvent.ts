@@ -33,6 +33,7 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @secure
    * @response `204` `void` ClientSessionEvent retrieved successfully
    * @response `400` `void` Bad request
+   * @response `404` `void` ClientSessionEvent foreign key constraint not found
    */
   createCreate = (
     data: ClientSessionEventCreateSchema,
@@ -123,7 +124,7 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @secure
    * @response `201` `void` ClientSessionEvent updated successfully
    * @response `400` `void` ClientSessionEvent validation error
-   * @response `404` `void` ClientSessionEvent not found
+   * @response `404` `void` ClientSessionEvent not found or foreign key constraint not found
    */
   updateUpdate = (
     data: ClientSessionEventUpdateSchema,
