@@ -28,8 +28,8 @@ jest.mock('@services/db/sync/SyncOperations', () => ({
   processUpdatesSyncTypePush: jest.fn(),
 }));
 
-jest.mock('@services/db/sync/SyncUtils', () => ({
-  ...jest.requireActual('@services/db/sync/SyncUtils'),
+jest.mock('@services/db/sync/Functions', () => ({
+  ...jest.requireActual('@services/db/sync/Functions'),
   getLastSyncedForTable: jest.fn(),
   getQueryObjForTable: jest.fn(),
   filterRowsForInsertion: jest.fn(),

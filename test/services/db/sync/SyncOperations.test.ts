@@ -22,8 +22,8 @@ import {
 import * as SyncUtilFunctions from '@services/db/sync/Functions';
 import * as AsyncStorageFunctions from '@services/asyncStorage/Functions';
 
-jest.mock('@services/db/sync/SyncUtils', () => ({
-  ...jest.requireActual('@services/db/sync/SyncUtils'),
+jest.mock('@services/db/sync/Functions', () => ({
+  ...jest.requireActual('@services/db/sync/Functions'),
   insertSyncUpdate: jest.fn(),
   convertListToSyncUpdateSchemas: jest.fn(),
 }));
