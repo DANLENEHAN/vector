@@ -20,6 +20,9 @@ import {
 // Constants
 import {unixEpoch} from '@shared/Constants';
 
+// Logger
+import logger from '@utils/Logger';
+
 export const getLastSyncedForTable = async (
   tableName: syncDbTables,
   syncType: SyncType,
@@ -33,7 +36,7 @@ export const getLastSyncedForTable = async (
   ]);
 
   if (executionResult[0].error) {
-    console.error('Error executing SQL query:', executionResult[0]?.error);
+    logger.error('Error executing SQL query:', executionResult[0]?.error);
   }
 
   const rows: RowData[] = executionResult[0].result;
@@ -76,7 +79,7 @@ export const getRowsToSyncPush = async (
   ]);
 
   if (executionResult[0].error) {
-    console.error(
+    logger.error(
       'Error executing getRowsToSyncPush SQL query:',
       executionResult[0].error,
     );

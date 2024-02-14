@@ -57,14 +57,9 @@ export const runDbMigrationProcess = async (revisionObject: {
     ]);
 
     // Extract the revision ID from the query result
-    const revisionId: string =
-      migrationResult.length === 1
-        ? migrationResult[0].result[0].version_num
-        : null;
-
-    if (!revisionId) {
-      throw new Error('No revision ID found in the database.');
-    }
+    const revisionId: string = migrationResult[0].result
+      ? migrationResult[0].result[0].version_num
+      : null;
 
     // Get the revisions to process based on the fetched revision ID
     const revisionsToProcess = getValuesAfterSpecifiedKey(

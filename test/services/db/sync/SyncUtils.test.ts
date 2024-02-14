@@ -28,11 +28,6 @@ import {SyncCreateSchemas} from '@services/db/sync/Types';
 
 // Global Mocks
 
-jest.mock('@services/db/Utils', () => ({
-  runSqlSelect: jest.fn(),
-  executeSqlNonQuery: jest.fn(),
-}));
-
 jest.mock('@services/db/sync/Queries', () => ({
   ...jest.requireActual('@services/db/sync/Queries'),
   getRowsToSyncPushQuery: jest.fn(),

@@ -13,6 +13,9 @@ import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuidv4} from 'uuid';
 import {getUserDetails} from '@services/asyncStorage/Functions';
 
+// Logger
+import logger from '@utils/Logger';
+
 /**
  * Inserts a client session event into the database.
  *
@@ -31,7 +34,7 @@ export const insertClientSessionEvent = async (
   try {
     userId = await getUserDetails('user_id');
   } catch (error) {
-    console.info("Don't have user details yet skipping...");
+    logger.info("Don't have user details yet skipping...");
   }
   if (userId) {
     const clientSessionEvent: ClientSessionEventCreateSchema = {

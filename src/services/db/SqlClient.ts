@@ -77,12 +77,12 @@ export const executeSqlBatch = (
           });
           resolve(executionResults);
         })
-        .catch(() => {
+        .catch(error => {
           const executionResults: ExecutionResult<any>[] = queries.map(
             ({sqlStatement, params}) => {
               return {
                 originalQuery: {sqlStatement, params},
-                error: `Execution failed for SQL statement: ${sqlStatement}`,
+                error: `Execution failed with error: '${error.message}'`,
               };
             },
           );

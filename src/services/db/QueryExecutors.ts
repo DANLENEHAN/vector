@@ -1,4 +1,3 @@
-import {Transaction} from 'react-native-sqlite-storage';
 // Functions
 import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
@@ -6,8 +5,6 @@ import {executeSqlBatch} from '@services/db/SqlClient';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
-// Constants
-import {db} from '@services/db/SqlClient';
 
 export const getTimestampForRow = async (
   tableName: string,
@@ -38,37 +35,28 @@ export const getTimestampForRow = async (
   }
 };
 
-export const deleteDB = (): void => {
+export const deleteDB = async (): Promise<void> => {
   logger.info('Deleting DB tables. Hold on tight!');
-  db.transaction(async (tx: Transaction) => {
-    try {
-      const results = await executeSqlBatch([
-        {
-          sqlStatement: generateDeletionQuery,
-          params: [],
-        },
-      ]);
 
-      results.forEach(result => {
-        if (!result.error) {
-          const rows = result.result.rows;
-          for (let i = 0; i < rows.length; i++) {
-            const dropSql = Object.values(rows.item(i))[0];
-            tx.executeSql(
-              dropSql as string,
-              [],
-              () => {
-                logger.info(`Query '${dropSql}' successful`);
-              },
-              () => {},
-            );
-          }
-        } else {
-          logger.error(`Error fetching deletion queries: ${result.error}`);
-        }
-      });
-    } catch (error) {
-      logger.error('Error during deletion:', error);
+  const result = await executeSqlBatch([
+    {
+      sqlStatement: generateDeletionQuery,
+    },
+  ]);
+  if (result[0].error) {
+    logger.error(`DB deletion unsuccessful error: ${result[0].error}`);
+  } else {
+    const deleteStatements = result[0].result.map((item: Object) => {
+      return {sqlStatement: Object.values(item)[0]};
+    });
+    const deleteResults = await executeSqlBatch(deleteStatements);
+    for (const result of deleteResults) {
+      if (result.error) {
+        logger.warn(
+          `SQL '${result.originalQuery.sqlStatement} failed with error: ${result.error}`,
+        );
+      }
     }
-  });
+  }
+  logger.info('DB deletion finished');
 };
