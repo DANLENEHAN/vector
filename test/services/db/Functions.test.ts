@@ -1,55 +1,12 @@
 // Functions
 import * as DbFunctions from '@services/db/Functions';
+import * as SqlClientFuncs from '@services/db/SqlClient';
 
 // Test Objects
-import {MockAlembicRevisionObject} from './sync/Objects';
+import {sampleStat} from '../../Objects';
 
-// Mock the 'react-native-sqlite-storage' module
-jest.mock('react-native-sqlite-storage', () => {
-  // Define the executeSql mock function here, directly within the jest.mock call
-  const executeSqlMock = jest
-    .fn()
-    .mockImplementation((sql, params, success, error) => {
-      // Simulate a successful SQL execution by invoking the success callback
-      return Promise.resolve()
-        .then(() => {
-          if (success) {
-            success();
-          }
-        })
-        .catch(err => {
-          if (error) {
-            error(err);
-          }
-        });
-    });
-
-  return {
-    openDatabase: jest.fn().mockImplementation(() => ({
-      transaction: jest
-        .fn()
-        .mockImplementation((callback, errorCallback, successCallback) => {
-          callback({
-            executeSql: executeSqlMock,
-          });
-          // Simulate the end of the transaction
-          Promise.resolve()
-            .then(() => {
-              if (successCallback) {
-                successCallback();
-              }
-            })
-            .catch(err => {
-              if (errorCallback) {
-                errorCallback(err);
-              }
-            });
-        }),
-    })),
-  };
-});
-
-// Now, executeSqlMock is defined within the scope allowed by jest.mock()
+// Types
+import {syncDbTables} from '@shared/Constants';
 
 describe('DB Functions Tests', () => {
   beforeEach(() => {
@@ -57,45 +14,53 @@ describe('DB Functions Tests', () => {
     jest.clearAllMocks();
   });
 
-  test('getValuesAfterSpecifiedKey null key provided', () => {
+  test('insertRows works with array of data', async () => {
     // Arrange
+    const columns = Object.keys(sampleStat);
+    const placeholders = columns.map(_ => '?').join(', ');
+    const params = [sampleStat, sampleStat];
+    const sqlStatement = `INSERT INTO ${
+      syncDbTables.bodyStatTable
+    } (${columns.join(', ')}) VALUES (${placeholders});`;
+
+    const executeSqlBatchRes = {
+      originalQuery: {
+        sqlStatement: sqlStatement,
+        params: params,
+      },
+      result: [],
+    };
+
+    jest
+      .spyOn(SqlClientFuncs, 'executeSqlBatch')
+      .mockResolvedValueOnce([executeSqlBatchRes, executeSqlBatchRes]);
+
     // Act
-    const response = DbFunctions.getValuesAfterSpecifiedKey(
-      MockAlembicRevisionObject,
-      null,
+    const response = await DbFunctions.insertRows(
+      syncDbTables.bodyStatTable,
+      params,
     );
-    /// Assert
-    expect(response).toEqual(MockAlembicRevisionObject);
+
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: sqlStatement,
+        params: Object.values(sampleStat),
+      },
+      {
+        sqlStatement: sqlStatement,
+        params: Object.values(sampleStat),
+      },
+    ]);
+    expect(response).toEqual(undefined);
   });
 
-  test('getValuesAfterSpecifiedKey first key provided', () => {
-    // Arrange
-    const {revisionIdOne, ...rest} = MockAlembicRevisionObject;
-    revisionIdOne;
-    // Act
-    const response = DbFunctions.getValuesAfterSpecifiedKey(
-      MockAlembicRevisionObject,
-      'revisionIdOne',
-    );
-    /// Assert
-    expect(response).toEqual(rest);
+  test('insertRows should throw if given now data', async () => {
+    try {
+      await DbFunctions.insertRows(syncDbTables.bodyStatTable, []);
+      fail('Function did not throw as expected');
+    } catch (error: any) {
+      expect(error.message).toBe('No data to insert.');
+    }
   });
-
-  test('getValuesAfterSpecifiedKey no revisions to process', () => {
-    // Arrange
-    // Act
-    const response = DbFunctions.getValuesAfterSpecifiedKey(
-      MockAlembicRevisionObject,
-      'revisionIdThree',
-    );
-    /// Assert
-    expect(response).toEqual({});
-  });
-
-  //   test('runMigrations revisions to process', async () => {
-  // 	const mockFun = jest.spyOn(DbFunctions, 'getValuesAfterSpecifiedKey').mockReturnValue({});
-
-  //     const res = await DbFunctions.runMigrations(MockAlembicRevisionObject, null);
-  //     expect(mockFun).toHaveBeenCalledTimes(1);
-  //   });
 });

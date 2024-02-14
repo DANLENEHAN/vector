@@ -18,9 +18,9 @@ import {
 // Logger
 import logger from '@utils/Logger';
 // Functions
-import {runDbMigrationProcess} from '@services/db/Functions';
+import {runDbMigrationProcess} from '@services/db/alembic/Functions';
 // Constants
-import {revisionObject} from '@services/db/VectorRevisions';
+import {revisionObject} from '@services/db/alembic/VectorRevisions';
 
 /**
  * System Context
