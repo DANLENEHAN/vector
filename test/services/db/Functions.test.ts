@@ -1,5 +1,5 @@
 // Functions
-import * as DbFunctions from '@services/db/Utils';
+import * as DbFunctions from '@services/db/Functions';
 
 // Test Objects
 import {MockAlembicRevisionObject} from './sync/Objects';

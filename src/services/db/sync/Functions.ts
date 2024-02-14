@@ -11,7 +11,7 @@ import {otherDbTables, syncDbTables, timestampFields} from '@shared/Constants';
 import {RowData, SqlQuery, ExecutionResult} from '@services/db/Types';
 
 // Functions
-import {executeSqlBatch} from '@services/db/TransactionFunctions';
+import {executeSqlBatch} from '@services/db/SqlClient';
 import {
   getLastSyncedForTableQuery,
   getRowsToSyncPushQuery,

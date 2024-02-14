@@ -17,8 +17,8 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
   filterRowsForInsertion,
-} from '@services/db/sync/SyncUtils';
-import {insertRows, updateRows} from '@services/db/Utils';
+} from '@services/db/sync/Functions';
+import {insertRows, updateRows} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,

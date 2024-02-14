@@ -19,7 +19,7 @@ import {
   processUpdatesSyncTypePush,
   processCreatesSyncTypePush,
 } from '@services/db/sync/SyncOperations';
-import * as SyncUtilFunctions from '@services/db/sync/SyncUtils';
+import * as SyncUtilFunctions from '@services/db/sync/Functions';
 import * as AsyncStorageFunctions from '@services/asyncStorage/Functions';
 
 jest.mock('@services/db/sync/SyncUtils', () => ({

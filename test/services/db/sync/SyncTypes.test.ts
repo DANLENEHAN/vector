@@ -10,13 +10,13 @@ import {
 } from './Objects';
 
 // Functions
-import * as SyncUtilsFunctions from '@services/db/sync/SyncUtils';
+import * as SyncUtilsFunctions from '@services/db/sync/Functions';
 import {
   processSyncTypePush,
   processSyncTypePull,
 } from '@services/db/sync/SyncTypes';
 import * as SyncOperationFunctions from '@services/db/sync/SyncOperations';
-import * as DbFunctions from '@services/db/Utils';
+import * as DbFunctions from '@services/db/Functions';
 
 // Types
 import {syncDbTables} from '@shared/Constants';

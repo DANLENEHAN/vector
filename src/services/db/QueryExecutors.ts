@@ -2,12 +2,12 @@ import {Transaction} from 'react-native-sqlite-storage';
 // Functions
 import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
-import {executeSqlBatch} from '@services/db/TransactionFunctions';
+import {executeSqlBatch} from '@services/db/SqlClient';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
 // Constants
-import {db} from '@services/db/TransactionFunctions';
+import {db} from '@services/db/SqlClient';
 
 export const getTimestampForRow = async (
   tableName: string,

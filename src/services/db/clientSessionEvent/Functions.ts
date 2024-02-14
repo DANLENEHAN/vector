@@ -8,7 +8,7 @@ import {syncDbTables} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 // Functions
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {insertRows} from '@services/db/Utils';
+import {insertRows} from '@services/db/Functions';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuidv4} from 'uuid';
 import {getUserDetails} from '@services/asyncStorage/Functions';

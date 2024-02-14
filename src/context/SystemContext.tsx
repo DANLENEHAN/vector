@@ -18,7 +18,7 @@ import {
 // Logger
 import logger from '@utils/Logger';
 // Functions
-import {runDbMigrationProcess} from '@services/db/Utils';
+import {runDbMigrationProcess} from '@services/db/Functions';
 // Constants
 import {revisionObject} from '@services/db/VectorRevisions';
 

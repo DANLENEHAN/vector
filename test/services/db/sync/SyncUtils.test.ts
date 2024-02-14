@@ -13,12 +13,12 @@ import {
   insertSyncUpdate,
   getQueryObjForTable,
   filterRowsForInsertion,
-} from '@services/db/sync/SyncUtils';
+} from '@services/db/sync/Functions';
 
 // Types
 import {syncDbTables, otherDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
-import * as DbTransactionFunctions from '@services/db/TransactionFunctions';
+import * as DbTransactionFunctions from '@services/db/SqlClient';
 import * as SyncQueries from '@services/db/sync/Queries';
 import {timestampFields} from '@shared/Constants';
 

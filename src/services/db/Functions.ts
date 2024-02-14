@@ -4,8 +4,8 @@ import {RowData} from '@services/db/Types';
 import {timestampFields} from '@shared/Constants';
 import {SqlQuery, ExecutionResult} from '@services/db/Types';
 // Functions
-import {executeSqlBatch} from '@services/db/TransactionFunctions';
-import {getTimestampForRow} from './QueryExecutionFunctions';
+import {executeSqlBatch} from '@services/db/SqlClient';
+import {getTimestampForRow} from './QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
