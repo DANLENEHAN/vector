@@ -11,7 +11,6 @@
 
 import {
   ExerciseBodypartCreateSchema,
-  ExerciseBodypartGetSchema,
   ExerciseBodypartUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -25,106 +24,126 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Create a new exercise_bodypart.
+   * @description Create a new ExerciseBodypart.
    *
    * @tags ExerciseBodypart
    * @name CreateCreate
-   * @summary Create a new exercise_bodypart.
+   * @summary Create a new ExerciseBodypart.
    * @request POST:/exercise_bodypart/create
-   * @response `204` `void` ExerciseBodypart created successfully
-   * @response `400` `void` ExerciseBodypart validation error
+   * @secure
+   * @response `204` `void` ExerciseBodypart retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` ExerciseBodypart foreign key constraint not found
    */
   createCreate = (
     data: ExerciseBodypartCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
     params: RequestParams = {},
   ) =>
     this.http.request<void, void>({
       path: `/exercise_bodypart/create`,
       method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * @description Delete an exercise_bodypart
-   *
-   * @tags ExerciseBodypart
-   * @name DeleteIntExerciseBodypartIdDelete
-   * @summary Delete an exercise_bodypart
-   * @request DELETE:/exercise_bodypart/delete/{int:exercise_bodypart_id}
-   * @response `204` `void` ExerciseBodypart deleted successfully
-   * @response `400` `void` ExerciseBodypart ID is required to delete an exercise_bodypart
-   * @response `404` `void` ExerciseBodypart not found
-   */
-  deleteIntExerciseBodypartIdDelete = (
-    exerciseBodypartId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<void, void>({
-      path: `/exercise_bodypart/delete/{int${exerciseBodypartId}}`,
-      method: 'DELETE',
-      ...params,
-    });
-  /**
-   * @description Get an exercise_bodypart
-   *
-   * @tags ExerciseBodypart
-   * @name GetIntExerciseBodypartIdList
-   * @summary Get an exercise_bodypart
-   * @request GET:/exercise_bodypart/get/{int:exercise_bodypart_id}
-   * @response `200` `ExerciseBodypartGetSchema` ExerciseBodypart retrieved successfully
-   */
-  getIntExerciseBodypartIdList = (
-    exerciseBodypartId: number,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<ExerciseBodypartGetSchema, any>({
-      path: `/exercise_bodypart/get/{int${exerciseBodypartId}}`,
-      method: 'GET',
-      format: 'json',
-      ...params,
-    });
-  /**
-   * @description Get exercise bodyparts from the database
-   *
-   * @tags ExerciseBodypart
-   * @name PostExerciseBodypart
-   * @summary Get exercise bodypart
-   * @request POST:/exercise_bodypart/get
-   * @secure
-   * @response `204` `void` Exercise bodypart found successfully
-   * @response `400` `void` Query validation error
-   */
-  postExerciseBodypart = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
-      path: `/exercise_bodypart/get`,
-      method: 'POST',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Update an exercise_bodypart
+   * @description Delete a ExerciseBodypart.
    *
    * @tags ExerciseBodypart
-   * @name UpdateUpdate
-   * @summary Update an exercise_bodypart
-   * @request PUT:/exercise_bodypart/update
-   * @response `201` `ExerciseBodypartGetSchema` ExerciseBodypart updated successfully
+   * @name DeleteStringObjectIdDelete
+   * @summary Delete a ExerciseBodypart.
+   * @request DELETE:/exercise_bodypart/delete/{string:object_id}
+   * @secure
+   * @response `204` `void` ExerciseBodypart deleted successfully
    * @response `400` `void` ExerciseBodypart validation error
    * @response `404` `void` ExerciseBodypart not found
    */
-  updateUpdate = (
-    data: ExerciseBodypartUpdateSchema,
-    params: RequestParams = {},
-  ) =>
-    this.http.request<ExerciseBodypartGetSchema, void>({
-      path: `/exercise_bodypart/update`,
-      method: 'PUT',
+  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<void, void>({
+      path: `/exercise_bodypart/delete/{string${objectId}}`,
+      method: 'DELETE',
+      secure: true,
+      ...params,
+    });
+  /**
+   * @description Get specific ExerciseBodypart for a user.
+   *
+   * @tags ExerciseBodypart
+   * @name GetStringObjectIdList
+   * @summary Get a specific ExerciseBodypart for a user.
+   * @request GET:/exercise_bodypart/get/{string:object_id}
+   * @secure
+   * @response `200` `ExerciseBodypartCreateSchema` ExerciseBodypart for user retrieved successfully
+   * @response `404` `void` ExerciseBodypart not found
+   */
+  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+    this.http.request<ExerciseBodypartCreateSchema, void>({
+      path: `/exercise_bodypart/get/{string${objectId}}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get ExerciseBodypart for a user based on query.
+   *
+   * @tags ExerciseBodypart
+   * @name PostExerciseBodypart
+   * @summary Get ExerciseBodypart for a user based on query.
+   * @request POST:/exercise_bodypart/get
+   * @secure
+   * @response `204` `(ExerciseBodypartCreateSchema)[]` ExerciseBodypart for user retrieved successfully
+   * @response `400` `void` Query validation error
+   */
+  postExerciseBodypart = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<ExerciseBodypartCreateSchema[], void>({
+      path: `/exercise_bodypart/get`,
+      method: 'POST',
       body: data,
+      secure: true,
       type: ContentType.Json,
       format: 'json',
+      ...params,
+    });
+  /**
+   * @description Update a ExerciseBodypart for a user.
+   *
+   * @tags ExerciseBodypart
+   * @name UpdateUpdate
+   * @summary Update a ExerciseBodypart for a user.
+   * @request PUT:/exercise_bodypart/update
+   * @secure
+   * @response `201` `void` ExerciseBodypart updated successfully
+   * @response `400` `void` ExerciseBodypart validation error
+   * @response `404` `void` ExerciseBodypart not found or foreign key constraint not found
+   */
+  updateUpdate = (
+    data: ExerciseBodypartUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
+      path: `/exercise_bodypart/update`,
+      method: 'PUT',
+      query: query,
+      body: data,
+      secure: true,
+      type: ContentType.Json,
       ...params,
     });
 }

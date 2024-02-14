@@ -33,6 +33,7 @@ export class Mood<SecurityDataType = unknown> {
    * @secure
    * @response `204` `void` Mood retrieved successfully
    * @response `400` `void` Bad request
+   * @response `404` `void` Mood foreign key constraint not found
    */
   createCreate = (
     data: MoodCreateSchema,
@@ -123,7 +124,7 @@ export class Mood<SecurityDataType = unknown> {
    * @secure
    * @response `201` `void` Mood updated successfully
    * @response `400` `void` Mood validation error
-   * @response `404` `void` Mood not found
+   * @response `404` `void` Mood not found or foreign key constraint not found
    */
   updateUpdate = (
     data: MoodUpdateSchema,

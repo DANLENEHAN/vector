@@ -33,6 +33,7 @@ export class MoodTagLink<SecurityDataType = unknown> {
    * @secure
    * @response `204` `void` MoodTagLink retrieved successfully
    * @response `400` `void` Bad request
+   * @response `404` `void` MoodTagLink foreign key constraint not found
    */
   createCreate = (
     data: MoodTagLinkCreateSchema,
@@ -123,7 +124,7 @@ export class MoodTagLink<SecurityDataType = unknown> {
    * @secure
    * @response `201` `void` MoodTagLink updated successfully
    * @response `400` `void` MoodTagLink validation error
-   * @response `404` `void` MoodTagLink not found
+   * @response `404` `void` MoodTagLink not found or foreign key constraint not found
    */
   updateUpdate = (
     data: MoodTagLinkUpdateSchema,
