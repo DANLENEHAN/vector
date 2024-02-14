@@ -52,26 +52,30 @@ export const updateRows = async (
   data: RowData[],
 ): Promise<void> => {
   if (data.length === 0) {
-    logger.warn('No data to update.');
-    return;
+    throw Error('No data to insert.');
   }
 
   let replaceCount = 0;
   const schema = Object.keys(data[0]);
 
   const columns = schema.join(', ');
-  const placeholders = `(${Object.keys(schema)
+  const placeholders = `${Object.keys(schema)
     .map(() => '?')
-    .join(', ')})`;
+    .join(', ')}`;
 
-  const filteredData = data.filter(async newRowObject => {
-    const rowIdColumn = `${tableName}_id`;
-    const rowId = newRowObject[rowIdColumn];
-    const currentRowTimestamp = await getTimestampForRow(
+  const rowIdColumn = `${tableName}_id`;
+  const currentTimestamps: any = {};
+  for (const obj of data) {
+    currentTimestamps[obj[rowIdColumn]] = await getTimestampForRow(
       tableName,
       timestampFields.updatedAt,
-      rowId,
+      obj[rowIdColumn],
     );
+  }
+
+  const filteredData = data.filter(newRowObject => {
+    const rowId = newRowObject[rowIdColumn];
+    const currentRowTimestamp = currentTimestamps[rowId];
     return (
       currentRowTimestamp === null ||
       newRowObject[timestampFields.updatedAt] > currentRowTimestamp
@@ -79,7 +83,7 @@ export const updateRows = async (
   });
 
   const queries: SqlQuery[] = filteredData.map(newRowObject => ({
-    sqlStatement: `REPLACE INTO ${tableName} (${columns}) VALUES ${placeholders}`,
+    sqlStatement: `REPLACE INTO ${tableName} (${columns}) VALUES (${placeholders});`,
     params: Object.values(newRowObject),
   }));
 

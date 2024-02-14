@@ -71,7 +71,9 @@ export const processSyncTypePull = async (
         await insertRows(tableName, rowsToInsert);
       }
     } else {
-      await updateRows(tableName, rowsToSync);
+      if (rowsToSync.length > 0) {
+        await updateRows(tableName, rowsToSync);
+      }
     }
 
     // Update the synchronization log

@@ -3,12 +3,14 @@ import {generateDeletionQuery} from '@services/db/Queries';
 import {getRowByIdQuery} from './sync/Queries';
 import {executeSqlBatch} from '@services/db/SqlClient';
 import 'react-native-get-random-values';
+// Types
+import {timestampFields} from '@shared/Constants';
 // Logger
 import logger from '@utils/Logger';
 
 export const getTimestampForRow = async (
   tableName: string,
-  timestampField: string,
+  timestampField: timestampFields,
   uuid: string,
 ): Promise<string | null> => {
   try {
