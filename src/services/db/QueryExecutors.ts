@@ -13,27 +13,22 @@ export const getTimestampForRow = async (
   timestampField: timestampFields,
   uuid: string,
 ): Promise<string | null> => {
-  try {
-    const results = await executeSqlBatch([
-      {
-        sqlStatement: getRowByIdQuery(tableName, uuid),
-        params: [],
-      },
-    ]);
-
-    if (results.length > 0 && !results[0].error) {
-      const result = results[0].result;
-      if (result.rows.length > 0) {
-        const timestamp: string = result.rows.item(0)[timestampField];
-        return timestamp;
-      }
-    }
-    // If the row is not found or an error occurred, resolve with null.
+  const results = await executeSqlBatch([
+    {
+      sqlStatement: getRowByIdQuery(tableName, uuid),
+      params: [],
+    },
+  ]);
+  const executionResult = results[0];
+  if (executionResult.error) {
+    logger.error(
+      `Error retrieving timestamp for table: ${tableName} uuid: ${uuid} column: ${timestampField} error: ${executionResult.error}`,
+    );
     return null;
-  } catch (error) {
-    // If there is an issue fetching the timestamp, reject with an error.
-    logger.error('Error fetching timestamp: ', error);
-    throw error;
+  } else {
+    return executionResult.result.length === 1
+      ? executionResult.result[0][timestampField]
+      : null;
   }
 };
 

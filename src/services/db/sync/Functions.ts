@@ -207,9 +207,7 @@ export const filterRowsForInsertion = async (
     params: tableUuids,
   };
 
-  const executionResult: ExecutionResult<any>[] = await executeSqlBatch([
-    query,
-  ]);
+  const executionResult: ExecutionResult[] = await executeSqlBatch([query]);
 
   if (executionResult[0].error) {
     throw new Error(

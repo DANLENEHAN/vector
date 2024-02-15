@@ -47,6 +47,7 @@ describe('DB Functions Tests', () => {
         params: params,
       },
       result: [],
+      error: null,
     };
 
     jest
@@ -98,6 +99,7 @@ describe('DB Functions Tests', () => {
           params: params,
         },
         result: [],
+        error: null,
       },
     ]);
 
@@ -138,6 +140,7 @@ describe('DB Functions Tests', () => {
           params: params,
         },
         result: [],
+        error: null,
       },
     ]);
 

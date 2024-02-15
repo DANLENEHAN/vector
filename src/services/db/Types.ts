@@ -14,13 +14,13 @@ export interface RowData {
   [key: string]: any;
 }
 
-export interface ExecutionResult<T> {
+export interface ExecutionResult {
   /**
    * Original SQL statement and parameters associated with this execution.
    */
-  originalQuery: {sqlStatement: string; params?: any[]};
-  result?: T;
-  error?: string;
+  originalQuery: {sqlStatement: string; params?: RowData[]};
+  result: RowData[];
+  error: string | null;
 }
 
 export interface SqlQuery {

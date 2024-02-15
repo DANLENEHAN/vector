@@ -6,7 +6,7 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
 // Types
-import {dbName} from '@services/db/Types';
+import {RowData, dbName} from '@services/db/Types';
 import 'react-native-get-random-values';
 import {ExecutionResult, SqlQuery} from '@services/db/Types';
 // Logger
@@ -41,7 +41,7 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
 
 export const executeSqlBatch = (
   queries: SqlQuery[],
-): Promise<ExecutionResult<any>[]> => {
+): Promise<ExecutionResult[]> => {
   return new Promise(resolve => {
     db.transaction((tx: Transaction) => {
       const promises: Promise<ResultSet>[] = queries.map(
@@ -63,26 +63,28 @@ export const executeSqlBatch = (
 
       Promise.all(promises)
         .then(results => {
-          const executionResults: ExecutionResult<any>[] = [];
+          const executionResults: ExecutionResult[] = [];
           results.forEach((result, index) => {
             const {sqlStatement, params} = queries[index];
-            const rows: any[] = [];
+            const rows: RowData[] = [];
             for (let i = 0; i < result.rows.length; i++) {
               rows.push(result.rows.item(i));
             }
             executionResults.push({
               originalQuery: {sqlStatement, params},
               result: rows,
+              error: null,
             });
           });
           resolve(executionResults);
         })
         .catch(error => {
-          const executionResults: ExecutionResult<any>[] = queries.map(
+          const executionResults: ExecutionResult[] = queries.map(
             ({sqlStatement, params}) => {
               return {
                 originalQuery: {sqlStatement, params},
                 error: `Execution failed with error: '${error.message}'`,
+                result: [],
               };
             },
           );

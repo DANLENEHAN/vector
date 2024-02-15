@@ -63,6 +63,7 @@ describe('Sync Utils Tests', () => {
         {
           originalQuery: {sqlStatement: fakeSql},
           result: [getLastSyncedForTableQueryCreateRow],
+          error: null,
         },
       ]);
 
@@ -103,6 +104,7 @@ describe('Sync Utils Tests', () => {
         {
           originalQuery: {sqlStatement: fakeSql},
           result: [getLastSyncedForTableQueryUpdateRow],
+          error: null,
         },
       ]);
 
@@ -148,6 +150,7 @@ describe('Sync Utils Tests', () => {
             getLastSyncedForTableQueryUpdateRow,
             getLastSyncedForTableQueryCreateRow,
           ],
+          error: null,
         },
       ]);
 
@@ -191,6 +194,7 @@ describe('Sync Utils Tests', () => {
             sqlStatement: fakeSql,
           },
           result: [],
+          error: null,
         },
       ]);
 
@@ -220,7 +224,7 @@ describe('Sync Utils Tests', () => {
 
   test('getRowsToSyncPush uses correct arguements and returns correct response', async () => {
     // Arrange
-    const params = [1, 2, 3];
+    const params = [{'1': 1, '2': '2'}, {3: '3'}];
     jest
       .spyOn(SyncQueries, 'getRowsToSyncPushQuery')
       .mockReturnValueOnce(fakeSql);
@@ -232,6 +236,7 @@ describe('Sync Utils Tests', () => {
             sqlStatement: fakeSql,
           },
           result: params,
+          error: null,
         },
       ]);
 
@@ -282,6 +287,7 @@ describe('Sync Utils Tests', () => {
             sqlStatement: '',
           },
           result: [],
+          error: null,
         },
       ]);
     // Act
@@ -371,7 +377,10 @@ describe('Sync Utils Tests', () => {
       [idColumn]: bodyStatIdToExclude,
     };
     const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`;
-    const params = [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id];
+    const params = [
+      {body_stat_id: sampleStat.body_stat_id},
+      {body_stat_id: sampleStatToExclude.body_stat_id},
+    ];
 
     jest
       .spyOn(DbTransactionFunctions, 'executeSqlBatch')
@@ -382,6 +391,7 @@ describe('Sync Utils Tests', () => {
             params: params,
           },
           result: [{[idColumn]: bodyStatIdToExclude}],
+          error: null,
         },
       ]);
 
@@ -394,7 +404,10 @@ describe('Sync Utils Tests', () => {
     // Assert
     expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
     expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
-      {sqlStatement: sqlStatement, params: params},
+      {
+        sqlStatement: sqlStatement,
+        params: [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
+      },
     ]);
     expect(response).toEqual([sampleStat]);
   });
@@ -408,7 +421,10 @@ describe('Sync Utils Tests', () => {
       [idColumn]: bodyStatIdToExclude,
     };
     const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`;
-    const params = [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id];
+    const params = [
+      {body_stat_id: sampleStat.body_stat_id},
+      {body_stat_id: sampleStatToExclude.body_stat_id},
+    ];
 
     jest
       .spyOn(DbTransactionFunctions, 'executeSqlBatch')
@@ -422,6 +438,7 @@ describe('Sync Utils Tests', () => {
             {[idColumn]: bodyStatIdToExclude},
             {[idColumn]: sampleStat.body_stat_id},
           ],
+          error: null,
         },
       ]);
 
@@ -436,7 +453,7 @@ describe('Sync Utils Tests', () => {
     expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement: sqlStatement,
-        params: params,
+        params: [sampleStat.body_stat_id, bodyStatIdToExclude],
       },
     ]);
 
@@ -447,7 +464,7 @@ describe('Sync Utils Tests', () => {
     // Arrange
     const idColumn: string = 'body_stat_id';
     const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?)`;
-    const params = [sampleStat.body_stat_id];
+    const params = [{body_stat_id: sampleStat.body_stat_id}];
 
     jest
       .spyOn(DbTransactionFunctions, 'executeSqlBatch')
@@ -458,6 +475,7 @@ describe('Sync Utils Tests', () => {
             params: params,
           },
           result: [],
+          error: null,
         },
       ]);
 
@@ -471,7 +489,7 @@ describe('Sync Utils Tests', () => {
     expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement: sqlStatement,
-        params: params,
+        params: [sampleStat.body_stat_id],
       },
     ]);
 
