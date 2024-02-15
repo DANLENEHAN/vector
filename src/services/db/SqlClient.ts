@@ -43,18 +43,39 @@ export const executeSqlBatch = (
   queries: SqlQuery[],
 ): Promise<ExecutionResult[]> => {
   return new Promise(resolve => {
+    const executionResults: ExecutionResult[] = [];
     db.transaction((tx: Transaction) => {
-      const promises: Promise<ResultSet>[] = queries.map(
-        ({sqlStatement, params = []}) => {
-          return new Promise<ResultSet>((queryResolve, queryReject) => {
+      const promises: Promise<void>[] = queries.map(
+        ({sqlStatement, params = []}, index) => {
+          return new Promise<void>((queryResolve, queryReject) => {
             tx.executeSql(
               sqlStatement,
               params,
               (_, result: ResultSet) => {
-                queryResolve(result);
+                const rows: RowData[] = [];
+                for (let i = 0; i < result.rows.length; i++) {
+                  rows.push(result.rows.item(i));
+                }
+                executionResults[index] = {
+                  originalQuery: {
+                    sqlStatement: sqlStatement,
+                    params: params.length > 0 ? params : undefined,
+                  },
+                  result: rows,
+                  error: null,
+                };
+                queryResolve();
               },
-              (error: Transaction) => {
-                queryReject(error);
+              (error: any) => {
+                executionResults[index] = {
+                  originalQuery: {
+                    sqlStatement: sqlStatement,
+                    params: params.length > 0 ? params : undefined,
+                  },
+                  error: `Execution failed with error: '${error.message}'`,
+                  result: [],
+                };
+                queryReject();
               },
             );
           });
@@ -62,32 +83,10 @@ export const executeSqlBatch = (
       );
 
       Promise.all(promises)
-        .then(results => {
-          const executionResults: ExecutionResult[] = [];
-          results.forEach((result, index) => {
-            const {sqlStatement, params} = queries[index];
-            const rows: RowData[] = [];
-            for (let i = 0; i < result.rows.length; i++) {
-              rows.push(result.rows.item(i));
-            }
-            executionResults.push({
-              originalQuery: {sqlStatement, params},
-              result: rows,
-              error: null,
-            });
-          });
+        .then(() => {
           resolve(executionResults);
         })
-        .catch(error => {
-          const executionResults: ExecutionResult[] = queries.map(
-            ({sqlStatement, params}) => {
-              return {
-                originalQuery: {sqlStatement, params},
-                error: `Execution failed with error: '${error.message}'`,
-                result: [],
-              };
-            },
-          );
+        .catch(() => {
           resolve(executionResults);
         });
     });

@@ -16,7 +16,6 @@ export const getTimestampForRow = async (
   const results = await executeSqlBatch([
     {
       sqlStatement: getRowByIdQuery(tableName, uuid),
-      params: [],
     },
   ]);
   const executionResult = results[0];

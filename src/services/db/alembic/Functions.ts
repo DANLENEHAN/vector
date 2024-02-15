@@ -15,7 +15,6 @@ export const runDbMigrationProcess = async (revisionObject: {
     const migrationResult: ExecutionResult[] = await executeSqlBatch([
       {
         sqlStatement: `SELECT version_num FROM ${alembicTable};`,
-        params: [],
       },
     ]);
 
@@ -42,7 +41,6 @@ export const runDbMigrationProcess = async (revisionObject: {
       sqlCommands.forEach(sqlCommand => {
         migrationQueries.push({
           sqlStatement: sqlCommand,
-          params: [],
         });
       });
     }
