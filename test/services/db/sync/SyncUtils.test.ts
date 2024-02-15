@@ -13,11 +13,12 @@ import {
   insertSyncUpdate,
   getQueryObjForTable,
   filterRowsForInsertion,
-} from '@services/db/sync/SyncUtils';
+} from '@services/db/sync/Functions';
+
 // Types
 import {syncDbTables, otherDbTables} from '@shared/Constants';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbTransactionFunctions from '@services/db/SqlClient';
 import * as SyncQueries from '@services/db/sync/Queries';
 import {timestampFields} from '@shared/Constants';
 
@@ -27,14 +28,10 @@ import {SyncCreateSchemas} from '@services/db/sync/Types';
 
 // Global Mocks
 
-jest.mock('@services/db/Functions', () => ({
-  runSqlSelect: jest.fn(),
-  executeSqlNonQuery: jest.fn(),
-}));
-
 jest.mock('@services/db/sync/Queries', () => ({
   ...jest.requireActual('@services/db/sync/Queries'),
   getRowsToSyncPushQuery: jest.fn(),
+  getLastSyncedForTableQuery: jest.fn(),
 }));
 
 const getLastSyncedForTableQueryCreateRow = {
@@ -46,6 +43,8 @@ const getLastSyncedForTableQueryUpdateRow = {
   sync_operation: SyncOperation.Updates,
 };
 
+const fakeSql = 'fakeSql';
+
 describe('Sync Utils Tests', () => {
   beforeEach(() => {
     // Clears 'toHaveBeenCalledTimes' cache
@@ -55,8 +54,18 @@ describe('Sync Utils Tests', () => {
   test('getLastSyncedForTable creates only previously synced', async () => {
     // Arrange
     jest
-      .spyOn(DbFunctions, 'runSqlSelect')
-      .mockResolvedValueOnce([getLastSyncedForTableQueryCreateRow]);
+      .spyOn(SyncQueries, 'getLastSyncedForTableQuery')
+      .mockReturnValueOnce(fakeSql);
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {sqlStatement: fakeSql},
+          result: [getLastSyncedForTableQueryCreateRow],
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await getLastSyncedForTable(
@@ -65,6 +74,17 @@ describe('Sync Utils Tests', () => {
     );
 
     // Assert
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledTimes(1);
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {sqlStatement: fakeSql},
+    ]);
+
     expect(response).toEqual({
       [timestampFields.createdAt]:
         getLastSyncedForTableQueryCreateRow.last_synced,
@@ -75,8 +95,18 @@ describe('Sync Utils Tests', () => {
   test('getLastSyncedForTable updates only previously synced', async () => {
     // Arrange
     jest
-      .spyOn(DbFunctions, 'runSqlSelect')
-      .mockResolvedValueOnce([getLastSyncedForTableQueryUpdateRow]);
+      .spyOn(SyncQueries, 'getLastSyncedForTableQuery')
+      .mockReturnValueOnce(fakeSql);
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {sqlStatement: fakeSql},
+          result: [getLastSyncedForTableQueryUpdateRow],
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await getLastSyncedForTable(
@@ -85,6 +115,17 @@ describe('Sync Utils Tests', () => {
     );
 
     // Assert
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledTimes(1);
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {sqlStatement: fakeSql},
+    ]);
+
     expect(response).toEqual({
       [timestampFields.updatedAt]:
         getLastSyncedForTableQueryUpdateRow.last_synced,
@@ -95,10 +136,22 @@ describe('Sync Utils Tests', () => {
   test('getLastSyncedForTable updates and creates previously synced', async () => {
     // Arrange
     jest
-      .spyOn(DbFunctions, 'runSqlSelect')
+      .spyOn(SyncQueries, 'getLastSyncedForTableQuery')
+      .mockReturnValueOnce(fakeSql);
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
       .mockResolvedValueOnce([
-        getLastSyncedForTableQueryUpdateRow,
-        getLastSyncedForTableQueryCreateRow,
+        {
+          originalQuery: {
+            sqlStatement: fakeSql,
+          },
+          result: [
+            getLastSyncedForTableQueryUpdateRow,
+            getLastSyncedForTableQueryCreateRow,
+          ],
+          error: null,
+        },
       ]);
 
     // Act
@@ -108,6 +161,17 @@ describe('Sync Utils Tests', () => {
     );
 
     // Assert
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledTimes(1);
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {sqlStatement: fakeSql},
+    ]);
+
     expect(response).toEqual({
       [timestampFields.updatedAt]:
         getLastSyncedForTableQueryUpdateRow.last_synced,
@@ -118,7 +182,21 @@ describe('Sync Utils Tests', () => {
 
   test('getLastSyncedForTable neither updates or creates previously synced', async () => {
     // Arrange
-    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([]);
+    jest
+      .spyOn(SyncQueries, 'getLastSyncedForTableQuery')
+      .mockReturnValueOnce(fakeSql);
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: fakeSql,
+          },
+          result: [],
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await getLastSyncedForTable(
@@ -127,6 +205,17 @@ describe('Sync Utils Tests', () => {
     );
 
     // Assert
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledTimes(1);
+    expect(SyncQueries.getLastSyncedForTableQuery).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      SyncType.Push,
+    );
+
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {sqlStatement: fakeSql},
+    ]);
+
     expect(response).toEqual({
       [timestampFields.updatedAt]: unixEpoch,
       [timestampFields.createdAt]: unixEpoch,
@@ -135,10 +224,21 @@ describe('Sync Utils Tests', () => {
 
   test('getRowsToSyncPush uses correct arguements and returns correct response', async () => {
     // Arrange
-    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([1, 2, 3]);
+    const params = [{'1': 1, '2': '2'}, {3: '3'}];
     jest
       .spyOn(SyncQueries, 'getRowsToSyncPushQuery')
-      .mockReturnValueOnce('fakeSQL');
+      .mockReturnValueOnce(fakeSql);
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: fakeSql,
+          },
+          result: params,
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await getRowsToSyncPush(
@@ -159,15 +259,37 @@ describe('Sync Utils Tests', () => {
       sampleSyncStartTimestamp,
     );
 
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith('fakeSQL', []);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: fakeSql,
+      },
+    ]);
 
-    expect(response).toEqual([1, 2, 3]);
+    expect(response).toEqual(params);
   });
 
   test('insertSyncUpdate calls correct query', async () => {
     // Arrange
-    jest.spyOn(DbFunctions, 'executeSqlNonQuery').mockResolvedValueOnce(1);
+    const sqlStatement = `INSERT OR REPLACE INTO ${otherDbTables.syncTable} ('table_name', 'last_synced', 'sync_type', 'sync_operation') VALUES (?, ?, ?, ?);`;
+    const params = [
+      syncDbTables.bodyStatTable,
+      sampleCreatedAtTimestamp,
+      SyncType.Push,
+      SyncOperation.Creates,
+    ];
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: '',
+          },
+          result: [],
+          error: null,
+        },
+      ]);
     // Act
     const response = await insertSyncUpdate({
       table_name: syncDbTables.bodyStatTable,
@@ -176,16 +298,13 @@ describe('Sync Utils Tests', () => {
       sync_operation: SyncOperation.Creates,
     });
     // Assert
-    expect(DbFunctions.executeSqlNonQuery).toHaveBeenCalledTimes(1);
-    expect(DbFunctions.executeSqlNonQuery).toHaveBeenCalledWith(
-      `INSERT OR REPLACE INTO ${otherDbTables.syncTable} ('table_name', 'last_synced', 'sync_type', 'sync_operation') VALUES (?, ?, ?, ?);`,
-      [
-        syncDbTables.bodyStatTable,
-        sampleCreatedAtTimestamp,
-        SyncType.Push,
-        SyncOperation.Creates,
-      ],
-    );
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: sqlStatement,
+        params: params,
+      },
+    ]);
     expect(response).toEqual(undefined);
   });
 
@@ -257,9 +376,24 @@ describe('Sync Utils Tests', () => {
       ...sampleStat,
       [idColumn]: bodyStatIdToExclude,
     };
+    const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`;
+    const params = [
+      {body_stat_id: sampleStat.body_stat_id},
+      {body_stat_id: sampleStatToExclude.body_stat_id},
+    ];
+
     jest
-      .spyOn(DbFunctions, 'runSqlSelect')
-      .mockResolvedValueOnce([{[idColumn]: bodyStatIdToExclude}]);
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: sqlStatement,
+            params: params,
+          },
+          result: [{[idColumn]: bodyStatIdToExclude}],
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await filterRowsForInsertion(syncDbTables.bodyStatTable, [
@@ -268,11 +402,13 @@ describe('Sync Utils Tests', () => {
     ]);
 
     // Assert
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`,
-      [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
-    );
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: sqlStatement,
+        params: [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
+      },
+    ]);
     expect(response).toEqual([sampleStat]);
   });
 
@@ -284,11 +420,26 @@ describe('Sync Utils Tests', () => {
       ...sampleStat,
       [idColumn]: bodyStatIdToExclude,
     };
+    const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`;
+    const params = [
+      {body_stat_id: sampleStat.body_stat_id},
+      {body_stat_id: sampleStatToExclude.body_stat_id},
+    ];
+
     jest
-      .spyOn(DbFunctions, 'runSqlSelect')
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
       .mockResolvedValueOnce([
-        {[idColumn]: bodyStatIdToExclude},
-        {[idColumn]: sampleStat.body_stat_id},
+        {
+          originalQuery: {
+            sqlStatement: sqlStatement,
+            params: params,
+          },
+          result: [
+            {[idColumn]: bodyStatIdToExclude},
+            {[idColumn]: sampleStat.body_stat_id},
+          ],
+          error: null,
+        },
       ]);
 
     // Act
@@ -298,18 +449,35 @@ describe('Sync Utils Tests', () => {
     ]);
 
     // Assert
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?, ?)`,
-      [sampleStat.body_stat_id, sampleStatToExclude.body_stat_id],
-    );
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: sqlStatement,
+        params: [sampleStat.body_stat_id, bodyStatIdToExclude],
+      },
+    ]);
+
     expect(response).toEqual([]);
   });
 
   test(`filterRowsForInsertion correctly no existing rows to filter`, async () => {
     // Arrange
     const idColumn: string = 'body_stat_id';
-    jest.spyOn(DbFunctions, 'runSqlSelect').mockResolvedValueOnce([]);
+    const sqlStatement = `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?)`;
+    const params = [{body_stat_id: sampleStat.body_stat_id}];
+
+    jest
+      .spyOn(DbTransactionFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: sqlStatement,
+            params: params,
+          },
+          result: [],
+          error: null,
+        },
+      ]);
 
     // Act
     const response = await filterRowsForInsertion(syncDbTables.bodyStatTable, [
@@ -317,11 +485,14 @@ describe('Sync Utils Tests', () => {
     ]);
 
     // Assert
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledTimes(1);
-    expect(DbFunctions.runSqlSelect).toHaveBeenCalledWith(
-      `SELECT ${idColumn} FROM ${syncDbTables.bodyStatTable} WHERE ${idColumn} IN (?)`,
-      [sampleStat.body_stat_id],
-    );
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(DbTransactionFunctions.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement: sqlStatement,
+        params: [sampleStat.body_stat_id],
+      },
+    ]);
+
     expect(response).toEqual([sampleStat]);
   });
 });

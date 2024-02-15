@@ -66,7 +66,7 @@ export const getRowByIdQuery = (
   tableName: string,
   uuid: string,
   idColumn?: string,
-) => {
+): string => {
   if (idColumn === undefined) {
     idColumn = `${tableName}_id`;
   }

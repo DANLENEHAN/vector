@@ -25,3 +25,9 @@ export const TableFunctionsMock = {
   [SyncOperation.Creates]: createCreateSpy,
   [SyncType.Pull]: postBodyStatSpy,
 };
+
+export const MockAlembicRevisionObject: {[key: string]: string[]} = {
+  revisionIdOne: ['FakeSqlOne', 'FakseSqlTwo'],
+  revisionIdTwo: ['FakeSqlThree', 'FakseSqlFour'],
+  revisionIdThree: ['FakeSqlFour', 'FakseSqlFive'],
+};

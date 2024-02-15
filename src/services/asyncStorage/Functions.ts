@@ -85,14 +85,14 @@ export const storeFailedSyncPushErrors = async <
       {};
 
     for (const syncError of failedSyncPushErrors) {
-      const rowUuid = syncError[`${tableName}_id`];
+      const rowUuid = (syncError as any)[`${tableName}_id`];
 
       if (rowUuid in tableSyncPushErrors) {
         if (tableSyncPushErrors[rowUuid].retries >= maxSyncPushRetry) {
           const row: T = tableSyncPushErrors[rowUuid].data;
           await SyncErrorDumpApi.createCreate({
             table_name: tableName,
-            row_id: row[`${tableName}_id`],
+            row_id: (row as any)[`${tableName}_id`],
             data: row,
             created_at: 'created_at' in row ? row.created_at : null,
             updated_at: 'updated_at' in row ? row.updated_at : null,

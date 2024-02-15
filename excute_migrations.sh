@@ -5,8 +5,8 @@ set -e
 GRAU_PATH="../grau"
 API_DOCS_PATH="$GRAU_PATH/docs/swagger.json"
 API_OUTPUT_PATH="./src/services/api/swagger"
-MIGRATIONS_PATH="./src/services/db"
-VECTOR_REVISIONS_FILE="./src/services/db/VectorRevisions.ts"
+MIGRATIONS_PATH="./src/services/db/alembic"
+VECTOR_REVISIONS_FILE="./src/services/db/alembic/VectorRevisions.ts"
 ALEMBIC_PATH="$GRAU_PATH/alembic/versions/frontend"
 
 # Check commands existence

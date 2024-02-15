@@ -12,7 +12,7 @@ import {syncDbTables, timestampFields} from '@shared/Constants';
 import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
-} from '@services/db/sync/SyncUtils';
+} from '@services/db/sync/Functions';
 import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
 import {
   getFailedSyncPushesCreatesForTable,

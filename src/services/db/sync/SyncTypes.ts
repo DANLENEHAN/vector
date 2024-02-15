@@ -17,7 +17,7 @@ import {
   getQueryObjForTable,
   insertSyncUpdate,
   filterRowsForInsertion,
-} from '@services/db/sync/SyncUtils';
+} from '@services/db/sync/Functions';
 import {insertRows, updateRows} from '@services/db/Functions';
 import {
   processCreatesSyncTypePush,
@@ -71,7 +71,9 @@ export const processSyncTypePull = async (
         await insertRows(tableName, rowsToInsert);
       }
     } else {
-      await updateRows(tableName, rowsToSync);
+      if (rowsToSync.length > 0) {
+        await updateRows(tableName, rowsToSync);
+      }
     }
 
     // Update the synchronization log
@@ -120,7 +122,7 @@ export const processSyncTypePush = async (
   syncStart: string,
 ): Promise<void> => {
   try {
-    const lastSynced: LastSyncedTimestamps | null = await getLastSyncedForTable(
+    const lastSynced: LastSyncedTimestamps = await getLastSyncedForTable(
       tableName,
       SyncType.Push,
     );

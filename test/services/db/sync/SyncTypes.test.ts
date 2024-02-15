@@ -10,7 +10,7 @@ import {
 } from './Objects';
 
 // Functions
-import * as SyncUtilsFunctions from '@services/db/sync/SyncUtils';
+import * as SyncUtilsFunctions from '@services/db/sync/Functions';
 import {
   processSyncTypePush,
   processSyncTypePull,
@@ -28,8 +28,8 @@ jest.mock('@services/db/sync/SyncOperations', () => ({
   processUpdatesSyncTypePush: jest.fn(),
 }));
 
-jest.mock('@services/db/sync/SyncUtils', () => ({
-  ...jest.requireActual('@services/db/sync/SyncUtils'),
+jest.mock('@services/db/sync/Functions', () => ({
+  ...jest.requireActual('@services/db/sync/Functions'),
   getLastSyncedForTable: jest.fn(),
   getQueryObjForTable: jest.fn(),
   filterRowsForInsertion: jest.fn(),

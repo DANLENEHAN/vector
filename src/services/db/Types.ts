@@ -13,3 +13,20 @@ export const alembicTable: string = 'alembic_version';
 export interface RowData {
   [key: string]: any;
 }
+
+export interface ExecutionResult {
+  /**
+   * Original SQL statement and parameters associated with this execution.
+   */
+  originalQuery: {sqlStatement: string; params?: RowData[]};
+  result: RowData[];
+  error: string | null;
+}
+
+export interface SqlQuery {
+  /**
+   * SQL statement to be executed.
+   */
+  sqlStatement: string;
+  params?: any[];
+}
