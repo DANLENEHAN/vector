@@ -19,32 +19,24 @@ export const insertRows = async (
 
   const schema = Object.keys(data[0]);
   const columns = schema.join(', ');
+  const results = await executeSqlBatch(
+    data.map(row => ({
+      sqlStatement: `INSERT INTO ${tableName} (${columns}) VALUES (${schema
+        .map(() => '?')
+        .join(', ')});`,
+      params: Object.values(row),
+    })),
+  );
 
-  try {
-    const results = await executeSqlBatch(
-      data.map(row => ({
-        sqlStatement: `INSERT INTO ${tableName} (${columns}) VALUES (${schema
-          .map(() => '?')
-          .join(', ')});`,
-        params: Object.values(row),
-      })),
-    );
-
-    results.forEach((result, index) => {
-      if (result.error) {
-        logger.error(
-          `Error during insertion of row ${index + 1}: ${result.error}`,
-        );
-      } else {
-        logger.info(
-          `Successfully inserted row ${index + 1} in '${tableName}'.`,
-        );
-      }
-    });
-  } catch (error) {
-    logger.error('Error during insertion:', error);
-    throw error;
-  }
+  results.forEach((result, index) => {
+    if (result.error) {
+      logger.error(
+        `Error during insertion of row ${index + 1}: ${result.error}`,
+      );
+    } else {
+      logger.info(`Successfully inserted row ${index + 1} in '${tableName}'.`);
+    }
+  });
 };
 
 export const updateRows = async (
@@ -88,7 +80,7 @@ export const updateRows = async (
       params: Object.values(newRowObject),
     }));
 
-    const results: ExecutionResult<any>[] = await executeSqlBatch(queries);
+    const results: ExecutionResult[] = await executeSqlBatch(queries);
 
     results.forEach(result => {
       if (result.error) {
