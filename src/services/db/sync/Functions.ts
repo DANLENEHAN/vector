@@ -23,6 +23,14 @@ import {unixEpoch} from '@shared/Constants';
 // Logger
 import logger from '@utils/Logger';
 
+/**
+ * Retrieves the last synced timestamps for a specified table and sync type.
+ *
+ * @param {string} tableName - The name of the table to retrieve last synced timestamps for.
+ * @param {SyncType} syncType - The type of synchronization (Creates or Updates).
+ * @returns {Promise<LastSyncedTimestamps>} A promise that resolves to an object containing the last synced timestamps for the specified table.
+ * @throws {Error} Throws an error if there's a problem executing the SQL query.
+ */
 export const getLastSyncedForTable = async (
   tableName: syncDbTables,
   syncType: SyncType,
@@ -55,6 +63,17 @@ export const getLastSyncedForTable = async (
   };
 };
 
+/**
+ * Retrieves rows to synchronize for pushing changes to the server.
+ *
+ * @param {string} tableName - The name of the table to retrieve rows for synchronization.
+ * @param {SyncOperation} syncOperation - The type of synchronization operation (Creates or Updates).
+ * @param {string} lastSyncedCreates - The timestamp of the last synchronization for create operations.
+ * @param {string} lastSyncedUpdates - The timestamp of the last synchronization for update operations.
+ * @param {string} syncStart - The timestamp indicating the start of the synchronization period.
+ * @returns {Promise<SyncCreateSchemas[]>} A promise that resolves to an array of schemas representing rows to sync push.
+ * @throws {Error} Throws an error if there's a problem executing the SQL query.
+ */
 export const getRowsToSyncPush = async (
   tableName: syncDbTables,
   syncOperation: SyncOperation,
@@ -84,6 +103,13 @@ export const getRowsToSyncPush = async (
   return executionResult[0].result;
 };
 
+/**
+ * Inserts or replaces a sync update record into the synchronization table.
+ *
+ * @param {SyncTable} syncUpdate - The sync update object to insert or replace.
+ * @returns {Promise<void>} A promise that resolves when the insertion or replacement is completed.
+ * @throws {Error} Throws an error if there's a problem executing the SQL query.
+ */
 export const insertSyncUpdate = async (
   syncUpdate: SyncTable,
 ): Promise<void> => {
@@ -181,6 +207,14 @@ export const getQueryObjForTable = (
   } as QuerySchema;
 };
 
+/**
+ * Filters rows to synchronize for insertion into the database, removing duplicates.
+ *
+ * @param {string} tableName - The name of the table to filter rows for insertion.
+ * @param {SyncCreateSchemas[]} rowsToSync - An array of schemas representing rows to synchronize.
+ * @returns {Promise<SyncCreateSchemas[]>} A promise that resolves to an array of filtered rows ready for insertion.
+ * @throws {Error} Throws an error if there's a problem executing the SQL query or filtering the rows.
+ */
 export const filterRowsForInsertion = async (
   tableName: string,
   rowsToSync: SyncCreateSchemas[],

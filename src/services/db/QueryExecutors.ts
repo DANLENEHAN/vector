@@ -8,6 +8,15 @@ import {timestampFields} from '@shared/Constants';
 // Logger
 import logger from '@utils/Logger';
 
+/**
+ * Retrieves the timestamp value associated with a specific row in the specified table.
+ *
+ * @param {string} tableName - The name of the table where the row is located.
+ * @param {timestampFields} timestampField - The name of the field containing the timestamp value.
+ * @param {string} uuid - The unique identifier of the row.
+ * @returns {Promise<string | null>} A promise resolving to the timestamp value if the row is found, otherwise null.
+ * @throws {Error} Throws an error if there's a problem executing the SQL query.
+ */
 export const getTimestampForRow = async (
   tableName: string,
   timestampField: timestampFields,
@@ -31,6 +40,12 @@ export const getTimestampForRow = async (
   }
 };
 
+/**
+ * Deletes all tables in the SQLite database.
+ *
+ * @returns {Promise<void>} A promise that resolves when the deletion process is complete.
+ * @throws {Error} Throws an error if there's a problem executing the deletion SQL queries.
+ */
 export const deleteDB = async (): Promise<void> => {
   logger.info('Deleting DB tables. Hold on tight!');
 

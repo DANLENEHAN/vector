@@ -7,6 +7,13 @@ import {getValuesAfterSpecifiedKey} from '@shared/Functions';
 // Logger
 import logger from '@utils/Logger';
 
+/**
+ * Runs the database migration process based on the provided revision object.
+ *
+ * @param {Object} revisionObject - An object containing revision IDs as keys and an array of SQL commands as values.
+ * @returns {Promise<void>} A promise that resolves when the migration process is complete.
+ * @throws {Error} Throws an error if there's a problem executing the migration queries or handling the migration process.
+ */
 export const runDbMigrationProcess = async (revisionObject: {
   [key: string]: string[];
 }): Promise<void> => {

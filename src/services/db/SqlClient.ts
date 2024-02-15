@@ -39,6 +39,13 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
   },
 );
 
+/**
+ * Executes a batch of SQL queries in a transaction.
+ *
+ * @param {SqlQuery[]} queries - An array of SQL queries to execute.
+ * @returns {Promise<ExecutionResult[]>} A promise that resolves to an array of execution results for each query.
+ * @throws {Error} Throws an error if there's a problem executing the SQL queries.
+ */
 export const executeSqlBatch = (
   queries: SqlQuery[],
 ): Promise<ExecutionResult[]> => {
