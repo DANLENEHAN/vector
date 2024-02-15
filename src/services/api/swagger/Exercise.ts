@@ -59,17 +59,20 @@ export class Exercise<SecurityDataType = unknown> {
    * @description Delete a Exercise.
    *
    * @tags Exercise
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringExerciseIdDelete
    * @summary Delete a Exercise.
-   * @request DELETE:/exercise/delete/{string:object_id}
+   * @request DELETE:/exercise/delete/{string:exercise_id}
    * @secure
    * @response `204` `void` Exercise deleted successfully
    * @response `400` `void` Exercise validation error
    * @response `404` `void` Exercise not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringExerciseIdDelete = (
+    exerciseId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/exercise/delete/{string${objectId}}`,
+      path: `/exercise/delete/{string${exerciseId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,16 @@ export class Exercise<SecurityDataType = unknown> {
    * @description Get specific Exercise for a user.
    *
    * @tags Exercise
-   * @name GetStringObjectIdList
+   * @name GetStringExerciseIdList
    * @summary Get a specific Exercise for a user.
-   * @request GET:/exercise/get/{string:object_id}
+   * @request GET:/exercise/get/{string:exercise_id}
    * @secure
    * @response `200` `ExerciseCreateSchema` Exercise for user retrieved successfully
    * @response `404` `void` Exercise not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringExerciseIdList = (exerciseId: string, params: RequestParams = {}) =>
     this.http.request<ExerciseCreateSchema, void>({
-      path: `/exercise/get/{string${objectId}}`,
+      path: `/exercise/get/{string${exerciseId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

@@ -1,6 +1,9 @@
 import {sqlCommands_20240214094534100620_b5cb75bf8cc0} from './revisions/20240214094534100620_b5cb75bf8cc0';
+import {sqlCommands_20240214170139396741_7f3f0991d2fd} from './revisions/20240214170139396741_7f3f0991d2fd';
 
 export const revisionObject: {[key: string]: string[]} = {
   '20240214094534100620_b5cb75bf8cc0':
     sqlCommands_20240214094534100620_b5cb75bf8cc0,
+  '20240214170139396741_7f3f0991d2fd':
+    sqlCommands_20240214170139396741_7f3f0991d2fd,
 };

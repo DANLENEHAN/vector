@@ -59,17 +59,20 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Delete a ExerciseBodypart.
    *
    * @tags ExerciseBodypart
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringExerciseBodypartIdDelete
    * @summary Delete a ExerciseBodypart.
-   * @request DELETE:/exercise_bodypart/delete/{string:object_id}
+   * @request DELETE:/exercise_bodypart/delete/{string:exercise_bodypart_id}
    * @secure
    * @response `204` `void` ExerciseBodypart deleted successfully
    * @response `400` `void` ExerciseBodypart validation error
    * @response `404` `void` ExerciseBodypart not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringExerciseBodypartIdDelete = (
+    exerciseBodypartId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/exercise_bodypart/delete/{string${objectId}}`,
+      path: `/exercise_bodypart/delete/{string${exerciseBodypartId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Get specific ExerciseBodypart for a user.
    *
    * @tags ExerciseBodypart
-   * @name GetStringObjectIdList
+   * @name GetStringExerciseBodypartIdList
    * @summary Get a specific ExerciseBodypart for a user.
-   * @request GET:/exercise_bodypart/get/{string:object_id}
+   * @request GET:/exercise_bodypart/get/{string:exercise_bodypart_id}
    * @secure
    * @response `200` `ExerciseBodypartCreateSchema` ExerciseBodypart for user retrieved successfully
    * @response `404` `void` ExerciseBodypart not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringExerciseBodypartIdList = (
+    exerciseBodypartId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<ExerciseBodypartCreateSchema, void>({
-      path: `/exercise_bodypart/get/{string${objectId}}`,
+      path: `/exercise_bodypart/get/{string${exerciseBodypartId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

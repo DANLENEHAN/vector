@@ -77,17 +77,20 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Delete a PlanComponent.
    *
    * @tags PlanComponent
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringPlanComponentIdDelete
    * @summary Delete a PlanComponent.
-   * @request DELETE:/plan_component/delete/{string:object_id}
+   * @request DELETE:/plan_component/delete/{string:plan_component_id}
    * @secure
    * @response `204` `void` PlanComponent deleted successfully
    * @response `400` `void` PlanComponent validation error
    * @response `404` `void` PlanComponent not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringPlanComponentIdDelete = (
+    planComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/plan_component/delete/{string${objectId}}`,
+      path: `/plan_component/delete/{string${planComponentId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -96,16 +99,19 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Get specific PlanComponent for a user.
    *
    * @tags PlanComponent
-   * @name GetStringObjectIdList
+   * @name GetStringPlanComponentIdList
    * @summary Get a specific PlanComponent for a user.
-   * @request GET:/plan_component/get/{string:object_id}
+   * @request GET:/plan_component/get/{string:plan_component_id}
    * @secure
    * @response `200` `PlanComponentCreateSchema` PlanComponent for user retrieved successfully
    * @response `404` `void` PlanComponent not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringPlanComponentIdList = (
+    planComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<PlanComponentCreateSchema, void>({
-      path: `/plan_component/get/{string${objectId}}`,
+      path: `/plan_component/get/{string${planComponentId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

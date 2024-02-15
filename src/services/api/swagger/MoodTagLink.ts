@@ -59,17 +59,20 @@ export class MoodTagLink<SecurityDataType = unknown> {
    * @description Delete a MoodTagLink.
    *
    * @tags MoodTagLink
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringMoodTagLinkIdDelete
    * @summary Delete a MoodTagLink.
-   * @request DELETE:/mood_tag_link/delete/{string:object_id}
+   * @request DELETE:/mood_tag_link/delete/{string:mood_tag_link_id}
    * @secure
    * @response `204` `void` MoodTagLink deleted successfully
    * @response `400` `void` MoodTagLink validation error
    * @response `404` `void` MoodTagLink not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringMoodTagLinkIdDelete = (
+    moodTagLinkId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/mood_tag_link/delete/{string${objectId}}`,
+      path: `/mood_tag_link/delete/{string${moodTagLinkId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class MoodTagLink<SecurityDataType = unknown> {
    * @description Get specific MoodTagLink for a user.
    *
    * @tags MoodTagLink
-   * @name GetStringObjectIdList
+   * @name GetStringMoodTagLinkIdList
    * @summary Get a specific MoodTagLink for a user.
-   * @request GET:/mood_tag_link/get/{string:object_id}
+   * @request GET:/mood_tag_link/get/{string:mood_tag_link_id}
    * @secure
    * @response `200` `MoodTagLinkCreateSchema` MoodTagLink for user retrieved successfully
    * @response `404` `void` MoodTagLink not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringMoodTagLinkIdList = (
+    moodTagLinkId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<MoodTagLinkCreateSchema, void>({
-      path: `/mood_tag_link/get/{string${objectId}}`,
+      path: `/mood_tag_link/get/{string${moodTagLinkId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

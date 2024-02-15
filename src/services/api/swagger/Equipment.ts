@@ -59,17 +59,20 @@ export class Equipment<SecurityDataType = unknown> {
    * @description Delete a Equipment.
    *
    * @tags Equipment
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringEquipmentIdDelete
    * @summary Delete a Equipment.
-   * @request DELETE:/equipment/delete/{string:object_id}
+   * @request DELETE:/equipment/delete/{string:equipment_id}
    * @secure
    * @response `204` `void` Equipment deleted successfully
    * @response `400` `void` Equipment validation error
    * @response `404` `void` Equipment not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringEquipmentIdDelete = (
+    equipmentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/equipment/delete/{string${objectId}}`,
+      path: `/equipment/delete/{string${equipmentId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class Equipment<SecurityDataType = unknown> {
    * @description Get specific Equipment for a user.
    *
    * @tags Equipment
-   * @name GetStringObjectIdList
+   * @name GetStringEquipmentIdList
    * @summary Get a specific Equipment for a user.
-   * @request GET:/equipment/get/{string:object_id}
+   * @request GET:/equipment/get/{string:equipment_id}
    * @secure
    * @response `200` `EquipmentCreateSchema` Equipment for user retrieved successfully
    * @response `404` `void` Equipment not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringEquipmentIdList = (
+    equipmentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<EquipmentCreateSchema, void>({
-      path: `/equipment/get/{string${objectId}}`,
+      path: `/equipment/get/{string${equipmentId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

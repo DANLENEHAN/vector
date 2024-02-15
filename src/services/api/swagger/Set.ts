@@ -78,17 +78,17 @@ export class Set<SecurityDataType = unknown> {
    * @description Delete a Set.
    *
    * @tags Set
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringSetIdDelete
    * @summary Delete a Set.
-   * @request DELETE:/set/delete/{string:object_id}
+   * @request DELETE:/set/delete/{string:set_id}
    * @secure
    * @response `204` `void` Set deleted successfully
    * @response `400` `void` Set validation error
    * @response `404` `void` Set not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringSetIdDelete = (setId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/set/delete/{string${objectId}}`,
+      path: `/set/delete/{string${setId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -97,16 +97,16 @@ export class Set<SecurityDataType = unknown> {
    * @description Get specific Set for a user.
    *
    * @tags Set
-   * @name GetStringObjectIdList
+   * @name GetStringSetIdList
    * @summary Get a specific Set for a user.
-   * @request GET:/set/get/{string:object_id}
+   * @request GET:/set/get/{string:set_id}
    * @secure
    * @response `200` `SetCreateSchema` Set for user retrieved successfully
    * @response `404` `void` Set not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringSetIdList = (setId: string, params: RequestParams = {}) =>
     this.http.request<SetCreateSchema, void>({
-      path: `/set/get/{string${objectId}}`,
+      path: `/set/get/{string${setId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

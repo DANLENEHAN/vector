@@ -81,17 +81,20 @@ export class WorkoutComponent<SecurityDataType = unknown> {
    * @description Delete a WorkoutComponent.
    *
    * @tags WorkoutComponent
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringWorkoutComponentIdDelete
    * @summary Delete a WorkoutComponent.
-   * @request DELETE:/workout_component/delete/{string:object_id}
+   * @request DELETE:/workout_component/delete/{string:workout_component_id}
    * @secure
    * @response `204` `void` WorkoutComponent deleted successfully
    * @response `400` `void` WorkoutComponent validation error
    * @response `404` `void` WorkoutComponent not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringWorkoutComponentIdDelete = (
+    workoutComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/workout_component/delete/{string${objectId}}`,
+      path: `/workout_component/delete/{string${workoutComponentId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -100,16 +103,19 @@ export class WorkoutComponent<SecurityDataType = unknown> {
    * @description Get specific WorkoutComponent for a user.
    *
    * @tags WorkoutComponent
-   * @name GetStringObjectIdList
+   * @name GetStringWorkoutComponentIdList
    * @summary Get a specific WorkoutComponent for a user.
-   * @request GET:/workout_component/get/{string:object_id}
+   * @request GET:/workout_component/get/{string:workout_component_id}
    * @secure
    * @response `200` `WorkoutComponentCreateSchema` WorkoutComponent for user retrieved successfully
    * @response `404` `void` WorkoutComponent not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringWorkoutComponentIdList = (
+    workoutComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<WorkoutComponentCreateSchema, void>({
-      path: `/workout_component/get/{string${objectId}}`,
+      path: `/workout_component/get/{string${workoutComponentId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
