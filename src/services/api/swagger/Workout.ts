@@ -81,17 +81,20 @@ export class Workout<SecurityDataType = unknown> {
    * @description Delete a Workout.
    *
    * @tags Workout
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringWorkoutIdDelete
    * @summary Delete a Workout.
-   * @request DELETE:/workout/delete/{string:object_id}
+   * @request DELETE:/workout/delete/{string:workout_id}
    * @secure
    * @response `204` `void` Workout deleted successfully
    * @response `400` `void` Workout validation error
    * @response `404` `void` Workout not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringWorkoutIdDelete = (
+    workoutId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/workout/delete/{string${objectId}}`,
+      path: `/workout/delete/{string${workoutId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -100,16 +103,16 @@ export class Workout<SecurityDataType = unknown> {
    * @description Get specific Workout for a user.
    *
    * @tags Workout
-   * @name GetStringObjectIdList
+   * @name GetStringWorkoutIdList
    * @summary Get a specific Workout for a user.
-   * @request GET:/workout/get/{string:object_id}
+   * @request GET:/workout/get/{string:workout_id}
    * @secure
    * @response `200` `WorkoutCreateSchema` Workout for user retrieved successfully
    * @response `404` `void` Workout not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringWorkoutIdList = (workoutId: string, params: RequestParams = {}) =>
     this.http.request<WorkoutCreateSchema, void>({
-      path: `/workout/get/{string${objectId}}`,
+      path: `/workout/get/{string${workoutId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

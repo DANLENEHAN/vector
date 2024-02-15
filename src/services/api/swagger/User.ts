@@ -70,6 +70,7 @@ export class User<SecurityDataType = unknown> {
    * @request DELETE:/user/delete
    * @secure
    * @response `204` `void` User deleted
+   * @response `400` `void` User already deleted
    * @response `500` `void` User not authenticated
    */
   deleteDelete = (params: RequestParams = {}) =>

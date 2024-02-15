@@ -77,17 +77,17 @@ export class Plan<SecurityDataType = unknown> {
    * @description Delete a Plan.
    *
    * @tags Plan
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringPlanIdDelete
    * @summary Delete a Plan.
-   * @request DELETE:/plan/delete/{string:object_id}
+   * @request DELETE:/plan/delete/{string:plan_id}
    * @secure
    * @response `204` `void` Plan deleted successfully
    * @response `400` `void` Plan validation error
    * @response `404` `void` Plan not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringPlanIdDelete = (planId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/plan/delete/{string${objectId}}`,
+      path: `/plan/delete/{string${planId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -96,16 +96,16 @@ export class Plan<SecurityDataType = unknown> {
    * @description Get specific Plan for a user.
    *
    * @tags Plan
-   * @name GetStringObjectIdList
+   * @name GetStringPlanIdList
    * @summary Get a specific Plan for a user.
-   * @request GET:/plan/get/{string:object_id}
+   * @request GET:/plan/get/{string:plan_id}
    * @secure
    * @response `200` `PlanCreateSchema` Plan for user retrieved successfully
    * @response `404` `void` Plan not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringPlanIdList = (planId: string, params: RequestParams = {}) =>
     this.http.request<PlanCreateSchema, void>({
-      path: `/plan/get/{string${objectId}}`,
+      path: `/plan/get/{string${planId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
