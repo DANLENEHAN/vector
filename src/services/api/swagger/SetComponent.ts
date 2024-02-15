@@ -59,17 +59,20 @@ export class SetComponent<SecurityDataType = unknown> {
    * @description Delete a SetComponent.
    *
    * @tags SetComponent
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringSetComponentIdDelete
    * @summary Delete a SetComponent.
-   * @request DELETE:/set_component/delete/{string:object_id}
+   * @request DELETE:/set_component/delete/{string:set_component_id}
    * @secure
    * @response `204` `void` SetComponent deleted successfully
    * @response `400` `void` SetComponent validation error
    * @response `404` `void` SetComponent not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringSetComponentIdDelete = (
+    setComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/set_component/delete/{string${objectId}}`,
+      path: `/set_component/delete/{string${setComponentId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class SetComponent<SecurityDataType = unknown> {
    * @description Get specific SetComponent for a user.
    *
    * @tags SetComponent
-   * @name GetStringObjectIdList
+   * @name GetStringSetComponentIdList
    * @summary Get a specific SetComponent for a user.
-   * @request GET:/set_component/get/{string:object_id}
+   * @request GET:/set_component/get/{string:set_component_id}
    * @secure
    * @response `200` `SetComponentCreateSchema` SetComponent for user retrieved successfully
    * @response `404` `void` SetComponent not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringSetComponentIdList = (
+    setComponentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<SetComponentCreateSchema, void>({
-      path: `/set_component/get/{string${objectId}}`,
+      path: `/set_component/get/{string${setComponentId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

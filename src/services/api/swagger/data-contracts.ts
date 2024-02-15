@@ -1636,7 +1636,6 @@ export interface PlanUpdateSchema {
 export enum ProfileStatus {
   Active = 'active',
   Inactive = 'inactive',
-  Deleted = 'deleted',
   Banned = 'banned',
 }
 

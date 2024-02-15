@@ -59,17 +59,20 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @description Delete a ClientSessionEvent.
    *
    * @tags ClientSessionEvent
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringClientSessionEventIdDelete
    * @summary Delete a ClientSessionEvent.
-   * @request DELETE:/client_session_event/delete/{string:object_id}
+   * @request DELETE:/client_session_event/delete/{string:client_session_event_id}
    * @secure
    * @response `204` `void` ClientSessionEvent deleted successfully
    * @response `400` `void` ClientSessionEvent validation error
    * @response `404` `void` ClientSessionEvent not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringClientSessionEventIdDelete = (
+    clientSessionEventId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/client_session_event/delete/{string${objectId}}`,
+      path: `/client_session_event/delete/{string${clientSessionEventId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @description Get specific ClientSessionEvent for a user.
    *
    * @tags ClientSessionEvent
-   * @name GetStringObjectIdList
+   * @name GetStringClientSessionEventIdList
    * @summary Get a specific ClientSessionEvent for a user.
-   * @request GET:/client_session_event/get/{string:object_id}
+   * @request GET:/client_session_event/get/{string:client_session_event_id}
    * @secure
    * @response `200` `ClientSessionEventCreateSchema` ClientSessionEvent for user retrieved successfully
    * @response `404` `void` ClientSessionEvent not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringClientSessionEventIdList = (
+    clientSessionEventId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<ClientSessionEventCreateSchema, void>({
-      path: `/client_session_event/get/{string${objectId}}`,
+      path: `/client_session_event/get/{string${clientSessionEventId}}`,
       method: 'GET',
       secure: true,
       format: 'json',

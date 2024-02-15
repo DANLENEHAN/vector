@@ -59,17 +59,20 @@ export class ExerciseEquipment<SecurityDataType = unknown> {
    * @description Delete a ExerciseEquipment.
    *
    * @tags ExerciseEquipment
-   * @name DeleteStringObjectIdDelete
+   * @name DeleteStringExerciseEquipmentIdDelete
    * @summary Delete a ExerciseEquipment.
-   * @request DELETE:/exercise_equipment/delete/{string:object_id}
+   * @request DELETE:/exercise_equipment/delete/{string:exercise_equipment_id}
    * @secure
    * @response `204` `void` ExerciseEquipment deleted successfully
    * @response `400` `void` ExerciseEquipment validation error
    * @response `404` `void` ExerciseEquipment not found
    */
-  deleteStringObjectIdDelete = (objectId: string, params: RequestParams = {}) =>
+  deleteStringExerciseEquipmentIdDelete = (
+    exerciseEquipmentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
-      path: `/exercise_equipment/delete/{string${objectId}}`,
+      path: `/exercise_equipment/delete/{string${exerciseEquipmentId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +81,19 @@ export class ExerciseEquipment<SecurityDataType = unknown> {
    * @description Get specific ExerciseEquipment for a user.
    *
    * @tags ExerciseEquipment
-   * @name GetStringObjectIdList
+   * @name GetStringExerciseEquipmentIdList
    * @summary Get a specific ExerciseEquipment for a user.
-   * @request GET:/exercise_equipment/get/{string:object_id}
+   * @request GET:/exercise_equipment/get/{string:exercise_equipment_id}
    * @secure
    * @response `200` `ExerciseEquipmentCreateSchema` ExerciseEquipment for user retrieved successfully
    * @response `404` `void` ExerciseEquipment not found
    */
-  getStringObjectIdList = (objectId: string, params: RequestParams = {}) =>
+  getStringExerciseEquipmentIdList = (
+    exerciseEquipmentId: string,
+    params: RequestParams = {},
+  ) =>
     this.http.request<ExerciseEquipmentCreateSchema, void>({
-      path: `/exercise_equipment/get/{string${objectId}}`,
+      path: `/exercise_equipment/get/{string${exerciseEquipmentId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
