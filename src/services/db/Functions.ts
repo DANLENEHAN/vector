@@ -82,12 +82,12 @@ export const updateRows = async (
     );
   });
 
-  const queries: SqlQuery[] = filteredData.map(newRowObject => ({
-    sqlStatement: `REPLACE INTO ${tableName} (${columns}) VALUES (${placeholders});`,
-    params: Object.values(newRowObject),
-  }));
+  if (filteredData.length > 0) {
+    const queries: SqlQuery[] = filteredData.map(newRowObject => ({
+      sqlStatement: `REPLACE INTO ${tableName} (${columns}) VALUES (${placeholders});`,
+      params: Object.values(newRowObject),
+    }));
 
-  try {
     const results: ExecutionResult<any>[] = await executeSqlBatch(queries);
 
     results.forEach(result => {
@@ -105,8 +105,9 @@ export const updateRows = async (
         filteredData.length
       } pulled in the sync.`,
     );
-  } catch (error) {
-    logger.error('Error during updating rows:', error);
-    throw error;
+  } else {
+    logger.info(
+      `None of the Update rows for Ttble '${tableName}' are more recent their existing data...skipping`,
+    );
   }
 };

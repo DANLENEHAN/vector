@@ -101,9 +101,7 @@ describe('DB Functions Tests', () => {
       },
     ]);
 
-    const response = await DbFunctions.updateRows(syncDbTables.bodyStatTable, [
-      sampleStat,
-    ]);
+    const response = await DbFunctions.updateRows(tableName, [sampleStat]);
 
     expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(1);
     expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledWith(
@@ -143,7 +141,7 @@ describe('DB Functions Tests', () => {
       },
     ]);
 
-    const response = await DbFunctions.updateRows(syncDbTables.bodyStatTable, [
+    const response = await DbFunctions.updateRows(tableName, [
       sampleStat,
       sampleStatTwo,
     ]);
@@ -171,5 +169,45 @@ describe('DB Functions Tests', () => {
     ]);
 
     expect(response).toEqual(undefined);
+  });
+
+  test('updateRows, all rows filtered out', async () => {
+    const tableName = syncDbTables.bodyStatTable;
+    const sampleStatTwo = {...sampleStat, body_stat_id: '1'};
+
+    const response = await DbFunctions.updateRows(tableName, [
+      {...sampleStat, body_stat_id: '2'},
+      sampleStatTwo,
+    ]);
+
+    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(2);
+    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
+      1,
+      tableName,
+      timestampFields.updatedAt,
+      '2',
+    );
+    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
+      2,
+      tableName,
+      timestampFields.updatedAt,
+      sampleStatTwo.body_stat_id,
+    );
+
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(0);
+
+    expect(response).toEqual(undefined);
+  });
+
+  test('updateRows, no rows passed', async () => {
+    try {
+      await DbFunctions.updateRows(syncDbTables.bodyStatTable, []);
+      fail('Function did not throw as expected');
+    } catch (error: any) {
+      expect(error.message).toBe('No data to insert.');
+    }
+
+    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(0);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(0);
   });
 });
