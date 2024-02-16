@@ -47,7 +47,7 @@ const AccountSettings: React.FC<ScreenProps> = ({
       <View style={styles.headerSection}>
         <Header
           label="Account Settings"
-          navigation={navigation}
+          onClick={navigation.goBack}
           includeBackArrow={true}
         />
       </View>

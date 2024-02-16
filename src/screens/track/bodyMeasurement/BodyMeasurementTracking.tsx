@@ -12,12 +12,9 @@ import GenericMeasurementTracking from './GenericMeasurementTracking';
 
 // Types
 import {BodyStatType} from '@services/api/swagger/data-contracts';
-import {ScreenProps} from '@screens/Types';
 import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
 
-const BodyMeasurementTracking: React.FC<ScreenProps> = ({
-  navigation,
-}: ScreenProps): React.ReactElement<ScreenProps> => {
+const BodyMeasurementTracking: React.FC = (): React.ReactElement => {
   const [selectedBodyPart, setSelectedBodyPart] =
     useState<MeasureableBodyparts | null>(null);
 
@@ -36,7 +33,7 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         {selectedBodyPart && (
           <GenericMeasurementTracking
             bodyStatType={BodyStatType.BodyMeasurement}
-            navigation={navigation}
+            headerArrowOnClick={() => setSelectedBodyPart(null)}
             bodyPart={selectedBodyPart}
           />
         )}
@@ -48,13 +45,11 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
 const styles = StyleSheet.create({
   componentContainer: {
     flex: 1,
-    ...layoutStyles.spaceBetweenVertical,
-    backgroundColor: 'blue',
+    ...layoutStyles.centerVertically,
   },
   bodyMapContainer: {
     flex: 0.8,
     ...layoutStyles.centerVertically,
-    backgroundColor: 'green',
   },
 });
 

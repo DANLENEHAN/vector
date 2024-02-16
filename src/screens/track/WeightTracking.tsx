@@ -64,7 +64,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
     createNewBodyStat({
       value: parsedWeight,
       unitValue: activeUnit.toLowerCase() as WeightUnit,
-      navigation: navigation,
+      onSuccessfulCreate: navigation.goBack,
       bodyStatType: BodyStatType.Weight,
     });
   };
@@ -72,7 +72,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
   return (
     <ScreenWrapper>
       <View style={styles.headerSection}>
-        <Header navigation={navigation} includeBackArrow={true} />
+        <Header onClick={navigation.goBack} includeBackArrow={true} />
       </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.content}>

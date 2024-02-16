@@ -27,7 +27,7 @@ import logger from '@utils/Logger';
  */
 export interface createNewBodyStatParams {
   value: number;
-  navigation: any;
+  onSuccessfulCreate: () => void;
   bodyStatType: BodyStatType;
   unitValue: BodyStatCreateSchema['unit'];
 }
@@ -41,7 +41,7 @@ export interface createNewBodyStatParams {
  */
 export const createNewBodyStat = async ({
   value,
-  navigation,
+  onSuccessfulCreate,
   bodyStatType,
   unitValue,
 }: createNewBodyStatParams): Promise<void> => {
@@ -60,7 +60,7 @@ export const createNewBodyStat = async ({
         [timestampFields.timezone]: timestampTimezone.timezone,
       },
     ]);
-    navigation.goBack();
+    onSuccessfulCreate();
   } catch (error) {
     logger.error(`Error: ${error}`);
   }

@@ -12,20 +12,18 @@ import {useSystem} from '@context/SystemContext';
 // Components
 import HeaderBackButton from '@components/buttons/HeaderBackButton';
 import {View, StyleSheet, Text} from 'react-native';
-// Navigation
-import {ScreenNavigationProp} from '@navigation/Types';
 
 /**
  * Interface for the Header component
  *
  * @interface HeaderProps
  *
- * @param {ScreenNavigationProp} navigation - Navigation prop for the screen
+ * @param {CallableFunction} onClick - Function to be called when back is selected
  * @param {string} label - Label for the header
  * @param {boolean} includeBackArrow - Whether or not to include the back arrow
  */
 interface HeaderProps {
-  navigation: ScreenNavigationProp;
+  onClick: () => void;
   label?: string;
   includeBackArrow: boolean;
 }
@@ -38,7 +36,7 @@ interface HeaderProps {
  * @returns {React.FC<HeaderProps>} - React Component
  */
 const Header: React.FC<HeaderProps> = ({
-  navigation,
+  onClick,
   label = '',
   includeBackArrow,
 }: HeaderProps): React.ReactElement<HeaderProps> => {
@@ -53,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({
         },
       ]}>
       <View style={styles.caretContainer}>
-        {includeBackArrow && <HeaderBackButton navigation={navigation} />}
+        {includeBackArrow && <HeaderBackButton onClick={onClick} />}
       </View>
       <Text style={[styles.logoText, {color: currentTheme.darkText}]}>
         {label}

@@ -32,7 +32,6 @@ import {
   HeightUnit,
   MuscleMeasurementUnit,
 } from '@services/api/swagger/data-contracts';
-import {ScreenNavigationProp} from '@navigation/Types';
 // Constants
 import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
 import {
@@ -43,15 +42,15 @@ import {
 import logger from '@utils/Logger';
 
 export interface GenericMeasurementTrackingProps {
-  navigation: ScreenNavigationProp;
   bodyStatType: BodyStatType;
   bodyPart: MeasureableBodyparts | null;
+  headerArrowOnClick: () => void;
 }
 
 const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
-  navigation,
   bodyStatType,
   bodyPart,
+  headerArrowOnClick,
 }: GenericMeasurementTrackingProps): React.ReactElement<GenericMeasurementTrackingProps> => {
   const config = BodyMeasurementConfig[bodyStatType];
   const muscleConfig = bodyPart != null ? MuscleToConfig[bodyPart] : null;
@@ -77,7 +76,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
         | MuscleMeasurementUnit
         | WeightUnit
         | HeightUnit,
-      navigation: navigation,
+      onSuccessfulCreate: headerArrowOnClick,
       bodyStatType: config.bodyStatType,
     });
   };
@@ -85,7 +84,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
   return (
     <ScreenWrapper>
       <View style={styles.headerSection}>
-        <Header navigation={navigation} includeBackArrow={true} />
+        <Header onClick={headerArrowOnClick} includeBackArrow={true} />
       </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.content}>
