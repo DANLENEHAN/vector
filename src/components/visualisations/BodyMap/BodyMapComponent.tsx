@@ -12,6 +12,7 @@ import {
 import {BodyPartToPolygonMapper} from './Constants';
 import {PolygonGroup} from './Types';
 import {ComponentSize} from '@shared/Types';
+import {MeasureableBodyparts} from './Constants';
 
 // Styles
 import {layoutStyles} from '@styles/Main';
@@ -23,7 +24,7 @@ import {layoutStyles} from '@styles/Main';
  * @property {(bodyPart: string) => void} onBodyPartSelect - A callback function that is called when a body part is selected. It receives the name of the selected body part as a string argument.
  */
 interface BodyMapProps {
-  onBodyPartSelect: (bodyPart: string) => void;
+  onBodyPartSelect: (bodyPart: MeasureableBodyparts) => void;
 }
 
 const BodyMap: React.FC<BodyMapProps> = ({
