@@ -10,7 +10,7 @@ import {
   BodyStatCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
-import {insertStat} from '@services/db/bodyStat/Functions';
+import {insertBodyStat} from '@services/db/bodyStat/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 
@@ -18,14 +18,14 @@ import {TimestampTimezone} from '@services/date/Type';
 import logger from '@utils/Logger';
 
 /**
- * Interface for the createNewStat function.
+ * Interface for the createNewBodyStat function.
  *
  * @param value  The value of the bodyStat.
  * @param navigation  The navigation object.
  * @param bodyStatType  The type of bodyStat.
  * @param unitValue  The unit of the bodyStat.
  */
-export interface CreateNewStatParams {
+export interface createNewBodyStatParams {
   value: number;
   navigation: any;
   bodyStatType: BodyStatType;
@@ -35,21 +35,21 @@ export interface CreateNewStatParams {
 /**
  * @description Create a new bodyStat.
  *
- * @param {Object} CreateNewStatParams  The interface parameters.
+ * @param {Object} createNewBodyStatParams  The interface parameters.
  * @returns {Promise<void>} A promise that resolves when the bodyStat is successfully created.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  */
-export const createNewStat = async ({
+export const createNewBodyStat = async ({
   value,
   navigation,
   bodyStatType,
   unitValue,
-}: CreateNewStatParams): Promise<void> => {
+}: createNewBodyStatParams): Promise<void> => {
   try {
     const user_id = await getUserDetails('user_id');
     const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
 
-    await insertStat([
+    await insertBodyStat([
       {
         body_stat_id: uuidv4(),
         unit: unitValue,

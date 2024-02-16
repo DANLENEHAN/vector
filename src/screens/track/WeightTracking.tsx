@@ -24,7 +24,7 @@ import {
   Keyboard,
 } from 'react-native';
 // Services
-import {createNewStat} from '@services/api/blueprints/bodyStat/Functions';
+import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
 // Types
 import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
 import {ScreenProps} from '@screens/Types';
@@ -61,7 +61,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
       logger.error('Invalid weight value. Please enter a valid weight.');
       return; // Stop the function if the weight is invalid
     }
-    createNewStat({
+    createNewBodyStat({
       value: parsedWeight,
       unitValue: activeUnit.toLowerCase() as WeightUnit,
       navigation: navigation,

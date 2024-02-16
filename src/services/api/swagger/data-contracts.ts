@@ -54,7 +54,7 @@ export interface BodyStatCreateSchema {
    * The unit of the body body_stat
    * @example "kg"
    */
-  unit: string;
+  unit: MuscleMeasurementUnit | HeightUnit | WeightUnit;
   /**
    * Updated At
    * @default null
@@ -122,7 +122,7 @@ export interface BodyStatUpdateSchema {
    * The unit of the body body_stat
    * @example "kg"
    */
-  unit: string;
+  unit: MuscleMeasurementUnit | HeightUnit | WeightUnit;
   /**
    * Updated At
    * @format date-time
@@ -1264,6 +1264,15 @@ export enum MuscleGroup {
   Forearms = 'Forearms',
   Neck = 'Neck',
   Traps = 'Traps',
+}
+
+/**
+ * MuscleMeasurementUnit
+ * Muscle measurement units.
+ */
+export enum MuscleMeasurementUnit {
+  Cm = 'cm',
+  Inch = 'inch',
 }
 
 /**
