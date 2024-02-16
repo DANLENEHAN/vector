@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {Meta, Story} from '@storybook/react-native';
-import BodyMap from '../../src/components/visualisations/BodyMap/BodyMapComponent';
+import BodyMap from '../../../../../src/components/visualisations/BodyMap/BodyMapComponent';
 
 const MyComponent: React.FC = () => {
   return (
