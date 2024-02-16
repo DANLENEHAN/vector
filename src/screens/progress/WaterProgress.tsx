@@ -7,13 +7,13 @@ import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
-import LineGraph from '@components/graphs/Line/Graph';
+import LineGraph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
 import {useSystem} from '@context/SystemContext';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {GraphPlotData} from '@components/graphs/Line/Types';
+import {GraphPlotData} from '@components/visualisations/graphs/Line/Types';
 import {WaterUnit} from '@services/api/swagger/data-contracts';
 
 /**
