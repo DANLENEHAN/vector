@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   componentContainer: {
     flex: 1,
     ...layoutStyles.centerHorizontally,
-    backgroundColor: 'green',
   },
   bodyMapContainer: {
     width: '75%',
