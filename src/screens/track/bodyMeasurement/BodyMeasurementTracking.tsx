@@ -52,13 +52,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
   bodyMapContainer: {
-    flex: 9,
+    flex: 0.8,
     ...layoutStyles.centerVertically,
     backgroundColor: 'green',
-  },
-  textContainer: {
-    flex: 1,
-    backgroundColor: 'orange',
   },
 });
 

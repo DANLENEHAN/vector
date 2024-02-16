@@ -28,6 +28,11 @@ const tile_data: TileData[] = [
     icon: 'face-smile',
     route: 'MoodTracking',
   },
+  {
+    label: 'Muscle Measurements',
+    icon: 'ruler',
+    route: 'BodyMeasurementTracking',
+  },
 ];
 
 /**
@@ -87,7 +92,8 @@ const styles = StyleSheet.create({
     flex: 9,
   },
   scroll: {
-    ...layoutStyles.spaceAroundHorizontal,
+    flex: 1,
+    ...layoutStyles.spaceAroundVertical,
   },
 });
 

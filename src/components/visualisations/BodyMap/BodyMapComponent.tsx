@@ -68,7 +68,7 @@ const BodyMap: React.FC<BodyMapProps> = ({
       <Image
         style={styles.bodyMapImage}
         source={require('../../../../assets/fonts/BodyMapFront.png')}
-        resizeMode="contain"
+        resizeMode="stretch"
       />
     </TouchableOpacity>
   );
