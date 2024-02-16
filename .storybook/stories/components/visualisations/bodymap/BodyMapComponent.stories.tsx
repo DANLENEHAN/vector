@@ -11,7 +11,3 @@ export default {
 const Template: Story<any> = (args: any) => <BodyMap {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {
-  onPress: () => alert('Clicked!'),
-  text: 'Click Me!',
-};
