@@ -1,46 +1,63 @@
-// Constants
-import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
 // Types
 import {
   WeightUnit,
   BodyStatType,
   HeightUnit,
   MuscleMeasurementUnit,
+  NutritionType,
+  WaterUnit,
+  CaloriesUnit,
+  NutritionWeightUnit,
 } from '@services/api/swagger/data-contracts';
 
-export interface MuscleConfig {
-  howToMeasure: string;
-  image: string | null;
-}
+type MeasurementConfiguration = {
+  measurementUnit:
+    | typeof MuscleMeasurementUnit
+    | typeof WeightUnit
+    | typeof HeightUnit
+    | typeof WaterUnit
+    | typeof CaloriesUnit
+    | typeof NutritionWeightUnit;
+  statType: BodyStatType | NutritionType;
+};
 
-export const BodyMeasurementConfig = {
+export const MeasurementConfig: {
+  [key in BodyStatType | NutritionType]: MeasurementConfiguration;
+} = {
   [BodyStatType.BodyMeasurement]: {
     measurementUnit: MuscleMeasurementUnit,
-    bodyStatType: BodyStatType.BodyMeasurement,
+    statType: BodyStatType.BodyMeasurement,
   },
   [BodyStatType.Weight]: {
     measurementUnit: WeightUnit,
-    bodyStatType: BodyStatType.Weight,
+    statType: BodyStatType.Weight,
   },
   [BodyStatType.Height]: {
     measurementUnit: HeightUnit,
-    bodyStatType: BodyStatType.Height,
+    statType: BodyStatType.Height,
   },
-};
-
-export const MuscleToConfig: {
-  [key in MeasureableBodyparts]?: MuscleConfig;
-} = {
-  [MeasureableBodyparts.Chest]: {
-    howToMeasure: 'Wrap that shit around your chest motherfucker',
-    image: null,
+  [NutritionType.Water]: {
+    measurementUnit: WaterUnit,
+    statType: NutritionType.Water,
   },
-  [MeasureableBodyparts.Neck]: {
-    howToMeasure: 'Wrap that shit around your Neck motherfucker',
-    image: null,
+  [NutritionType.Calories]: {
+    measurementUnit: CaloriesUnit,
+    statType: NutritionType.Calories,
   },
-  [MeasureableBodyparts.Waist]: {
-    howToMeasure: 'Wrap that shit around your Waist motherfucker',
-    image: null,
+  [NutritionType.Carbohydrates]: {
+    measurementUnit: NutritionWeightUnit,
+    statType: NutritionType.Carbohydrates,
+  },
+  [NutritionType.Fat]: {
+    measurementUnit: NutritionWeightUnit,
+    statType: NutritionType.Fat,
+  },
+  [NutritionType.Fiber]: {
+    measurementUnit: NutritionWeightUnit,
+    statType: NutritionType.Fiber,
+  },
+  [NutritionType.Protein]: {
+    measurementUnit: NutritionWeightUnit,
+    statType: NutritionType.Protein,
   },
 };

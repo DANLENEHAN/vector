@@ -28,7 +28,7 @@ import logger from '@utils/Logger';
 export interface createNewBodyStatParams {
   value: number;
   onSuccessfulCreate: () => void;
-  bodyStatType: BodyStatType;
+  statType: BodyStatType;
   unitValue: BodyStatCreateSchema['unit'];
 }
 
@@ -41,9 +41,9 @@ export interface createNewBodyStatParams {
  */
 export const createNewBodyStat = async ({
   value,
-  onSuccessfulCreate,
-  bodyStatType,
   unitValue,
+  statType,
+  onSuccessfulCreate,
 }: createNewBodyStatParams): Promise<void> => {
   try {
     const user_id = await getUserDetails('user_id');
@@ -53,7 +53,7 @@ export const createNewBodyStat = async ({
       {
         body_stat_id: uuidv4(),
         unit: unitValue,
-        stat_type: bodyStatType,
+        stat_type: statType,
         user_id: user_id,
         value: value,
         [timestampFields.createdAt]: timestampTimezone.timestamp,

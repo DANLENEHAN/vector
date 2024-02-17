@@ -25,7 +25,7 @@ import {useSystem} from '@context/SystemContext';
 interface UnitSelectorProps {
   units: string[];
   activeUnit: string;
-  setActiveUnit: React.Dispatch<React.SetStateAction<string>>;
+  setActiveUnit: React.Dispatch<React.SetStateAction<any>>;
   style?: object;
 }
 

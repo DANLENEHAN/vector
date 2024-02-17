@@ -27,9 +27,9 @@ import logger from '@utils/Logger';
  */
 export interface CreateNewNutritionParams {
   value: number;
-  navigation: any;
-  type: NutritionType;
-  unit: WaterUnit | NutritionWeightUnit | CaloriesUnit;
+  unitValue: WaterUnit | NutritionWeightUnit | CaloriesUnit;
+  statType: NutritionType;
+  onSuccessfulCreate: () => void;
 }
 
 /**
@@ -41,9 +41,9 @@ export interface CreateNewNutritionParams {
  */
 export const createNewNutrition = async ({
   value,
-  navigation,
-  type,
-  unit,
+  unitValue,
+  statType,
+  onSuccessfulCreate,
 }: CreateNewNutritionParams): Promise<void> => {
   try {
     const user_id = await getUserDetails('user_id');
@@ -54,13 +54,13 @@ export const createNewNutrition = async ({
         nutrition_id: uuidv4(),
         user_id: user_id,
         value: value,
-        type: type,
-        unit: unit,
+        type: statType,
+        unit: unitValue,
         [timestampFields.createdAt]: timestampTimezone.timestamp,
         [timestampFields.timezone]: timestampTimezone.timezone,
       },
     ]);
-    navigation.goBack();
+    onSuccessfulCreate();
   } catch (error) {
     logger.error(`Error: ${error}`);
   }

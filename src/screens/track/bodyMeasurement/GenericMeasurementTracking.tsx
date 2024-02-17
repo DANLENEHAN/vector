@@ -1,7 +1,6 @@
 // React imports
 import React, {useState} from 'react';
-// Layouts
-import ScreenWrapper from '@components/layout/ScreenWrapper';
+
 // Styling
 import {
   lightThemeColors,
@@ -9,10 +8,11 @@ import {
   marginSizes,
   layoutStyles,
   headingTextStyles,
+  bodyTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
+
 // Components
-import Header from '@components/navbar/Header';
 import UnitSelector from '@components/buttons/UnitSelector';
 import NumberInput from '@components/inputs/NumberInput';
 import ButtonComponent from '@components/buttons/ButtonComponent';
@@ -23,44 +23,55 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-// Services
-import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
+
 // Types
 import {
   BodyStatType,
   WeightUnit,
   HeightUnit,
   MuscleMeasurementUnit,
+  NutritionType,
+  WaterUnit,
+  CaloriesUnit,
+  NutritionWeightUnit,
 } from '@services/api/swagger/data-contracts';
+
 // Constants
 import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
-import {
-  BodyMeasurementConfig,
-  MuscleToConfig,
-} from '@screens/track/bodyMeasurement/Constants';
+import {MeasurementConfig} from '@screens/track/bodyMeasurement/Constants';
+
 // Logger
 import logger from '@utils/Logger';
 
+// Functions
+import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
+import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
+
 export interface GenericMeasurementTrackingProps {
-  bodyStatType: BodyStatType;
-  bodyPart: MeasureableBodyparts | null;
-  headerArrowOnClick: () => void;
+  statType: BodyStatType | NutritionType;
+  statName: MeasureableBodyparts | 'Weight' | 'Height' | 'Water';
+  onSuccessfulCreate: () => void;
 }
 
 const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
-  bodyStatType,
-  bodyPart,
-  headerArrowOnClick,
+  statType,
+  statName,
+  onSuccessfulCreate,
 }: GenericMeasurementTrackingProps): React.ReactElement<GenericMeasurementTrackingProps> => {
-  const config = BodyMeasurementConfig[bodyStatType];
-  const muscleConfig = bodyPart != null ? MuscleToConfig[bodyPart] : null;
+  const measurementConfig = MeasurementConfig[statType];
+  const measurementUnit = Object.values(measurementConfig.measurementUnit);
 
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [measurementValue, setMeasurementValue] = useState('0');
-  const [activeUnit, setActiveUnit] = useState<string>(
-    Object.values(config.measurementUnit)[0],
-  );
+  const [activeUnit, setActiveUnit] = useState<
+    | MuscleMeasurementUnit
+    | WeightUnit
+    | HeightUnit
+    | WaterUnit
+    | CaloriesUnit
+    | NutritionWeightUnit
+  >(measurementUnit[0]);
 
   const handleSaveMeasurement = async () => {
     const parsedMeasurement = parseFloat(measurementValue);
@@ -70,35 +81,43 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
       );
       return;
     }
-    createNewBodyStat({
-      value: parsedMeasurement,
-      unitValue: activeUnit.toLowerCase() as
-        | MuscleMeasurementUnit
-        | WeightUnit
-        | HeightUnit,
-      onSuccessfulCreate: headerArrowOnClick,
-      bodyStatType: config.bodyStatType,
-    });
+
+    if (statType === BodyStatType.BodyMeasurement) {
+      createNewBodyStat({
+        value: parsedMeasurement,
+        unitValue: activeUnit as
+          | MuscleMeasurementUnit
+          | WeightUnit
+          | HeightUnit,
+        onSuccessfulCreate: onSuccessfulCreate,
+        statType: statType as BodyStatType,
+      });
+    } else {
+      createNewNutrition({
+        value: parsedMeasurement,
+        unitValue: activeUnit as WaterUnit | CaloriesUnit | NutritionWeightUnit,
+        onSuccessfulCreate: onSuccessfulCreate,
+        statType: statType as NutritionType,
+      });
+    }
   };
 
   return (
-    <ScreenWrapper>
-      <View style={styles.headerSection}>
-        <Header onClick={headerArrowOnClick} includeBackArrow={true} />
-      </View>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.content}>
-          <Text>{muscleConfig?.howToMeasure}</Text>
-          <Text style={[styles.title, {color: currentTheme.text}]}>
-            What is your {bodyPart} measurement?
-          </Text>
-          <NumberInput
-            allowFloat={true}
-            inputValue={measurementValue}
-            setInputValue={setMeasurementValue}
-          />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.content}>
+        <Text
+          style={[styles.textLayout, styles.title, {color: currentTheme.text}]}>
+          What is your {statName} measurement?
+        </Text>
+        <NumberInput
+          style={styles.nonTextElement}
+          allowFloat={true}
+          inputValue={measurementValue}
+          setInputValue={setMeasurementValue}
+        />
+        <View style={styles.nonTextElement}>
           <UnitSelector
-            units={Object.values(config.measurementUnit)}
+            units={measurementUnit}
             activeUnit={activeUnit}
             setActiveUnit={setActiveUnit}
           />
@@ -112,22 +131,29 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
             onPress={handleSaveMeasurement}
           />
         </View>
-      </TouchableWithoutFeedback>
-    </ScreenWrapper>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  headerSection: {
-    flex: 1,
-  },
   content: {
-    flex: 9,
+    flex: 1,
     ...layoutStyles.spaceAroundVertical,
+  },
+  textLayout: {
+    flex: 2,
+  },
+  nonTextElement: {
+    flex: 2,
   },
   title: {
     ...headingTextStyles.small,
     marginBottom: marginSizes.xxLarge,
+  },
+  measureInstructions: {
+    ...bodyTextStyles.small,
+    textAlign: 'center',
   },
 });
 

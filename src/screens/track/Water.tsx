@@ -53,9 +53,9 @@ const WaterScreen: React.FC<ScreenProps> = ({
     }
     createNewNutrition({
       value: parsedWater,
-      unit: activeUnit.toLowerCase() as WaterUnit,
-      navigation: navigation,
-      type: NutritionType.Water,
+      unitValue: activeUnit.toLowerCase() as WaterUnit,
+      onSuccessfulCreate: navigation.goBack,
+      statType: NutritionType.Water,
     });
   };
 

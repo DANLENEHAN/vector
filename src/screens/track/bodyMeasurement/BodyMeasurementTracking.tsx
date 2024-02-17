@@ -9,12 +9,16 @@ import {layoutStyles} from '@styles/Main';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 import BodyMap from '@components/visualisations/BodyMap/BodyMapComponent';
 import GenericMeasurementTracking from './GenericMeasurementTracking';
+import Header from '@components/navbar/Header';
 
 // Types
 import {BodyStatType} from '@services/api/swagger/data-contracts';
+import {ScreenProps} from '@screens/Types';
 import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
 
-const BodyMeasurementTracking: React.FC = (): React.ReactElement => {
+const BodyMeasurementTracking: React.FC<ScreenProps> = ({
+  navigation,
+}: ScreenProps): React.ReactElement<ScreenProps> => {
   const [selectedBodyPart, setSelectedBodyPart] =
     useState<MeasureableBodyparts | null>(null);
 
@@ -24,6 +28,18 @@ const BodyMeasurementTracking: React.FC = (): React.ReactElement => {
 
   return (
     <ScreenWrapper>
+      <View style={styles.headerSection}>
+        <Header
+          onClick={() => {
+            if (selectedBodyPart) {
+              setSelectedBodyPart(null);
+            } else {
+              navigation.goBack();
+            }
+          }}
+          includeBackArrow={true}
+        />
+      </View>
       <View style={styles.componentContainer}>
         {!selectedBodyPart && (
           <View style={styles.bodyMapContainer}>
@@ -32,9 +48,9 @@ const BodyMeasurementTracking: React.FC = (): React.ReactElement => {
         )}
         {selectedBodyPart && (
           <GenericMeasurementTracking
-            bodyStatType={BodyStatType.BodyMeasurement}
-            headerArrowOnClick={() => setSelectedBodyPart(null)}
-            bodyPart={selectedBodyPart}
+            statType={BodyStatType.BodyMeasurement}
+            onSuccessfulCreate={() => setSelectedBodyPart(null)}
+            statName={selectedBodyPart}
           />
         )}
       </View>
@@ -43,12 +59,15 @@ const BodyMeasurementTracking: React.FC = (): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  componentContainer: {
+  headerSection: {
     flex: 1,
+  },
+  componentContainer: {
+    flex: 15,
     ...layoutStyles.centerVertically,
   },
   bodyMapContainer: {
-    flex: 0.8,
+    flex: 1,
     ...layoutStyles.centerVertically,
   },
 });
