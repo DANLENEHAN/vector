@@ -5,7 +5,6 @@ import React, {useState} from 'react';
 import {
   lightThemeColors,
   darkThemeColors,
-  marginSizes,
   layoutStyles,
   headingTextStyles,
   bodyTextStyles,
@@ -46,6 +45,7 @@ import logger from '@utils/Logger';
 // Functions
 import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
+import {capitalizeString} from '@shared/Functions';
 
 export interface GenericMeasurementTrackingProps {
   statType: BodyStatType | NutritionType;
@@ -105,32 +105,29 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.content}>
-        <Text
-          style={[styles.textLayout, styles.title, {color: currentTheme.text}]}>
-          What is your {statName} measurement?
+        <Text style={[styles.title, {color: currentTheme.text}]}>
+          What is your {capitalizeString(statName)} measurement?
         </Text>
         <NumberInput
-          style={styles.nonTextElement}
+          style={styles.inputStyle}
           allowFloat={true}
           inputValue={measurementValue}
           setInputValue={setMeasurementValue}
         />
-        <View style={styles.nonTextElement}>
-          <UnitSelector
-            units={measurementUnit}
-            activeUnit={activeUnit}
-            setActiveUnit={setActiveUnit}
-          />
-          <ButtonComponent
-            text="Track"
-            disabled={
-              measurementValue === '0' ||
-              measurementValue === '' ||
-              measurementValue === '0.0'
-            }
-            onPress={handleSaveMeasurement}
-          />
-        </View>
+        <UnitSelector
+          units={measurementUnit}
+          activeUnit={activeUnit}
+          setActiveUnit={setActiveUnit}
+        />
+        <ButtonComponent
+          text="Track"
+          disabled={
+            measurementValue === '0' ||
+            measurementValue === '' ||
+            measurementValue === '0.0'
+          }
+          onPress={handleSaveMeasurement}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -138,18 +135,16 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1,
-    ...layoutStyles.spaceAroundVertical,
-  },
-  textLayout: {
-    flex: 2,
-  },
-  nonTextElement: {
-    flex: 2,
+    height: '60%',
+    width: '80%',
+    ...layoutStyles.spaceBetweenVertical,
   },
   title: {
     ...headingTextStyles.small,
-    marginBottom: marginSizes.xxLarge,
+    textAlign: 'center',
+  },
+  inputStyle: {
+    ...headingTextStyles.medium,
   },
   measureInstructions: {
     ...bodyTextStyles.small,

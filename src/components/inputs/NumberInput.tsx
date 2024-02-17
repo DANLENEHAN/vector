@@ -64,7 +64,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     <TextInput
       value={inputValue}
       defaultValue={allowFloat ? '0.0' : '0'}
-      style={[style, styles.textInput, {color: currentTheme.text}]}
+      style={[styles.textInput, {color: currentTheme.text}, style]}
       onChangeText={handleChange}
       keyboardType={allowFloat ? 'numeric' : 'number-pad'}
       onFocus={handleFocus}
