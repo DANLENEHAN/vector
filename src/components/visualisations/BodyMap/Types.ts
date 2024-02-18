@@ -1,3 +1,11 @@
+/**
+ * Represents a point in a two-dimensional space.
+ *
+ * @type {Object} Point
+ * @property {number} x - The x-coordinate of the point.
+ * @property {number} y - The y-coordinate of the point.
+ *
+ */
 export type Point = {
   x: number;
   y: number;
@@ -38,6 +46,13 @@ export class Polygon {
   }
 }
 
+/**
+ * Represents a mapping of keys to arrays of Polygons, facilitating the organization and retrieval of polygonal shapes associated with specific identifiers.
+ *
+ * @type {Object} PolygonGroups
+ * @template TKey - The type of the keys used to index the groups, constrained to string or number types.
+ * @property {Polygon[]} [key] - An optional array of Polygon objects associated with a given key. Each key represents a distinct group of polygons, potentially corresponding to different areas or features within a graphical representation.
+ */
 export type PolygonGroups<TKey extends string | number> = {
   [key in TKey]?: Polygon[];
 };

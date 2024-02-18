@@ -51,7 +51,11 @@ const ThemeScreen: React.FC<ScreenProps> = ({
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
       <View style={styles.headerSection}>
-        <Header label="Theme" navigation={navigation} includeBackArrow={true} />
+        <Header
+          label="Theme"
+          onClick={navigation.goBack}
+          includeBackArrow={true}
+        />
       </View>
       <View style={styles.settingsSection}>
         <OptionGroup

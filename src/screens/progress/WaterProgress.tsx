@@ -50,7 +50,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
         <View style={styles.headerSection}>
           <Header
             label="Water"
-            navigation={navigation}
+            onClick={navigation.goBack}
             includeBackArrow={true}
           />
         </View>

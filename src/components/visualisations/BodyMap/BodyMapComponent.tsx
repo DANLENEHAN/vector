@@ -3,7 +3,6 @@ import React, {useState, useMemo} from 'react';
 import {
   Image,
   TouchableOpacity,
-  View,
   GestureResponderEvent,
   LayoutChangeEvent,
   StyleSheet,
@@ -13,17 +12,29 @@ import {
 import {BodyPartToPolygonMapper} from './Constants';
 import {PolygonGroup} from './Types';
 import {ComponentSize} from '@shared/Types';
+import {MeasureableBodyparts} from './Constants';
 
 // Styles
 import {layoutStyles} from '@styles/Main';
 
-const BodyMap: React.FC = () => {
+/**
+ * Defines the properties for the BodyMap component, enabling interaction with selected body parts on the map.
+ *
+ * @type {Object} BodyMapProps
+ * @property {(bodyPart: string) => void} onBodyPartSelect - A callback function that is called when a body part is selected. It receives the name of the selected body part as a string argument.
+ */
+interface BodyMapProps {
+  onBodyPartSelect: (bodyPart: MeasureableBodyparts) => void;
+}
+
+const BodyMap: React.FC<BodyMapProps> = ({
+  onBodyPartSelect,
+}: BodyMapProps): React.ReactElement<BodyMapProps> => {
   const [componentSize, setComponentSize] = useState<ComponentSize>({
     width: 0,
     height: 0,
   });
 
-  // Use useMemo to avoid unnecessary re-creation of polygonGroup
   const polygonGroup = useMemo(
     () => new PolygonGroup(BodyPartToPolygonMapper),
     [],
@@ -35,8 +46,10 @@ const BodyMap: React.FC = () => {
     const normalizedY = locationY / componentSize.height;
     const selectionCoords = {x: normalizedX, y: normalizedY};
 
-    polygonGroup.isPointInAnyPolygon(selectionCoords);
-    console.log('Selection coordinates:', selectionCoords);
+    const bodyPart = polygonGroup.isPointInAnyPolygon(selectionCoords);
+    if (bodyPart) {
+      onBodyPartSelect(bodyPart);
+    }
   };
 
   const onComponentLayout = (event: LayoutChangeEvent) => {
@@ -45,36 +58,28 @@ const BodyMap: React.FC = () => {
   };
 
   return (
-    <View style={styles.componentContainer}>
-      <TouchableOpacity
-        onPress={handleMusclePress}
-        onLayout={onComponentLayout}
-        accessibilityLabel="Body map"
-        accessibilityHint="Select a muscle group by tapping on the body map."
-        accessibilityRole="button"
-        style={styles.bodyMapContainer}>
-        <Image
-          style={styles.bodyMapImage}
-          source={require('../../../../assets/fonts/BodyMapFront.png')}
-        />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={handleMusclePress}
+      onLayout={onComponentLayout}
+      accessibilityLabel="Body map"
+      accessibilityHint="Select a muscle group by tapping on the body map."
+      accessibilityRole="button"
+      style={styles.bodyMapContainer}>
+      <Image
+        style={styles.bodyMapImage}
+        source={require('../../../../assets/fonts/BodyMapFront.png')}
+        resizeMode="stretch"
+      />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  componentContainer: {
-    flex: 1,
-    ...layoutStyles.centerHorizontally,
-  },
   bodyMapContainer: {
-    width: '75%',
-    height: '85%',
-    ...layoutStyles.centerHorizontally,
+    ...layoutStyles.centerVertically,
   },
   bodyMapImage: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
 

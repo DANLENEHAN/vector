@@ -113,7 +113,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
         <View style={styles.headerSection}>
           <Header
             label="Weight"
-            navigation={navigation}
+            onClick={navigation.goBack}
             includeBackArrow={true}
           />
         </View>

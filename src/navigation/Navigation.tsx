@@ -12,6 +12,7 @@ import Splash from '@screens/Splash';
 import Generic from '@screens/Generic';
 // Track Screens
 import WeightTracking from '@screens/track/WeightTracking';
+import BodyMeasurementTracking from '@screens/track/bodyMeasurement/BodyMeasurementTracking';
 import MoodScreen from '@screens/track/Mood';
 import WaterScreen from '@screens/track/Water';
 // Progress Screens
@@ -104,6 +105,11 @@ const AuthNavigator: React.FC = (): React.ReactElement => {
         <AppStack.Screen
           name="WeightTracking"
           component={WeightTracking}
+          options={{headerShown: false}}
+        />
+        <AppStack.Screen
+          name="BodyMeasurementTracking"
+          component={BodyMeasurementTracking}
           options={{headerShown: false}}
         />
         <AppStack.Screen
