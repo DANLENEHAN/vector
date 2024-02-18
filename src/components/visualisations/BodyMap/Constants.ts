@@ -1,22 +1,10 @@
+import {BodyStatType} from '@services/api/swagger/data-contracts';
 import {Polygon} from '@components/visualisations/BodyMap/Types';
 
-export enum MeasureableBodyparts {
-  Chest = 'chest',
-  Neck = 'Neck',
-  Shoulders = 'shoulders',
-  UpperLeg = 'UpperLeg',
-  LowerLeg = 'LowerLeg',
-  Waist = 'Waist',
-  Hips = 'Hips',
-  Glutes = 'Glutes',
-  UpperArm = 'UpperArm',
-  LowerArm = 'LowerArm',
-}
-
 export const BodyPartToPolygonMapper: {
-  [key in MeasureableBodyparts]?: Array<Polygon>;
+  [key in BodyStatType]?: Array<Polygon>;
 } = {
-  [MeasureableBodyparts.Chest]: [
+  [BodyStatType.Chest]: [
     new Polygon([
       {x: 0.3502065540215009, y: 0.23677706148207545},
       {x: 0.3533057273798082, y: 0.24369748445843636},
@@ -69,7 +57,7 @@ export const BodyPartToPolygonMapper: {
       {x: 0.3657024208130374, y: 0.23776569980097348},
     ]),
   ],
-  [MeasureableBodyparts.Neck]: [
+  [BodyStatType.Neck]: [
     new Polygon([
       {x: 0.4452478861061357, y: 0.18734553021253902},
       {x: 0.4555784482039492, y: 0.19080573038673812},
@@ -116,7 +104,7 @@ export const BodyPartToPolygonMapper: {
       {x: 0.4493801014873346, y: 0.18685119973910863},
     ]),
   ],
-  [MeasureableBodyparts.Waist]: [
+  [BodyStatType.Waist]: [
     new Polygon([
       {x: 0.3119834316989217, y: 0.31636184651235666},
       {x: 0.3305784718487655, y: 0.3222936311698195},

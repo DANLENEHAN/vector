@@ -12,17 +12,17 @@ import GenericMeasurementTracking from './GenericMeasurementTracking';
 import Header from '@components/navbar/Header';
 
 // Types
-import {BodyStatType} from '@services/api/swagger/data-contracts';
 import {ScreenProps} from '@screens/Types';
-import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
+import {BodyStatType} from '@services/api/swagger/data-contracts';
 
 const BodyMeasurementTracking: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const [selectedBodyPart, setSelectedBodyPart] =
-    useState<MeasureableBodyparts | null>(null);
+  const [selectedBodyPart, setSelectedBodyPart] = useState<BodyStatType | null>(
+    null,
+  );
 
-  const handleBodyPartSelect = (bodyPart: MeasureableBodyparts) => {
+  const handleBodyPartSelect = (bodyPart: BodyStatType) => {
     setSelectedBodyPart(bodyPart);
   };
 
@@ -48,9 +48,8 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         )}
         {selectedBodyPart && (
           <GenericMeasurementTracking
-            statType={BodyStatType.BodyMeasurement}
+            statType={selectedBodyPart}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}
-            statName={selectedBodyPart}
           />
         )}
       </View>

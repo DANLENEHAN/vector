@@ -7,7 +7,6 @@ import {
   darkThemeColors,
   layoutStyles,
   headingTextStyles,
-  bodyTextStyles,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
@@ -36,7 +35,6 @@ import {
 } from '@services/api/swagger/data-contracts';
 
 // Constants
-import {MeasureableBodyparts} from '@components/visualisations/BodyMap/Constants';
 import {MeasurementConfig} from '@screens/track/bodyMeasurement/Constants';
 
 // Logger
@@ -45,17 +43,14 @@ import logger from '@utils/Logger';
 // Functions
 import {createNewNutrition} from '@services/api/blueprints/nutrition/Functions';
 import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
-import {capitalizeString} from '@shared/Functions';
 
 export interface GenericMeasurementTrackingProps {
   statType: BodyStatType | NutritionType;
-  statName: MeasureableBodyparts | 'Weight' | 'Height' | 'Water';
   onSuccessfulCreate: () => void;
 }
 
 const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
   statType,
-  statName,
   onSuccessfulCreate,
 }: GenericMeasurementTrackingProps): React.ReactElement<GenericMeasurementTrackingProps> => {
   const measurementConfig = MeasurementConfig[statType];
@@ -82,7 +77,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
       return;
     }
 
-    if (statType === BodyStatType.BodyMeasurement) {
+    if (Object.values(BodyStatType).includes(statType as BodyStatType)) {
       createNewBodyStat({
         value: parsedMeasurement,
         unitValue: activeUnit as
@@ -92,13 +87,17 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
         onSuccessfulCreate: onSuccessfulCreate,
         statType: statType as BodyStatType,
       });
-    } else {
+    } else if (
+      Object.values(NutritionType).includes(statType as NutritionType)
+    ) {
       createNewNutrition({
         value: parsedMeasurement,
         unitValue: activeUnit as WaterUnit | CaloriesUnit | NutritionWeightUnit,
         onSuccessfulCreate: onSuccessfulCreate,
         statType: statType as NutritionType,
       });
+    } else {
+      logger.error(`Cannot save stat. Unknown statType: ${statType}.`);
     }
   };
 
@@ -106,7 +105,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.content}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
-          What is your {capitalizeString(statName)} measurement?
+          What is your measurement?
         </Text>
         <NumberInput
           style={styles.inputStyle}
@@ -145,10 +144,6 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     ...headingTextStyles.medium,
-  },
-  measureInstructions: {
-    ...bodyTextStyles.small,
-    textAlign: 'center',
   },
 });
 

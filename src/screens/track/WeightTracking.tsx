@@ -7,7 +7,7 @@ import GenericMeasurementTracking from '@screens/track/bodyMeasurement/GenericMe
 
 // Types
 import {ScreenProps} from '@screens/Types';
-import {NutritionType} from '@services/api/swagger/data-contracts';
+import {BodyStatType} from '@services/api/swagger/data-contracts';
 // Styling
 import {layoutStyles} from '@styles/Main';
 // Services
@@ -31,9 +31,8 @@ const WeightTracking: React.FC<ScreenProps> = ({
       </View>
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
-          statType={NutritionType.Water}
+          statType={BodyStatType.Weight}
           onSuccessfulCreate={navigation.goBack}
-          statName={'Water'}
         />
       </View>
     </ScreenWrapper>
