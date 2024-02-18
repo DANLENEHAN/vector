@@ -1,17 +1,13 @@
 // React imports
 import React from 'react';
-import {Text} from 'react-native';
 // Styling
-import {
-  lightThemeColors,
-  darkThemeColors,
-  layoutStyles,
-  headingTextStyles,
-} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
 import {View, StyleSheet, ScrollView} from 'react-native';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
+
 // Types
 import {ScreenProps} from '@screens/Types';
 import {TileData} from '@components/buttons/ClickableTile';
@@ -47,15 +43,13 @@ const WellnessTracking: React.FC<ScreenProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
-    <View
-      style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
-      testID="wellness-tracking-screen">
-      <View style={styles.header}>
-        <Text style={[styles.pageHeading, {color: currentTheme.text}]}>
-          Health & Wellness
-        </Text>
-      </View>
-      <View style={styles.scrollContainer}>
+    <ScreenWrapper>
+      <View
+        style={[
+          styles.mainContainer,
+          {backgroundColor: currentTheme.background},
+        ]}
+        testID="wellness-tracking-screen">
         <ScrollView contentContainerStyle={styles.scroll}>
           {tile_data.map((tile, index) => (
             <ClickableTile
@@ -73,27 +67,18 @@ const WellnessTracking: React.FC<ScreenProps> = ({
           ))}
         </ScrollView>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-  },
-  header: {
-    flex: 1,
-    ...layoutStyles.centerVertically,
-  },
-  pageHeading: {
-    ...headingTextStyles.small,
-  },
-  scrollContainer: {
-    flex: 9,
+    height: '70%',
+    width: '100%',
   },
   scroll: {
     flex: 1,
-    ...layoutStyles.spaceAroundVertical,
+    ...layoutStyles.flexStartVertical,
   },
 });
 
