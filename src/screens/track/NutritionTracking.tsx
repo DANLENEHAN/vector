@@ -24,10 +24,10 @@ const tile_data: TileData[] = [
 /**
  * Nutrition Tracking Screen
  *
- * @component NutritionTracking
+ * Uses context to manage themes and provides a scrollable view of clickable tiles
+ * for different nutrition tracking options.
  *
- * @param {ScreenProps} navigation - Stack Navigation
- *
+ * @param {ScreenProps} navigation - Stack Navigation for navigating to different screens.
  * @returns {React.FC} - Nutrition Tracking Screen Component
  */
 const NutritionTracking: React.FC<ScreenProps> = ({
@@ -44,9 +44,9 @@ const NutritionTracking: React.FC<ScreenProps> = ({
         ]}
         testID="nutrition-tracking-screen">
         <ScrollView contentContainerStyle={styles.scroll}>
-          {tile_data.map((tile, index) => (
+          {tile_data.map(tile => (
             <ClickableTile
-              key={index}
+              key={tile.route} // Use unique identifier as key
               onPress={() => navigation.navigate(tile.route as 'WaterTracking')}
               label={tile.label}
               icon={tile.icon}

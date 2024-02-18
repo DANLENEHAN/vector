@@ -44,15 +44,12 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         />
       </View>
       <View style={styles.componentContainer}>
-        {!selectedBodyPart && (
-          <View style={styles.bodyMapContainer}>
-            <BodyMap onBodyPartSelect={handleBodyPartSelect} />
-          </View>
-        )}
-        {selectedBodyPart && (
+        {!selectedBodyPart ? (
+          <BodyMap onBodyPartSelect={handleBodyPartSelect} />
+        ) : (
           <GenericMeasurementTracking
             statType={selectedBodyPart}
-            headingText={`Track a measurement for ${capitalizeString(
+            headingText={`Track measurement for ${capitalizeString(
               selectedBodyPart,
             )}!`}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}

@@ -34,8 +34,10 @@ const tile_data: TileData[] = [
 /**
  * Home screen for the wellness tracking section
  *
- * @param {ScreenProps} props - Navigation object for the screen
- * @returns {React.FC} - Returns the wellness tracking screen component
+ * Provides a UI for navigating to different wellness tracking features.
+ *
+ * @param {ScreenProps} props - Props containing the navigation object for screen navigation
+ * @returns {React.FC<ScreenProps>} The wellness tracking screen component
  */
 const WellnessTracking: React.FC<ScreenProps> = ({
   navigation,
@@ -51,9 +53,9 @@ const WellnessTracking: React.FC<ScreenProps> = ({
         ]}
         testID="wellness-tracking-screen">
         <ScrollView contentContainerStyle={styles.scroll}>
-          {tile_data.map((tile, index) => (
+          {tile_data.map(tile => (
             <ClickableTile
-              key={index}
+              key={tile.route} // Use unique label for key
               onPress={() =>
                 navigation.navigate(
                   tile.route as 'WeightProgress' | 'MoodProgress',

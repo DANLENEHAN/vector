@@ -21,7 +21,7 @@ import {layoutStyles} from '@styles/Main';
  * Defines the properties for the BodyMap component, enabling interaction with selected body parts on the map.
  *
  * @type {Object} BodyMapProps
- * @property {(bodyPart: string) => void} onBodyPartSelect - A callback function that is called when a body part is selected. It receives the name of the selected body part as a string argument.
+ * @property {(bodyPart: BodyStatType) => void} onBodyPartSelect - A callback function that is called when a body part is selected. It receives the name of the selected body part as a string argument.
  */
 interface BodyMapProps {
   onBodyPartSelect: (bodyPart: BodyStatType) => void;
@@ -61,9 +61,9 @@ const BodyMap: React.FC<BodyMapProps> = ({
     <TouchableOpacity
       onPress={handleMusclePress}
       onLayout={onComponentLayout}
-      accessibilityLabel="Body map"
-      accessibilityHint="Select a muscle group by tapping on the body map."
-      accessibilityRole="button"
+      accessibilityLabel="Interactive body map"
+      accessibilityHint="Tap a muscle group on the body map to select it."
+      accessibilityRole="imagebutton"
       style={styles.bodyMapContainer}>
       <Image
         style={styles.bodyMapImage}

@@ -14,12 +14,11 @@ import {layoutStyles} from '@styles/Main';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 
 /**
- *  Weight tracking screen
+ * Weight tracking screen component
+ * Provides UI for tracking weight updates.
  *
- * @component WeightTracking
- * @param {ScreenProps} navigation - Navigation object for the screen
- *
- * @returns {React.FC} - Returns the weight tracking screen component
+ * @param {ScreenProps} props - Props containing the navigation object for screen navigation
+ * @returns {React.FC<ScreenProps>} The weight tracking screen component
  */
 const WeightTracking: React.FC<ScreenProps> = ({
   navigation,
@@ -32,7 +31,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
           statType={BodyStatType.Weight}
-          headingText="Track a Weight update!"
+          headingText="Track Your Weight Update!"
           onSuccessfulCreate={navigation.goBack}
         />
       </View>

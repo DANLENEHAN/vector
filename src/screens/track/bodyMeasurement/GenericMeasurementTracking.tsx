@@ -103,7 +103,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.content}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
           {headingText}
@@ -121,11 +121,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
         />
         <ButtonComponent
           text="Track"
-          disabled={
-            measurementValue === '0' ||
-            measurementValue === '' ||
-            measurementValue === '0.0'
-          }
+          disabled={!measurementValue || parseFloat(measurementValue) <= 0}
           onPress={handleSaveMeasurement}
         />
       </View>
@@ -135,7 +131,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
 
 const styles = StyleSheet.create({
   content: {
-    height: '60%',
+    height: '55%',
     width: '80%',
     ...layoutStyles.spaceBetweenVertical,
   },
