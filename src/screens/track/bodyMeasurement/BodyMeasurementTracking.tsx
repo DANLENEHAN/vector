@@ -15,6 +15,9 @@ import Header from '@components/navbar/Header';
 import {ScreenProps} from '@screens/Types';
 import {BodyStatType} from '@services/api/swagger/data-contracts';
 
+// Functions
+import {capitalizeString} from '@shared/Functions';
+
 const BodyMeasurementTracking: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
@@ -49,6 +52,9 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         {selectedBodyPart && (
           <GenericMeasurementTracking
             statType={selectedBodyPart}
+            headingText={`Track a measurement for ${capitalizeString(
+              selectedBodyPart,
+            )}!`}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}
           />
         )}

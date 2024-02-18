@@ -32,6 +32,7 @@ const WaterScreen: React.FC<ScreenProps> = ({
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
           statType={NutritionType.Water}
+          headingText="Track Your Water Intake!"
           onSuccessfulCreate={navigation.goBack}
         />
       </View>

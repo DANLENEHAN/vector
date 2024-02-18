@@ -46,15 +46,16 @@ import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
 
 export interface GenericMeasurementTrackingProps {
   statType: BodyStatType | NutritionType;
+  headingText: string;
   onSuccessfulCreate: () => void;
 }
 
 const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
   statType,
+  headingText,
   onSuccessfulCreate,
 }: GenericMeasurementTrackingProps): React.ReactElement<GenericMeasurementTrackingProps> => {
-  const measurementConfig = MeasurementConfig[statType];
-  const measurementUnit = Object.values(measurementConfig.measurementUnit);
+  const measurementUnit = Object.values(MeasurementConfig[statType]);
 
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -105,7 +106,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.content}>
         <Text style={[styles.title, {color: currentTheme.text}]}>
-          What is your measurement?
+          {headingText}
         </Text>
         <NumberInput
           style={styles.inputStyle}

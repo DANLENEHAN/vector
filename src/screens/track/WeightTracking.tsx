@@ -32,6 +32,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
           statType={BodyStatType.Weight}
+          headingText="Track a Weight update!"
           onSuccessfulCreate={navigation.goBack}
         />
       </View>
