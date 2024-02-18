@@ -36,9 +36,9 @@ describe('Body BodyStat Functions Tests', () => {
     // Arrange
     const params = {
       value: sampleStat.value,
-      navigation: mockNavigation,
-      bodyStatType: sampleStat.stat_type,
       unitValue: sampleStat.unit,
+      statType: sampleStat.stat_type,
+      onSuccessfulCreate: mockNavigation.goBack,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
 
@@ -51,7 +51,7 @@ describe('Body BodyStat Functions Tests', () => {
       {
         body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
         unit: params.unitValue,
-        stat_type: params.bodyStatType,
+        stat_type: params.statType,
         user_id: 1,
         value: params.value,
         created_at: sampleStat.created_at,
