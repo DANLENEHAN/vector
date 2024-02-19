@@ -25,7 +25,7 @@ const tile_data: TileData[] = [
     route: 'MoodTracking',
   },
   {
-    label: 'Muscle Measurements',
+    label: 'Muscle',
     icon: 'ruler',
     route: 'BodyMeasurementTracking',
   },
@@ -75,7 +75,7 @@ const WellnessTracking: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: '70%',
+    height: '80%',
     width: '100%',
   },
   scroll: {

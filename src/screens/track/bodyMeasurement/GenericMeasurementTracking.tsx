@@ -131,7 +131,7 @@ const GenericMeasurementTracking: React.FC<GenericMeasurementTrackingProps> = ({
 
 const styles = StyleSheet.create({
   content: {
-    height: '55%',
+    height: '60%',
     width: '80%',
     ...layoutStyles.spaceBetweenVertical,
   },

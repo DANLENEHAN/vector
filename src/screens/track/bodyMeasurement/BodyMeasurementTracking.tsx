@@ -49,7 +49,7 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         ) : (
           <GenericMeasurementTracking
             statType={selectedBodyPart}
-            headingText={`Track measurement for ${capitalizeString(
+            headingText={`Track Your Measurement For ${capitalizeString(
               selectedBodyPart,
             )}!`}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}
