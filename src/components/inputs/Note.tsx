@@ -1,7 +1,7 @@
 // React Import
 import React, {useState} from 'react';
 // Components
-import {View, TextInput, ScrollView, Text} from 'react-native';
+import {View, TextInput, ScrollView, Text, StyleSheet} from 'react-native';
 // Styling
 import {
   paddingSizes,
@@ -72,22 +72,30 @@ const Note: React.FC<NoteProps> = ({
     const lastAddedChar = getLastAddedChar(note, cursorPosition);
     const currentLine = getCurrentLine(note, cursorPosition);
     const bulletPointRegex = /^([*-])\s/;
+    const validBulletChars = [bulletPoint, '-'];
 
     // If the user types "*" or "-" at the start of a new line,
     if (bulletPointRegex.test(currentLine)) {
-      newContent = replaceBulletPointCharacter(note, cursorPosition);
+      // Evaluate if bullet point is "-" or "*"
+      const bulletChar = currentLine.match(bulletPointRegex)![1];
+      newContent = replaceBulletPointCharacter(
+        note,
+        cursorPosition,
+        bulletChar,
+      );
     }
 
     // Handling bullet point addition and line continuation
     if (lastAddedChar === '\n') {
       const trimmedCurrentLine = currentLine.trim();
       // Continuation of bullet points
-      if (trimmedCurrentLine.charAt(0) === bulletPoint) {
+      if (validBulletChars.includes(trimmedCurrentLine.charAt(0))) {
         // Check if content is empty after bullet point
         if (trimmedCurrentLine.length === 1) {
           newContent = terminateBulletPoint(note, cursorPosition);
         } else {
-          newContent = continueBulletPoint(note, cursorPosition);
+          const bulletChar = trimmedCurrentLine.charAt(0);
+          newContent = continueBulletPoint(note, cursorPosition, bulletChar);
         }
       }
     }
@@ -117,11 +125,20 @@ const Note: React.FC<NoteProps> = ({
    * @returns {string} the updated text with the bullet point character replaced
    *
    */
-  const replaceBulletPointCharacter = (text: string, cursorPos: number) => {
+  const replaceBulletPointCharacter = (
+    text: string,
+    cursorPos: number,
+    bulletChar: string,
+  ) => {
     const startOfLine = text.substring(0, cursorPos).lastIndexOf('\n') + 1;
     const contentBefore = text.substring(0, startOfLine);
     const contentAfter = text.substring(cursorPos);
-    return `${contentBefore}${tabSpace}${bulletPoint} ${contentAfter}`;
+
+    if (bulletChar === '*') {
+      return `${contentBefore}${tabSpace}${bulletPoint} ${contentAfter}`;
+    } else {
+      return `${contentBefore}${tabSpace}${bulletChar} ${contentAfter}`;
+    }
   };
 
   /**
@@ -133,10 +150,17 @@ const Note: React.FC<NoteProps> = ({
    * @returns {string} the updated text with the bullet point character added
    *
    */
-  const continueBulletPoint = (text: string, cursorPos: number) => {
+  const continueBulletPoint = (
+    text: string,
+    cursorPos: number,
+    bulletChar: string,
+  ) => {
     const contentBeforeNewLine = text.substring(0, cursorPos);
     const contentAfterNewLine = text.substring(cursorPos + 1);
-    return `${contentBeforeNewLine}\n${tabSpace}${bulletPoint} ${contentAfterNewLine}`;
+
+    const usedChar = bulletChar === '*' ? bulletPoint : bulletChar;
+
+    return `${contentBeforeNewLine}\n${tabSpace}${usedChar} ${contentAfterNewLine}`;
   };
 
   /**
@@ -205,13 +229,12 @@ const Note: React.FC<NoteProps> = ({
       style={[
         styles.noteContainer,
         {
-          width: '100%',
           backgroundColor: currentTheme.background,
           borderColor: atMaxLen ? currentTheme.error : currentTheme.borders,
         },
       ]}>
       {showTitle && (
-        <>
+        <View>
           <TextInput
             style={[
               styles.title,
@@ -229,12 +252,10 @@ const Note: React.FC<NoteProps> = ({
               styles.titleBottomBorder,
               {
                 borderBottomColor: currentTheme.borders,
-                width: '95%',
-                left: '2.5%',
               },
             ]}
           />
-        </>
+        </View>
       )}
       <ScrollView style={styles.bodyContainer}>
         <TextInput
@@ -258,12 +279,13 @@ const Note: React.FC<NoteProps> = ({
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   noteContainer: {
     flex: 1,
     padding: paddingSizes.small,
     borderRadius: borderRadius.small,
     borderWidth: borderWidth.xSmall,
+    width: '100%',
   },
   title: {
     ...headingTextStyles.xSmall,
@@ -271,6 +293,8 @@ const styles = {
   titleBottomBorder: {
     borderBottomWidth: borderWidth.xSmall,
     marginVertical: marginSizes.medium,
+    left: '2.5%',
+    width: '95%',
   },
   bodyContainer: {
     flex: 1,
@@ -278,6 +302,6 @@ const styles = {
   bodyText: {
     ...bodyTextStyles.small,
   },
-};
+});
 
 export default Note;

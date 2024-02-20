@@ -76,7 +76,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
   };
 
   return (
-    <View style={{width: '100%'}}>
+    <View>
       <View style={styles.TagSelectorHeader}>
         <Text style={[styles.TagSelectorLabel, {color: currentTheme.text}]}>
           {tagSelectorLabel}
@@ -92,7 +92,6 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
           </Text>
         )}
         <View style={styles.iconContainer}>
-          {/* Placeholder for other actions like opening a menu */}
           <TouchableOpacity onPress={() => console.log('Menu action')}>
             <Icon
               name={'bars'}

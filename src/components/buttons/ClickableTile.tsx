@@ -78,7 +78,7 @@ const ClickableTile: React.FC<ClickableTileProps> = ({
   icon,
   backgroundColor,
   lastTracked,
-}: ClickableTileProps) => {
+}): React.ReactElement<ClickableTileProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
