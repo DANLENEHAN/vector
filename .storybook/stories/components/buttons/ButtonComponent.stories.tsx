@@ -6,7 +6,7 @@ import ButtonComponent, {
 import {SystemProvider} from '../../../../src/context/SystemContext';
 
 export default {
-  title: 'ButtonComponent',
+  title: 'components/buttons/ButtonComponent',
   component: ButtonComponent,
   decorators: [
     (Story: any) => (

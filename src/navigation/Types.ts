@@ -53,6 +53,7 @@ export type HomeParamList = {
  * @param {undefined} MoodProgress  The MoodProgress screen.
  * @param {undefined} WeightProgress  The WeightProgress screen.
  * @param {undefined} WaterProgress  The WaterProgress screen.
+ * @param {object} MoodTagTracking  The MoodTagTracking screen.
  */
 export type RootStackParamList = {
   Splash: undefined;
@@ -62,6 +63,7 @@ export type RootStackParamList = {
   MoodTracking: undefined;
   WeightTracking: undefined;
   WaterTracking: undefined;
+  MoodTagTracking: object;
   // Progress Screens
   MoodProgress: undefined;
   WeightProgress: undefined;

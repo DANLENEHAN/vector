@@ -16,6 +16,7 @@ export interface LayoutStyles {
   flexStartVertical: ViewStyle;
   flexStretchVertical: ViewStyle;
   flexStretchHorizontal: ViewStyle;
+  flexEndHorizontal: ViewStyle;
 }
 
 export interface ButtonStyles {

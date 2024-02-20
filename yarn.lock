@@ -2284,7 +2284,7 @@
 
 "@testing-library/jest-native@^5.4.3":
   version "5.4.3"
-  resolved "https://registry.npmjs.org/@testing-library/jest-native/-/jest-native-5.4.3.tgz"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-native/-/jest-native-5.4.3.tgz#9334c68eaf45db9eb20d0876728cc5d7fc2c3ea2"
   integrity sha512-/sSDGaOuE+PJ1Z9Kp4u7PQScSVVXGud59I/qsBFFJvIbcn4P6yYw6cBnBmbPF+X9aRIsTJRDl6gzw5ZkJNm66w==
   dependencies:
     chalk "^4.1.2"
@@ -2293,9 +2293,9 @@
     pretty-format "^29.0.3"
     redent "^3.0.0"
 
-"@testing-library/react-native@^12.4.2":
+"@testing-library/react-native@^12.4.3":
   version "12.4.3"
-  resolved "https://registry.npmjs.org/@testing-library/react-native/-/react-native-12.4.3.tgz"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.4.3.tgz#57cd6a88b289f19144558b5e97336b57101af3ec"
   integrity sha512-WLE7VbbR5jZJQl3vfNK7Wt+IHnzhOxyu95Mr56EHmzH3XhC8DkrPVAnUq9asq/QWj4aGnymbinFx6zZys/WZmA==
   dependencies:
     jest-matcher-utils "^29.7.0"
