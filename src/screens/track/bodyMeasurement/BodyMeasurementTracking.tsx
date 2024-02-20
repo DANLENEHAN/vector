@@ -7,7 +7,7 @@ import {layoutStyles} from '@styles/Main';
 
 // Components
 import ScreenWrapper from '@components/layout/ScreenWrapper';
-import BodyMap from '@components/visualisations/BodyMap/BodyMapComponent';
+import BodyMap from '@components/visualisations/BodyMap/BodyMap';
 import GenericMeasurementTracking from './GenericMeasurementTracking';
 import Header from '@components/navbar/Header';
 

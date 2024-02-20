@@ -5,7 +5,7 @@ import BodyMeasurementTracking from '../../../src/screens/track//bodyMeasurement
 import {SystemProvider} from '../../../src/context/SystemContext';
 
 export default {
-  title: 'BodyMeasurementTracking',
+  title: 'screens/track/bodyMeasurement/BodyMeasurementTracking',
   component: BodyMeasurementTracking,
   decorators: [
     (Story: any) => (
