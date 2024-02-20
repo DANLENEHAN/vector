@@ -1,6 +1,8 @@
 /**
  * Global setup for tests
  */
+import '@testing-library/jest-native/extend-expect';
+
 jest.mock('react-native-fs', () => {});
 jest.mock('react-native-device-info', () => {});
 jest.mock('uuid', () => {});

@@ -2,11 +2,11 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react-native';
 import ButtonComponent, {
   ButtonProps,
-} from '../../src/components/buttons/ButtonComponent';
-import {SystemProvider} from '../../src/context/SystemContext';
+} from '../../../../src/components/buttons/ButtonComponent';
+import {SystemProvider} from '../../../../src/context/SystemContext';
 
 export default {
-  title: 'ButtonComponent',
+  title: 'components/buttons/ButtonComponent',
   component: ButtonComponent,
   decorators: [
     (Story: any) => (

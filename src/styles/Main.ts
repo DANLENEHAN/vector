@@ -228,6 +228,11 @@ export const layoutStyles: LayoutStyles = {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  flexEndHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
   flexStartVertical: {
     flexDirection: 'column',
     justifyContent: 'space-between',

@@ -14,6 +14,7 @@ import Generic from '@screens/Generic';
 import WeightTracking from '@screens/track/WeightTracking';
 import MoodScreen from '@screens/track/Mood';
 import WaterScreen from '@screens/track/Water';
+import MoodTagScreen from '@screens/track/MoodTag';
 // Progress Screens
 import WeightProgress from '@screens/progress/WeightProgress';
 import MoodProgress from '@screens/progress/MoodProgress';
@@ -109,6 +110,11 @@ const AuthNavigator: React.FC = (): React.ReactElement => {
         <AppStack.Screen
           name="MoodTracking"
           component={MoodScreen}
+          options={{headerShown: false}}
+        />
+        <AppStack.Screen
+          name="MoodTagTracking"
+          component={MoodTagScreen}
           options={{headerShown: false}}
         />
         <AppStack.Screen

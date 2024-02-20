@@ -14,7 +14,7 @@ import {useSystem} from '@context/SystemContext';
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {marginSizes, layoutStyles, headingTextStyles} from '@styles/Main';
 // Services
-import {createNewMood} from '@services/api/blueprints/mood/Functions';
+//import {createNewMood} from '@services/api/blueprints/mood/Functions';
 // Constants
 import {MoodValue} from '@services/api/swagger/data-contracts';
 
@@ -76,13 +76,13 @@ const MoodScreen: React.FC<ScreenProps> = ({
     setMoodValue(newValue);
   };
 
-  const handleSaveMood = async () => {
-    createNewMood({
-      value: moodValue,
-      label: moods[moodValue].label as MoodValue,
-      navigation: navigation,
-    });
-  };
+  // const handleSaveMood = async () => {
+  //   createNewMood({
+  //     value: moodValue,
+  //     label: moods[moodValue].label as MoodValue,
+  //     navigation: navigation,
+  //   });
+  // };
 
   const mood = moods[moodValue];
 
@@ -117,7 +117,9 @@ const MoodScreen: React.FC<ScreenProps> = ({
         <ButtonComponent
           text="Capture"
           disabled={false}
-          onPress={handleSaveMood}
+          onPress={() =>
+            navigation.navigate('MoodTagTracking', {mood: moods[moodValue]})
+          }
         />
       </View>
     </ScreenWrapper>
