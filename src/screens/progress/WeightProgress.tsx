@@ -7,7 +7,7 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
-import LineGraph from '@components/graphs/Line/Graph';
+import LineGraph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 import {View, StyleSheet} from 'react-native';
 // Services
@@ -18,7 +18,7 @@ import {convertStats} from '@utils/Conversion';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
-import {GraphPlotData} from '@components/graphs/Line/Types';
+import {GraphPlotData} from '@components/visualisations/graphs/Line/Types';
 // Logger
 import logger from '@utils/Logger';
 
@@ -113,7 +113,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
         <View style={styles.headerSection}>
           <Header
             label="Weight"
-            navigation={navigation}
+            onClick={navigation.goBack}
             includeBackArrow={true}
           />
         </View>

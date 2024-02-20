@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   tile: {
     ...layoutStyles.spaceAroundVertical,
     width: '45%',
-    height: 110,
+    height: 120,
     borderRadius: borderRadius.medium,
   },
   iconContainer: {
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   },
   tileLabel: {
     ...headingTextStyles.small,
+    textAlign: 'center',
   },
   tileSubtext: {
     ...bodyTextStyles.small,

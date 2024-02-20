@@ -68,6 +68,7 @@ export type RootStackParamList = {
   MoodProgress: undefined;
   WeightProgress: undefined;
   WaterProgress: undefined;
+  BodyMeasurementTracking: undefined;
 };
 
 /**

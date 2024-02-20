@@ -54,7 +54,7 @@ export interface BodyStatCreateSchema {
    * The unit of the body body_stat
    * @example "kg"
    */
-  unit: string;
+  unit: MuscleMeasurementUnit | HeightUnit | WeightUnit;
   /**
    * Updated At
    * @default null
@@ -78,12 +78,22 @@ export interface BodyStatCreateSchema {
 
 /**
  * BodyStatType
- * Body BodyStat types.
+ * Extended Enum for body statistics including general measurements like height and weight,
+ * in addition to specific body parts defined in MeasureableBodyParts.
  */
 export enum BodyStatType {
   Height = 'height',
   Weight = 'weight',
-  BodyMeasurement = 'body_measurement',
+  Chest = 'chest',
+  Neck = 'neck',
+  Shoulders = 'shoulders',
+  UpperLeg = 'upper_leg',
+  LowerLeg = 'lower_leg',
+  Waist = 'waist',
+  Hips = 'hips',
+  Glutes = 'glutes',
+  UpperArm = 'upper_arm',
+  LowerArm = 'lower_arm',
 }
 
 /**
@@ -122,7 +132,7 @@ export interface BodyStatUpdateSchema {
    * The unit of the body body_stat
    * @example "kg"
    */
-  unit: string;
+  unit: MuscleMeasurementUnit | HeightUnit | WeightUnit;
   /**
    * Updated At
    * @format date-time
@@ -1264,6 +1274,15 @@ export enum MuscleGroup {
   Forearms = 'Forearms',
   Neck = 'Neck',
   Traps = 'Traps',
+}
+
+/**
+ * MuscleMeasurementUnit
+ * Muscle measurement units.
+ */
+export enum MuscleMeasurementUnit {
+  Cm = 'cm',
+  Inch = 'inch',
 }
 
 /**

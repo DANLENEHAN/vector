@@ -26,9 +26,14 @@ export const runDbMigrationProcess = async (revisionObject: {
     ]);
 
     // Extract the revision ID from the query result
-    const revisionId: string = migrationResult[0].result
-      ? migrationResult[0].result[0].version_num
-      : null;
+    let revisionId: string | null;
+    if (migrationResult[0].error) {
+      revisionId = null;
+    } else {
+      revisionId = migrationResult[0].result
+        ? migrationResult[0].result[0].version_num
+        : null;
+    }
 
     // Get the revisions to process based on the fetched revision ID
     const revisionsToProcess = getValuesAfterSpecifiedKey(

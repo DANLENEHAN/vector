@@ -1,11 +1,11 @@
 // Mocked Functions
-import {insertStat} from '@services/db/bodyStat/Functions';
+import {insertBodyStat} from '@services/db/bodyStat/Functions';
 import * as statApiFunctions from '@services/api/blueprints/bodyStat/Api';
 import * as asyncStorageFunctions from '@services/asyncStorage/Functions';
 import logger from '@utils/Logger';
 // Test Functions
 import {
-  createNewStat,
+  createNewBodyStat,
   getUserStats,
 } from '@services/api/blueprints/bodyStat/Functions';
 // Data
@@ -24,7 +24,7 @@ jest.mock('@services/date/Functions', () => ({
 }));
 jest.mock('@services/db/bodyStat/Functions', () => ({
   ...jest.requireActual('@services/db/bodyStat/Functions'),
-  insertStat: jest.fn(),
+  insertBodyStat: jest.fn(),
 }));
 
 describe('Body BodyStat Functions Tests', () => {
@@ -32,26 +32,26 @@ describe('Body BodyStat Functions Tests', () => {
     jest.clearAllMocks();
   });
 
-  test('createNewStat', async () => {
+  test('createNewBodyStat', async () => {
     // Arrange
     const params = {
       value: sampleStat.value,
-      navigation: mockNavigation,
-      bodyStatType: sampleStat.stat_type,
       unitValue: sampleStat.unit,
+      statType: sampleStat.stat_type,
+      onSuccessfulCreate: mockNavigation.goBack,
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
 
     // Act
-    await createNewStat(params);
+    await createNewBodyStat(params);
 
     // Assert
-    expect(insertStat).toHaveBeenCalledTimes(1);
-    expect(insertStat).toHaveBeenCalledWith([
+    expect(insertBodyStat).toHaveBeenCalledTimes(1);
+    expect(insertBodyStat).toHaveBeenCalledWith([
       {
         body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
         unit: params.unitValue,
-        stat_type: params.bodyStatType,
+        stat_type: params.statType,
         user_id: 1,
         value: params.value,
         created_at: sampleStat.created_at,
@@ -61,7 +61,7 @@ describe('Body BodyStat Functions Tests', () => {
     expect(mockNavigation.goBack).toHaveBeenCalledTimes(1);
   });
 
-  test('createNewStat with error', async () => {
+  test('createNewBodyStat with error', async () => {
     // Arrange
     const params = {
       value: sampleStat.value,
@@ -71,10 +71,10 @@ describe('Body BodyStat Functions Tests', () => {
     };
     jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
     // Act
-    await createNewStat(params);
+    await createNewBodyStat(params);
 
     // Assert
-    expect(insertStat).toHaveBeenCalledTimes(0);
+    expect(insertBodyStat).toHaveBeenCalledTimes(0);
     expect(logger.error).toHaveBeenCalledWith('Error: ');
   });
 

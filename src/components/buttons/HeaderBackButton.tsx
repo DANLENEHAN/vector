@@ -3,8 +3,6 @@ import React from 'react';
 // Components
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-// Navigation
-import {ScreenNavigationProp} from '@navigation/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {
@@ -20,10 +18,10 @@ import {
  *
  * @interface HeaderBackButtonProps
  *
- * @param {ScreenNavigationProp} navigation - Navigation prop for the screen
+ * @param {CallableFunction} onClick - Function to be called when back is selected
  */
 interface HeaderBackButtonProps {
-  navigation: ScreenNavigationProp;
+  onClick: () => void;
 }
 
 /**
@@ -34,7 +32,7 @@ interface HeaderBackButtonProps {
  * @returns {React.FC<HeaderBackButtonProps>} - React Component
  */
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
-  navigation,
+  onClick,
 }: HeaderBackButtonProps): React.ReactElement<HeaderBackButtonProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -44,7 +42,7 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
         styles.headerBackButton,
         {backgroundColor: currentTheme.background},
       ]}
-      onPress={() => navigation.goBack()}>
+      onPress={() => onClick()}>
       <Icon
         name="arrow-left"
         size={iconSizes.large}
