@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/BodyMapFront.png",
+      "sha1": "3715d6f94b1d6e88583037a08c91615314bf655c"
+    },
+    {
       "path": "assets/fonts/Lato-Black.ttf",
       "sha1": "a001eb827743636e04f8efa7d4aeedf0541c46ac"
     },

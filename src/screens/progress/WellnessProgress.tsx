@@ -1,19 +1,15 @@
 // React imports
 import React from 'react';
 // Styling
-import {
-  lightThemeColors,
-  darkThemeColors,
-  layoutStyles,
-  headingTextStyles,
-} from '@styles/Main';
+import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 //Services
 import {useSystem} from '@context/SystemContext';
 // Components
 import ClickableTile from '@components/buttons/ClickableTile';
 import {ScreenProps} from '@screens/Types';
 import {TileData} from '@components/buttons/ClickableTile';
-import {View, StyleSheet, ScrollView, Text} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import ScreenWrapper from '@components/layout/ScreenWrapper';
 
 // Data
 const tile_data: TileData[] = [
@@ -45,19 +41,17 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   return (
-    <View
-      style={[styles.mainContainer, {backgroundColor: currentTheme.background}]}
-      testID="wellness-progress-screen">
-      <View style={styles.header}>
-        <Text style={[styles.pageHeading, {color: currentTheme.text}]}>
-          Health & Wellness
-        </Text>
-      </View>
-      <View style={styles.scrollContainer}>
+    <ScreenWrapper>
+      <View
+        style={[
+          styles.mainContainer,
+          {backgroundColor: currentTheme.background},
+        ]}
+        testID="wellness-progress-screen">
         <ScrollView contentContainerStyle={styles.scroll}>
-          {tile_data.map((tile, index) => (
+          {tile_data.map(tile => (
             <ClickableTile
-              key={index}
+              key={tile.route}
               onPress={() =>
                 navigation.navigate(
                   tile.route as 'WeightProgress' | 'MoodProgress',
@@ -71,26 +65,17 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
           ))}
         </ScrollView>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-  },
-  pageHeading: {
-    ...headingTextStyles.small,
-  },
-  header: {
-    flex: 1,
-    ...layoutStyles.centerVertically,
-  },
-  scrollContainer: {
-    flex: 9,
+    height: '50%',
   },
   scroll: {
-    ...layoutStyles.spaceAroundHorizontal,
+    flex: 1,
+    ...layoutStyles.spaceBetweenVertical,
   },
 });
 

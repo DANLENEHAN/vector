@@ -28,6 +28,7 @@
 		0ACDE5BF2B28BB9700A63F93 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0ACDE5AB2B28BA3D00A63F93 /* FontAwesome6_Brands.ttf */; };
 		0ACDE5C02B28BB9700A63F93 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0ACDE5AC2B28BA3D00A63F93 /* MaterialIcons.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-vector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-vector.a */; };
+		0CE099FCDAAA4D5391C1B98F /* BodyMapFront.png in Resources */ = {isa = PBXBuildFile; fileRef = 604121320C694DC89A4BDA48 /* BodyMapFront.png */; };
 		0F485086814D40C4B9CC30BE /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1CF1446FF8694795A1B37FB3 /* Montserrat-ExtraBold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -121,6 +122,7 @@
 		5B7EB9410499542E8C5724F5 /* Pods-vector-vectorTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vector-vectorTests.debug.xcconfig"; path = "Target Support Files/Pods-vector-vectorTests/Pods-vector-vectorTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5C8473D96C7D4D668FC99C65 /* Lato-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BoldItalic.ttf"; path = "../assets/fonts/Lato-BoldItalic.ttf"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-vector.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-vector.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		604121320C694DC89A4BDA48 /* BodyMapFront.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BodyMapFront.png; path = ../assets/fonts/BodyMapFront.png; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = vector/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-vector-vectorTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vector-vectorTests.release.xcconfig"; path = "Target Support Files/Pods-vector-vectorTests/Pods-vector-vectorTests.release.xcconfig"; sourceTree = "<group>"; };
 		8D120A257A47437097FA2CE6 /* Montserrat.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Montserrat.ttf; path = ../assets/fonts/Montserrat.ttf; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 				A99142F063894686AD37D057 /* Montserrat-SemiBoldItalic.ttf */,
 				8F120D4828C94F8EA437D00C /* Montserrat-Thin.ttf */,
 				C5EAEA3992874CBBB8F09FD9 /* Montserrat-ThinItalic.ttf */,
+				604121320C694DC89A4BDA48 /* BodyMapFront.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				6EE214EBC3BD4CBC9F5A0A2E /* Montserrat-SemiBoldItalic.ttf in Resources */,
 				4A33D01E479F4B939C202041 /* Montserrat-Thin.ttf in Resources */,
 				4416FCBBC517401C97013F6A /* Montserrat-ThinItalic.ttf in Resources */,
+				0CE099FCDAAA4D5391C1B98F /* BodyMapFront.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

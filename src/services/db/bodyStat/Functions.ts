@@ -11,7 +11,7 @@ import {insertRows} from '@services/db/Functions';
  * @returns {Promise<void>} A promise that resolves when the stats are successfully inserted.
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  */
-export const insertStat = async (
+export const insertBodyStat = async (
   stats: BodyStatCreateSchema[],
 ): Promise<void> => {
   await insertRows(syncDbTables.bodyStatTable, stats);

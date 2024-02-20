@@ -28,7 +28,7 @@ const Preferences: React.FC<ScreenProps> = ({
       <View style={styles.headerSection}>
         <Header
           label="Preferences"
-          navigation={navigation}
+          onClick={navigation.goBack}
           includeBackArrow={true}
         />
       </View>
