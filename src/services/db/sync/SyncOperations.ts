@@ -13,7 +13,10 @@ import {
   convertListToSyncUpdateSchemas,
   insertSyncUpdate,
 } from '@services/db/sync/Functions';
-import {storeFailedSyncPushErrors} from '@services/asyncStorage/Functions';
+import {
+  storeFailedSyncPushErrors,
+  deleteSuccessfulSyncPushErrors,
+} from '@services/asyncStorage/Functions';
 import {
   getFailedSyncPushesCreatesForTable,
   getFailedSyncPushesUpdatesForTable,
@@ -29,6 +32,8 @@ export const processUpdatesSyncTypePush = async (
 ) => {
   let successfulRequests = 0;
   const failedPushes: SyncUpdateSchemas[] = [];
+  const successfulPushUuids: string[] = [];
+  const tableUuidColumn = `${tableName}_id`;
 
   // Get any previously failed UpdateSchemas
   const failedSyncPushesForTable: SyncUpdateSchemas[] =
@@ -56,6 +61,7 @@ export const processUpdatesSyncTypePush = async (
         ](row, {isSync: true});
 
         if (response.status === 204) {
+          successfulPushUuids.push((row as any)[tableUuidColumn]);
           successfulRequests++;
         } else {
           failedPushes.push(row);
@@ -66,14 +72,30 @@ export const processUpdatesSyncTypePush = async (
         failedPushes.push(row);
       }
     }
-    await insertSyncUpdate({
-      table_name: tableName,
-      last_synced: lastRow[timestampFields.updatedAt],
-      sync_type: SyncType.Push,
-      sync_operation: SyncOperation.Updates,
-    });
+    if (lastRow) {
+      // The lastRow can be undefined if we're only
+      // retrying failed rows with no new to process
+      await insertSyncUpdate({
+        table_name: tableName,
+        last_synced: lastRow[timestampFields.updatedAt],
+        sync_type: SyncType.Push,
+        sync_operation: SyncOperation.Updates,
+      });
+    }
     if (failedPushes.length > 0) {
       storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
+    }
+    if (successfulPushUuids.length > 0) {
+      const newSyncUuids: string[] = rowsToSync.map(
+        row => (row as any)[tableUuidColumn],
+      );
+      await deleteSuccessfulSyncPushErrors(
+        tableName,
+        successfulPushUuids.filter(
+          (uuid: string) => !newSyncUuids.includes(uuid),
+        ),
+        SyncOperation.Updates,
+      );
     }
   }
   logger.info(
@@ -97,7 +119,10 @@ export const processCreatesSyncTypePush = async (
   const allRowsToSync = [...failedSyncPushesForTable, ...rowsToSync];
 
   const failedPushes: SyncCreateSchemas[] = [];
-  if (rowsToSync.length === 0) {
+  const successfulPushUuids: string[] = [];
+  const tableUuidColumn = `${tableName}_id`;
+
+  if (allRowsToSync.length === 0) {
     logger.info(
       `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Creates}'.`,
     );
@@ -114,6 +139,7 @@ export const processCreatesSyncTypePush = async (
         ](row, {isSync: true});
 
         if (response.status === 201) {
+          successfulPushUuids.push((row as any)[tableUuidColumn]);
           successfulRequests++;
         } else {
           failedPushes.push(row);
@@ -124,14 +150,34 @@ export const processCreatesSyncTypePush = async (
         failedPushes.push(row);
       }
     }
-    await insertSyncUpdate({
-      table_name: tableName,
-      last_synced: lastRow[timestampFields.createdAt],
-      sync_type: SyncType.Push,
-      sync_operation: SyncOperation.Creates,
-    });
+    if (lastRow) {
+      // The lastRow can be undefined if we're only
+      // retrying failed rows with no new to process
+      await insertSyncUpdate({
+        table_name: tableName,
+        last_synced: lastRow[timestampFields.createdAt],
+        sync_type: SyncType.Push,
+        sync_operation: SyncOperation.Creates,
+      });
+    }
     if (failedPushes.length > 0) {
-      storeFailedSyncPushErrors(tableName, SyncOperation.Creates, failedPushes);
+      await storeFailedSyncPushErrors(
+        tableName,
+        SyncOperation.Creates,
+        failedPushes,
+      );
+    }
+    if (successfulPushUuids.length > 0) {
+      const newSyncUuids: string[] = rowsToSync.map(
+        row => (row as any)[tableUuidColumn],
+      );
+      await deleteSuccessfulSyncPushErrors(
+        tableName,
+        successfulPushUuids.filter(
+          (uuid: string) => !newSyncUuids.includes(uuid),
+        ),
+        SyncOperation.Creates,
+      );
     }
   }
   logger.info(
