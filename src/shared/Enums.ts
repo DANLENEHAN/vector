@@ -15,4 +15,5 @@ export enum TimestampFormat {
 export enum DateFormat {
   YYYYMMDD = 'YYYY-MM-DD', // Example: 2024-02-08
   DDMM = 'DD/MM', // 02-08
+  DOW_DD_MM = 'ddd DD/MM', // Mon 02-08
 }

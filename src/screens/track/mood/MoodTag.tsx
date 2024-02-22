@@ -37,6 +37,8 @@ import {moodTagGroups} from '@screens/track/mood/Constants';
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 import {MoodValue} from '@services/api/swagger/data-contracts';
 import {transformsInternalNameToDisplay} from '@shared/Functions';
+import {formatDate, utcTimestampNow} from '@services/date/Functions';
+import {DateFormat} from '@shared/Enums';
 
 /**
  *  Mood tag tracking screen
@@ -58,12 +60,8 @@ const MoodTagScreen: React.FC<any> = ({
   const mood = route.params.mood as Mood;
 
   // Get the current date
-  const today = new Date();
-  const currentDatetime = today.toLocaleDateString('en-UK', {
-    weekday: 'short', // Include the day of the week
-    day: 'numeric',
-    month: 'short',
-  });
+  const now = utcTimestampNow();
+  const currentDatetime = formatDate(now, DateFormat.DOW_DD_MM);
 
   const [notePopupVisible, setNotePopupVisible] = useState(false);
   const [note, setNote] = useState('');
