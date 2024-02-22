@@ -50,7 +50,7 @@ export const getValuesAfterSpecifiedKey = (
  * @returns {string} The transformed string with each word capitalized and separated by spaces.
  *
  */
-export const tranformInternalNameToDisplay = (name: string) => {
+export const transformsInternalNameToDisplay = (name: string) => {
   return name
     .split('_')
     .map(word => capitalizeString(word))

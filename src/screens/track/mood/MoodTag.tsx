@@ -31,12 +31,12 @@ import {
   paddingSizes,
   bodyTextStyles,
 } from '@styles/Main';
-import {capitalizeString} from '@shared/Functions';
 // Constants
 import {moodTagGroups} from '@screens/track/mood/Constants';
 //Services
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 import {MoodValue} from '@services/api/swagger/data-contracts';
+import {transformsInternalNameToDisplay} from '@shared/Functions';
 
 /**
  *  Mood tag tracking screen
@@ -113,11 +113,7 @@ const MoodTagScreen: React.FC<any> = ({
             Object.entries(moodTagGroups).map(([category, tags], index) => (
               <TagSelector
                 tags={tags}
-                tagSelectorLabel={category
-                  .replace('_', ' ')
-                  .split(' ')
-                  .map(word => capitalizeString(word))
-                  .join(' ')}
+                tagSelectorLabel={transformsInternalNameToDisplay(category)}
                 style={styles.tagSelectors}
                 key={index}
               />
