@@ -1,12 +1,11 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Meta, Story} from '@storybook/react-native';
 
 import {layoutStyles} from '../../../../../src/styles/Main';
 import BodyMap from '../../../../../src/components/visualisations/BodyMap/BodyMap';
 
 export default {
-  title: 'BodyMap',
+  title: 'components/visualisations/bodymap/BodyMap',
   component: BodyMap,
   decorators: [
     (Story: any) => (
@@ -15,8 +14,8 @@ export default {
       </View>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<any> = (args: any) => <BodyMap {...args} />;
+const Template = (args: any) => <BodyMap {...args} />;
 
 export const Default = Template.bind({});

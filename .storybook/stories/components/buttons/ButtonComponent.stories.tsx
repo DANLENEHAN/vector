@@ -1,5 +1,4 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react-native';
 import ButtonComponent, {
   ButtonProps,
 } from '../../../../src/components/buttons/ButtonComponent';
@@ -15,11 +14,9 @@ export default {
       </SystemProvider>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<ButtonProps> = (args: any) => (
-  <ButtonComponent {...args} />
-);
+const Template = (args: any) => <ButtonComponent {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

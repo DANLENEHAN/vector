@@ -26,6 +26,7 @@ export interface ButtonStyles {
 }
 
 export interface HeadingTextStyles {
+  xxSmall: TextStyle;
   xSmall: TextStyle;
   small: TextStyle;
   medium: TextStyle;
@@ -33,6 +34,7 @@ export interface HeadingTextStyles {
 }
 
 export interface BodyTextStyles {
+  xxSmall: TextStyle;
   xSmall: TextStyle;
   small: TextStyle;
   medium: TextStyle;
@@ -40,6 +42,25 @@ export interface BodyTextStyles {
 }
 
 export interface CtaTextStyles {
+  xxSmall: TextStyle;
   xSmall: TextStyle;
   small: TextStyle;
+}
+
+export interface themeColors {
+  background: string;
+  button: string;
+  disabledButton: string;
+  buttonText: string;
+  icon: string;
+  borders: string;
+  text: string;
+  primary: string;
+  secondary: string;
+  lightText: string;
+  darkText: string;
+  error: string;
+  shadow: string;
+  lowOpacityBackground: string;
+  secondaryBackground: string;
 }

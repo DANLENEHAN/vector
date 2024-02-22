@@ -1,5 +1,4 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react-native';
 import {View} from 'react-native';
 import Note, {NoteProps} from '../../../../src/components/inputs/Note';
 import {SystemProvider} from '../../../../src/context/SystemContext';
@@ -17,9 +16,9 @@ export default {
       </SystemProvider>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<NoteProps> = (args: any) => (
+const Template = (args: any) => (
   <View
     style={{
       width: '90%',

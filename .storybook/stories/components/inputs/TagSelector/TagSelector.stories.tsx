@@ -1,5 +1,4 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react-native';
 import {View} from 'react-native';
 import {
   TagSelector,
@@ -20,11 +19,9 @@ export default {
       </SystemProvider>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<TagSelectorProps> = (args: TagSelectorProps) => (
-  <TagSelector {...args} />
-);
+const Template = (args: TagSelectorProps) => <TagSelector {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

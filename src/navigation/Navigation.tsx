@@ -13,9 +13,9 @@ import Generic from '@screens/Generic';
 // Track Screens
 import WeightTracking from '@screens/track/WeightTracking';
 import BodyMeasurementTracking from '@screens/track/bodyMeasurement/BodyMeasurementTracking';
-import MoodScreen from '@screens/track/Mood';
+import MoodScreen from '@screens/track/mood/Mood';
 import WaterScreen from '@screens/track/Water';
-import MoodTagScreen from '@screens/track/MoodTag';
+import MoodTagScreen from '@screens/track/mood/MoodTag';
 // Progress Screens
 import WeightProgress from '@screens/progress/WeightProgress';
 import MoodProgress from '@screens/progress/MoodProgress';

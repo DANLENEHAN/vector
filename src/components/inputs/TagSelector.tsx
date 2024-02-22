@@ -13,20 +13,49 @@ import {
   headingTextStyles,
   bodyTextStyles,
   marginSizes,
+  paddingSizes,
+  borderWidth,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 
+/**
+ * Interface for the TagSelector Component
+ *
+ * @interface TagProps
+ *
+ * @param {string} label - The label for the tag
+ * @param {string} icon - The icon for the tag
+ * @param {string} color - The color for the tag
+ */
 export interface TagProps {
   label: string;
   icon: string;
   color: string;
 }
 
+/**
+ * Interface for the TagSelector Component
+ *
+ * @interface TagSelectorProps
+ *
+ * @param {TagProps[]} tags - The tags to be displayed
+ * @param {string} tagSelectorLabel - The label for the tag selector
+ * @param {object} style - The style for the tag selector
+ */
 export interface TagSelectorProps {
   tags: TagProps[];
   tagSelectorLabel: string;
+  style?: object;
 }
 
+/**
+ *  Tag Component
+ *
+ * @param {TagProps} TagProps
+ * @param {boolean} active - The active state for the tag
+ * @param {() => void} onPress - The function to be called when the tag is pressed
+ * @returns {React.FC} - React Component
+ */
 export const Tag: React.FC<
   TagProps & {active: boolean; onPress: () => void}
 > = ({label, icon, color, active, onPress}) => {
@@ -49,34 +78,48 @@ export const Tag: React.FC<
       ]}
       onPress={onPress}
       testID={`tagSelectorTag_${label}`}>
-      <Icon name={icon} solid size={iconSizes.medium} color={fontColor} />
+      <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
       <Text style={[styles.tagLabel, {color: fontColor}]}>{label}</Text>
     </TouchableOpacity>
   );
 };
 
+/**
+ * TagSelector Component
+ *
+ * @param {TagSelectorProps} tagSelectorLabel - The label for the tag selector
+ * @returns {React.FC} - React Component
+ */
 export const TagSelector: React.FC<TagSelectorProps> = ({
   tagSelectorLabel,
   tags,
+  style = {},
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
   const [isCollapsed, setIsCollapsed] = useState(false); // State to track collapse
   const [selectedTags, setSelectedTags] = useState<string[]>([]); // Track selected tags by label
+
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   const toggleTagSelection = (label: string) => {
     setSelectedTags(prev =>
       prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label],
     );
   };
 
-  // Toggle the collapse state
-  const toggleCollapse = () => {
-    setIsCollapsed(prev => !prev);
-  };
-
   return (
-    <View>
+    <View
+      style={[
+        styles.TagSelectorContainer,
+        {
+          borderColor: currentTheme.borders,
+          backgroundColor: currentTheme.secondaryBackground,
+        },
+        style,
+      ]}>
       <View style={styles.TagSelectorHeader}>
         <Text style={[styles.TagSelectorLabel, {color: currentTheme.text}]}>
           {tagSelectorLabel}
@@ -92,23 +135,20 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
           </Text>
         )}
         <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => console.log('Menu action')}>
-            <Icon
-              name={'bars'}
-              solid
-              size={iconSizes.small}
-              color={currentTheme.text}
-            />
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={toggleCollapse}
-            style={styles.TagSelectorAdd}
+            style={[
+              styles.TagSelectorAdd,
+              {
+                backgroundColor: currentTheme.button,
+              },
+            ]}
             testID="tagSelectorCollapseButton">
             <Icon
-              name={isCollapsed ? 'plus' : 'minus'}
+              name={isCollapsed ? 'caret-down' : 'caret-up'}
               solid
               size={iconSizes.small}
-              color={currentTheme.text}
+              color={currentTheme.background}
             />
           </TouchableOpacity>
         </View>
@@ -132,38 +172,47 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // Tag Styles
   tag: {
-    height: 45,
     borderRadius: borderRadius.circle,
     ...layoutStyles.centerHorizontally,
     paddingHorizontal: marginSizes.small,
+    paddingVertical: paddingSizes.xSmall,
     borderWidth: 1,
     margin: marginSizes.xSmall,
   },
   tagLabel: {
-    ...bodyTextStyles.small,
+    ...bodyTextStyles.xxSmall,
     marginLeft: marginSizes.small,
   },
   tagContainer: {
     flexWrap: 'wrap',
     ...layoutStyles.flexStartHorizontal,
   },
+  // Tag Selector Styles
+  TagSelectorContainer: {
+    width: '95%',
+    padding: paddingSizes.small,
+    borderRadius: borderRadius.large,
+    borderWidth: borderWidth.xSmall,
+  },
   TagSelectorLabel: {
-    ...headingTextStyles.xSmall,
-    marginLeft: marginSizes.medium,
-    marginBottom: marginSizes.xSmall,
+    ...headingTextStyles.xxSmall,
   },
   TagSelectorActiveOptions: {
     ...bodyTextStyles.small,
   },
   TagSelectorAdd: {
-    marginRight: marginSizes.medium,
+    borderRadius: borderRadius.circle,
+    height: 25,
+    width: 25,
+    ...layoutStyles.centerHorizontally,
   },
   iconContainer: {
-    width: 50,
-    ...layoutStyles.spaceBetweenHorizontal,
+    ...layoutStyles.flexEndHorizontal,
   },
   TagSelectorHeader: {
+    margin: marginSizes.xSmall,
     ...layoutStyles.spaceBetweenHorizontal,
   },
 });
