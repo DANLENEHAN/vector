@@ -29,6 +29,13 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
     setSelectedBodyPart(bodyPart);
   };
 
+  const parseInternalMuscleName = (bodyPart: BodyStatType) => {
+    return bodyPart
+      .split('_')
+      .map(word => capitalizeString(word))
+      .join(' ');
+  };
+
   return (
     <ScreenWrapper>
       <View style={styles.headerSection}>
@@ -49,7 +56,7 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         ) : (
           <GenericMeasurementTracking
             statType={selectedBodyPart}
-            headingText={`Track Your Measurement For ${capitalizeString(
+            headingText={`Track Your Measurement For ${parseInternalMuscleName(
               selectedBodyPart,
             )}!`}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}
