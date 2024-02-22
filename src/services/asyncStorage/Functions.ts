@@ -84,6 +84,10 @@ export const storeFailedSyncPushErrors = async <
         syncPushErrorsObject[tableName]?.[syncOperation]) ??
       {};
 
+    syncPushErrorsObject[tableName] = syncPushErrorsObject[tableName] || {};
+    syncPushErrorsObject[tableName]![syncOperation] =
+      syncPushErrorsObject[tableName]![syncOperation] || {};
+
     for (const syncError of failedSyncPushErrors) {
       const rowUuid = (syncError as any)[`${tableName}_id`];
 
@@ -112,12 +116,7 @@ export const storeFailedSyncPushErrors = async <
       }
     }
 
-    syncPushErrorsObject = {
-      [tableName]: {
-        [syncOperation]: tableSyncPushErrors,
-      },
-    };
-
+    syncPushErrorsObject[tableName]![syncOperation] = tableSyncPushErrors;
     await AsyncStorage.setItem(
       AsyncStorageKeys.SyncPushErrors,
       JSON.stringify(syncPushErrorsObject),
@@ -147,7 +146,7 @@ const getFailedSyncPushesForTable = async <T>(
     );
 
     if (syncPushErrorsStore === null) {
-      logger.log(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
+      logger.info(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
     } else {
       const parsedData: FailedSyncPushError<T> =
         JSON.parse(syncPushErrorsStore);
@@ -204,4 +203,75 @@ export const getFailedSyncPushesUpdatesForTable = async (
     tableName,
     SyncOperation.Updates,
   );
+};
+
+/**
+ * Deletes entries from the synchronization push errors stored in AsyncStorage for objects that have
+ * been successfully synchronized.
+ *
+ * This function updates the stored synchronization errors by removing the entries for objects
+ * identified by their IDs in `successfulSyncIds`. It targets a specific table and synchronization
+ * operation type (e.g., creation, update).
+ *
+ * @param tableName The name of the table in the database for which synchronization errors are stored.
+ * @param successfulSyncIds An array of string IDs for objects that have been successfully synchronized
+ *                          and should be removed from the error log.
+ * @param syncOperation The type of synchronization operation (e.g., Creates, Updates) for which
+ *                      the errors should be cleared.
+ * @returns A promise that resolves to `void`. The promise will reject if there's an error accessing
+ *          AsyncStorage or if the stored sync errors cannot be parsed or updated.
+ * @throws Will throw an error if the AsyncStorage operations fail or if there's an issue with
+ *         JSON parsing or serialization.
+ */
+export const deleteSuccessfulSyncPushErrors = async <T>(
+  tableName: syncDbTables,
+  successfulSyncIds: string[],
+  syncOperation: SyncOperation,
+): Promise<void> => {
+  try {
+    const syncPushErrorsStore = await AsyncStorage.getItem(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    let syncPushErrorsObject: FailedSyncPushError<T> = {};
+
+    if (syncPushErrorsStore !== null) {
+      try {
+        syncPushErrorsObject = JSON.parse(syncPushErrorsStore);
+      } catch (error) {
+        logger.warn(
+          `${AsyncStorageKeys.SyncPushErrors} key has invalid JSON. Rebuilding...`,
+        );
+      }
+    }
+
+    const tableSyncPushErrors: {[key: string]: SyncPushErrorItem<T>} =
+      (syncPushErrorsObject &&
+        syncPushErrorsObject[tableName] &&
+        syncPushErrorsObject[tableName]?.[syncOperation]) ??
+      {};
+
+    syncPushErrorsObject[tableName] = syncPushErrorsObject[tableName] || {};
+    syncPushErrorsObject[tableName]![syncOperation] =
+      syncPushErrorsObject[tableName]![syncOperation] || {};
+
+    successfulSyncIds.forEach(id => {
+      if (id in tableSyncPushErrors) {
+        delete tableSyncPushErrors[id];
+      }
+    });
+
+    console.log(tableName, tableSyncPushErrors, successfulSyncIds);
+    syncPushErrorsObject[tableName]![syncOperation] = tableSyncPushErrors;
+
+    console.log(syncPushErrorsObject);
+    await AsyncStorage.setItem(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify(syncPushErrorsObject),
+    );
+  } catch (error) {
+    throw new Error(
+      `Failed to delete successfully synchronized push errors: ${error}`,
+    );
+  }
 };

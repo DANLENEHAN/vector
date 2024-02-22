@@ -1,5 +1,5 @@
 // Typing
-import {AxiosResponse} from 'axios';
+import axios from 'axios';
 import {
   SyncTableFunctions,
   SyncCreateSchemas,
@@ -55,52 +55,60 @@ export const processSyncTypePull = async (
     syncStart,
   );
 
-  // Retrieve data from the backend using the specified sync function
-  const response: AxiosResponse<SyncCreateSchemas[]> = await syncFunctions[
-    SyncType.Pull
-  ](tableQuerySchema);
+  try {
+    const response = await syncFunctions[SyncType.Pull](tableQuerySchema);
+    // Process synchronization based on the Sync operation type
+    const rowsToSync = response.data || [];
 
-  // Process synchronization based on the Sync operation type
-  const rowsToSync = response.data || [];
-
-  if (response.status === 201 && rowsToSync.length > 0) {
-    if (syncOperation === SyncOperation.Creates) {
-      // Removing any existing rows to avoid errors
-      const rowsToInsert = await filterRowsForInsertion(tableName, rowsToSync);
-      if (rowsToInsert.length > 0) {
-        await insertRows(tableName, rowsToInsert);
+    if (response.status === 201 && rowsToSync.length > 0) {
+      if (syncOperation === SyncOperation.Creates) {
+        // Removing any existing rows to avoid errors
+        const rowsToInsert = await filterRowsForInsertion(
+          tableName,
+          rowsToSync,
+        );
+        if (rowsToInsert.length > 0) {
+          await insertRows(tableName, rowsToInsert);
+        }
+      } else {
+        if (rowsToSync.length > 0) {
+          await updateRows(tableName, rowsToSync);
+        }
       }
+
+      // Update the synchronization log
+      await insertSyncUpdate({
+        table_name: tableName,
+        // IMPORTANT:
+        // This 'last_synced' must the timestamp of the last sync'd
+        // row as this allows us to sync in batches. See 'syncBatchLimit'.
+        last_synced:
+          syncOperation === SyncOperation.Creates
+            ? rowsToSync.slice(-1)[0][timestampFields.createdAt]
+            : rowsToSync.slice(-1)[0][timestampFields.updatedAt],
+        sync_type: SyncType.Pull,
+        sync_operation: syncOperation,
+      });
+
+      logger.info(
+        `Sync type '${SyncType.Pull}' operation '${syncOperation}' completed successfully on table: '${tableName}'`,
+      );
+    } else if (response.status !== 201) {
+      logger.error(
+        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed due to unexpected response status code: '${response.status}'`,
+      );
     } else {
-      if (rowsToSync.length > 0) {
-        await updateRows(tableName, rowsToSync);
-      }
+      logger.info(
+        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has received no rows to sync.`,
+      );
     }
-
-    // Update the synchronization log
-    await insertSyncUpdate({
-      table_name: tableName,
-      // IMPORTANT:
-      // This 'last_synced' must the timestamp of the last sync'd
-      // row as this allows us to sync in batches. See 'syncBatchLimit'.
-      last_synced:
-        syncOperation === SyncOperation.Creates
-          ? rowsToSync.slice(-1)[0][timestampFields.createdAt]
-          : rowsToSync.slice(-1)[0][timestampFields.updatedAt],
-      sync_type: SyncType.Pull,
-      sync_operation: syncOperation,
-    });
-
-    logger.info(
-      `Sync type '${SyncType.Pull}' operation '${syncOperation}' completed successfully on table: '${tableName}'`,
-    );
-  } else if (response.status !== 201) {
-    logger.error(
-      `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed due to unexpected response status code: '${response.status}'`,
-    );
-  } else {
-    logger.info(
-      `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has received no rows to sync.`,
-    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      logger.warn(
+        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed with error message '${error.message}'`,
+      );
+    }
+    return Promise.resolve();
   }
 };
 

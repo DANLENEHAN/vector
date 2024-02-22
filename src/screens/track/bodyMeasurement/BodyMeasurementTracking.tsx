@@ -16,7 +16,7 @@ import {ScreenProps} from '@screens/Types';
 import {BodyStatType} from '@services/api/swagger/data-contracts';
 
 // Functions
-import {capitalizeString} from '@shared/Functions';
+import {transformsInternalNameToDisplay} from '@shared/Functions';
 
 const BodyMeasurementTracking: React.FC<ScreenProps> = ({
   navigation,
@@ -49,7 +49,7 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
         ) : (
           <GenericMeasurementTracking
             statType={selectedBodyPart}
-            headingText={`Track Your Measurement For ${capitalizeString(
+            headingText={`Track Your Measurement For ${transformsInternalNameToDisplay(
               selectedBodyPart,
             )}!`}
             onSuccessfulCreate={() => setSelectedBodyPart(null)}

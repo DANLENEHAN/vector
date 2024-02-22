@@ -48,6 +48,11 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
+  const buttonBackgroundColor =
+    style && 'backgroundColor' in style
+      ? style.backgroundColor
+      : currentTheme.button;
+
   return (
     <TouchableOpacity
       style={[
@@ -55,7 +60,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
         style,
         disabled
           ? {backgroundColor: currentTheme.disabledButton}
-          : {backgroundColor: currentTheme.button},
+          : {backgroundColor: buttonBackgroundColor},
       ]}
       onPress={onPress}
       disabled={disabled}>

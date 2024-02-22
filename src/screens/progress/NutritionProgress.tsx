@@ -60,10 +60,11 @@ const NutritionProgressScreen: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    height: '30%',
   },
   scroll: {
-    ...layoutStyles.centerVertically,
+    flex: 1,
+    ...layoutStyles.centerHorizontally,
   },
 });
 

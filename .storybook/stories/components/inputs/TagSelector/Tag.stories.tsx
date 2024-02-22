@@ -1,5 +1,4 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react-native';
 import {View} from 'react-native';
 import {Tag, TagProps} from '../../../../../src/components/inputs/TagSelector';
 import {SystemProvider} from '../../../../../src/context/SystemContext';
@@ -17,9 +16,9 @@ export default {
       </SystemProvider>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<TagProps> = (args: any) => <Tag {...args} />;
+const Template = (args: any) => <Tag {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

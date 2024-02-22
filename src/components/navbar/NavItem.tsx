@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   navLabel: {
     marginTop: marginSizes.xSmall,
-    ...ctaTextStyles.xSmall,
+    ...ctaTextStyles.xxSmall,
   },
 });
 

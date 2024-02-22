@@ -75,12 +75,12 @@ const WellnessTracking: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: '80%',
+    height: '90%',
     width: '100%',
   },
   scroll: {
     flex: 1,
-    ...layoutStyles.flexStartVertical,
+    ...layoutStyles.spaceAroundVertical,
   },
 });
 

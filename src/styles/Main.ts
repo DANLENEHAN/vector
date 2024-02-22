@@ -11,6 +11,7 @@ import {
   HeadingTextStyles,
   BodyTextStyles,
   CtaTextStyles,
+  themeColors,
 } from '@styles/Types';
 
 const black = '#333333';
@@ -42,7 +43,7 @@ export const fontWeights: Record<FontTypes, FontWeights> = {
   ultraBold: '900',
 };
 
-export const lightThemeColors = {
+export const lightThemeColors: themeColors = {
   background: white,
   button: black,
   disabledButton: gray,
@@ -57,9 +58,10 @@ export const lightThemeColors = {
   error: '#FF3B30', // Error text color
   shadow: 'rgba(150, 150, 150, 0.3)',
   lowOpacityBackground: 'rgba(51, 51, 51, 0.5)',
+  secondaryBackground: '#F0F0F0',
 };
 
-export const darkThemeColors = {
+export const darkThemeColors: themeColors = {
   background: black,
   button: white,
   disabledButton: gray,
@@ -74,6 +76,7 @@ export const darkThemeColors = {
   error: '#FF453A',
   shadow: 'rgba(50, 50, 50, 0.3)',
   lowOpacityBackground: 'rgba(255, 255, 255, 0.5)',
+  secondaryBackground: '#383838',
 };
 
 export const paddingSizes = {
@@ -134,6 +137,11 @@ export const buttonStyles: ButtonStyles = {
 };
 
 export const headingTextStyles: HeadingTextStyles = {
+  xxSmall: {
+    fontSize: fontSizes.xSmall,
+    fontFamily: fonts.heading,
+    fontWeight: fontWeights.bold,
+  },
   xSmall: {
     fontSize: fontSizes.medium,
     fontFamily: fonts.heading,
@@ -157,6 +165,11 @@ export const headingTextStyles: HeadingTextStyles = {
 };
 
 export const bodyTextStyles: BodyTextStyles = {
+  xxSmall: {
+    fontSize: fontSizes.xxSmall,
+    fontFamily: fonts.body,
+    fontWeight: fontWeights.normal,
+  },
   xSmall: {
     fontSize: fontSizes.xSmall,
     fontFamily: fonts.body,
@@ -180,6 +193,11 @@ export const bodyTextStyles: BodyTextStyles = {
 };
 
 export const ctaTextStyles: CtaTextStyles = {
+  xxSmall: {
+    fontSize: fontSizes.xxSmall,
+    fontFamily: fonts.cta,
+    fontWeight: fontWeights.semiBold,
+  },
   xSmall: {
     fontSize: fontSizes.xSmall,
     fontFamily: fonts.cta,

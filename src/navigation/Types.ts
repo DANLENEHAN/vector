@@ -62,6 +62,7 @@ export type RootStackParamList = {
   // Tracking Screens
   MoodTracking: undefined;
   WeightTracking: undefined;
+  WorkoutTracking: undefined;
   WaterTracking: undefined;
   MoodTagTracking: object;
   // Progress Screens
