@@ -12,15 +12,15 @@ import logger from '@utils/Logger';
  * @throws {Error} Throws an error if there is any issue retrieving the device information.
  */
 export const getDeviceInfo =
-  async (): Promise<SessionEventDeviceInfo | void> => {
+  async (): Promise<SessionEventDeviceInfo | null> => {
     try {
       // Retrieve device information using the DeviceInfo library
       const brand = DeviceInfo.getBrand();
-      const deviceId = DeviceInfo.getDeviceId();
       const systemVersion = DeviceInfo.getSystemVersion();
       const version = DeviceInfo.getVersion();
 
       // Retrieve user agent asynchronously
+      const deviceId = await DeviceInfo.getUniqueId();
       const userAgent = await DeviceInfo.getUserAgent();
 
       // Return an object containing the device information
@@ -33,5 +33,6 @@ export const getDeviceInfo =
       };
     } catch (error) {
       logger.warn(`Error in getDeviceInfo: ${error}`);
+      return null;
     }
   };
