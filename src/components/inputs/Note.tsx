@@ -44,7 +44,6 @@ const Note: React.FC<NoteProps> = ({
 
   const handleLayoutChange = (event: any) => {
     const {height} = event.nativeEvent.layout;
-    console.log(height);
     setScrollViewHeight(height); // Update state with the new height
   };
 

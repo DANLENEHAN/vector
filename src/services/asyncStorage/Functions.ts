@@ -147,7 +147,7 @@ const getFailedSyncPushesForTable = async <T>(
     );
 
     if (syncPushErrorsStore === null) {
-      logger.log(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
+      logger.info(`Key not found: ${AsyncStorageKeys.SyncPushErrors}`);
     } else {
       const parsedData: FailedSyncPushError<T> =
         JSON.parse(syncPushErrorsStore);
