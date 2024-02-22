@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "489784381503",
+    "project_id": "train-2378f",
+    "storage_bucket": "train-2378f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489784381503:android:c9cd3b5bf87a2ef5d3a88a",
+        "android_client_info": {
+          "package_name": "com.vector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489784381503-t1euf2frsfub8f9dfnlppeeirt2ek9n9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLmUO5-xtWQ4AHu_QMR3kU7eGjJZIcKQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489784381503-t1euf2frsfub8f9dfnlppeeirt2ek9n9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "489784381503-90a2tajvm6178nmh9qihtmlss7q9hion.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ie.train.vector"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
