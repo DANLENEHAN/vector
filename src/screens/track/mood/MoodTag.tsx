@@ -108,12 +108,12 @@ const MoodTagScreen: React.FC<any> = ({
           {
             // For group in MoodTagGroups
             // add a TagSelector
-            Object.entries(moodTagGroups).map(([category, tags], index) => (
+            Object.entries(moodTagGroups).map(([category, tags]) => (
               <TagSelector
                 tags={tags}
                 tagSelectorLabel={transformsInternalNameToDisplay(category)}
                 style={styles.tagSelectors}
-                key={index}
+                key={category}
               />
             ))
           }
