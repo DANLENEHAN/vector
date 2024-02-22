@@ -18,7 +18,8 @@ import {useSystem} from '@context/SystemContext';
 export interface NoteProps {
   titlePlaceholder?: string;
   notePlaceholder?: string;
-  existingNote?: string;
+  content: string;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
   existingTitle?: string;
   showTitle?: boolean;
   maxNoteLength?: number;
@@ -28,17 +29,23 @@ export interface NoteProps {
 const Note: React.FC<NoteProps> = ({
   notePlaceholder,
   titlePlaceholder,
-  existingNote,
+  content,
+  setContent,
   existingTitle,
   maxNoteLength,
   maxTitleLength,
   showTitle = false,
 }) => {
   // State for the content of the note
-  const [content, setContent] = useState(existingNote ? existingNote : '');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [atMaxLen, setAtMaxLen] = useState(false);
   const [title, setTitle] = useState(existingTitle ? existingTitle : '');
+  const [scrollViewHeight, setScrollViewHeight] = useState(0); // State to store the height
+
+  const handleLayoutChange = (event: any) => {
+    const {height} = event.nativeEvent.layout;
+    setScrollViewHeight(height); // Update state with the new height
+  };
 
   // Get the current theme
   const {theme} = useSystem();
@@ -69,6 +76,7 @@ const Note: React.FC<NoteProps> = ({
       }
     }
 
+    // Variables for bullet point handling
     const lastAddedChar = getLastAddedChar(note, cursorPosition);
     const currentLine = getCurrentLine(note, cursorPosition);
     const bulletPointRegex = /^([*-])\s/;
@@ -227,11 +235,11 @@ const Note: React.FC<NoteProps> = ({
   return (
     <View
       style={[
-        styles.noteContainer,
         {
-          backgroundColor: currentTheme.background,
+          backgroundColor: currentTheme.secondaryBackground,
           borderColor: atMaxLen ? currentTheme.error : currentTheme.borders,
         },
+        styles.noteContainer,
       ]}>
       {showTitle && (
         <View>
@@ -243,6 +251,7 @@ const Note: React.FC<NoteProps> = ({
               },
             ]}
             placeholder={titlePlaceholder ? titlePlaceholder : 'Title'}
+            placeholderTextColor={currentTheme.lightText}
             value={title}
             onChangeText={handleTitleChange}
           />
@@ -257,15 +266,17 @@ const Note: React.FC<NoteProps> = ({
           />
         </View>
       )}
-      <ScrollView style={styles.bodyContainer}>
+      <ScrollView style={styles.bodyContainer} onLayout={handleLayoutChange}>
         <TextInput
           style={[
             styles.bodyText,
             {
               color: currentTheme.text,
+              height: scrollViewHeight,
             },
           ]}
           placeholder={notePlaceholder ? notePlaceholder : 'Note'}
+          placeholderTextColor={currentTheme.lightText}
           multiline={true}
           value={content}
           onChangeText={handleInputChange}
@@ -300,6 +311,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bodyText: {
+    textAlignVertical: 'top',
     ...bodyTextStyles.small,
   },
 });

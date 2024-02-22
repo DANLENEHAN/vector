@@ -1,8 +1,7 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react-native';
-import BodyMeasurementTracking from '../../../src/screens/track//bodyMeasurement/BodyMeasurementTracking';
-
+import BodyMeasurementTracking from '../../../src/screens/track/bodyMeasurement/BodyMeasurementTracking';
 import {SystemProvider} from '../../../src/context/SystemContext';
+import {mockStoryNavigation} from '../constants';
 
 export default {
   title: 'screens/track/bodyMeasurement/BodyMeasurementTracking',
@@ -14,10 +13,10 @@ export default {
       </SystemProvider>
     ),
   ],
-} as Meta;
+};
 
-const Template: Story<any> = (args: any) => (
-  <BodyMeasurementTracking {...args} />
+const Template = (args: any) => (
+  <BodyMeasurementTracking {...args} navigation={mockStoryNavigation} />
 );
 
 export const Default = Template.bind({});

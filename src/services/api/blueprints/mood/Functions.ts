@@ -16,13 +16,13 @@ import logger from '@utils/Logger';
  * Interface for the CreateNewMoodParams function.
  *
  * @param value  The value of the mood.
- * @param navigation  The navigation object.
+ * @param callback  The callback function to be called after the mood is created.
  * @param note  The note of the mood (optional).
  * @param label  The label of the mood.
  */
 export interface CreateNewMoodParams {
   value: number;
-  navigation: any;
+  callback: () => void;
   note?: string;
   label: MoodValue;
 }
@@ -36,7 +36,7 @@ export interface CreateNewMoodParams {
  */
 export const createNewMood = async ({
   value,
-  navigation,
+  callback,
   label,
   note,
 }: CreateNewMoodParams): Promise<void> => {
@@ -55,7 +55,7 @@ export const createNewMood = async ({
         [timestampFields.timezone]: timestampTimezone.timezone,
       },
     ]);
-    navigation.goBack();
+    callback();
   } catch (error) {
     logger.error(`Error: ${error}`);
   }

@@ -75,21 +75,23 @@ describe('DB Functions Tests', () => {
     expect(output).toBe('X');
   });
 
-  describe('tranformInternalNameToDisplay', () => {
+  describe('transformsInternalNameToDisplay', () => {
     test('transforms snake_case to capitalized words separated by spaces', () => {
       expect(
-        sharedFunctions.tranformInternalNameToDisplay('example_internal_name'),
+        sharedFunctions.transformsInternalNameToDisplay(
+          'example_internal_name',
+        ),
       ).toBe('Example Internal Name');
     });
 
     test('handles single word without underscores correctly', () => {
-      expect(sharedFunctions.tranformInternalNameToDisplay('example')).toBe(
+      expect(sharedFunctions.transformsInternalNameToDisplay('example')).toBe(
         'Example',
       );
     });
 
     test('handles empty string without throwing error', () => {
-      expect(sharedFunctions.tranformInternalNameToDisplay('')).toBe('');
+      expect(sharedFunctions.transformsInternalNameToDisplay('')).toBe('');
     });
   });
 });
