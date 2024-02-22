@@ -74,4 +74,22 @@ describe('DB Functions Tests', () => {
     const output = sharedFunctions.capitalizeString(input);
     expect(output).toBe('X');
   });
+
+  describe('tranformInternalNameToDisplay', () => {
+    test('transforms snake_case to capitalized words separated by spaces', () => {
+      expect(
+        sharedFunctions.tranformInternalNameToDisplay('example_internal_name'),
+      ).toBe('Example Internal Name');
+    });
+
+    test('handles single word without underscores correctly', () => {
+      expect(sharedFunctions.tranformInternalNameToDisplay('example')).toBe(
+        'Example',
+      );
+    });
+
+    test('handles empty string without throwing error', () => {
+      expect(sharedFunctions.tranformInternalNameToDisplay('')).toBe('');
+    });
+  });
 });
