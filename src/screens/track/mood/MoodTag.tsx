@@ -95,7 +95,7 @@ const MoodTagScreen: React.FC<any> = ({
       </View>
       <View style={styles.content}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          <View style={[styles.currentMood, {}]}>
+          <View style={styles.currentMood}>
             <Icon name={mood.icon} solid size={50} color={mood.color} />
             <Text
               style={[
