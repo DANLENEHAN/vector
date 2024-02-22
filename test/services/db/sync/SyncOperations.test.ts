@@ -33,6 +33,7 @@ jest.mock('@services/asyncStorage/Functions', () => ({
   getFailedSyncPushesUpdatesForTable: jest.fn(),
   getFailedSyncPushesCreatesForTable: jest.fn(),
   storeFailedSyncPushErrors: jest.fn(),
+  deleteSuccessfulSyncPushErrors: jest.fn(),
 }));
 
 describe('Sync Operation Tests', () => {
@@ -108,7 +109,13 @@ describe('Sync Operation Tests', () => {
     const failedStatUpdate = {
       ...sampleUpdatedStat,
       updated_at: failedTimeStamp,
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eec',
     };
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'deleteSuccessfulSyncPushErrors')
+      .mockResolvedValue();
+
     updateUpdateSpy
       .mockResolvedValueOnce({status: 204})
       .mockResolvedValueOnce({status: 204});
@@ -167,6 +174,17 @@ describe('Sync Operation Tests', () => {
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
     ).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      ['67f6127d-13cc-4c27-b91f-2b1f83c48eec'],
+      SyncOperation.Updates,
+    );
   });
 
   test('processUpdatesSyncTypePush Update receives invalid status code', async () => {
@@ -326,6 +344,77 @@ describe('Sync Operation Tests', () => {
     ).toHaveBeenCalledTimes(0);
   });
 
+  test('processUpdatesSyncTypePush with one previously failed row only', async () => {
+    // Arrange
+
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+    const failedTimeStamp: string = '2025-01-01T00:01:00.666';
+    const failedStatUpdate = {
+      ...sampleUpdatedStat,
+      updated_at: failedTimeStamp,
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eec',
+    };
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'deleteSuccessfulSyncPushErrors')
+      .mockResolvedValue();
+
+    updateUpdateSpy.mockResolvedValueOnce({status: 204});
+
+    jest
+      .spyOn(SyncUtilFunctions, 'convertListToSyncUpdateSchemas')
+      .mockReturnValueOnce([]);
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'getFailedSyncPushesUpdatesForTable')
+      .mockResolvedValueOnce([failedStatUpdate]);
+
+    // Act
+    await processUpdatesSyncTypePush([], tableToSync, TableFunctionsMock);
+
+    // Assert
+    expect(
+      SyncUtilFunctions.convertListToSyncUpdateSchemas,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      SyncUtilFunctions.convertListToSyncUpdateSchemas,
+    ).toHaveBeenCalledWith([]);
+
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesCreatesForTable,
+    ).toHaveBeenCalledTimes(0);
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesUpdatesForTable,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesUpdatesForTable,
+    ).toHaveBeenCalledWith(tableToSync);
+
+    expect(createCreateSpy).toHaveBeenCalledTimes(0);
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(0);
+    expect(updateUpdateSpy).toHaveBeenCalledTimes(1);
+    expect(updateUpdateSpy).toHaveBeenNthCalledWith(1, failedStatUpdate, {
+      isSync: true,
+    });
+
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.storeFailedSyncPushErrors,
+    ).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      ['67f6127d-13cc-4c27-b91f-2b1f83c48eec'],
+      SyncOperation.Updates,
+    );
+  });
+
   test('processCreatesSyncTypePush with one valid row and previously failed row', async () => {
     // Arrange
     const rowsToSync: SyncCreateSchemas[] = [sampleStat];
@@ -334,6 +423,7 @@ describe('Sync Operation Tests', () => {
     const failedStatCreate = {
       ...sampleStat,
       created_at: failedTimeStamp,
+      body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eec',
     };
     createCreateSpy
       .mockResolvedValueOnce({status: 201})
@@ -342,6 +432,10 @@ describe('Sync Operation Tests', () => {
     jest
       .spyOn(AsyncStorageFunctions, 'getFailedSyncPushesCreatesForTable')
       .mockResolvedValueOnce([failedStatCreate]);
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'deleteSuccessfulSyncPushErrors')
+      .mockResolvedValue();
 
     // Act
     await processCreatesSyncTypePush(
@@ -382,6 +476,17 @@ describe('Sync Operation Tests', () => {
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
     ).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      ['67f6127d-13cc-4c27-b91f-2b1f83c48eec'],
+      SyncOperation.Creates,
+    );
   });
 
   test('processCreatesSyncTypePush with invalid status code for second row', async () => {
@@ -475,5 +580,63 @@ describe('Sync Operation Tests', () => {
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
     ).toHaveBeenCalledTimes(0);
+  });
+
+  test('processCreatesSyncTypePush with one previously failed row only', async () => {
+    // Arrange
+
+    const tableToSync: syncDbTables = syncDbTables.bodyStatTable;
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'deleteSuccessfulSyncPushErrors')
+      .mockResolvedValue();
+
+    createCreateSpy.mockResolvedValueOnce({status: 201});
+
+    jest
+      .spyOn(AsyncStorageFunctions, 'getFailedSyncPushesCreatesForTable')
+      .mockResolvedValueOnce([sampleStat]);
+
+    // Act
+    await processCreatesSyncTypePush([], tableToSync, TableFunctionsMock);
+
+    // Assert
+    expect(
+      SyncUtilFunctions.convertListToSyncUpdateSchemas,
+    ).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesCreatesForTable,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesCreatesForTable,
+    ).toHaveBeenCalledWith(tableToSync);
+    expect(
+      AsyncStorageFunctions.getFailedSyncPushesUpdatesForTable,
+    ).toHaveBeenCalledTimes(0);
+
+    expect(updateUpdateSpy).toHaveBeenCalledTimes(0);
+    expect(postBodyStatSpy).toHaveBeenCalledTimes(0);
+    expect(createCreateSpy).toHaveBeenCalledTimes(1);
+    expect(createCreateSpy).toHaveBeenNthCalledWith(1, sampleStat, {
+      isSync: true,
+    });
+
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.storeFailedSyncPushErrors,
+    ).toHaveBeenCalledTimes(0);
+
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledWith(
+      syncDbTables.bodyStatTable,
+      [sampleStat.body_stat_id],
+      SyncOperation.Creates,
+    );
   });
 });

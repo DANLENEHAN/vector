@@ -8,6 +8,7 @@ import {SyncOperation} from '@services/api/swagger/data-contracts';
 // Types
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
 import {sampleStat, sampleUpdatedStat} from '../../Objects';
+
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 
 // Functions
@@ -17,6 +18,7 @@ import {
   getFailedSyncPushesCreatesForTable,
   getFailedSyncPushesUpdatesForTable,
   SyncErrorDumpApi,
+  deleteSuccessfulSyncPushErrors,
 } from '@services/asyncStorage/Functions';
 import {SyncType} from '@shared/Enums';
 
@@ -178,6 +180,169 @@ describe('getUserDetails', () => {
       updated_at: sampleStat.updated_at,
       timezone: sampleStat.timezone,
     });
+  });
+
+  it('storeFailedSyncPushErrors Object has previously failures', async () => {
+    // Arrange
+    const failedSyncPushErrors: SyncCreateSchemas[] = [sampleStat];
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Updates]: {
+            [sampleStat.body_stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+
+    // Act
+    await storeFailedSyncPushErrors(
+      syncDbTables.bodyStatTable,
+      SyncOperation.Creates,
+      failedSyncPushErrors,
+    );
+
+    // Assert
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Updates]: {
+            [sampleStat.body_stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+          [SyncOperation.Creates]: {
+            [sampleStat.body_stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  it('deleteSuccessfulSyncPushErrors removes single successful syncs', async () => {
+    // Arrange
+    const fakeuUid = '16945c77-6076-4dce-8921-7db976327922';
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Creates]: {
+            [sampleStat.body_stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+            [fakeuUid]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+
+    // Act
+    await deleteSuccessfulSyncPushErrors(
+      syncDbTables.bodyStatTable,
+      [sampleStat.body_stat_id],
+      SyncOperation.Creates,
+    );
+
+    // Assert
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Creates]: {
+            [fakeuUid]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  it('deleteSuccessfulSyncPushErrors removes all successful syncs', async () => {
+    // Arrange
+    const fakeuUid = '16945c77-6076-4dce-8921-7db976327922';
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Creates]: {
+            [sampleStat.body_stat_id]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+            [fakeuUid]: {
+              retries: 1,
+              data: {
+                ...sampleStat,
+              },
+            },
+          },
+        },
+      }),
+    );
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+
+    // Act
+    await deleteSuccessfulSyncPushErrors(
+      syncDbTables.bodyStatTable,
+      [sampleStat.body_stat_id, fakeuUid],
+      SyncOperation.Creates,
+    );
+
+    // Assert
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+    );
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.SyncPushErrors,
+      JSON.stringify({
+        [syncDbTables.bodyStatTable]: {
+          [SyncOperation.Creates]: {},
+        },
+      }),
+    );
   });
 
   it('getFailedSyncPushesCreatesForTable has failed pushes', async () => {

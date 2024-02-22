@@ -71,11 +71,12 @@ const WellnessProgressScreen: React.FC<ScreenProps> = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: '50%',
+    height: '60%',
+    width: '100%',
   },
   scroll: {
     flex: 1,
-    ...layoutStyles.spaceBetweenVertical,
+    ...layoutStyles.spaceAroundVertical,
   },
 });
 
