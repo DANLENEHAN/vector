@@ -19,3 +19,7 @@ export default {
 const Template = (args: any) => <BodyMap {...args} />;
 
 export const Default = Template.bind({});
+Default.args = {
+  onBodyPartSelect: (bodyPart: string) =>
+    console.log(`Selected Bodypart ${bodyPart}`),
+};

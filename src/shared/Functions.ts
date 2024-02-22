@@ -40,3 +40,19 @@ export const getValuesAfterSpecifiedKey = (
     return result;
   }, {} as {[key: string]: string[]});
 };
+
+/**
+ * Transforms an internal name from snake_case to a display format where each word is capitalized and separated by spaces.
+ *
+ * This function takes a string formatted in snake_case (words separated by underscores) and converts it into a more readable format suitable for display purposes. Each word in the input string is capitalized (i.e., the first letter is uppercase, and the remaining letters are lowercase), and the underscores are replaced with spaces to create a human-readable string.
+ *
+ * @param {string} name - The snake_case string to be transformed into display format.
+ * @returns {string} The transformed string with each word capitalized and separated by spaces.
+ *
+ */
+export const tranformInternalNameToDisplay = (name: string) => {
+  return name
+    .split('_')
+    .map(word => capitalizeString(word))
+    .join(' ');
+};

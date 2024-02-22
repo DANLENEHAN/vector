@@ -78,8 +78,9 @@ export interface BodyStatCreateSchema {
 
 /**
  * BodyStatType
- * Extended Enum for body statistics including general measurements like height and weight,
- * in addition to specific body parts defined in MeasureableBodyParts.
+ * Extended Enum for body statistics including general
+ * measurements like height and weight, in addition
+ * to specific body parts defined in MeasureableBodyParts.
  */
 export enum BodyStatType {
   Height = 'height',
@@ -87,13 +88,17 @@ export enum BodyStatType {
   Chest = 'chest',
   Neck = 'neck',
   Shoulders = 'shoulders',
-  UpperLeg = 'upper_leg',
-  LowerLeg = 'lower_leg',
+  UpperLeftLeg = 'upper_left_leg',
+  LowerLeftLeg = 'lower_left_leg',
+  UpperRightLeg = 'upper_right_leg',
+  LowerRightLeg = 'lower_right_leg',
   Waist = 'waist',
   Hips = 'hips',
   Glutes = 'glutes',
-  UpperArm = 'upper_arm',
-  LowerArm = 'lower_arm',
+  UpperRightArm = 'upper_right_arm',
+  LowerRightArm = 'lower_right_arm',
+  UpperLeftArm = 'upper_left_arm',
+  LowerLeftArm = 'lower_left_arm',
 }
 
 /**
