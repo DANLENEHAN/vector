@@ -20,3 +20,7 @@ export default {
 const Template: Story<any> = (args: any) => <BodyMap {...args} />;
 
 export const Default = Template.bind({});
+Default.args = {
+  onBodyPartSelect: (bodyPart: string) =>
+    console.log(`Selected Bodypart ${bodyPart}`),
+};
