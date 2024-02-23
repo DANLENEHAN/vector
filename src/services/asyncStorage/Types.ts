@@ -38,3 +38,12 @@ export type FailedSyncPushError<T> = {
     };
   };
 };
+
+export interface DeviceIdMap {
+  // The unique Id of the device set
+  // by the device itself
+  internalDeviceId: string | null;
+  // The unqiue Id of the device set
+  // by us
+  deviceId: string | null;
+}

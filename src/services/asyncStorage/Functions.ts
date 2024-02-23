@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   FailedSyncPushError,
   SyncPushErrorItem,
+  DeviceIdMap,
 } from '@services/asyncStorage/Types';
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
 
@@ -29,7 +30,9 @@ export const SyncErrorDumpApi = new SyncErrorDump(api);
  **/
 export async function getUserDetails(field_name: string): Promise<any> {
   try {
-    const user_details = await AsyncStorage.getItem('user-details-key');
+    const user_details = await AsyncStorage.getItem(
+      AsyncStorageKeys.UserDetails,
+    );
     if (user_details) {
       const user_details_json = JSON.parse(user_details);
       if (field_name in user_details_json) {
@@ -260,11 +263,7 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
         delete tableSyncPushErrors[id];
       }
     });
-
-    console.log(tableName, tableSyncPushErrors, successfulSyncIds);
     syncPushErrorsObject[tableName]![syncOperation] = tableSyncPushErrors;
-
-    console.log(syncPushErrorsObject);
     await AsyncStorage.setItem(
       AsyncStorageKeys.SyncPushErrors,
       JSON.stringify(syncPushErrorsObject),
@@ -274,4 +273,35 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
       `Failed to delete successfully synchronized push errors: ${error}`,
     );
   }
+};
+
+export const getStoredDeviceIdMap = async (
+  internalDeviceId: string,
+): Promise<DeviceIdMap> => {
+  let deviceMap: DeviceIdMap = {
+    internalDeviceId: null,
+    deviceId: null,
+  };
+
+  try {
+    const response = await AsyncStorage.getItem(AsyncStorageKeys.DeviceId);
+    deviceMap = JSON.parse(response);
+  } catch (error) {
+    logger.warn(
+      `Unable to parse AsyncStorage key ${AsyncStorageKeys.DeviceId} will rebuild...`,
+    );
+  }
+
+  // If any of the data is wrong/missing reset the object
+  if (
+    deviceMap.internalDeviceId !== internalDeviceId ||
+    deviceMap.internalDeviceId === null ||
+    deviceMap.deviceId === null
+  ) {
+    deviceMap.internalDeviceId = null;
+    deviceMap.deviceId = null;
+    await AsyncStorage.setItem(AsyncStorageKeys.DeviceId, null);
+  }
+
+  return deviceMap;
 };

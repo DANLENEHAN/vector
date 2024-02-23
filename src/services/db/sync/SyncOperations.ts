@@ -89,13 +89,18 @@ export const processUpdatesSyncTypePush = async (
       const newSyncUuids: string[] = rowsToSync.map(
         row => (row as any)[tableUuidColumn],
       );
-      await deleteSuccessfulSyncPushErrors(
-        tableName,
-        successfulPushUuids.filter(
-          (uuid: string) => !newSyncUuids.includes(uuid),
-        ),
-        SyncOperation.Updates,
+      const syncPushErrorsToDelete: string[] = successfulPushUuids.filter(
+        (uuid: string) => !newSyncUuids.includes(uuid),
       );
+      if (syncPushErrorsToDelete.length > 0) {
+        await deleteSuccessfulSyncPushErrors(
+          tableName,
+          successfulPushUuids.filter(
+            (uuid: string) => !newSyncUuids.includes(uuid),
+          ),
+          SyncOperation.Updates,
+        );
+      }
     }
   }
   logger.info(
@@ -171,13 +176,18 @@ export const processCreatesSyncTypePush = async (
       const newSyncUuids: string[] = rowsToSync.map(
         row => (row as any)[tableUuidColumn],
       );
-      await deleteSuccessfulSyncPushErrors(
-        tableName,
-        successfulPushUuids.filter(
-          (uuid: string) => !newSyncUuids.includes(uuid),
-        ),
-        SyncOperation.Creates,
+      const syncPushErrorsToDelete: string[] = successfulPushUuids.filter(
+        (uuid: string) => !newSyncUuids.includes(uuid),
       );
+      if (syncPushErrorsToDelete.length > 0) {
+        await deleteSuccessfulSyncPushErrors(
+          tableName,
+          successfulPushUuids.filter(
+            (uuid: string) => !newSyncUuids.includes(uuid),
+          ),
+          SyncOperation.Creates,
+        );
+      }
     }
   }
   logger.info(

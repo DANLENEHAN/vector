@@ -245,6 +245,13 @@ export interface ClientSessionEventCreateSchema {
    */
   deleted?: boolean | null;
   /**
+   * Device Id
+   * ID of the device triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
+  /**
    * Enum representing client
    * session event types.
    */
@@ -327,6 +334,13 @@ export interface ClientSessionEventUpdateSchema {
    * @example false
    */
   deleted?: boolean | null;
+  /**
+   * Device Id
+   * ID of the device triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
   /**
    * Enum representing client
    * session event types.
