@@ -54,7 +54,7 @@ export const createUser = async (
 export const loginUser = async (data: {
   email: string;
   password: string;
-}): Promise<void | SwaggerValidationError> => {
+}): Promise<string | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<object> = await UserApi.loginCreate(data);
     if (response.status === 201) {
@@ -78,7 +78,7 @@ export const loginUser = async (data: {
         AsyncStorageKeys.UserDetails,
         JSON.stringify(response_data),
       );
-      return Promise.resolve();
+      return Promise.resolve((response_data as any).user_id);
     } else {
       return new SwaggerValidationError();
     }
