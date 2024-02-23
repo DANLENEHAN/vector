@@ -221,14 +221,6 @@ export interface ClientSessionEventCreateSchema {
    */
   application_version?: string;
   /**
-   * Brand
-   * The brand of the client_hardware
-   * @maxLength 50
-   * @default null
-   * @example "Apple"
-   */
-  brand?: string;
-  /**
    * Client Session Event Id
    * ID of the user triggering the event
    * @maxLength 36
@@ -252,14 +244,6 @@ export interface ClientSessionEventCreateSchema {
    * @example false
    */
   deleted?: boolean | null;
-  /**
-   * Device Id
-   * ID of the client_hardware
-   * @maxLength 100
-   * @default null
-   * @example "iPhone7,2"
-   */
-  device_id?: string;
   /**
    * Enum representing client
    * session event types.
@@ -326,14 +310,6 @@ export interface ClientSessionEventUpdateSchema {
    */
   application_version?: string;
   /**
-   * Brand
-   * The brand of the client_hardware
-   * @maxLength 50
-   * @default null
-   * @example "Apple"
-   */
-  brand?: string;
-  /**
    * Client Session Event Id
    * ID of the user triggering the event
    * @maxLength 36
@@ -351,14 +327,6 @@ export interface ClientSessionEventUpdateSchema {
    * @example false
    */
   deleted?: boolean | null;
-  /**
-   * Device Id
-   * ID of the client_hardware
-   * @maxLength 100
-   * @default null
-   * @example "iPhone7,2"
-   */
-  device_id?: string;
   /**
    * Enum representing client
    * session event types.
@@ -414,6 +382,129 @@ export enum DateFormat {
   ValueYMD = '%Y-%m-%d',
   ValueMDY = '%m-%d-%Y',
   ValueDMY = '%d-%m-%Y',
+}
+
+/**
+ * DeviceCreateSchema
+ * Schema for validating the device schema
+ */
+export interface DeviceCreateSchema {
+  /**
+   * Brand
+   * The brand of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "Apple"
+   */
+  brand?: string;
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Device Fcm
+   * The firebase cloud management id of the device
+   * @maxLength 500
+   * @example "eWhHBQQuT2uUuQBa3Hrix...."
+   */
+  device_fcm: string;
+  /**
+   * Device Id
+   * UUID of the device defined by us
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
+  /**
+   * Device Internal Id
+   * Unique ID of the device defined by the device itself
+   * @maxLength 200
+   * @example "dd96dec43fb81c97"
+   */
+  device_internal_id: string;
+  /**
+   * Model
+   * The model of the device
+   * @maxLength 100
+   * @default null
+   * @example "iPhone7,2"
+   */
+  model?: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
+ * DeviceUpdateSchema
+ * Schema for validating the device update schema
+ */
+export interface DeviceUpdateSchema {
+  /**
+   * Brand
+   * The brand of the client_hardware
+   * @maxLength 50
+   * @default null
+   * @example "Apple"
+   */
+  brand?: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Device Fcm
+   * The firebase cloud management id of the device
+   * @maxLength 500
+   * @example "eWhHBQQuT2uUuQBa3Hrix...."
+   */
+  device_fcm: string;
+  /**
+   * Device Id
+   * UUID of the device defined by us
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
+  /**
+   * Device Internal Id
+   * Unique ID of the device defined by the device itself
+   * @maxLength 200
+   * @example "dd96dec43fb81c97"
+   */
+  device_internal_id: string;
+  /**
+   * Model
+   * The model of the device
+   * @maxLength 100
+   * @default null
+   * @example "iPhone7,2"
+   */
+  model?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -508,6 +599,11 @@ export interface EquipmentCreateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -580,6 +676,11 @@ export interface EquipmentUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -694,6 +795,13 @@ export interface ExerciseCreateSchema {
    */
   created_at: string;
   /**
+   * Created By
+   * The user_id of the user who created the exercise
+   * @min 0
+   * @example 1
+   */
+  created_by: number;
+  /**
    * Deleted
    * @default false
    * @example false
@@ -735,6 +843,11 @@ export interface ExerciseCreateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -833,6 +946,13 @@ export interface ExerciseUpdateSchema {
    */
   category: string;
   /**
+   * Created By
+   * The user_id of the user who created the exercise
+   * @min 0
+   * @example 1
+   */
+  created_by: number;
+  /**
    * Deleted
    * @default false
    * @example false
@@ -869,6 +989,11 @@ export interface ExerciseUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -1595,6 +1720,11 @@ export interface PlanCreateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -1651,6 +1781,11 @@ export interface PlanUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
 }
 
 /**
@@ -2455,7 +2590,7 @@ export interface UserCreateSchema {
    * Premium
    * @default false
    */
-  premium?: boolean;
+  premium?: boolean | null;
   /** @default "active" */
   status?: ProfileStatus;
   /**
@@ -2479,6 +2614,97 @@ export interface UserCreateSchema {
   username: string;
   /** Weight units. */
   weight_unit_pref: WeightUnit;
+}
+
+/**
+ * UserDeviceLinkCreateSchema
+ * Validation schema for the UserDeviceLink model.
+ */
+export interface UserDeviceLinkCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Device Id
+   * UUID of the device
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * User Device Link Id
+   * UUID of the junction table
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_device_link_id: string;
+  /**
+   * User Id
+   * UUID of user
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
+}
+
+/**
+ * UserDeviceLinkUpdateSchema
+ * Validation schema for the UserDeviceLink model.
+ */
+export interface UserDeviceLinkUpdateSchema {
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Device Id
+   * UUID of the device
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  device_id: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
+  /**
+   * User Device Link Id
+   * UUID of the junction table
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_device_link_id: string;
+  /**
+   * User Id
+   * UUID of user
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
 }
 
 /**
@@ -2561,7 +2787,7 @@ export interface UserGetSchema {
    * Premium
    * @default false
    */
-  premium?: boolean;
+  premium?: boolean | null;
   /** @default "active" */
   status?: ProfileStatus;
   /**
@@ -2667,7 +2893,7 @@ export interface UserUpdateSchema {
    * Premium
    * @default false
    */
-  premium?: boolean;
+  premium?: boolean | null;
   /** @default "active" */
   status?: ProfileStatus;
   /**
@@ -3042,6 +3268,11 @@ export interface WorkoutCreateSchema {
    */
   updated_at?: string | null;
   /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
+  /**
    * Workout Id
    * ID for the workout component entry
    * @maxLength 36
@@ -3137,6 +3368,11 @@ export interface WorkoutTreeCreateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
   /** Workout Components */
   workout_components: WorkoutComponentTreeCreateSchema[];
   /**
@@ -3220,6 +3456,11 @@ export interface WorkoutUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
   /**
    * Workout Id
    * ID for the workout component entry
