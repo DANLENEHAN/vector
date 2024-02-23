@@ -39,6 +39,10 @@ jest.mock('@services/api/blueprints/user/Api', () => ({
 jest.mock('@services/db/sync/SyncProcess', () => ({
   runSyncProcess: jest.fn(),
 }));
+jest.mock('@services/api/blueprints/device/Api', () => ({
+  ...jest.requireActual('@services/asyncStorage/Functions'),
+  retrieveOrRegisterDeviceId: jest.fn(),
+}));
 
 describe('User Functions Tests', () => {
   beforeEach(() => {

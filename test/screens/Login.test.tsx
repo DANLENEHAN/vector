@@ -16,6 +16,11 @@ jest.mock('@react-native-community/netinfo', () => {
   };
 });
 
+jest.mock('@services/api/blueprints/device/Api', () => ({
+  ...jest.requireActual('@services/asyncStorage/Functions'),
+  retrieveOrRegisterDeviceId: jest.fn(),
+}));
+
 describe('LoginScreen Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
