@@ -1,5 +1,5 @@
 // React imports
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // Components
 import ButtonComponent from '@components/buttons/ButtonComponent';
 import Header from '@components/navbar/Header';
@@ -15,6 +15,10 @@ import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {layoutStyles, headingTextStyles} from '@styles/Main';
 // Constants
 import {moods} from '@screens/track/mood/Constants';
+import {MoodTagGroups} from './Types';
+import {getMoodTagObject} from '@services/api/blueprints/moodTag/Functions';
+// Logger
+import logger from '@utils/Logger';
 
 /**
  *  Mood tracking screen
@@ -35,6 +39,27 @@ const MoodScreen: React.FC<ScreenProps> = ({
   const handleSliderChange = (newValue: number) => {
     setMoodValue(newValue);
   };
+
+  const [fetchedMoodTags, setFetchedMoodTags] = useState<MoodTagGroups>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const fetchMoodTags = async () => {
+      try {
+        const moodTags = await getMoodTagObject();
+        if (!moodTags) {
+          logger.error('Failed to fetch mood tags');
+          return;
+        }
+        // Assuming getMoodTagObject returns the data in the structure { category: [{ tag_id, label, icon, color }], ... }
+        setFetchedMoodTags(moodTags);
+      } catch (error) {
+        logger.error('Failed to fetch mood tags:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMoodTags();
+  }, []);
 
   const mood = moods[moodValue];
 
@@ -69,9 +94,12 @@ const MoodScreen: React.FC<ScreenProps> = ({
           />
           <ButtonComponent
             text="Capture"
-            disabled={false}
+            disabled={isLoading}
             onPress={() =>
-              navigation.navigate('MoodTagTracking', {mood: moods[moodValue]})
+              navigation.navigate('MoodTagTracking', {
+                mood: moods[moodValue],
+                moodTags: fetchedMoodTags,
+              })
             }
           />
         </View>

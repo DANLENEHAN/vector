@@ -5,7 +5,7 @@ import {start} from '@storybook/react-native';
 const normalizedStories = [
   {
     titlePrefix: '',
-    directory: './.storybook/stories',
+    directory: '../.storybook/stories',
     files: '**/*.stories.?(ts|tsx|js|jsx)',
     importPathMatcher:
       /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/,

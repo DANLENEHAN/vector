@@ -7,6 +7,7 @@ import {Keyboard} from 'react-native';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
+import {v4 as uuidv4} from 'uuid';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {
@@ -100,6 +101,7 @@ export const handleCreateAccount = async (
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
   let response = await createUser({
     // NOTE: Remove these hard-coded values when the UI is implemented fully
+    user_id: uuidv4(),
     email: params.email,
     password: params.password,
     age: 125,
