@@ -5,7 +5,7 @@ import DeviceInfo from 'react-native-device-info';
 import {v4 as uuid4} from 'uuid';
 import messaging from '@react-native-firebase/messaging';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {createUserDeviceLink} from '../user_device_link/Api';
+import {createUserDeviceLink} from '@services/api/blueprints/user_device_link/Api';
 // Services
 import {DeviceApi} from '@services/api/ApiService';
 // Types
@@ -20,13 +20,13 @@ export const createDevice = async (
   userId: string,
   deviceInternalId?: string | null,
 ): Promise<DeviceIdMap | null> => {
-  if (deviceInternalId === null) {
+  if (deviceInternalId === null || deviceInternalId === undefined) {
     deviceInternalId = await DeviceInfo.getUniqueId();
   }
 
   const deviceId: string = uuid4();
   const brand: string = DeviceInfo.getBrand();
-  const model: string = DeviceInfo.getModel();
+  const model: string = DeviceInfo.getDeviceId(); // e.g. Iphone7,2
   const deviceFcm: string = await messaging().getToken();
 
   const {timestamp, timezone} = getCurrentTimestampTimezone();
