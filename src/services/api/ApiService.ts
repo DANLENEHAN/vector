@@ -2,11 +2,11 @@
 import {HttpClient} from '@services/api/swagger/http-client';
 
 // Api Classes
-import {UserDeviceLink} from './swagger/UserDeviceLink';
+import {UserDeviceLink} from '@services/api/swagger/UserDeviceLink';
 import {BodyStat} from '@services/api/swagger/BodyStat';
-import {Device} from './swagger/Device';
-import {User} from './swagger/User';
-import {SyncErrorDump} from './swagger/SyncErrorDump';
+import {Device} from '@services/api/swagger/Device';
+import {User} from '@services/api/swagger/User';
+import {SyncErrorDump} from '@services/api/swagger/SyncErrorDump';
 import {Mood} from '@services/api/swagger/Mood';
 import {MoodTag} from '@services/api/swagger/MoodTag';
 import {MoodTagLink} from '@services/api/swagger/MoodTagLink';
