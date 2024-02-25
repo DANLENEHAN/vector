@@ -19,22 +19,15 @@ import {
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 
-// Functions
-import api from '@services/api/ApiService';
-import {BodyStat} from '@services/api/swagger/BodyStat';
-import {Mood} from '@services/api/swagger/Mood';
-import {MoodTag} from '@services/api/swagger/MoodTag';
-import {MoodTagLink} from '@services/api/swagger/MoodTagLink';
-import {Nutrition} from '@services/api/swagger/Nutrition';
-import {ClientSessionEvent} from '@services/api/swagger/ClientSessionEvent';
-
 // Apis
-const BodyStatApi = new BodyStat(api);
-const MoodApi = new Mood(api);
-const MoodTagApi = new MoodTag(api);
-const MoodTagLinkApi = new MoodTagLink(api);
-const NutritionApi = new Nutrition(api);
-const ClientSessionEventApi = new ClientSessionEvent(api);
+import {
+  BodyStatApi,
+  MoodApi,
+  MoodTagApi,
+  MoodTagLinkApi,
+  ClientSessionEventApi,
+  NutritionApi,
+} from '@services/api/ApiService';
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {

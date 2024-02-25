@@ -19,6 +19,7 @@ import {
   getFailedSyncPushesUpdatesForTable,
   SyncErrorDumpApi,
   deleteSuccessfulSyncPushErrors,
+  getStoredDeviceIdMap,
 } from '@services/asyncStorage/Functions';
 import {SyncType} from '@shared/Enums';
 
@@ -26,6 +27,7 @@ import {SyncType} from '@shared/Enums';
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
+  removeItem: jest.fn(),
 }));
 
 // Mocking the BodyStat Api Class
@@ -36,6 +38,7 @@ jest.mock('@services/api/swagger/SyncErrorDump', () => ({
 }));
 
 describe('getUserDetails', () => {
+  const fakeDeviceId = '4f76f081-0192-484a-a9b7-07b93b297c93';
   beforeEach(() => {
     // Clears 'toHaveBeenCalledTimes' cache
     jest.clearAllMocks();
@@ -417,5 +420,65 @@ describe('getUserDetails', () => {
 
     // Assert
     expect(response).toEqual([]);
+  });
+
+  it('getStoredDeviceIdMap key is null', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve(null));
+
+    // Act
+    const response = await getStoredDeviceIdMap(fakeDeviceId);
+
+    // Assert
+    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.DeviceId,
+    );
+    expect(response).toEqual({
+      internalDeviceId: null,
+      deviceId: null,
+    });
+  });
+
+  it('getStoredDeviceIdMap key is invalid', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockReturnValue(
+      Promise.resolve('{{{{{{{'),
+    );
+
+    // Act
+    const response = await getStoredDeviceIdMap(fakeDeviceId);
+
+    // Assert
+    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
+      AsyncStorageKeys.DeviceId,
+    );
+    expect(response).toEqual({
+      internalDeviceId: null,
+      deviceId: null,
+    });
+  });
+
+  it('getStoredDeviceIdMap key is valid', async () => {
+    // Arrange
+    (AsyncStorage.getItem as jest.Mock).mockReturnValue(
+      Promise.resolve(
+        JSON.stringify({
+          internalDeviceId: fakeDeviceId,
+          deviceId: '21db11ea-4dd6-4e1d-a697-7c62a11dce4b',
+        }),
+      ),
+    );
+
+    // Act
+    const response = await getStoredDeviceIdMap(fakeDeviceId);
+
+    // Assert
+    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(0);
+    expect(response).toEqual({
+      internalDeviceId: fakeDeviceId,
+      deviceId: '21db11ea-4dd6-4e1d-a697-7c62a11dce4b',
+    });
   });
 });

@@ -2,8 +2,7 @@
 import {UserDeviceLinkCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Services
-import api from '@services/api/ApiService';
-import {UserDeviceLink} from '@services/api/swagger/UserDeviceLink';
+import {UserDeviceLinkApi} from '@services/api/ApiService';
 import logger from '@utils/Logger';
 
 // Functions
@@ -12,8 +11,6 @@ import {v4 as uuid4} from 'uuid';
 import {AxiosResponse} from 'axios';
 import {insertRows} from '@services/db/Functions';
 import {syncDbTables} from '@shared/Constants';
-
-const UserDeviceLinkApi = new UserDeviceLink(api);
 
 export const createUserDeviceLink = async (
   deviceId: string,
@@ -34,14 +31,14 @@ export const createUserDeviceLink = async (
       userDeviceLinkRow,
     );
     if (response.status !== 201) {
-      console.warn(
+      logger.warn(
         `Unexpected status code for UserDeviceLinkApi.createCreate: ${response.status}`,
       );
     }
   } catch (error) {
     logger.warn(
-      `UserDeviceLinkApi.createCreate request for deviceId:${deviceId} ` +
-        `and userId:${userId} has failed. Will be picked up in the sync.`,
+      `UserDeviceLinkApi.createCreate request for deviceId: ${deviceId} ` +
+        `and userId: ${userId} has failed. Will be picked up in the sync.`,
     );
   }
 };

@@ -7,7 +7,7 @@ import {Keyboard} from 'react-native';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
-import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Api';
+import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {

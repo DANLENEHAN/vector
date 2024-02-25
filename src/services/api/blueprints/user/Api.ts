@@ -1,10 +1,9 @@
 import {AxiosResponse} from 'axios';
-import api from '@services/api/ApiService';
+import {UserApi} from '@services/api/ApiService';
 import {
   UserCreateSchema,
   UserGetSchema,
 } from '@services/api/swagger/data-contracts';
-import {User} from '@services/api/swagger/User';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
@@ -14,8 +13,6 @@ import {HandleSwaggerValidationError} from '@services/api/Functions';
 import {SwaggerValidationError} from '@services/api/Types';
 // Logger
 import logger from '@utils/Logger';
-
-const UserApi = new User(api);
 
 /**
  * Function to create a new user.

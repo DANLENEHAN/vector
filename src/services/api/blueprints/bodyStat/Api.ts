@@ -1,14 +1,11 @@
 import {AxiosResponse} from 'axios';
-import api from '@services/api/ApiService';
+import {BodyStatApi} from '@services/api/ApiService';
 // Functions
 import {HandleSwaggerValidationError} from '@services/api/Functions';
 // Components
-import {BodyStat} from '@services/api/swagger/BodyStat';
 // Types
 import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
-
-const BodyStatApi = new BodyStat(api);
 
 /**
  * Retrieves a list of stats based on the provided query parameters.

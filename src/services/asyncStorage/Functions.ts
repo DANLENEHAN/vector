@@ -1,5 +1,6 @@
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SyncErrorDumpApi} from '@services/api/ApiService';
 
 // Types
 import {
@@ -15,11 +16,7 @@ import {syncDbTables} from '@shared/Constants';
 import {maxSyncPushRetry} from '@services/db/sync/Constants';
 import logger from '@utils/Logger';
 import {SyncOperation} from '@services/api/swagger/data-contracts';
-import {SyncErrorDump} from '@services/api/swagger/SyncErrorDump';
-import api from '@services/api/ApiService';
 import {SyncType} from '@services/api/swagger/data-contracts';
-
-export const SyncErrorDumpApi = new SyncErrorDump(api);
 
 /**
  * Gets the user details from AsyncStorage.
@@ -278,30 +275,29 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
 export const getStoredDeviceIdMap = async (
   internalDeviceId: string,
 ): Promise<DeviceIdMap> => {
-  let deviceMap: DeviceIdMap = {
-    internalDeviceId: null,
-    deviceId: null,
-  };
-
   try {
     const response = await AsyncStorage.getItem(AsyncStorageKeys.DeviceId);
-    deviceMap = JSON.parse(response);
+    if (response !== null) {
+      const deviceMap: DeviceIdMap = JSON.parse(response);
+
+      // Validate the retrieved data
+      if (
+        deviceMap.internalDeviceId === internalDeviceId &&
+        deviceMap.deviceId !== null
+      ) {
+        // Data is valid and matches the provided internalDeviceId
+        return deviceMap;
+      }
+    }
+    logger.warn(
+      `Invalid or mismatched device map data. Resetting AsyncStorage key ${AsyncStorageKeys.DeviceId}...`,
+    );
   } catch (error) {
     logger.warn(
-      `Unable to parse AsyncStorage key ${AsyncStorageKeys.DeviceId} will rebuild...`,
+      `Error accessing AsyncStorage key ${AsyncStorageKeys.DeviceId}. Error: ${error}. Resetting data...`,
     );
   }
 
-  // If any of the data is wrong/missing reset the object
-  if (
-    deviceMap.internalDeviceId !== internalDeviceId ||
-    deviceMap.internalDeviceId === null ||
-    deviceMap.deviceId === null
-  ) {
-    deviceMap.internalDeviceId = null;
-    deviceMap.deviceId = null;
-    await AsyncStorage.setItem(AsyncStorageKeys.DeviceId, null);
-  }
-
-  return deviceMap;
+  await AsyncStorage.removeItem(AsyncStorageKeys.DeviceId);
+  return {internalDeviceId: null, deviceId: null};
 };
