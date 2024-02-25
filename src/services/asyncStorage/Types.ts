@@ -39,11 +39,18 @@ export type FailedSyncPushError<T> = {
   };
 };
 
+/**
+ * Interface representing the mapping of device identifiers within the application.
+ *
+ * @property {string | null} internalDeviceId - A unique identifier set by the device itself.
+ * This could be a hardware serial number or any other unique hardware-based ID. It can be `null`
+ * if the identifier is not set or retrievable.
+ *
+ * @property {string | null} deviceId - A unique identifier assigned by the application to the device.
+ * This is used for tracking or linking the device within the application's backend systems. It can also
+ * be `null` if the identifier has not yet been assigned or is not available.
+ */
 export interface DeviceIdMap {
-  // The unique Id of the device set
-  // by the device itself
   internalDeviceId: string | null;
-  // The unqiue Id of the device set
-  // by us
   deviceId: string | null;
 }

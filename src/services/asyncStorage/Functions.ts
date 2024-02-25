@@ -272,6 +272,31 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
   }
 };
 
+/**
+ * Asynchronously retrieves a device ID map from local storage using `AsyncStorage`.
+ * This function attempts to fetch a stored device ID map by the given `internalDeviceId`. If found, it validates
+ * that the stored device map's `internalDeviceId` matches the provided one and that the `deviceId` is not null.
+ * If these conditions are met, the function returns the device ID map. Otherwise, it logs a warning and resets
+ * the relevant `AsyncStorage` key by removing any stored device map data, indicating either invalid data or
+ * a mismatch between the stored and provided internal device IDs.
+ *
+ * @param internalDeviceId - The internal device ID for which the device ID map is being retrieved.
+ * @returns A `Promise` that resolves to a `DeviceIdMap` object. If valid data is found and matches the
+ *          provided `internalDeviceId`, the device map is returned. If no valid data is found, or if there's
+ *          a mismatch or error, the function returns an object with both `internalDeviceId` and `deviceId`
+ *          set to `null`.
+ *
+ * The function is designed to support error handling for both non-existent data scenarios and any issues encountered
+ * during the retrieval process from `AsyncStorage`. In case of an error or if validation fails, it ensures that
+ * potentially corrupted or mismatched data does not persist by clearing the stored device map data.
+ *
+ * Possible errors include:
+ * - Exceptions thrown by `AsyncStorage.getItem` due to issues accessing the local storage.
+ * - JSON parsing errors if the data retrieved from `AsyncStorage` is not properly formatted JSON.
+ *
+ * These errors are caught and logged, and the function then proceeds to clear the potentially problematic data
+ * from `AsyncStorage` before returning an empty device map object with null values.
+ */
 export const getStoredDeviceIdMap = async (
   internalDeviceId: string,
 ): Promise<DeviceIdMap> => {
