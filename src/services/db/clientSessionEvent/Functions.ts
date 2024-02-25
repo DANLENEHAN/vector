@@ -57,6 +57,6 @@ export const insertClientSessionEvent = async (
       }
     }
   } catch (error) {
-    logger.info("Don't have user details yet skipping...");
+    logger.info("Don't have user or device details yet skipping...");
   }
 };
