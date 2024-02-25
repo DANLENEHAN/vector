@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Constants
 import {syncDbTables} from '@shared/Constants';
 import {SyncOperation} from '@services/api/swagger/data-contracts';
+import {SyncErrorDumpApi} from '@services/api/ApiService';
 
 // Types
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
@@ -17,7 +18,6 @@ import {
   storeFailedSyncPushErrors,
   getFailedSyncPushesCreatesForTable,
   getFailedSyncPushesUpdatesForTable,
-  SyncErrorDumpApi,
   deleteSuccessfulSyncPushErrors,
   getStoredDeviceIdMap,
 } from '@services/asyncStorage/Functions';
