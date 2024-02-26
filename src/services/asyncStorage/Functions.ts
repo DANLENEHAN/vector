@@ -261,10 +261,8 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
       }
     });
 
-    console.log(tableName, tableSyncPushErrors, successfulSyncIds);
     syncPushErrorsObject[tableName]![syncOperation] = tableSyncPushErrors;
 
-    console.log(syncPushErrorsObject);
     await AsyncStorage.setItem(
       AsyncStorageKeys.SyncPushErrors,
       JSON.stringify(syncPushErrorsObject),

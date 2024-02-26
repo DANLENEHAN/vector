@@ -7,24 +7,33 @@ jest.mock('@context/SystemContext', () => ({
   useSystem: jest.fn(() => ({theme: 'light'})),
 }));
 
+const testTags = [
+  {
+    label: 'Happy',
+    icon: 'meh',
+    color: 'yellow',
+    tagId: '1',
+  },
+  {
+    label: 'Sad',
+    icon: 'frown',
+    color: 'yellow',
+    tagId: '2',
+  },
+];
+
+// Mock function should append the tagId to the selectedTags array
+const mockOnTagSelect = jest.fn();
+
 describe('TagSelector', () => {
   it('Should render when open', () => {
     // Arrange
     const {getByText} = render(
       <TagSelector
         tagSelectorLabel="Tag Group"
-        tags={[
-          {
-            label: 'Happy',
-            icon: 'meh',
-            color: 'yellow',
-          },
-          {
-            label: 'Sad',
-            icon: 'frown',
-            color: 'yellow',
-          },
-        ]}
+        tags={testTags}
+        onTagSelect={mockOnTagSelect}
+        selectedTags={[]}
       />,
     );
     // Act
@@ -43,18 +52,9 @@ describe('TagSelector', () => {
     const {getByText, getByTestId} = render(
       <TagSelector
         tagSelectorLabel="Tag Group"
-        tags={[
-          {
-            label: 'Happy',
-            icon: 'meh',
-            color: 'yellow',
-          },
-          {
-            label: 'Sad',
-            icon: 'frown',
-            color: 'yellow',
-          },
-        ]}
+        tags={testTags}
+        onTagSelect={mockOnTagSelect}
+        selectedTags={[]}
       />,
     );
     // Act
@@ -80,18 +80,9 @@ describe('TagSelector', () => {
     const {getByText, getByTestId} = render(
       <TagSelector
         tagSelectorLabel="Tag Group"
-        tags={[
-          {
-            label: 'Happy',
-            icon: 'meh',
-            color: 'yellow',
-          },
-          {
-            label: 'Sad',
-            icon: 'frown',
-            color: 'yellow',
-          },
-        ]}
+        tags={testTags}
+        onTagSelect={mockOnTagSelect}
+        selectedTags={[]}
       />,
     );
     // Act
@@ -118,52 +109,57 @@ describe('TagSelector', () => {
 
   it('Should select and unselect a tag', () => {
     // Arrange
+    const mockOnTagSelectDoesSomething = (tagId: string) => {
+      if (selectedTags.includes(tagId)) {
+        selectedTags.splice(selectedTags.indexOf(tagId), 1);
+      } else {
+        selectedTags.push(tagId);
+      }
+    };
+    const selectedTags = [] as string[];
     const {getByTestId} = render(
       <TagSelector
         tagSelectorLabel="Tag Group"
-        tags={[
-          {
-            label: 'Happy',
-            icon: 'meh',
-            color: 'yellow',
-          },
-          {
-            label: 'Sad',
-            icon: 'frown',
-            color: 'yellow',
-          },
-        ]}
+        tags={testTags}
+        onTagSelect={mockOnTagSelectDoesSomething}
+        selectedTags={selectedTags}
       />,
     );
     // Act
     let tag1 = getByTestId('tagSelectorTag_Happy');
     expect(tag1).toHaveStyle({backgroundColor: lightThemeColors.background});
     fireEvent.press(tag1);
+    // Forces a re-render of the tags
+    const collapseButton = getByTestId('tagSelectorCollapseButton');
+    fireEvent.press(collapseButton);
+    fireEvent.press(collapseButton);
     // Assert
     tag1 = getByTestId('tagSelectorTag_Happy');
     expect(tag1).toHaveStyle({backgroundColor: 'yellow'});
     fireEvent.press(tag1);
+    // Forces a re-render of the tags
+    fireEvent.press(collapseButton);
+    fireEvent.press(collapseButton);
     tag1 = getByTestId('tagSelectorTag_Happy');
     expect(tag1).toHaveStyle({backgroundColor: lightThemeColors.background});
   });
 
   it('Should show number of selected tags when collapsed', () => {
     // Arrange
+    const mockOnTagSelectDoesSomething = (tagId: string) => {
+      if (selectedTags.includes(tagId)) {
+        selectedTags.splice(selectedTags.indexOf(tagId), 1);
+      } else {
+        selectedTags.push(tagId);
+      }
+    };
+    const selectedTags = [] as string[];
     const {getByText, getByTestId} = render(
       <TagSelector
         tagSelectorLabel="Tag Group"
-        tags={[
-          {
-            label: 'Happy',
-            icon: 'meh',
-            color: 'yellow',
-          },
-          {
-            label: 'Sad',
-            icon: 'frown',
-            color: 'yellow',
-          },
-        ]}
+        tags={testTags}
+        onTagSelect={mockOnTagSelectDoesSomething}
+        selectedTags={selectedTags}
       />,
     );
     // Act
@@ -182,8 +178,8 @@ describe('TagSelector', () => {
     // Assert
     tagGroup = getByText('Tag Group');
     expect(tagGroup).toBeTruthy();
-    const selectedTags = getByTestId('tagSelectorSelectedCount');
-    expect(selectedTags).toHaveTextContent('1 Selected');
+    const selectedTagCount = getByTestId('tagSelectorSelectedCount');
+    expect(selectedTagCount).toHaveTextContent('1 Selected');
 
     // Expand and unselect
     fireEvent.press(collapseButton);

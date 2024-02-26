@@ -39,6 +39,9 @@ jest.mock('@services/api/blueprints/user/Api', () => ({
 jest.mock('@services/db/sync/SyncProcess', () => ({
   runSyncProcess: jest.fn(),
 }));
+jest.mock('uuid', () => ({
+  v4: jest.fn().mockReturnValue('fakeUuid'),
+}));
 
 describe('User Functions Tests', () => {
   beforeEach(() => {

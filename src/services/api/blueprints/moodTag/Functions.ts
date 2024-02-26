@@ -14,7 +14,6 @@ import {TagProps} from '@components/inputs/TagSelector';
 export const getMoodTagObject = async (): Promise<
   MoodTagGroups | undefined
 > => {
-  const startTime = Date.now(); // Start time
   try {
     const moodTags = await getMoodTags();
     const output: MoodTagGroups = {};
@@ -40,8 +39,5 @@ export const getMoodTagObject = async (): Promise<
   } catch (error) {
     logger.error(`Error: ${error}`);
     return undefined;
-  } finally {
-    const endTime = Date.now(); // End time
-    console.log(`getMoodTagObject Execution Time: ${endTime - startTime}ms`);
   }
 };
