@@ -168,11 +168,10 @@ export type SyncTableFunctions<
  * @property {SyncTableFunctions} bodyStatTable - API functions for the 'bodyStatTable' table.
  */
 export interface SyncApiFunctions {
-  // NOTE: Will being in after backend changes
-  // [syncDbTables.userTable]: SyncTableReadWriteFunctions<
-  //   UserCreateSchema,
-  //   UserUpdateSchema
-  // >;
+  [syncDbTables.userTable]: SyncTableReadWriteFunctions<
+    UserCreateSchema,
+    UserUpdateSchema
+  >;
   [syncDbTables.bodyStatTable]: SyncTableReadWriteFunctions<
     BodyStatCreateSchema,
     BodyStatUpdateSchema

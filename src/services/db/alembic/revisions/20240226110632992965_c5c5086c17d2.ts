@@ -1,6 +1,6 @@
-export const revisionID = 'c63902af946d';
+export const revisionID = 'c5c5086c17d2';
 
-export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
+export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL,
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -21,7 +21,8 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
-	    PRIMARY KEY (device_id)
+	    PRIMARY KEY (device_id),
+	    UNIQUE (device_internal_id)
 	);`,
   `CREATE TABLE sync_error_dump (
 	    id INTEGER NOT NULL,
@@ -45,7 +46,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    CONSTRAINT uq_table_sync_type_sync_operation UNIQUE (table_name, sync_type, sync_operation)
 	);`,
   `CREATE TABLE user_account (
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    username VARCHAR(100) NOT NULL,
 	    email VARCHAR(50) NOT NULL,
 	    password VARCHAR(500) NOT NULL,
@@ -78,7 +79,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    unit VARCHAR(25) NOT NULL,
 	    stat_type VARCHAR(50) NOT NULL,
 	    note VARCHAR(200),
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -93,7 +94,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    system_version VARCHAR(50),
 	    user_agent VARCHAR(500),
 	    application_version VARCHAR(50),
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    device_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -114,7 +115,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    increment FLOAT,
 	    type VARCHAR(50),
 	    verified BOOLEAN NOT NULL,
-	    created_by INTEGER NOT NULL,
+	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -131,7 +132,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    category VARCHAR(100) NOT NULL,
 	    laterality VARCHAR(50) NOT NULL,
 	    verified BOOLEAN NOT NULL,
-	    created_by INTEGER NOT NULL,
+	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -144,7 +145,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    value INTEGER NOT NULL,
 	    label VARCHAR(50) NOT NULL,
 	    note VARCHAR(500),
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -157,7 +158,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    label VARCHAR(100) NOT NULL,
 	    category VARCHAR(100) NOT NULL,
 	    icon VARCHAR(50) NOT NULL,
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -170,7 +171,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    value FLOAT NOT NULL,
 	    unit VARCHAR(25) NOT NULL,
 	    type VARCHAR(50) NOT NULL,
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -185,7 +186,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    is_active BOOLEAN NOT NULL,
 	    goal VARCHAR(50),
 	    verified BOOLEAN NOT NULL,
-	    created_by INTEGER NOT NULL,
+	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
@@ -195,7 +196,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	);`,
   `CREATE TABLE user_device_link (
 	    user_device_link_id VARCHAR(36) NOT NULL,
-	    user_id INTEGER NOT NULL,
+	    user_id VARCHAR(36) NOT NULL,
 	    device_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -265,7 +266,7 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    end_time TIMESTAMP NOT NULL,
 	    goal VARCHAR(50),
 	    verified BOOLEAN NOT NULL,
-	    created_by INTEGER NOT NULL,
+	    created_by VARCHAR(36) NOT NULL,
 	    plan_component_id VARCHAR(36),
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -335,5 +336,5 @@ export const sqlCommands_20240223103318330434_c63902af946d: string[] = [
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id),
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('c63902af946d');",
+  "INSERT INTO alembic_version (version_num) VALUES ('c5c5086c17d2');",
 ];

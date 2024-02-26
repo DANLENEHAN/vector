@@ -19,8 +19,8 @@ import {
   DeviceUpdateSchema,
   UserDeviceLinkCreateSchema,
   UserDeviceLinkUpdateSchema,
-  // UserCreateSchema,
-  // UserUpdateSchema,
+  UserCreateSchema,
+  UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
@@ -35,24 +35,23 @@ import {
   NutritionApi,
   DeviceApi,
   UserDeviceLinkApi,
-  // UserApi,
+  UserApi,
 } from '@services/api/ApiService';
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
-  // NOTE: Will being in after backend changes
-  // [syncDbTables.userTable]: {
-  //   [SyncOperation.Creates]: (
-  //     data: UserCreateSchema,
-  //     query?: SyncObject,
-  //   ): Promise<AxiosResponse> => UserApi.createCreate(data, query),
-  //   [SyncOperation.Updates]: (
-  //     data: UserUpdateSchema,
-  //     query?: SyncObject,
-  //   ): Promise<AxiosResponse> => UserApi.updateUpdate(data, query),
-  //   [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-  //     UserApi.postUser(data),
-  // },
+  [syncDbTables.userTable]: {
+    [SyncOperation.Creates]: (
+      data: UserCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: UserUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      UserApi.postUser(data),
+  },
   [syncDbTables.bodyStatTable]: {
     [SyncOperation.Creates]: (
       data: BodyStatCreateSchema,

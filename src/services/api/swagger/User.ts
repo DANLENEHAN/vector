@@ -43,39 +43,52 @@ export class User<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Create a new user.
+   * @description Create a new User.
    *
-   * @tags Users
+   * @tags User
    * @name CreateCreate
-   * @summary Create a new user.
+   * @summary Create a new User.
    * @request POST:/user/create
-   * @response `204` `void` User created successfully
-   * @response `400` `void` User validation error
-   * @response `409` `void` User already exists
+   * @secure
+   * @response `204` `void` User retrieved successfully
+   * @response `400` `void` Bad request
+   * @response `404` `void` User foreign key constraint not found
    */
-  createCreate = (data: UserCreateSchema, params: RequestParams = {}) =>
+  createCreate = (
+    data: UserCreateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
       path: `/user/create`,
       method: 'POST',
+      query: query,
       body: data,
+      secure: true,
       type: ContentType.Json,
       ...params,
     });
   /**
-   * @description Delete user.
+   * @description Delete a User.
    *
-   * @tags Users
-   * @name DeleteDelete
-   * @summary Delete User.
-   * @request DELETE:/user/delete
+   * @tags User
+   * @name DeleteStringUserIdDelete
+   * @summary Delete a User.
+   * @request DELETE:/user/delete/{string:user_id}
    * @secure
-   * @response `204` `void` User deleted
-   * @response `400` `void` User already deleted
-   * @response `500` `void` User not authenticated
+   * @response `204` `void` User deleted successfully
+   * @response `400` `void` User validation error
+   * @response `404` `void` User not found
    */
-  deleteDelete = (params: RequestParams = {}) =>
+  deleteStringUserIdDelete = (userId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/user/delete`,
+      path: `/user/delete/{string${userId}}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -94,6 +107,25 @@ export class User<SecurityDataType = unknown> {
   detailsList = (params: RequestParams = {}) =>
     this.http.request<UserGetSchema, void>({
       path: `/user/details`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Get specific User for a user.
+   *
+   * @tags User
+   * @name GetStringUserIdList
+   * @summary Get a specific User for a user.
+   * @request GET:/user/get/{string:user_id}
+   * @secure
+   * @response `200` `UserCreateSchema` User for user retrieved successfully
+   * @response `404` `void` User not found
+   */
+  getStringUserIdList = (userId: string, params: RequestParams = {}) =>
+    this.http.request<UserCreateSchema, void>({
+      path: `/user/get/{string${userId}}`,
       method: 'GET',
       secure: true,
       format: 'json',
@@ -161,45 +193,56 @@ export class User<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description Get users from the database
+   * @description Get User for a user based on query.
    *
-   * @tags Users
+   * @tags User
    * @name PostUser
-   * @summary Get users
+   * @summary Get User for a user based on query.
    * @request POST:/user/get
    * @secure
-   * @response `204` `void` Users found successfully
+   * @response `204` `(UserCreateSchema)[]` User for user retrieved successfully
    * @response `400` `void` Query validation error
    */
   postUser = (data: QuerySchema, params: RequestParams = {}) =>
-    this.http.request<void, void>({
+    this.http.request<UserCreateSchema[], void>({
       path: `/user/get`,
       method: 'POST',
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
       ...params,
     });
   /**
-   * @description Update user details.
+   * @description Update a User for a user.
    *
-   * @tags Users
+   * @tags User
    * @name UpdateUpdate
-   * @summary Update User.
+   * @summary Update a User for a user.
    * @request PUT:/user/update
    * @secure
-   * @response `201` `UserUpdateSchema` User details updated
+   * @response `201` `void` User updated successfully
    * @response `400` `void` User validation error
-   * @response `500` `void` User details not updated
+   * @response `404` `void` User not found or foreign key constraint not found
    */
-  updateUpdate = (data: UserCreateSchema, params: RequestParams = {}) =>
-    this.http.request<UserUpdateSchema, void>({
+  updateUpdate = (
+    data: UserUpdateSchema,
+    query?: {
+      /**
+       * Tells the creation endpoint if the object's origin is from the frontend via a sync.
+       * @example false
+       */
+      isSync?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<void, void>({
       path: `/user/update`,
       method: 'PUT',
+      query: query,
       body: data,
       secure: true,
       type: ContentType.Json,
-      format: 'json',
       ...params,
     });
 }
