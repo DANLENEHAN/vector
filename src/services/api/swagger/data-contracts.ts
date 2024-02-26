@@ -2636,8 +2636,7 @@ export interface UserCreateSchema {
   /**
    * Password
    * @minLength 8
-   * @maxLength 100
-   * @pattern ^[A-Za-z0-9@#$%^&+=]+$
+   * @maxLength 500
    * @example "RLp6^$L2Ro"
    */
   password: string;
