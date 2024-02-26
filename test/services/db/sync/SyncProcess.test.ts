@@ -15,6 +15,7 @@ import * as DateFunctions from '@services/date/Functions';
 
 // Objects
 import {sampleTimestampOne, sampleTimezone} from '../../../Objects';
+import {SyncType} from '@shared/Enums';
 
 jest.mock('@services/db/sync/SyncTypes', () => ({
   processSyncTypePush: jest.fn(),
@@ -36,8 +37,11 @@ describe('Sync Process Tests', () => {
     await runSyncProcess();
 
     // Assert
+
+    // SyncTableWriteOnlyFunctions will not add to the number of pulls
+    // hence the minus 4
     expect(processSyncTypePull).toHaveBeenCalledTimes(
-      Object.entries(apiFunctions).length * 2,
+      Object.entries(apiFunctions).length * 2 - 4,
     );
 
     expect(processSyncTypePush).toHaveBeenCalledTimes(
@@ -48,21 +52,23 @@ describe('Sync Process Tests', () => {
       apiFunctions,
     ).entries()) {
       let call = (index + 1) * 2;
-      expect(processSyncTypePull).toHaveBeenNthCalledWith(
-        call - 1,
-        tableName as syncDbTables,
-        tableFunctions,
-        SyncOperation.Creates,
-        sampleTimestampOne,
-      );
+      if (tableFunctions[SyncType.Pull] !== undefined) {
+        expect(processSyncTypePull).toHaveBeenNthCalledWith(
+          call - 1,
+          tableName as syncDbTables,
+          tableFunctions[SyncType.Pull],
+          SyncOperation.Creates,
+          sampleTimestampOne,
+        );
 
-      expect(processSyncTypePull).toHaveBeenNthCalledWith(
-        call,
-        tableName as syncDbTables,
-        tableFunctions,
-        SyncOperation.Updates,
-        sampleTimestampOne,
-      );
+        expect(processSyncTypePull).toHaveBeenNthCalledWith(
+          call,
+          tableName as syncDbTables,
+          tableFunctions[SyncType.Pull],
+          SyncOperation.Updates,
+          sampleTimestampOne,
+        );
+      }
 
       expect(processSyncTypePush).toHaveBeenNthCalledWith(
         call - 1,

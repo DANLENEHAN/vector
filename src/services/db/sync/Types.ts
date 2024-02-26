@@ -4,8 +4,14 @@ import {AxiosResponse} from 'axios';
 import {
   ClientSessionEventCreateSchema,
   ClientSessionEventUpdateSchema,
+  DeviceCreateSchema,
+  DeviceUpdateSchema,
   SyncOperation,
   SyncType,
+  UserCreateSchema,
+  UserDeviceLinkCreateSchema,
+  UserDeviceLinkUpdateSchema,
+  UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {
@@ -31,12 +37,15 @@ import {timestampFields} from '@shared/Constants';
  * @description A schema for data that can be synchronized during a create operation.
  */
 export type SyncCreateSchemas =
+  | UserCreateSchema
   | BodyStatCreateSchema
   | MoodCreateSchema
   | MoodTagCreateSchema
   | MoodTagLinkCreateSchema
   | NutritionCreateSchema
-  | ClientSessionEventCreateSchema;
+  | ClientSessionEventCreateSchema
+  | DeviceCreateSchema
+  | UserDeviceLinkCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -46,12 +55,15 @@ export type SyncCreateSchemas =
  * @description A schema for data that can be synchronized during an update operation.
  */
 export type SyncUpdateSchemas =
+  | UserUpdateSchema
   | BodyStatUpdateSchema
   | MoodUpdateSchema
   | MoodTagUpdateSchema
   | MoodTagLinkUpdateSchema
   | NutritionUpdateSchema
-  | ClientSessionEventUpdateSchema;
+  | ClientSessionEventUpdateSchema
+  | DeviceUpdateSchema
+  | UserDeviceLinkUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -89,20 +101,19 @@ export type UpdatesFunction<T extends SyncUpdateSchemas> = (
  *
  * @type {function(data: QuerySchema): Promise<AxiosResponse<SyncCreateSchemas[]>>} GetsFunction
  */
-type GetsFunction = (
+export type GetsFunction = (
   data: QuerySchema,
 ) => Promise<AxiosResponse<SyncCreateSchemas[]>>;
 
 /**
- * Defines functions for creating, updating, and retrieving records in a synchronized table.
+ * Defines functions for creating and updating records in a synchronized table, omitting retrieval operations.
  *
- * @interface SyncTableFunctions
+ * @interface SyncTableReadWriteFunctions
  *
  * @property {CreatesFunction} Creates - Function for creating records.
  * @property {UpdatesFunction} Updates - Function for updating records.
- * @property {GetsFunction} Pull - Function for retrieving records.
  */
-export interface SyncTableFunctions<
+export interface SyncTableReadWriteFunctions<
   C extends SyncCreateSchemas,
   U extends SyncUpdateSchemas,
 > {
@@ -112,6 +123,44 @@ export interface SyncTableFunctions<
 }
 
 /**
+ * Defines a function for creating records in a synchronized table, specifically tailored for write-only operations.
+ *
+ * @interface SyncTableWriteOnlyFunctions
+ *
+ * @property {CreatesFunction} Creates - Function for creating records.
+ */
+export interface SyncTableWriteOnlyFunctions<
+  C extends SyncCreateSchemas,
+  U extends SyncUpdateSchemas,
+> {
+  [SyncOperation.Creates]: CreatesFunction<C>;
+  [SyncOperation.Updates]: UpdatesFunction<U>;
+}
+
+/**
+ * Represents a union type that can either be `SyncTableReadWriteFunctions` or `SyncTableWriteOnlyFunctions`.
+ * This type is used to define the set of functions available for synchronizing records in a table, allowing for flexibility
+ * in specifying whether the synchronization functionality includes both creating and updating records (`SyncTableReadWriteFunctions`),
+ * or is limited to only creating records (`SyncTableWriteOnlyFunctions`).
+ *
+ * The type is parameterized with generic types `C` and `U` which extend `SyncCreateSchemas` and `SyncUpdateSchemas` respectively.
+ * These generics ensure that the functions for creating and updating records are strongly typed according to the schemas they operate on,
+ * providing compile-time safety and clarity about the structure of the data being synchronized.
+ *
+ * Use this type when you need to declare a variable or a parameter that could accept either read-write or write-only sync table functionality,
+ * offering flexibility in how synchronization is implemented and utilized within your application.
+ *
+ * @type {SyncTableFunctions}
+ * @template C The creation schema type, extending `SyncCreateSchemas`, to define the structure of records to be created.
+ * @template U The update schema type, extending `SyncUpdateSchemas`, to define the structure of records to be updated.
+ *
+ */
+export type SyncTableFunctions<
+  C extends SyncCreateSchemas,
+  U extends SyncUpdateSchemas,
+> = SyncTableReadWriteFunctions<C, U> | SyncTableWriteOnlyFunctions<C, U>;
+
+/**
  * Defines the API functions for synchronization for a specific table.
  *
  * @interface SyncApiFunctions
@@ -119,29 +168,42 @@ export interface SyncTableFunctions<
  * @property {SyncTableFunctions} bodyStatTable - API functions for the 'bodyStatTable' table.
  */
 export interface SyncApiFunctions {
-  [syncDbTables.bodyStatTable]: SyncTableFunctions<
+  // NOTE: Will being in after backend changes
+  // [syncDbTables.userTable]: SyncTableReadWriteFunctions<
+  //   UserCreateSchema,
+  //   UserUpdateSchema
+  // >;
+  [syncDbTables.bodyStatTable]: SyncTableReadWriteFunctions<
     BodyStatCreateSchema,
     BodyStatUpdateSchema
   >;
-  [syncDbTables.moodTable]: SyncTableFunctions<
+  [syncDbTables.moodTable]: SyncTableReadWriteFunctions<
     MoodCreateSchema,
     MoodUpdateSchema
   >;
-  [syncDbTables.moodTagTable]: SyncTableFunctions<
+  [syncDbTables.moodTagTable]: SyncTableReadWriteFunctions<
     MoodTagCreateSchema,
     MoodTagUpdateSchema
   >;
-  [syncDbTables.moodTagLinkTable]: SyncTableFunctions<
+  [syncDbTables.moodTagLinkTable]: SyncTableReadWriteFunctions<
     MoodTagLinkCreateSchema,
     MoodTagLinkUpdateSchema
   >;
-  [syncDbTables.nutritionTable]: SyncTableFunctions<
+  [syncDbTables.nutritionTable]: SyncTableReadWriteFunctions<
     NutritionCreateSchema,
     NutritionUpdateSchema
   >;
-  [syncDbTables.clientSessionEventTable]: SyncTableFunctions<
+  [syncDbTables.clientSessionEventTable]: SyncTableReadWriteFunctions<
     ClientSessionEventCreateSchema,
     ClientSessionEventUpdateSchema
+  >;
+  [syncDbTables.deviceTable]: SyncTableWriteOnlyFunctions<
+    DeviceCreateSchema,
+    DeviceUpdateSchema
+  >;
+  [syncDbTables.userDeviceLinkTable]: SyncTableWriteOnlyFunctions<
+    UserDeviceLinkCreateSchema,
+    UserDeviceLinkUpdateSchema
   >;
 }
 

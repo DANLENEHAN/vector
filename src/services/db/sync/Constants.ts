@@ -15,6 +15,12 @@ import {
   QuerySchema,
   ClientSessionEventCreateSchema,
   ClientSessionEventUpdateSchema,
+  DeviceCreateSchema,
+  DeviceUpdateSchema,
+  UserDeviceLinkCreateSchema,
+  UserDeviceLinkUpdateSchema,
+  // UserCreateSchema,
+  // UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
@@ -27,11 +33,26 @@ import {
   MoodTagLinkApi,
   ClientSessionEventApi,
   NutritionApi,
+  DeviceApi,
+  UserDeviceLinkApi,
+  // UserApi,
 } from '@services/api/ApiService';
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
-  // BodyStat
+  // NOTE: Will being in after backend changes
+  // [syncDbTables.userTable]: {
+  //   [SyncOperation.Creates]: (
+  //     data: UserCreateSchema,
+  //     query?: SyncObject,
+  //   ): Promise<AxiosResponse> => UserApi.createCreate(data, query),
+  //   [SyncOperation.Updates]: (
+  //     data: UserUpdateSchema,
+  //     query?: SyncObject,
+  //   ): Promise<AxiosResponse> => UserApi.updateUpdate(data, query),
+  //   [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+  //     UserApi.postUser(data),
+  // },
   [syncDbTables.bodyStatTable]: {
     [SyncOperation.Creates]: (
       data: BodyStatCreateSchema,
@@ -44,7 +65,6 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       BodyStatApi.postBodyStat(data),
   },
-  // Mood
   [syncDbTables.moodTable]: {
     [SyncOperation.Creates]: (
       data: MoodCreateSchema,
@@ -57,7 +77,6 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       MoodApi.postMood(data),
   },
-  // Mood Tag
   [syncDbTables.moodTagTable]: {
     [SyncOperation.Creates]: (
       data: MoodTagCreateSchema,
@@ -70,7 +89,6 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       MoodTagApi.postMoodTag(data),
   },
-  // Mood Tag Link
   [syncDbTables.moodTagLinkTable]: {
     [SyncOperation.Creates]: (
       data: MoodTagLinkCreateSchema,
@@ -83,7 +101,6 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       MoodTagLinkApi.postMoodTagLink(data),
   },
-  // Nutrition
   [syncDbTables.nutritionTable]: {
     [SyncOperation.Creates]: (
       data: NutritionCreateSchema,
@@ -96,7 +113,6 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       NutritionApi.postNutrition(data),
   },
-  // ClientSessionEvent
   [syncDbTables.clientSessionEventTable]: {
     [SyncOperation.Creates]: (
       data: ClientSessionEventCreateSchema,
@@ -110,6 +126,26 @@ export const apiFunctions: SyncApiFunctions = {
       ClientSessionEventApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       ClientSessionEventApi.postClientSessionEvent(data),
+  },
+  [syncDbTables.deviceTable]: {
+    [SyncOperation.Creates]: (
+      data: DeviceCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: DeviceUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
+  },
+  [syncDbTables.userDeviceLinkTable]: {
+    [SyncOperation.Creates]: (
+      data: UserDeviceLinkCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserDeviceLinkApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: UserDeviceLinkUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserDeviceLinkApi.updateUpdate(data, query),
   },
 };
 

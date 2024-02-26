@@ -70,7 +70,7 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      TableFunctionsMock,
+      TableFunctionsMock[SyncType.Pull],
       SyncOperation.Creates,
       sampleSyncStartTimestamp,
     );
@@ -134,7 +134,7 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      TableFunctionsMock,
+      TableFunctionsMock[SyncType.Pull],
       SyncOperation.Creates,
       sampleSyncStartTimestamp,
     );
@@ -182,7 +182,7 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      TableFunctionsMock,
+      TableFunctionsMock[SyncType.Pull],
       SyncOperation.Creates,
       sampleSyncStartTimestamp,
     );
@@ -234,7 +234,7 @@ describe('SyncType Tests', () => {
     // Act
     await processSyncTypePull(
       tableToSync,
-      TableFunctionsMock,
+      TableFunctionsMock[SyncType.Pull],
       SyncOperation.Updates,
       sampleSyncStartTimestamp,
     );
