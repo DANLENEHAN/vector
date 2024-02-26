@@ -123,13 +123,3 @@ WHERE type = 'table' AND name != 'android_metadata';
 ```shell
 bash ./excute_migrations.sh 
 ```
-
-MR (1)
-- Add Sync to User Table
-- Add Sync to Device and UserDeviceLink table
-- Allow Sync Tables to not have a Pull
-- Turn on foreign key constraints
-
-Mr (2)
-- Actually implement Notifcations
-- Ask user to log in everyday
