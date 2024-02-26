@@ -3,4 +3,5 @@ export enum AsyncStorageKeys {
   UserThemePreference = 'user-theme-pref-key',
   UserDetails = 'user-details-key',
   SyncPushErrors = 'sync-push-errors',
+  DeviceId = 'device-id',
 }

@@ -1,10 +1,9 @@
 import {AxiosResponse} from 'axios';
-import api from '@services/api/ApiService';
+import {UserApi} from '@services/api/ApiService';
 import {
   UserCreateSchema,
   UserGetSchema,
 } from '@services/api/swagger/data-contracts';
-import {User} from '@services/api/swagger/User';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
@@ -14,8 +13,6 @@ import {HandleSwaggerValidationError} from '@services/api/Functions';
 import {SwaggerValidationError} from '@services/api/Types';
 // Logger
 import logger from '@utils/Logger';
-
-const UserApi = new User(api);
 
 /**
  * Function to create a new user.
@@ -54,7 +51,7 @@ export const createUser = async (
 export const loginUser = async (data: {
   email: string;
   password: string;
-}): Promise<void | SwaggerValidationError> => {
+}): Promise<string | SwaggerValidationError> => {
   try {
     const response: AxiosResponse<object> = await UserApi.loginCreate(data);
     if (response.status === 201) {
@@ -78,7 +75,7 @@ export const loginUser = async (data: {
         AsyncStorageKeys.UserDetails,
         JSON.stringify(response_data),
       );
-      return Promise.resolve();
+      return Promise.resolve((response_data as any).user_id);
     } else {
       return new SwaggerValidationError();
     }

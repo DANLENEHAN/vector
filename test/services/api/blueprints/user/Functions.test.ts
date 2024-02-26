@@ -39,6 +39,9 @@ jest.mock('@services/api/blueprints/user/Api', () => ({
 jest.mock('@services/db/sync/SyncProcess', () => ({
   runSyncProcess: jest.fn(),
 }));
+jest.mock('@services/api/blueprints/device/Functions', () => ({
+  retrieveOrRegisterDeviceId: jest.fn(),
+}));
 
 describe('User Functions Tests', () => {
   beforeEach(() => {
@@ -61,7 +64,7 @@ describe('User Functions Tests', () => {
   it('handleLogin sucessful', async () => {
     // Arrange
     const params = mockParams;
-    jest.spyOn(Apis, 'loginUser').mockResolvedValueOnce();
+    jest.spyOn(Apis, 'loginUser').mockResolvedValueOnce({} as any);
     // Act
     await handleLogin(params);
     // Assert

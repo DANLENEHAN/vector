@@ -7,6 +7,7 @@ import {Keyboard} from 'react-native';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
+import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {
@@ -63,6 +64,7 @@ export const handleLogin = async (
   } else {
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
+    await retrieveOrRegisterDeviceId(response);
     handleClientSessionEvent(ClientSessionEventType.LoggedIn);
     runSyncProcess();
   }
@@ -98,7 +100,7 @@ export const handleCreateAccount = async (
     return;
   }
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-  let response = await createUser({
+  let createResponse = await createUser({
     // NOTE: Remove these hard-coded values when the UI is implemented fully
     email: params.email,
     password: params.password,
@@ -119,16 +121,22 @@ export const handleCreateAccount = async (
     [timestampFields.createdAt]: timestampTimezone.timestamp,
     [timestampFields.timezone]: timestampTimezone.timezone,
   });
-  if (response instanceof SwaggerValidationError) {
-    logger.error(`Error: ${response.message}`);
-    return response.message;
+  if (createResponse instanceof SwaggerValidationError) {
+    logger.error(`Error: ${createResponse.message}`);
+    return createResponse.message;
   } else {
     logger.info('Account creation successful, logging in.');
-    response = await loginUser({
+    const loginResponse = await loginUser({
       email: params.email,
       password: params.password,
     });
-    params.navigation.navigate('App', {screen: 'Home'});
-    runSyncProcess();
+    if (loginResponse instanceof SwaggerValidationError) {
+      logger.error(`Error: ${loginResponse.message}`);
+      return loginResponse.message;
+    } else {
+      await retrieveOrRegisterDeviceId(loginResponse);
+      params.navigation.navigate('App', {screen: 'Home'});
+      runSyncProcess();
+    }
   }
 };
