@@ -76,7 +76,6 @@ const MoodTagScreen: React.FC<any> = ({
   );
 
   const selectTag = (category: string, tag_id: string) => {
-    console.log('category', category, tag_id);
     setMoodTags(prev => ({
       ...prev,
       [category]: prev[category]
