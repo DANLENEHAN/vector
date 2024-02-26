@@ -96,6 +96,10 @@ describe('Sync Operation Tests', () => {
     });
 
     expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(0);
+
+    expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
     ).toHaveBeenCalledTimes(0);
   });
@@ -338,6 +342,10 @@ describe('Sync Operation Tests', () => {
       sync_type: SyncType.Push,
       sync_operation: SyncOperation.Creates,
     });
+
+    expect(
+      AsyncStorageFunctions.deleteSuccessfulSyncPushErrors,
+    ).toHaveBeenCalledTimes(0);
 
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
