@@ -75,6 +75,11 @@ const MoodTagScreen: React.FC<any> = ({
     {},
   );
 
+  /**
+   * Function to select a tag
+   * @param category <string> The category of the tag
+   * @param tag_id <string> The id of the tag
+   */
   const selectTag = (category: string, tag_id: string) => {
     setMoodTags(prev => ({
       ...prev,
@@ -86,14 +91,23 @@ const MoodTagScreen: React.FC<any> = ({
     }));
   };
 
+  /**
+   * Function to toggle the note popup
+   */
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  /**
+   * Function to change the note popup visibility
+   */
   const changeNotePopupVisibility = () => {
     setNotePopupVisible(!notePopupVisible);
   };
 
+  /**
+   * Function to save the mood
+   */
   const saveMood = async () => {
     const moodId = uuidv4();
     createNewMood({
@@ -104,6 +118,11 @@ const MoodTagScreen: React.FC<any> = ({
       label: mood.label as MoodValue,
     });
   };
+
+  /**
+   * Function to save the mood tag links
+   * @param mood_id <string> The id of the mood
+   */
   const saveMoodTagLinks = (mood_id: string) => {
     createNewMoodTagLink({
       mood_id: mood_id,
