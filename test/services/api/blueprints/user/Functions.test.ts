@@ -42,6 +42,9 @@ jest.mock('@services/db/sync/SyncProcess', () => ({
 jest.mock('@services/api/blueprints/device/Functions', () => ({
   retrieveOrRegisterDeviceId: jest.fn(),
 }));
+jest.mock('uuid', () => ({
+  v4: jest.fn().mockReturnValue('mockedUuid'),
+}));
 
 describe('User Functions Tests', () => {
   beforeEach(() => {
