@@ -34,5 +34,6 @@ describe('insertMoodTagLinks', () => {
 
     // Assert
     expect(insertRowsSpy).toHaveBeenCalledTimes(1);
+    expect(insertRowsSpy).toHaveBeenCalledWith('mood_tag_link', moodTagLinks);
   });
 });
