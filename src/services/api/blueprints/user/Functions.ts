@@ -8,6 +8,7 @@ import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
+import {v4 as uuid4} from 'uuid';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {
@@ -102,6 +103,7 @@ export const handleCreateAccount = async (
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
   let createResponse = await createUser({
     // NOTE: Remove these hard-coded values when the UI is implemented fully
+    user_id: uuid4(),
     email: params.email,
     password: params.password,
     age: 125,

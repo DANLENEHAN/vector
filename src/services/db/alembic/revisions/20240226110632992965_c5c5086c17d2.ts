@@ -45,7 +45,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    PRIMARY KEY (sync_progress_id),
 	    CONSTRAINT uq_table_sync_type_sync_operation UNIQUE (table_name, sync_type, sync_operation)
 	);`,
-  `CREATE TABLE user_account (
+  `CREATE TABLE user (
 	    user_id VARCHAR(36) NOT NULL,
 	    username VARCHAR(100) NOT NULL,
 	    email VARCHAR(50) NOT NULL,
@@ -85,7 +85,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (body_stat_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE client_session_event (
 	    client_session_event_id VARCHAR(36) NOT NULL,
@@ -102,7 +102,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (client_session_event_id),
 	    FOREIGN KEY(device_id) REFERENCES device (device_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE equipment (
 	    equipment_id VARCHAR(36) NOT NULL,
@@ -121,7 +121,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (equipment_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE exercise (
 	    exercise_id VARCHAR(36) NOT NULL,
@@ -138,7 +138,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (exercise_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE mood (
 	    mood_id VARCHAR(36) NOT NULL,
@@ -151,7 +151,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (mood_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE mood_tag (
 	    mood_tag_id VARCHAR(36) NOT NULL,
@@ -164,7 +164,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (mood_tag_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE nutrition (
 	    nutrition_id VARCHAR(36) NOT NULL,
@@ -177,7 +177,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (nutrition_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE plan (
 	    plan_id VARCHAR(36) NOT NULL,
@@ -192,7 +192,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (plan_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE user_device_link (
 	    user_device_link_id VARCHAR(36) NOT NULL,
@@ -204,7 +204,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (user_device_link_id),
 	    FOREIGN KEY(device_id) REFERENCES device (device_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES user (user_id)
 	);`,
   `CREATE TABLE exercise_bodypart (
 	    exercise_bodypart_id VARCHAR(36) NOT NULL,
@@ -273,7 +273,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (workout_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id),
+	    FOREIGN KEY(created_by) REFERENCES user (user_id),
 	    FOREIGN KEY(plan_component_id) REFERENCES plan_component (plan_component_id)
 	);`,
   `CREATE TABLE workout_component (

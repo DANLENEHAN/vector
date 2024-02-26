@@ -2,7 +2,7 @@
 import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 
 // Types
 import {
@@ -51,7 +51,7 @@ export const createNewBodyStat = async ({
 
     await insertBodyStat([
       {
-        body_stat_id: uuidv4(),
+        body_stat_id: uuid4(),
         unit: unitValue,
         stat_type: statType,
         user_id: user_id,

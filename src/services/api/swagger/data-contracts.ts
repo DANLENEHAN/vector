@@ -16,7 +16,7 @@ export interface BodyStatCreateSchema {
   /**
    * Body Stat Id
    * ID for the body body_stat entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   body_stat_id: string;
@@ -64,7 +64,7 @@ export interface BodyStatCreateSchema {
   /**
    * User Id
    * The ID for the user tracking the body body_stat
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -111,7 +111,7 @@ export interface BodyStatUpdateSchema {
   /**
    * Body Stat Id
    * ID for the body body_stat entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   body_stat_id: string;
@@ -148,7 +148,7 @@ export interface BodyStatUpdateSchema {
   /**
    * User Id
    * The ID for the user tracking the body body_stat
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -225,7 +225,7 @@ export interface ClientSessionEventCreateSchema {
   /**
    * Client Session Event Id
    * ID of the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   client_session_event_id: string;
@@ -249,7 +249,7 @@ export interface ClientSessionEventCreateSchema {
   /**
    * Device Id
    * ID of the device triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -288,7 +288,7 @@ export interface ClientSessionEventCreateSchema {
   /**
    * User Id
    * The ID for the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -322,7 +322,7 @@ export interface ClientSessionEventUpdateSchema {
   /**
    * Client Session Event Id
    * ID of the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   client_session_event_id: string;
@@ -340,7 +340,7 @@ export interface ClientSessionEventUpdateSchema {
   /**
    * Device Id
    * ID of the device triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -374,7 +374,7 @@ export interface ClientSessionEventUpdateSchema {
   /**
    * User Id
    * The ID for the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -437,7 +437,7 @@ export interface DeviceCreateSchema {
   /**
    * Device Id
    * UUID of the device defined by us
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -498,7 +498,7 @@ export interface DeviceUpdateSchema {
   /**
    * Device Id
    * UUID of the device defined by us
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -574,7 +574,7 @@ export interface EquipmentCreateSchema {
   /**
    * Equipment Id
    * ID of the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   equipment_id: string;
@@ -663,7 +663,7 @@ export interface EquipmentUpdateSchema {
   /**
    * Equipment Id
    * ID of the user triggering the event
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   equipment_id: string;
@@ -740,13 +740,14 @@ export interface ExerciseBodypartCreateSchema {
   /**
    * Exercise Bodypart Id
    * ID for the set entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_bodypart_id: string;
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -787,13 +788,14 @@ export interface ExerciseBodypartUpdateSchema {
   /**
    * Exercise Bodypart Id
    * ID for the set entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_bodypart_id: string;
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -849,6 +851,7 @@ export interface ExerciseCreateSchema {
   /**
    * Exercise Id
    * Unique uuid for a exercise entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -902,18 +905,21 @@ export interface ExerciseEquipmentCreateSchema {
   /**
    * Equipment Id
    * The equipment_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   equipment_id: string;
   /**
    * Exercise Equipment Id
    * Unique uuid for a exercise_equipment entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_equipment_id: string;
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -944,18 +950,21 @@ export interface ExerciseEquipmentUpdateSchema {
   /**
    * Equipment Id
    * The equipment_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   equipment_id: string;
   /**
    * Exercise Equipment Id
    * Unique uuid for a exercise_equipment entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_equipment_id: string;
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -1000,6 +1009,7 @@ export interface ExerciseUpdateSchema {
   /**
    * Exercise Id
    * Unique uuid for a exercise entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -1094,6 +1104,7 @@ export interface MoodCreateSchema {
   /**
    * Mood Id
    * Unique uuid for a mood entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_id: string;
@@ -1118,7 +1129,7 @@ export interface MoodCreateSchema {
   /**
    * User Id
    * The ID for the user creating the mood
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1198,6 +1209,7 @@ export interface MoodTagCreateSchema {
   /**
    * Mood Tag Id
    * Unique uuid for a mood_tag entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_id: string;
@@ -1215,7 +1227,7 @@ export interface MoodTagCreateSchema {
   /**
    * User Id
    * The ID for the user creating the mood_tag
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1241,18 +1253,21 @@ export interface MoodTagLinkCreateSchema {
   /**
    * Mood Id
    * The mood_id of the mood_tag_link
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_id: string;
   /**
    * Mood Tag Id
    * The mood_tag_id of the mood_tag_link
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_id: string;
   /**
    * Mood Tag Link Id
    * Unique uuid for a mood_tag_link entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_link_id: string;
@@ -1283,18 +1298,21 @@ export interface MoodTagLinkUpdateSchema {
   /**
    * Mood Id
    * The mood_id of the mood_tag_link
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_id: string;
   /**
    * Mood Tag Id
    * The mood_tag_id of the mood_tag_link
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_id: string;
   /**
    * Mood Tag Link Id
    * Unique uuid for a mood_tag_link entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_link_id: string;
@@ -1339,6 +1357,7 @@ export interface MoodTagUpdateSchema {
   /**
    * Mood Tag Id
    * Unique uuid for a mood_tag entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_tag_id: string;
@@ -1351,7 +1370,7 @@ export interface MoodTagUpdateSchema {
   /**
    * User Id
    * The ID for the user creating the mood_tag
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1376,6 +1395,7 @@ export interface MoodUpdateSchema {
   /**
    * Mood Id
    * Unique uuid for a mood entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   mood_id: string;
@@ -1395,7 +1415,7 @@ export interface MoodUpdateSchema {
   /**
    * User Id
    * The ID for the user creating the mood
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1471,6 +1491,7 @@ export interface NutritionCreateSchema {
   /**
    * Nutrition Id
    * Unique uuid for a nutrition entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   nutrition_id: string;
@@ -1500,7 +1521,7 @@ export interface NutritionCreateSchema {
   /**
    * User Id
    * The ID for the user creating the nutrition entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1541,6 +1562,7 @@ export interface NutritionUpdateSchema {
   /**
    * Nutrition Id
    * Unique uuid for a nutrition entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   nutrition_id: string;
@@ -1565,7 +1587,7 @@ export interface NutritionUpdateSchema {
   /**
    * User Id
    * The ID for the user creating the nutrition entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -1622,14 +1644,14 @@ export interface PlanComponentCreateSchema {
   /**
    * Plan Component Id
    * ID for the plan component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_component_id: string;
   /**
    * Plan Id
    * The ID of the plan this plan component belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_id: string;
@@ -1674,14 +1696,14 @@ export interface PlanComponentUpdateSchema {
   /**
    * Plan Component Id
    * ID for the plan component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_component_id: string;
   /**
    * Plan Id
    * The ID of the plan this plan component belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_id: string;
@@ -1743,7 +1765,7 @@ export interface PlanCreateSchema {
   /**
    * Plan Id
    * ID for the plan entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_id: string;
@@ -1809,7 +1831,7 @@ export interface PlanUpdateSchema {
   /**
    * Plan Id
    * ID for the plan entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   plan_id: string;
@@ -1889,6 +1911,7 @@ export interface SetComponentCreateSchema {
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -1942,14 +1965,14 @@ export interface SetComponentCreateSchema {
   /**
    * Set Component Id
    * ID for the body body_stat entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_component_id: string;
   /**
    * Set Id
    * The set_id of the set_component
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_id: string;
@@ -2012,6 +2035,7 @@ export interface SetComponentUpdateSchema {
   /**
    * Exercise Id
    * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
@@ -2065,14 +2089,14 @@ export interface SetComponentUpdateSchema {
   /**
    * Set Component Id
    * ID for the body body_stat entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_component_id: string;
   /**
    * Set Id
    * The set_id of the set_component
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_id: string;
@@ -2159,7 +2183,7 @@ export interface SetCreateSchema {
   /**
    * Set Id
    * ID for the set entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_id: string;
@@ -2183,7 +2207,7 @@ export interface SetCreateSchema {
   /**
    * Workout Component Id
    * The ID of the workout component this set belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
@@ -2250,7 +2274,7 @@ export interface SetTreeCreateSchema {
   /**
    * Set Id
    * ID for the set entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_id: string;
@@ -2274,7 +2298,7 @@ export interface SetTreeCreateSchema {
   /**
    * Workout Component Id
    * The ID of the workout component this set belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
@@ -2329,7 +2353,7 @@ export interface SetUpdateSchema {
   /**
    * Set Id
    * ID for the set entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   set_id: string;
@@ -2348,7 +2372,7 @@ export interface SetUpdateSchema {
   /**
    * Workout Component Id
    * The ID of the workout component this set belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
@@ -2477,7 +2501,8 @@ export interface SyncErrorDumpCreateSchema {
   /**
    * Row ID
    * The unique identifier of the row associated with the failed synchronization push error.
-   * @example "uuid123"
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   row_id: string;
   /**
@@ -2645,6 +2670,7 @@ export interface UserCreateSchema {
   /**
    * User Id
    * Unique uuid for a user entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -2680,7 +2706,7 @@ export interface UserDeviceLinkCreateSchema {
   /**
    * Device Id
    * UUID of the device
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -2698,16 +2724,17 @@ export interface UserDeviceLinkCreateSchema {
   /**
    * User Device Link Id
    * UUID of the junction table
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_device_link_id: string;
   /**
    * User Id
-   * ID of user
-   * @example 1
+   * UUID of the User
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -2724,7 +2751,7 @@ export interface UserDeviceLinkUpdateSchema {
   /**
    * Device Id
    * UUID of the device
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   device_id: string;
@@ -2737,16 +2764,17 @@ export interface UserDeviceLinkUpdateSchema {
   /**
    * User Device Link Id
    * UUID of the junction table
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_device_link_id: string;
   /**
    * User Id
-   * ID of user
-   * @example 1
+   * UUID of the User
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -2846,6 +2874,7 @@ export interface UserGetSchema {
   /**
    * User Id
    * Unique uuid for a user entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -2947,6 +2976,7 @@ export interface UserUpdateSchema {
   /**
    * User Id
    * Unique uuid for a user entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   user_id: string;
@@ -3054,14 +3084,14 @@ export interface WorkoutComponentCreateSchema {
   /**
    * Workout Component Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
   /**
    * Workout Id
    * The ID of the workout this component belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;
@@ -3145,14 +3175,14 @@ export interface WorkoutComponentTreeCreateSchema {
   /**
    * Workout Component Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
   /**
    * Workout Id
    * The ID of the workout this component belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;
@@ -3219,14 +3249,14 @@ export interface WorkoutComponentUpdateSchema {
   /**
    * Workout Component Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_component_id: string;
   /**
    * Workout Id
    * The ID of the workout this component belongs to
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;
@@ -3324,7 +3354,7 @@ export interface WorkoutCreateSchema {
   /**
    * Workout Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;
@@ -3428,7 +3458,7 @@ export interface WorkoutTreeCreateSchema {
   /**
    * Workout Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;
@@ -3515,7 +3545,7 @@ export interface WorkoutUpdateSchema {
   /**
    * Workout Id
    * ID for the workout component entry
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   workout_id: string;

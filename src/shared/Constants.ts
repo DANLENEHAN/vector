@@ -18,7 +18,7 @@ export enum otherDbTables {
  * @property {string} bodyStatTable - Represents the statistics table.
  */
 export enum syncDbTables {
-  userTable = 'user_account',
+  userTable = 'user',
   bodyStatTable = 'body_stat',
   moodTable = 'mood',
   moodTagTable = 'mood_tag',

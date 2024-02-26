@@ -27,13 +27,13 @@ export const createUser = async (
   try {
     const response: AxiosResponse<void> = await UserApi.createCreate(userData);
 
-    if (response.status === 204) {
+    if (response.status === 201) {
       return Promise.resolve();
     } else {
       return new SwaggerValidationError();
     }
   } catch (error) {
-    return HandleSwaggerValidationError(error, {400: null, 409: null});
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 

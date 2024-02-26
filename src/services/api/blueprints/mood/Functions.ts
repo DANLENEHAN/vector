@@ -1,7 +1,7 @@
 // Functions
 import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 
 // Types
 import {MoodValue} from '@services/api/swagger/data-contracts';
@@ -46,7 +46,7 @@ export const createNewMood = async ({
 
     await insertMoods([
       {
-        mood_id: uuidv4(),
+        mood_id: uuid4(),
         user_id: user_id,
         value: value,
         label: label,

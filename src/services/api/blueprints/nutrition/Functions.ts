@@ -1,7 +1,7 @@
 // Functions
 import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 
 // Types
 import {
@@ -51,7 +51,7 @@ export const createNewNutrition = async ({
 
     await insertNutritions([
       {
-        nutrition_id: uuidv4(),
+        nutrition_id: uuid4(),
         user_id: user_id,
         value: value,
         type: statType,
