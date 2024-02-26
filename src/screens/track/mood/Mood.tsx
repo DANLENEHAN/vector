@@ -15,7 +15,7 @@ import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {layoutStyles, headingTextStyles} from '@styles/Main';
 // Constants
 import {moods} from '@screens/track/mood/Constants';
-import {MoodTagGroups} from './Types';
+import {MoodTagGroups} from '@screens/track/mood/Types';
 import {getMoodTagObject} from '@services/api/blueprints/moodTag/Functions';
 // Logger
 import logger from '@utils/Logger';

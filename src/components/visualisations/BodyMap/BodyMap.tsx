@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 
 // Types and Utilities
-import {BodyPartToPolygonMapper} from './Constants';
-import {PolygonGroup} from './Types';
+import {BodyPartToPolygonMapper} from '@components/visualisations/BodyMap/Constants';
+import {PolygonGroup} from '@components/visualisations/BodyMap//Types';
 import {ComponentSize} from '@shared/Types';
 import {BodyStatType} from '@services/api/swagger/data-contracts';
 

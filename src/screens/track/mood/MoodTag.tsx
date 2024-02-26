@@ -17,7 +17,7 @@ import ButtonComponent from '@components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {Mood} from '@screens/track/mood/Types';
-import {MoodTagGroups} from './Types';
+import {MoodTagGroups} from '@screens/track/mood/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {
