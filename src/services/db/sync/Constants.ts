@@ -59,7 +59,7 @@ export const apiFunctions: SyncApiFunctions = {
       query?: SyncObject,
     ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-      UserApi.postUser(data),
+      DeviceApi.postDevice(data),
   },
   [syncDbTables.clientSessionEventTable]: {
     [SyncOperation.Creates]: (
