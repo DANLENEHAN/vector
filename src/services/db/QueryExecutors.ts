@@ -1,6 +1,6 @@
 // Functions
 import {generateDeletionQuery} from '@services/db/Queries';
-import {getRowByIdQuery} from './sync/Queries';
+import {getRowByIdQuery} from '@services/db/sync/Queries';
 import {executeSqlBatch} from '@services/db/SqlClient';
 import 'react-native-get-random-values';
 // Types

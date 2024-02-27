@@ -1,85 +1,6 @@
 //Typing
-import {MoodTagGroups, MoodsDictionary} from '@screens/track/mood/Types';
-import {MoodTagCategory, MoodValue} from '@services/api/swagger/data-contracts';
-
-/**
- * Mood tag groups
- *
- * The mood tag groups are used to group the mood tags into categories.
- **/
-const moodTagGroups: MoodTagGroups = {
-  [MoodTagCategory.Social]: [
-    {
-      label: 'Met Friends',
-      icon: 'people-group',
-      color: 'blue',
-    },
-    {
-      label: 'Family Time',
-      icon: 'children',
-      color: 'green',
-    },
-    {
-      label: 'Date Night',
-      icon: 'heart',
-      color: 'red',
-    },
-    {
-      label: 'Alone Time',
-      icon: 'user',
-      color: 'blue',
-    },
-  ],
-  [MoodTagCategory.Emotions]: [
-    {
-      label: 'Happy',
-      icon: 'smile',
-      color: 'green',
-    },
-    {
-      label: 'Sad',
-      icon: 'sad-cry',
-      color: 'red',
-    },
-    {
-      label: 'Angry',
-      icon: 'angry',
-      color: 'red',
-    },
-    {
-      label: 'Excited',
-      icon: 'laugh',
-      color: 'blue',
-    },
-    {
-      label: 'Anxious',
-      icon: 'exclamation',
-      color: 'red',
-    },
-  ],
-  [MoodTagCategory.BadHabits]: [
-    {
-      label: 'Smoking',
-      icon: 'smoking',
-      color: 'red',
-    },
-    {
-      label: 'Drinking',
-      icon: 'glass-whiskey',
-      color: 'red',
-    },
-    {
-      label: 'Drugs',
-      icon: 'syringe',
-      color: 'red',
-    },
-    {
-      label: 'Overeating',
-      icon: 'utensils',
-      color: 'red',
-    },
-  ],
-};
+import {MoodsDictionary} from '@screens/track/mood/Types';
+import {MoodValue} from '@services/api/swagger/data-contracts';
 
 /**
  * Moods
@@ -131,4 +52,4 @@ const moods: MoodsDictionary = {
   },
 };
 
-export {moodTagGroups, moods};
+export {moods};

@@ -64,9 +64,10 @@ export interface BodyStatCreateSchema {
   /**
    * User Id
    * The ID for the user tracking the body body_stat
-   * @example 1
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the body body_stat
@@ -147,9 +148,10 @@ export interface BodyStatUpdateSchema {
   /**
    * User Id
    * The ID for the user tracking the body body_stat
-   * @example 1
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the body body_stat
@@ -285,10 +287,11 @@ export interface ClientSessionEventCreateSchema {
   user_agent?: string;
   /**
    * User Id
-   * ID of the user triggering the event
-   * @example 1
+   * The ID for the user triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -370,10 +373,11 @@ export interface ClientSessionEventUpdateSchema {
   user_agent?: string;
   /**
    * User Id
-   * ID of the user triggering the event
-   * @example 1
+   * The ID for the user triggering the event
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -550,6 +554,13 @@ export interface EquipmentCreateSchema {
    */
   created_at: string;
   /**
+   * Created By
+   * The ID for the user creating the equipment
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  created_by: string;
+  /**
    * Deleted
    * @default false
    * @example false
@@ -631,6 +642,13 @@ export interface EquipmentUpdateSchema {
    * @example "Rogue"
    */
   brand?: string | null;
+  /**
+   * Created By
+   * The ID for the user creating the equipment
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -810,11 +828,11 @@ export interface ExerciseCreateSchema {
   created_at: string;
   /**
    * Created By
-   * The user_id of the user who created the exercise
-   * @min 0
-   * @example 1
+   * The ID for the user creating the exercise
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -961,11 +979,11 @@ export interface ExerciseUpdateSchema {
   category: string;
   /**
    * Created By
-   * The user_id of the user who created the exercise
-   * @min 0
-   * @example 1
+   * The ID for the user creating the exercise
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -1099,10 +1117,11 @@ export interface MoodCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the user recording the mood
-   * @example 1
+   * The ID for the user creating the mood
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the mood
@@ -1195,10 +1214,11 @@ export interface MoodTagCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the body_stat
-   * @example 1
+   * The ID for the user creating the mood_tag
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -1330,10 +1350,11 @@ export interface MoodTagUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the body_stat
-   * @example 1
+   * The ID for the user creating the mood_tag
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
 }
 
 /**
@@ -1373,10 +1394,11 @@ export interface MoodUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the user recording the mood
-   * @example 1
+   * The ID for the user creating the mood
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the mood
@@ -1477,10 +1499,11 @@ export interface NutritionCreateSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * The user_id of the user recording the nurtition
-   * @example 1
+   * The ID for the user creating the nutrition entry
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the nutrition entry
@@ -1541,10 +1564,11 @@ export interface NutritionUpdateSchema {
   updated_at: string;
   /**
    * User Id
-   * The user_id of the user recording the nurtition
-   * @example 1
+   * The ID for the user creating the nutrition entry
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Value
    * The value of the nutrition entry
@@ -1682,11 +1706,11 @@ export interface PlanCreateSchema {
   created_at: string;
   /**
    * Created By
-   * The user_id of the user who created the plan
-   * @min 0
-   * @example 1
+   * The ID for the user creating the plan
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -1748,11 +1772,11 @@ export interface PlanCreateSchema {
 export interface PlanUpdateSchema {
   /**
    * Created By
-   * The user_id of the user who created the plan
-   * @min 0
-   * @example 1
+   * The ID for the user creating the plan
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -2619,6 +2643,12 @@ export interface UserCreateSchema {
    */
   updated_at?: string | null;
   /**
+   * User Id
+   * Unique uuid for a user entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
+  /**
    * Username
    * @minLength 8
    * @maxLength 100
@@ -2674,11 +2704,10 @@ export interface UserDeviceLinkCreateSchema {
   user_device_link_id: string;
   /**
    * User Id
-   * UUID of user
-   * @maxLength 36
-   * @example "16945c77-6076-4dce-8921-7db976327923"
+   * ID of user
+   * @example 1
    */
-  user_id: string;
+  user_id: number;
 }
 
 /**
@@ -2714,11 +2743,10 @@ export interface UserDeviceLinkUpdateSchema {
   user_device_link_id: string;
   /**
    * User Id
-   * UUID of user
-   * @maxLength 36
-   * @example "16945c77-6076-4dce-8921-7db976327923"
+   * ID of user
+   * @example 1
    */
-  user_id: string;
+  user_id: number;
 }
 
 /**
@@ -2817,10 +2845,10 @@ export interface UserGetSchema {
   updated_at?: string | null;
   /**
    * User Id
-   * User ID
-   * @example 1
+   * Unique uuid for a user entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  user_id: number;
+  user_id: string;
   /**
    * Username
    * @minLength 8
@@ -2916,6 +2944,12 @@ export interface UserUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * User Id
+   * Unique uuid for a user entry
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
   /**
    * Username
    * @minLength 8
@@ -3211,10 +3245,11 @@ export interface WorkoutCreateSchema {
   created_at: string;
   /**
    * Created By
-   * @min 0
-   * @example 1
+   * The ID for the user creating the workout
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -3312,10 +3347,11 @@ export interface WorkoutTreeCreateSchema {
   created_at: string;
   /**
    * Created By
-   * @min 0
-   * @example 1
+   * The ID for the user creating the workout
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false
@@ -3405,10 +3441,11 @@ export interface WorkoutTreeCreateSchema {
 export interface WorkoutUpdateSchema {
   /**
    * Created By
-   * @min 0
-   * @example 1
+   * The ID for the user creating the workout
+   * @maxLength 36
+   * @example "16945c77-6076-4dce-8921-7db976327923"
    */
-  created_by: number;
+  created_by: string;
   /**
    * Deleted
    * @default false

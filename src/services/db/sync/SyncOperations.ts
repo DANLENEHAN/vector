@@ -4,7 +4,7 @@ import {
   SyncTableFunctions,
   SyncCreateSchemas,
   SyncUpdateSchemas,
-} from './Types';
+} from '@services/db/sync/Types';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 
