@@ -119,42 +119,40 @@ export interface SyncTableReadWriteFunctions<
 }
 
 /**
- * Defines a function for creating records in a synchronized table, specifically tailored for write-only operations.
+ * Defines the structure for synchronization table functions within a system tha
+ * handles data synchronization across devices or services.
+ * This interface maps specific sync operations and types to corresponding
+ * function types that implement these operations.
  *
- * @interface SyncTableWriteOnlyFunctions
+ * Type Parameters:
+ * - C: Represents the create schema type that extends `SyncCreateSchemas`, which
+ *      defines the structure for objects that can be created.
+ * - U: Represents the update schema type that extends `SyncUpdateSchemas`, which
+ *      outlines the structure for objects that can be updated.
  *
- * @property {CreatesFunction} Creates - Function for creating records.
+ * Properties:
+ * - `[SyncOperation.Creates]`: This property is associated with the `CreatesFunction<C>`,
+ *                              indicating a function type that handles the creation of
+ *                              new records based on the create schema `C`.
+ * - `[SyncOperation.Updates]`: This property is linked to the `UpdatesFunction<U>`,
+ *                              signifying a function type that manages the updates
+ *                              of existing records according to the update schema `U`.
+ * - `[SyncType.Pull]`: This property corresponds to the `GetsFunction`, a function type
+ *                      designed for retrieving (pulling) data, without specifying a
+ *                      particular schema for the operation.
+ *
+ * The `SyncOperation` and `SyncType` are expected to be enumerations or similar
+ * constructs that define possible synchronization operations (like create, update)
+ * and synchronization types (like pull), respectively.
  */
-export interface SyncTableWriteOnlyFunctions<
+export interface SyncTableFunctions<
   C extends SyncCreateSchemas,
   U extends SyncUpdateSchemas,
 > {
   [SyncOperation.Creates]: CreatesFunction<C>;
   [SyncOperation.Updates]: UpdatesFunction<U>;
+  [SyncType.Pull]: GetsFunction;
 }
-
-/**
- * Represents a union type that can either be `SyncTableReadWriteFunctions` or `SyncTableWriteOnlyFunctions`.
- * This type is used to define the set of functions available for synchronizing records in a table, allowing for flexibility
- * in specifying whether the synchronization functionality includes both creating and updating records (`SyncTableReadWriteFunctions`),
- * or is limited to only creating records (`SyncTableWriteOnlyFunctions`).
- *
- * The type is parameterized with generic types `C` and `U` which extend `SyncCreateSchemas` and `SyncUpdateSchemas` respectively.
- * These generics ensure that the functions for creating and updating records are strongly typed according to the schemas they operate on,
- * providing compile-time safety and clarity about the structure of the data being synchronized.
- *
- * Use this type when you need to declare a variable or a parameter that could accept either read-write or write-only sync table functionality,
- * offering flexibility in how synchronization is implemented and utilized within your application.
- *
- * @type {SyncTableFunctions}
- * @template C The creation schema type, extending `SyncCreateSchemas`, to define the structure of records to be created.
- * @template U The update schema type, extending `SyncUpdateSchemas`, to define the structure of records to be updated.
- *
- */
-export type SyncTableFunctions<
-  C extends SyncCreateSchemas,
-  U extends SyncUpdateSchemas,
-> = SyncTableReadWriteFunctions<C, U> | SyncTableWriteOnlyFunctions<C, U>;
 
 /**
  * Defines the API functions for synchronization for a specific table.
@@ -188,7 +186,7 @@ export interface SyncApiFunctions {
     NutritionCreateSchema,
     NutritionUpdateSchema
   >;
-  [syncDbTables.deviceTable]: SyncTableWriteOnlyFunctions<
+  [syncDbTables.deviceTable]: SyncTableReadWriteFunctions<
     DeviceCreateSchema,
     DeviceUpdateSchema
   >;
