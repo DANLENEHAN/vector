@@ -29,7 +29,7 @@ export const retrieveOrRegisterDeviceId = async (
 ): Promise<DeviceCreateSchema | null> => {
   try {
     const actualInternalDeviceId = await DeviceInfo.getUniqueId();
-    if (userId == null || actualInternalDeviceId == null) {
+    if (userId == null || actualInternalDeviceId === '') {
       return null;
     }
 
@@ -47,7 +47,7 @@ export const retrieveOrRegisterDeviceId = async (
         deviceRow = response.data[0];
         await insertDevice(deviceRow);
       } else if (response.status === 201 && response.data.length === 0) {
-        await createDevice(userId, actualInternalDeviceId);
+        deviceRow = await createDevice(userId, actualInternalDeviceId);
       } else {
         logger.warn(
           `Unexpected status code for postDevice: ${response.status}`,
