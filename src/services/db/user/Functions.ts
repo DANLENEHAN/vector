@@ -23,7 +23,7 @@ import logger from '@utils/Logger';
  *                          will be rejected with an error.
  */
 export const insertUser = async (user: UserCreateSchema): Promise<void> => {
-  insertRows(syncDbTables.userTable, [user]);
+  insertRows(syncDbTables.userTable, [{...user, superuser: false}]);
 };
 
 /**
@@ -46,8 +46,12 @@ export const getUser = async (): Promise<UserCreateSchema | null> => {
       },
     ]);
 
-    if (sqlResult[0].error) {
-      logger.error('Unable to get user', {error: sqlResult[0].error});
+    if (
+      sqlResult[0].error &&
+      // Table will not exist pre migrations
+      !sqlResult[0].error.includes('no such table: user')
+    ) {
+      logger.error(`Unable to get user with error: ${sqlResult[0].error}`);
       return null;
     }
 

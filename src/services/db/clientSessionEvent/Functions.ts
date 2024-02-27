@@ -37,7 +37,6 @@ export const insertClientSessionEvent = async (
   try {
     const user: UserCreateSchema | null = await getUser();
     userId = user != null ? user.user_id : null;
-
     if (userId !== null) {
       const deviceRow: DeviceCreateSchema | null =
         await retrieveOrRegisterDeviceId(userId);

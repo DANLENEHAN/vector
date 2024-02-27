@@ -68,8 +68,10 @@ export const handleLogin = async (
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
     await retrieveOrRegisterDeviceId(response);
-    handleClientSessionEvent(ClientSessionEventType.LoggedIn);
-    runSyncProcess();
+    await runSyncProcess();
+    // Also captured if login is avoided in the Splash screen
+    await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+    await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
   }
 };
 
@@ -142,7 +144,10 @@ export const handleCreateAccount = async (
     } else {
       await retrieveOrRegisterDeviceId(loginResponse);
       params.navigation.navigate('App', {screen: 'Home'});
-      runSyncProcess();
+      await runSyncProcess();
+      // Also captured if login is avoided in the Splash screen
+      await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+      await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
     }
   }
 };

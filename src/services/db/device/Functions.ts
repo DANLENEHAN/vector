@@ -54,12 +54,11 @@ export const getDevice = async (
           `SELECT * FROM ${syncDbTables.deviceTable} ` +
           `WHERE device_internal_id = '${internalDeviceId}' ` +
           `AND user_id = '${userId}';`,
-        params: [internalDeviceId],
       },
     ]);
 
     if (sqlResult[0].error) {
-      logger.error('Unable to get Device', {error: sqlResult[0].error});
+      logger.info('Unable to get Device', {error: sqlResult[0].error});
       return null;
     }
 

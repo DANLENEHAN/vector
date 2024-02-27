@@ -49,6 +49,30 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       UserApi.postUser(data),
   },
+  [syncDbTables.deviceTable]: {
+    [SyncOperation.Creates]: (
+      data: DeviceCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: DeviceUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
+  },
+  [syncDbTables.clientSessionEventTable]: {
+    [SyncOperation.Creates]: (
+      data: ClientSessionEventCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: ClientSessionEventUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      ClientSessionEventApi.postClientSessionEvent(data),
+  },
   [syncDbTables.bodyStatTable]: {
     [SyncOperation.Creates]: (
       data: BodyStatCreateSchema,
@@ -108,30 +132,6 @@ export const apiFunctions: SyncApiFunctions = {
     ): Promise<AxiosResponse> => NutritionApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       NutritionApi.postNutrition(data),
-  },
-  [syncDbTables.deviceTable]: {
-    [SyncOperation.Creates]: (
-      data: DeviceCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: DeviceUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
-  },
-  [syncDbTables.clientSessionEventTable]: {
-    [SyncOperation.Creates]: (
-      data: ClientSessionEventCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> =>
-      ClientSessionEventApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: ClientSessionEventUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> =>
-      ClientSessionEventApi.updateUpdate(data, query),
-    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-      ClientSessionEventApi.postClientSessionEvent(data),
   },
 };
 
