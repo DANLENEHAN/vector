@@ -8,11 +8,21 @@ import {
   handleLogin,
   handleCreateAccount,
 } from '@services/api/blueprints/user/Functions';
+import * as UserFunctions from '@services/db/user/Functions';
 // Data
 import {mockNavigation} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
+import {
+  DateFormat,
+  FitnessGoal,
+  Gender,
+  HeightUnit,
+  ProfileStatus,
+  UserCreateSchema,
+  WeightUnit,
+} from '@services/api/swagger/data-contracts';
 
 const mockParams = {
   email: 'test@gmail.com',
@@ -32,6 +42,7 @@ const timestampTimezone: TimestampTimezone = {
 jest.mock('@services/api/blueprints/clientSessionEvent/Functions', () => ({
   handleClientSessionEvent: jest.fn(),
 }));
+jest.mock('@services/db/user/Functions');
 jest.mock('@services/api/blueprints/user/Api', () => ({
   loginUser: jest.fn(),
   createUser: jest.fn(),
@@ -118,6 +129,28 @@ describe('User Functions Tests', () => {
   it('handleCreateAccount sucessful', async () => {
     // Arrange
     const params = mockParams;
+    const userObjct: UserCreateSchema = {
+      age: 125,
+      birthday: '1997-05-18',
+      created_at: 'test',
+      date_format_pref: DateFormat.ValueDMY,
+      email: 'test@gmail.com',
+      first_name: 'test',
+      gender: Gender.Male,
+      goal: FitnessGoal.BuildMuscle,
+      height_unit_pref: HeightUnit.Cm,
+      language: 'en',
+      last_name: 'Lenehan',
+      password: 'password',
+      phone_number: '+447308821533',
+      premium: false,
+      status: ProfileStatus.Active,
+      timezone: 'test',
+      user_id: 'mockedUuid',
+      username: 'danlen97',
+      weight_unit_pref: WeightUnit.Kg,
+    };
+
     jest.spyOn(Apis, 'createUser').mockResolvedValueOnce();
     // Spy on getCurrentTimestampTimezone
     jest
@@ -127,6 +160,9 @@ describe('User Functions Tests', () => {
     await handleCreateAccount(params);
     // Assert
     expect(Apis.createUser).toHaveBeenCalledTimes(1);
+    expect(Apis.createUser).toHaveBeenCalledWith(userObjct);
+    expect(UserFunctions.insertUser).toHaveBeenCalledTimes(1);
+    expect(UserFunctions.insertUser).toHaveBeenCalledWith(userObjct);
     expect(Apis.loginUser).toHaveBeenCalledWith({
       email: mockParams.email,
       password: mockParams.password,
