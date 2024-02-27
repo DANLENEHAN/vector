@@ -1,6 +1,6 @@
-export const revisionID = 'c5c5086c17d2';
+export const revisionID = '48353668a71d';
 
-export const sqlCommands_20240226194701872620_c5c5086c17d2: string[] = [
+export const sqlCommands_20240227111451620369_48353668a71d: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL,
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -63,7 +63,7 @@ export const sqlCommands_20240226194701872620_c5c5086c17d2: string[] = [
 	    height_unit_pref VARCHAR(25) NOT NULL,
 	    weight_unit_pref VARCHAR(25) NOT NULL,
 	    date_format_pref VARCHAR(25) NOT NULL,
-	    language VARCHAR(25),
+	    language VARCHAR(25) NOT NULL,
 	    goal VARCHAR(50) NOT NULL,
 	    superuser BOOLEAN NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
@@ -193,18 +193,6 @@ export const sqlCommands_20240226194701872620_c5c5086c17d2: string[] = [
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (plan_id),
 	    FOREIGN KEY(created_by) REFERENCES "user" (user_id)
-	);`,
-  `CREATE TABLE user_device_link (
-	    user_device_link_id VARCHAR(36) NOT NULL,
-	    user_id VARCHAR(36) NOT NULL,
-	    device_id VARCHAR(36) NOT NULL,
-	    created_at TIMESTAMP NOT NULL,
-	    updated_at TIMESTAMP,
-	    timezone VARCHAR(100) NOT NULL,
-	    deleted BOOLEAN DEFAULT false NOT NULL,
-	    PRIMARY KEY (user_device_link_id),
-	    FOREIGN KEY(device_id) REFERENCES device (device_id),
-	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE exercise_bodypart (
 	    exercise_bodypart_id VARCHAR(36) NOT NULL,
@@ -336,5 +324,5 @@ export const sqlCommands_20240226194701872620_c5c5086c17d2: string[] = [
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id),
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('c5c5086c17d2');",
+  "INSERT INTO alembic_version (version_num) VALUES ('48353668a71d');",
 ];

@@ -25,7 +25,6 @@ export enum syncDbTables {
   moodTagLinkTable = 'mood_tag_link',
   nutritionTable = 'nutrition',
   deviceTable = 'device',
-  userDeviceLinkTable = 'user_device_link',
   clientSessionEventTable = 'client_session_event',
 }
 

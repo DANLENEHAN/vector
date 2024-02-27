@@ -467,6 +467,13 @@ export interface DeviceCreateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at?: string | null;
+  /**
+   * User Id
+   * The ID for a user using the device
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
 }
 
 /**
@@ -523,6 +530,13 @@ export interface DeviceUpdateSchema {
    * @example "2024-12-18T12:01:00.000Z"
    */
   updated_at: string;
+  /**
+   * User Id
+   * The ID for a user using the device
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  user_id: string;
 }
 
 /**
@@ -556,7 +570,7 @@ export interface EquipmentCreateSchema {
   /**
    * Created By
    * The ID for the user creating the equipment
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -645,7 +659,7 @@ export interface EquipmentUpdateSchema {
   /**
    * Created By
    * The ID for the user creating the equipment
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -831,7 +845,7 @@ export interface ExerciseCreateSchema {
   /**
    * Created By
    * The ID for the user creating the exercise
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -989,7 +1003,7 @@ export interface ExerciseUpdateSchema {
   /**
    * Created By
    * The ID for the user creating the exercise
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -1729,7 +1743,7 @@ export interface PlanCreateSchema {
   /**
    * Created By
    * The ID for the user creating the plan
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -1795,7 +1809,7 @@ export interface PlanUpdateSchema {
   /**
    * Created By
    * The ID for the user creating the plan
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -2686,97 +2700,6 @@ export interface UserCreateSchema {
 }
 
 /**
- * UserDeviceLinkCreateSchema
- * Validation schema for the UserDeviceLink model.
- */
-export interface UserDeviceLinkCreateSchema {
-  /**
-   * Created At
-   * @format date-time
-   * @example "2024-12-18T12:00:00.000Z"
-   */
-  created_at: string;
-  /**
-   * Deleted
-   * @default false
-   * @example false
-   */
-  deleted?: boolean | null;
-  /**
-   * Device Id
-   * UUID of the device
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  device_id: string;
-  /**
-   * Timezone
-   * @example "UTC"
-   */
-  timezone: string;
-  /**
-   * Updated At
-   * @default null
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at?: string | null;
-  /**
-   * User Device Link Id
-   * UUID of the junction table
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  user_device_link_id: string;
-  /**
-   * User Id
-   * UUID of the User
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  user_id: string;
-}
-
-/**
- * UserDeviceLinkUpdateSchema
- * Validation schema for the UserDeviceLink model.
- */
-export interface UserDeviceLinkUpdateSchema {
-  /**
-   * Deleted
-   * @default false
-   * @example false
-   */
-  deleted?: boolean | null;
-  /**
-   * Device Id
-   * UUID of the device
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  device_id: string;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at: string;
-  /**
-   * User Device Link Id
-   * UUID of the junction table
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  user_device_link_id: string;
-  /**
-   * User Id
-   * UUID of the User
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  user_id: string;
-}
-
-/**
  * UserGetSchema
  * User get schema
  */
@@ -3275,7 +3198,7 @@ export interface WorkoutCreateSchema {
   /**
    * Created By
    * The ID for the user creating the workout
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -3377,7 +3300,7 @@ export interface WorkoutTreeCreateSchema {
   /**
    * Created By
    * The ID for the user creating the workout
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;
@@ -3471,7 +3394,7 @@ export interface WorkoutUpdateSchema {
   /**
    * Created By
    * The ID for the user creating the workout
-   * @maxLength 36
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   created_by: string;

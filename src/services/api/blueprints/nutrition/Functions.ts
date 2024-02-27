@@ -1,7 +1,7 @@
 // Functions
-import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
+import {getUser} from '@services/db/user/Functions';
 
 // Types
 import {
@@ -9,6 +9,7 @@ import {
   WaterUnit,
   NutritionWeightUnit,
   CaloriesUnit,
+  UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {insertNutritions} from '@services/db/nutrition/Functions';
 import {timestampFields} from '@shared/Constants';
@@ -46,21 +47,25 @@ export const createNewNutrition = async ({
   onSuccessfulCreate,
 }: CreateNewNutritionParams): Promise<void> => {
   try {
-    const user_id = await getUserDetails('user_id');
+    const user: UserCreateSchema | null = await getUser();
     const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
 
-    await insertNutritions([
-      {
-        nutrition_id: uuid4(),
-        user_id: user_id,
-        value: value,
-        type: statType,
-        unit: unitValue,
-        [timestampFields.createdAt]: timestampTimezone.timestamp,
-        [timestampFields.timezone]: timestampTimezone.timezone,
-      },
-    ]);
-    onSuccessfulCreate();
+    if (user != null) {
+      await insertNutritions([
+        {
+          nutrition_id: uuid4(),
+          user_id: user.user_id,
+          value: value,
+          type: statType,
+          unit: unitValue,
+          [timestampFields.createdAt]: timestampTimezone.timestamp,
+          [timestampFields.timezone]: timestampTimezone.timezone,
+        },
+      ]);
+      onSuccessfulCreate();
+    } else {
+      logger.warn('Unable to retrieve user will not insert nutrition.');
+    }
   } catch (error) {
     logger.error(`Error: ${error}`);
   }

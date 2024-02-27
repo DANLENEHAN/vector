@@ -9,8 +9,6 @@ import {
   SyncOperation,
   SyncType,
   UserCreateSchema,
-  UserDeviceLinkCreateSchema,
-  UserDeviceLinkUpdateSchema,
   UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
@@ -44,8 +42,7 @@ export type SyncCreateSchemas =
   | MoodTagLinkCreateSchema
   | NutritionCreateSchema
   | ClientSessionEventCreateSchema
-  | DeviceCreateSchema
-  | UserDeviceLinkCreateSchema;
+  | DeviceCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -62,8 +59,7 @@ export type SyncUpdateSchemas =
   | MoodTagLinkUpdateSchema
   | NutritionUpdateSchema
   | ClientSessionEventUpdateSchema
-  | DeviceUpdateSchema
-  | UserDeviceLinkUpdateSchema;
+  | DeviceUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -192,17 +188,13 @@ export interface SyncApiFunctions {
     NutritionCreateSchema,
     NutritionUpdateSchema
   >;
-  [syncDbTables.clientSessionEventTable]: SyncTableReadWriteFunctions<
-    ClientSessionEventCreateSchema,
-    ClientSessionEventUpdateSchema
-  >;
   [syncDbTables.deviceTable]: SyncTableWriteOnlyFunctions<
     DeviceCreateSchema,
     DeviceUpdateSchema
   >;
-  [syncDbTables.userDeviceLinkTable]: SyncTableWriteOnlyFunctions<
-    UserDeviceLinkCreateSchema,
-    UserDeviceLinkUpdateSchema
+  [syncDbTables.clientSessionEventTable]: SyncTableReadWriteFunctions<
+    ClientSessionEventCreateSchema,
+    ClientSessionEventUpdateSchema
   >;
 }
 

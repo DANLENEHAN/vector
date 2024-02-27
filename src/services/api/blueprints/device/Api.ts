@@ -5,16 +5,13 @@ import DeviceInfo from 'react-native-device-info';
 import {v4 as uuid4} from 'uuid';
 import messaging from '@react-native-firebase/messaging';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {createUserDeviceLink} from '@services/api/blueprints/user_device_link/Api';
 // Services
 import {DeviceApi} from '@services/api/ApiService';
 // Types
 import axios, {AxiosResponse} from 'axios';
 import {DeviceCreateSchema} from '@services/api/swagger/data-contracts';
 // Constants
-import {DeviceIdMap} from '@services/asyncStorage/Types';
-import {insertRows} from '@services/db/Functions';
-import {syncDbTables} from '@shared/Constants';
+import {insertDevice} from '@services/db/device/Functions';
 
 /**
  * Asynchronously creates and registers a new device in the system, linking it to a specified user.
@@ -37,7 +34,7 @@ import {syncDbTables} from '@shared/Constants';
 export const createDevice = async (
   userId: string,
   deviceInternalId?: string | null,
-): Promise<DeviceIdMap | null> => {
+): Promise<DeviceCreateSchema | null> => {
   if (deviceInternalId === null || deviceInternalId === undefined) {
     deviceInternalId = await DeviceInfo.getUniqueId();
   }
@@ -51,6 +48,7 @@ export const createDevice = async (
 
   try {
     const deviceRow: DeviceCreateSchema = {
+      user_id: userId,
       brand: brand,
       created_at: timestamp,
       device_fcm: deviceFcm,
@@ -63,12 +61,8 @@ export const createDevice = async (
       deviceRow,
     );
     if (response.status == 201) {
-      await insertRows(syncDbTables.deviceTable, [deviceRow]);
-      await createUserDeviceLink(deviceId, userId);
-      return {
-        internalDeviceId: deviceInternalId,
-        deviceId: deviceId,
-      };
+      await insertDevice(deviceRow);
+      return deviceRow;
     } else {
       logger.warn(
         `Unexpected status code for Device createCreate: ${response.status}`,

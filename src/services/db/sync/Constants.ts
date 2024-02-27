@@ -17,8 +17,6 @@ import {
   ClientSessionEventUpdateSchema,
   DeviceCreateSchema,
   DeviceUpdateSchema,
-  UserDeviceLinkCreateSchema,
-  UserDeviceLinkUpdateSchema,
   UserCreateSchema,
   UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
@@ -34,7 +32,6 @@ import {
   ClientSessionEventApi,
   NutritionApi,
   DeviceApi,
-  UserDeviceLinkApi,
   UserApi,
 } from '@services/api/ApiService';
 
@@ -112,6 +109,16 @@ export const apiFunctions: SyncApiFunctions = {
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       NutritionApi.postNutrition(data),
   },
+  [syncDbTables.deviceTable]: {
+    [SyncOperation.Creates]: (
+      data: DeviceCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: DeviceUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
+  },
   [syncDbTables.clientSessionEventTable]: {
     [SyncOperation.Creates]: (
       data: ClientSessionEventCreateSchema,
@@ -125,26 +132,6 @@ export const apiFunctions: SyncApiFunctions = {
       ClientSessionEventApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       ClientSessionEventApi.postClientSessionEvent(data),
-  },
-  [syncDbTables.deviceTable]: {
-    [SyncOperation.Creates]: (
-      data: DeviceCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: DeviceUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
-  },
-  [syncDbTables.userDeviceLinkTable]: {
-    [SyncOperation.Creates]: (
-      data: UserDeviceLinkCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => UserDeviceLinkApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: UserDeviceLinkUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => UserDeviceLinkApi.updateUpdate(data, query),
   },
 };
 

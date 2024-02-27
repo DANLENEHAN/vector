@@ -1,5 +1,5 @@
 // Functions
-import {getUserDetails} from '@services/asyncStorage/Functions';
+import {getUser} from '@services/db/user/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 
@@ -8,6 +8,7 @@ import {MoodValue} from '@services/api/swagger/data-contracts';
 import {insertMoods} from '@services/db/mood/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
+import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Logger
 import logger from '@utils/Logger';
@@ -44,21 +45,26 @@ export const createNewMood = async ({
   note,
 }: CreateNewMoodParams): Promise<void> => {
   try {
-    const user_id = await getUserDetails('user_id');
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-    const moodId = mood_id ? mood_id : uuid4();
-    await insertMoods([
-      {
-        mood_id: moodId,
-        user_id: user_id,
-        value: value,
-        label: label,
-        note: note,
-        [timestampFields.createdAt]: timestampTimezone.timestamp,
-        [timestampFields.timezone]: timestampTimezone.timezone,
-      },
-    ]);
-    callback();
+    const user: UserCreateSchema | null = await getUser();
+    if (user != null) {
+      const timestampTimezone: TimestampTimezone =
+        getCurrentTimestampTimezone();
+      const moodId = mood_id ? mood_id : uuid4();
+      await insertMoods([
+        {
+          mood_id: moodId,
+          user_id: user.user_id,
+          value: value,
+          label: label,
+          note: note,
+          [timestampFields.createdAt]: timestampTimezone.timestamp,
+          [timestampFields.timezone]: timestampTimezone.timezone,
+        },
+      ]);
+      callback();
+    } else {
+      logger.warn('Unable to retreive user will not insert mood get stats.');
+    }
   } catch (error) {
     logger.error(`Error: ${error}`);
   }

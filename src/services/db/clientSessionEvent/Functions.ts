@@ -3,6 +3,8 @@ import {
   ClientSessionEventCreateSchema,
   ClientSessionEventType,
   ClientType,
+  DeviceCreateSchema,
+  UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
@@ -11,12 +13,11 @@ import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {insertRows} from '@services/db/Functions';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuid4} from 'uuid';
-import {getUserDetails} from '@services/asyncStorage/Functions';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
 
 // Logger
 import logger from '@utils/Logger';
-import {DeviceIdMap} from '@services/asyncStorage/Types';
+import {getUser} from '../user/Functions';
 
 /**
  * Inserts a client session event into the database.
@@ -34,11 +35,13 @@ export const insertClientSessionEvent = async (
 
   let userId = null;
   try {
-    userId = await getUserDetails('user_id');
+    const user: UserCreateSchema | null = await getUser();
+    userId = user != null ? user.user_id : null;
 
     if (userId !== null) {
-      const deviceMap: DeviceIdMap = await retrieveOrRegisterDeviceId(userId);
-      if (deviceMap.deviceId !== null) {
+      const deviceRow: DeviceCreateSchema | null =
+        await retrieveOrRegisterDeviceId(userId);
+      if (deviceRow !== null) {
         const clientSessionEvent: ClientSessionEventCreateSchema = {
           user_id: userId,
           event_type: eventType,
@@ -49,7 +52,7 @@ export const insertClientSessionEvent = async (
           system_version: sessionEventDeviceInfo?.systemVersion,
           timezone: timestampTimezone.timezone,
           user_agent: sessionEventDeviceInfo?.userAgent,
-          device_id: deviceMap.deviceId,
+          device_id: deviceRow.device_id,
         };
         await insertRows(syncDbTables.clientSessionEventTable, [
           clientSessionEvent,
