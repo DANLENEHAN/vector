@@ -1,7 +1,7 @@
 import moment from 'moment';
 import {getTimeZone} from 'react-native-localize';
 
-import {TimestampTimezone} from './Type';
+import {TimestampTimezone} from '@services/date/Type';
 import {TimestampFormat} from '@shared/Enums';
 
 /**

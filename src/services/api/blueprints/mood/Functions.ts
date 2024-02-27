@@ -19,12 +19,14 @@ import logger from '@utils/Logger';
  * @param callback  The callback function to be called after the mood is created.
  * @param note  The note of the mood (optional).
  * @param label  The label of the mood.
+ * @param mood_id  The id of the mood (optional).
  */
 export interface CreateNewMoodParams {
   value: number;
   callback: () => void;
   note?: string;
   label: MoodValue;
+  mood_id?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ export interface CreateNewMoodParams {
  */
 export const createNewMood = async ({
   value,
+  mood_id,
   callback,
   label,
   note,
@@ -43,10 +46,10 @@ export const createNewMood = async ({
   try {
     const user_id = await getUserDetails('user_id');
     const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-
+    const moodId = mood_id ? mood_id : uuid4();
     await insertMoods([
       {
-        mood_id: uuid4(),
+        mood_id: moodId,
         user_id: user_id,
         value: value,
         label: label,
