@@ -58,7 +58,7 @@ export const getDevice = async (
     ]);
 
     if (sqlResult[0].error) {
-      logger.info('Unable to get Device', {error: sqlResult[0].error});
+      logger.warn(`Unable to get Device with error: ${sqlResult[0].error}`);
       return null;
     }
 

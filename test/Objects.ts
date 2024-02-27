@@ -3,6 +3,7 @@ import {
   BodyStatCreateSchema,
   BodyStatType,
   BodyStatUpdateSchema,
+  DeviceCreateSchema,
   WeightUnit,
 } from '@services/api/swagger/data-contracts';
 import {
@@ -67,6 +68,17 @@ export const sampleUser = {
   weight_unit_pref: WeightUnit.Kg,
   [timestampFields.createdAt]: sampleTimestampOne,
   [timestampFields.timezone]: sampleTimestampTwo,
+};
+
+export const sampleDeviceRow: DeviceCreateSchema = {
+  user_id: sampleUserId,
+  brand: 'mockedBrand',
+  created_at: '2025-01-01T00:00:00.000',
+  device_fcm: 'mockedFcmToken',
+  device_id: 'fakeUuid',
+  device_internal_id: 'fakeDeviceId',
+  model: 'mockedModel',
+  timezone: 'UTC',
 };
 
 export const sampleSyncRow = {

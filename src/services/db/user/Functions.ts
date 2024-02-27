@@ -46,12 +46,13 @@ export const getUser = async (): Promise<UserCreateSchema | null> => {
       },
     ]);
 
-    if (
-      sqlResult[0].error &&
-      // Table will not exist pre migrations
-      !sqlResult[0].error.includes('no such table: user')
-    ) {
-      logger.error(`Unable to get user with error: ${sqlResult[0].error}`);
+    if (sqlResult[0].error) {
+      if (
+        // Table will not exist pre migrations
+        !sqlResult[0].error.includes('no such table: user')
+      ) {
+        logger.warn(`Unable to get user with error: ${sqlResult[0].error}`);
+      }
       return null;
     }
 
@@ -61,7 +62,7 @@ export const getUser = async (): Promise<UserCreateSchema | null> => {
     }
     return user as UserCreateSchema;
   } catch (error) {
-    logger.error('Error fetching user', {error});
+    logger.warn('Error fetching user', {error});
     return null;
   }
 };

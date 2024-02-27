@@ -15,10 +15,9 @@ import {
   ClientSessionEventType,
   ClientType,
   ClientSessionEventCreateSchema,
-  DeviceCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
-import {sampleUser, sampleUserId} from '../../../Objects';
+import {sampleDeviceRow, sampleUser, sampleUserId} from '../../../Objects';
 
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
@@ -57,16 +56,6 @@ describe('Test Client Session Event Functions', () => {
     userAgent: mockedUserAgent,
     version: mockedVersion,
   };
-  let deviceRow: DeviceCreateSchema = {
-    user_id: sampleUserId,
-    brand: 'mockedBrand',
-    created_at: '2025-01-01T00:00:00.000',
-    device_fcm: 'mockedFcmToken',
-    device_id: 'fakeUuid',
-    device_internal_id: 'fakeDeviceId',
-    model: 'mockedModel',
-    timezone: 'UTC',
-  };
   const clientSessionEvent: ClientSessionEventCreateSchema = {
     user_id: sampleUserId,
     event_type: ClientSessionEventType.LoggedIn,
@@ -77,7 +66,7 @@ describe('Test Client Session Event Functions', () => {
     system_version: mockedSystemVersion,
     timezone: 'UTC',
     user_agent: mockedUserAgent,
-    device_id: deviceRow.device_id,
+    device_id: sampleDeviceRow.device_id,
   };
 
   test('insertClientSessionEvent user and device not null', async () => {
@@ -86,7 +75,7 @@ describe('Test Client Session Event Functions', () => {
     jest.spyOn(UserDbFunctions, 'getUser').mockResolvedValue(sampleUser);
     jest
       .spyOn(Devicefunctions, 'retrieveOrRegisterDeviceId')
-      .mockResolvedValue(deviceRow);
+      .mockResolvedValue(sampleDeviceRow);
 
     // Act
     const response = await insertClientSessionEvent(
