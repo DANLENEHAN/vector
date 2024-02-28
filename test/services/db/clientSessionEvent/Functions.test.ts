@@ -1,11 +1,11 @@
 // Functions
 import * as SystemFunctions from '@services/system/Functions';
-import * as AsyncStorageFunctions from '@services/asyncStorage/Functions';
 import * as Devicefunctions from '@services/api/blueprints/device/Functions';
 import * as dbFunctions from '@services/db/Functions';
 import {insertClientSessionEvent} from '@services/db/clientSessionEvent/Functions';
 import * as dateFunctions from '@services/date/Functions';
 import logger from '@utils/Logger';
+import * as UserDbFunctions from '@services/db/user/Functions';
 
 // Types
 import {SessionEventDeviceInfo} from '@services/system/Types';
@@ -17,6 +17,7 @@ import {
   ClientSessionEventCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
+import {sampleDeviceRow, sampleUser, sampleUserId} from '../../../Objects';
 
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
@@ -55,9 +56,8 @@ describe('Test Client Session Event Functions', () => {
     userAgent: mockedUserAgent,
     version: mockedVersion,
   };
-  const fakeUserId = 1;
   const clientSessionEvent: ClientSessionEventCreateSchema = {
-    user_id: 1,
+    user_id: sampleUserId,
     event_type: ClientSessionEventType.LoggedIn,
     application_version: mockedVersion,
     client_session_event_id: mockedUuid,
@@ -66,21 +66,16 @@ describe('Test Client Session Event Functions', () => {
     system_version: mockedSystemVersion,
     timezone: 'UTC',
     user_agent: mockedUserAgent,
-    device_id: mockedUuid,
+    device_id: sampleDeviceRow.device_id,
   };
 
   test('insertClientSessionEvent user and device not null', async () => {
     // Arrange
     jest.spyOn(SystemFunctions, 'getDeviceInfo').mockResolvedValue(deviceInfo);
-    jest
-      .spyOn(AsyncStorageFunctions, 'getUserDetails')
-      .mockResolvedValue(fakeUserId);
+    jest.spyOn(UserDbFunctions, 'getUser').mockResolvedValue(sampleUser);
     jest
       .spyOn(Devicefunctions, 'retrieveOrRegisterDeviceId')
-      .mockResolvedValue({
-        deviceId: mockedUuid,
-        internalDeviceId: mockedDeviceId,
-      });
+      .mockResolvedValue(sampleDeviceRow);
 
     // Act
     const response = await insertClientSessionEvent(
@@ -90,15 +85,10 @@ describe('Test Client Session Event Functions', () => {
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
     expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
-
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledWith(
-      'user_id',
-    );
-
+    expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
-      fakeUserId,
+      sampleUserId,
     );
 
     expect(dbFunctions.insertRows).toHaveBeenCalledTimes(1);
@@ -113,8 +103,7 @@ describe('Test Client Session Event Functions', () => {
   test('insertClientSessionEvent user null', async () => {
     // Arrange
     jest.spyOn(SystemFunctions, 'getDeviceInfo').mockResolvedValue(deviceInfo);
-    jest.spyOn(AsyncStorageFunctions, 'getUserDetails').mockResolvedValue(null);
-
+    jest.spyOn(UserDbFunctions, 'getUser').mockResolvedValue(null);
     // Act
     const response = await insertClientSessionEvent(
       ClientSessionEventType.LoggedIn,
@@ -123,11 +112,7 @@ describe('Test Client Session Event Functions', () => {
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
     expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
-
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledWith(
-      'user_id',
-    );
+    expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
     expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
@@ -138,15 +123,10 @@ describe('Test Client Session Event Functions', () => {
   test('insertClientSessionEvent device null', async () => {
     // Arrange
     jest.spyOn(SystemFunctions, 'getDeviceInfo').mockResolvedValue(deviceInfo);
-    jest
-      .spyOn(AsyncStorageFunctions, 'getUserDetails')
-      .mockResolvedValue(fakeUserId);
+    jest.spyOn(UserDbFunctions, 'getUser').mockResolvedValue(sampleUser);
     jest
       .spyOn(Devicefunctions, 'retrieveOrRegisterDeviceId')
-      .mockResolvedValue({
-        deviceId: null,
-        internalDeviceId: null,
-      });
+      .mockResolvedValue(null);
 
     // Act
     const response = await insertClientSessionEvent(
@@ -156,15 +136,10 @@ describe('Test Client Session Event Functions', () => {
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
     expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
-
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledWith(
-      'user_id',
-    );
-
+    expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
-      fakeUserId,
+      sampleUserId,
     );
 
     expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
@@ -175,9 +150,7 @@ describe('Test Client Session Event Functions', () => {
   test('insertClientSessionEvent error thrown', async () => {
     // Arrange
     jest.spyOn(SystemFunctions, 'getDeviceInfo').mockResolvedValue(deviceInfo);
-    jest
-      .spyOn(AsyncStorageFunctions, 'getUserDetails')
-      .mockRejectedValue('Error!');
+    jest.spyOn(UserDbFunctions, 'getUser').mockRejectedValue('Error!');
 
     // Act
     const response = await insertClientSessionEvent(
@@ -188,10 +161,7 @@ describe('Test Client Session Event Functions', () => {
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
     expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
 
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getUserDetails).toHaveBeenCalledWith(
-      'user_id',
-    );
+    expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
     expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);

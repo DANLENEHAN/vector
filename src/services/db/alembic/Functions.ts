@@ -61,22 +61,15 @@ export const runDbMigrationProcess = async (revisionObject: {
     const results: ExecutionResult[] = await executeSqlBatch(migrationQueries);
 
     // Handle the results of migration queries
-    results.forEach((result, index) => {
-      const revisionID_ = Object.keys(revisionsToProcess)[index];
+    results.forEach(result => {
       if (result.error) {
-        logger.error(
-          `Error applying migrations for ${revisionID_}: ${result.error}`,
-        );
-        // Consider if this is a recoverable error or if it requires manual intervention
-        throw new Error(
-          `Error applying migrations for ${revisionID_}: ${result.error}`,
-        );
-      } else {
-        logger.info(`Migration for ${revisionID_} applied successfully`);
+        logger.error(`Error applying migration sql ${result.error}`);
+        throw new Error(`Error applying migration sql ${result.error}`);
       }
     });
+    logger.info('Migrations complete...');
   } catch (error) {
     logger.error('Error applying migrations:', error);
-    throw error; // Rethrow the error for higher-level handling
+    throw error;
   }
 };

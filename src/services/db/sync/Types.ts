@@ -4,8 +4,12 @@ import {AxiosResponse} from 'axios';
 import {
   ClientSessionEventCreateSchema,
   ClientSessionEventUpdateSchema,
+  DeviceCreateSchema,
+  DeviceUpdateSchema,
   SyncOperation,
   SyncType,
+  UserCreateSchema,
+  UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 import {
@@ -31,12 +35,14 @@ import {timestampFields} from '@shared/Constants';
  * @description A schema for data that can be synchronized during a create operation.
  */
 export type SyncCreateSchemas =
+  | UserCreateSchema
   | BodyStatCreateSchema
   | MoodCreateSchema
   | MoodTagCreateSchema
   | MoodTagLinkCreateSchema
   | NutritionCreateSchema
-  | ClientSessionEventCreateSchema;
+  | ClientSessionEventCreateSchema
+  | DeviceCreateSchema;
 
 /**
  * Represents a schema for data that can be synchronized during an update operation.
@@ -46,12 +52,14 @@ export type SyncCreateSchemas =
  * @description A schema for data that can be synchronized during an update operation.
  */
 export type SyncUpdateSchemas =
+  | UserUpdateSchema
   | BodyStatUpdateSchema
   | MoodUpdateSchema
   | MoodTagUpdateSchema
   | MoodTagLinkUpdateSchema
   | NutritionUpdateSchema
-  | ClientSessionEventUpdateSchema;
+  | ClientSessionEventUpdateSchema
+  | DeviceUpdateSchema;
 
 /**
  * Represents an object with synchronization information.
@@ -89,18 +97,53 @@ export type UpdatesFunction<T extends SyncUpdateSchemas> = (
  *
  * @type {function(data: QuerySchema): Promise<AxiosResponse<SyncCreateSchemas[]>>} GetsFunction
  */
-type GetsFunction = (
+export type GetsFunction = (
   data: QuerySchema,
 ) => Promise<AxiosResponse<SyncCreateSchemas[]>>;
 
 /**
- * Defines functions for creating, updating, and retrieving records in a synchronized table.
+ * Defines functions for creating and updating records in a synchronized table, omitting retrieval operations.
  *
- * @interface SyncTableFunctions
+ * @interface SyncTableReadWriteFunctions
  *
  * @property {CreatesFunction} Creates - Function for creating records.
  * @property {UpdatesFunction} Updates - Function for updating records.
- * @property {GetsFunction} Pull - Function for retrieving records.
+ */
+export interface SyncTableReadWriteFunctions<
+  C extends SyncCreateSchemas,
+  U extends SyncUpdateSchemas,
+> {
+  [SyncOperation.Creates]: CreatesFunction<C>;
+  [SyncOperation.Updates]: UpdatesFunction<U>;
+  [SyncType.Pull]: GetsFunction;
+}
+
+/**
+ * Defines the structure for synchronization table functions within a system tha
+ * handles data synchronization across devices or services.
+ * This interface maps specific sync operations and types to corresponding
+ * function types that implement these operations.
+ *
+ * Type Parameters:
+ * - C: Represents the create schema type that extends `SyncCreateSchemas`, which
+ *      defines the structure for objects that can be created.
+ * - U: Represents the update schema type that extends `SyncUpdateSchemas`, which
+ *      outlines the structure for objects that can be updated.
+ *
+ * Properties:
+ * - `[SyncOperation.Creates]`: This property is associated with the `CreatesFunction<C>`,
+ *                              indicating a function type that handles the creation of
+ *                              new records based on the create schema `C`.
+ * - `[SyncOperation.Updates]`: This property is linked to the `UpdatesFunction<U>`,
+ *                              signifying a function type that manages the updates
+ *                              of existing records according to the update schema `U`.
+ * - `[SyncType.Pull]`: This property corresponds to the `GetsFunction`, a function type
+ *                      designed for retrieving (pulling) data, without specifying a
+ *                      particular schema for the operation.
+ *
+ * The `SyncOperation` and `SyncType` are expected to be enumerations or similar
+ * constructs that define possible synchronization operations (like create, update)
+ * and synchronization types (like pull), respectively.
  */
 export interface SyncTableFunctions<
   C extends SyncCreateSchemas,
@@ -119,27 +162,35 @@ export interface SyncTableFunctions<
  * @property {SyncTableFunctions} bodyStatTable - API functions for the 'bodyStatTable' table.
  */
 export interface SyncApiFunctions {
-  [syncDbTables.bodyStatTable]: SyncTableFunctions<
+  [syncDbTables.userTable]: SyncTableReadWriteFunctions<
+    UserCreateSchema,
+    UserUpdateSchema
+  >;
+  [syncDbTables.bodyStatTable]: SyncTableReadWriteFunctions<
     BodyStatCreateSchema,
     BodyStatUpdateSchema
   >;
-  [syncDbTables.moodTable]: SyncTableFunctions<
+  [syncDbTables.moodTable]: SyncTableReadWriteFunctions<
     MoodCreateSchema,
     MoodUpdateSchema
   >;
-  [syncDbTables.moodTagTable]: SyncTableFunctions<
+  [syncDbTables.moodTagTable]: SyncTableReadWriteFunctions<
     MoodTagCreateSchema,
     MoodTagUpdateSchema
   >;
-  [syncDbTables.moodTagLinkTable]: SyncTableFunctions<
+  [syncDbTables.moodTagLinkTable]: SyncTableReadWriteFunctions<
     MoodTagLinkCreateSchema,
     MoodTagLinkUpdateSchema
   >;
-  [syncDbTables.nutritionTable]: SyncTableFunctions<
+  [syncDbTables.nutritionTable]: SyncTableReadWriteFunctions<
     NutritionCreateSchema,
     NutritionUpdateSchema
   >;
-  [syncDbTables.clientSessionEventTable]: SyncTableFunctions<
+  [syncDbTables.deviceTable]: SyncTableReadWriteFunctions<
+    DeviceCreateSchema,
+    DeviceUpdateSchema
+  >;
+  [syncDbTables.clientSessionEventTable]: SyncTableReadWriteFunctions<
     ClientSessionEventCreateSchema,
     ClientSessionEventUpdateSchema
   >;

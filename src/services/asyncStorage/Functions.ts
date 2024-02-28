@@ -6,7 +6,6 @@ import {SyncErrorDumpApi} from '@services/api/ApiService';
 import {
   FailedSyncPushError,
   SyncPushErrorItem,
-  DeviceIdMap,
 } from '@services/asyncStorage/Types';
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
 
@@ -17,33 +16,6 @@ import {maxSyncPushRetry} from '@services/db/sync/Constants';
 import logger from '@utils/Logger';
 import {SyncOperation} from '@services/api/swagger/data-contracts';
 import {SyncType} from '@services/api/swagger/data-contracts';
-
-/**
- * Gets the user details from AsyncStorage.
- *
- * @param {string} field_name - The name of the field to retrieve.
- * @returns {Promise<string>} A promise that resolves with the value of the field.
- * @throws {string} Throws an error with a message describing the issue if the operation fails.
- **/
-export async function getUserDetails(field_name: string): Promise<any> {
-  try {
-    const user_details = await AsyncStorage.getItem(
-      AsyncStorageKeys.UserDetails,
-    );
-    if (user_details) {
-      const user_details_json = JSON.parse(user_details);
-      if (field_name in user_details_json) {
-        return user_details_json[field_name];
-      } else {
-        throw `Field ${field_name} not found in user details`;
-      }
-    } else {
-      throw 'User details not found in AsyncStorage';
-    }
-  } catch (error) {
-    return Promise.reject(new Error(`Error retrieving user details: ${error}`));
-  }
-}
 
 /**
  * Stores failed synchronization push errors in AsyncStorage for a specific table and Sync operation.
@@ -270,59 +242,4 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
       `Failed to delete successfully synchronized push errors: ${error}`,
     );
   }
-};
-
-/**
- * Asynchronously retrieves a device ID map from local storage using `AsyncStorage`.
- * This function attempts to fetch a stored device ID map by the given `internalDeviceId`. If found, it validates
- * that the stored device map's `internalDeviceId` matches the provided one and that the `deviceId` is not null.
- * If these conditions are met, the function returns the device ID map. Otherwise, it logs a warning and resets
- * the relevant `AsyncStorage` key by removing any stored device map data, indicating either invalid data or
- * a mismatch between the stored and provided internal device IDs.
- *
- * @param internalDeviceId - The internal device ID for which the device ID map is being retrieved.
- * @returns A `Promise` that resolves to a `DeviceIdMap` object. If valid data is found and matches the
- *          provided `internalDeviceId`, the device map is returned. If no valid data is found, or if there's
- *          a mismatch or error, the function returns an object with both `internalDeviceId` and `deviceId`
- *          set to `null`.
- *
- * The function is designed to support error handling for both non-existent data scenarios and any issues encountered
- * during the retrieval process from `AsyncStorage`. In case of an error or if validation fails, it ensures that
- * potentially corrupted or mismatched data does not persist by clearing the stored device map data.
- *
- * Possible errors include:
- * - Exceptions thrown by `AsyncStorage.getItem` due to issues accessing the local storage.
- * - JSON parsing errors if the data retrieved from `AsyncStorage` is not properly formatted JSON.
- *
- * These errors are caught and logged, and the function then proceeds to clear the potentially problematic data
- * from `AsyncStorage` before returning an empty device map object with null values.
- */
-export const getStoredDeviceIdMap = async (
-  internalDeviceId: string,
-): Promise<DeviceIdMap> => {
-  try {
-    const response = await AsyncStorage.getItem(AsyncStorageKeys.DeviceId);
-    if (response !== null) {
-      const deviceMap: DeviceIdMap = JSON.parse(response);
-
-      // Validate the retrieved data
-      if (
-        deviceMap.internalDeviceId === internalDeviceId &&
-        deviceMap.deviceId !== null
-      ) {
-        // Data is valid and matches the provided internalDeviceId
-        return deviceMap;
-      }
-    }
-    logger.warn(
-      `Invalid or mismatched device map data. Resetting AsyncStorage key ${AsyncStorageKeys.DeviceId}...`,
-    );
-  } catch (error) {
-    logger.warn(
-      `Error accessing AsyncStorage key ${AsyncStorageKeys.DeviceId}. Error: ${error}. Resetting data...`,
-    );
-  }
-
-  await AsyncStorage.removeItem(AsyncStorageKeys.DeviceId);
-  return {internalDeviceId: null, deviceId: null};
 };

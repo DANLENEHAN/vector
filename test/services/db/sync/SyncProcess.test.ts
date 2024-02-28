@@ -15,6 +15,7 @@ import * as DateFunctions from '@services/date/Functions';
 
 // Objects
 import {sampleTimestampOne, sampleTimezone} from '../../../Objects';
+import {SyncType} from '@shared/Enums';
 
 jest.mock('@services/db/sync/SyncTypes', () => ({
   processSyncTypePush: jest.fn(),
@@ -48,10 +49,11 @@ describe('Sync Process Tests', () => {
       apiFunctions,
     ).entries()) {
       let call = (index + 1) * 2;
+
       expect(processSyncTypePull).toHaveBeenNthCalledWith(
         call - 1,
         tableName as syncDbTables,
-        tableFunctions,
+        tableFunctions[SyncType.Pull],
         SyncOperation.Creates,
         sampleTimestampOne,
       );
@@ -59,7 +61,7 @@ describe('Sync Process Tests', () => {
       expect(processSyncTypePull).toHaveBeenNthCalledWith(
         call,
         tableName as syncDbTables,
-        tableFunctions,
+        tableFunctions[SyncType.Pull],
         SyncOperation.Updates,
         sampleTimestampOne,
       );

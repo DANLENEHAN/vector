@@ -39,7 +39,7 @@ export const runSyncProcess = async (): Promise<void> => {
       // Process synchronization pull for create operations
       await processSyncTypePull(
         tableName as syncDbTables,
-        tableFunctions,
+        tableFunctions[SyncType.Pull],
         SyncOperation.Creates,
         syncStart,
       );
@@ -47,7 +47,7 @@ export const runSyncProcess = async (): Promise<void> => {
       // Process synchronization pull for update operations
       await processSyncTypePull(
         tableName as syncDbTables,
-        tableFunctions,
+        tableFunctions[SyncType.Pull],
         SyncOperation.Updates,
         syncStart,
       );

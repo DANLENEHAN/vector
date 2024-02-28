@@ -25,8 +25,6 @@ NetInfo.configure({
 
 function App(): JSX.Element {
   useEffect(() => {
-    // Component Mounts
-    handleClientSessionEvent(ClientSessionEventType.AppOpen);
     return () => {
       // Component Unmounts
       handleClientSessionEvent(ClientSessionEventType.AppClose);

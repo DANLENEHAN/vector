@@ -1,9 +1,6 @@
 import {AxiosResponse} from 'axios';
 import {UserApi} from '@services/api/ApiService';
-import {
-  UserCreateSchema,
-  UserGetSchema,
-} from '@services/api/swagger/data-contracts';
+import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 // Services
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
@@ -27,13 +24,13 @@ export const createUser = async (
   try {
     const response: AxiosResponse<void> = await UserApi.createCreate(userData);
 
-    if (response.status === 204) {
+    if (response.status === 201) {
       return Promise.resolve();
     } else {
       return new SwaggerValidationError();
     }
   } catch (error) {
-    return HandleSwaggerValidationError(error, {400: null, 409: null});
+    return HandleSwaggerValidationError(error, {400: null});
   }
 };
 
@@ -70,11 +67,6 @@ export const loginUser = async (data: {
       if (!response_data) {
         return new SwaggerValidationError();
       }
-      // Save the user ID to AsyncStorage and return a resolved promise.
-      AsyncStorage.setItem(
-        AsyncStorageKeys.UserDetails,
-        JSON.stringify(response_data),
-      );
       return Promise.resolve((response_data as any).user_id);
     } else {
       return new SwaggerValidationError();
@@ -128,26 +120,3 @@ export const testAuthentication =
       return HandleSwaggerValidationError(error, {401: null});
     }
   };
-
-/**
- * Function to get the details of a user.
- *
- * @function getUserDetails
- *
- * @returns {Promise<UserGetSchema>} A promise that resolves with the user details.
- */
-export const getUserDetails = async (): Promise<
-  UserGetSchema | SwaggerValidationError
-> => {
-  try {
-    const response: AxiosResponse<UserGetSchema> = await UserApi.detailsList();
-
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      return new SwaggerValidationError();
-    }
-  } catch (error) {
-    return HandleSwaggerValidationError(error, {500: null});
-  }
-};

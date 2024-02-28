@@ -35,7 +35,8 @@ const AccountSettings: React.FC<ScreenProps> = ({
     if (response instanceof SwaggerValidationError) {
       logger.error(`Error: ${response.message}`);
     } else {
-      handleClientSessionEvent(ClientSessionEventType.Logout);
+      // Also captured upon logging in if required
+      await handleClientSessionEvent(ClientSessionEventType.Logout);
       navigation.navigate('Login');
     }
   };
