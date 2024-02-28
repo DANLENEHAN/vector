@@ -14,12 +14,10 @@ import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 
 // Functions
 import {
-  getUserDetails,
   storeFailedSyncPushErrors,
   getFailedSyncPushesCreatesForTable,
   getFailedSyncPushesUpdatesForTable,
   deleteSuccessfulSyncPushErrors,
-  getStoredDeviceIdMap,
 } from '@services/asyncStorage/Functions';
 import {SyncType} from '@shared/Enums';
 
@@ -37,59 +35,10 @@ jest.mock('@services/api/swagger/SyncErrorDump', () => ({
   })),
 }));
 
-describe('getUserDetails', () => {
-  const fakeDeviceId = '4f76f081-0192-484a-a9b7-07b93b297c93';
+describe('Test AsyncStorage Functions', () => {
   beforeEach(() => {
     // Clears 'toHaveBeenCalledTimes' cache
     jest.clearAllMocks();
-  });
-
-  it('Gets value when present', async () => {
-    // Arrange
-    const fieldName = 'username';
-    const fieldValue = 'johndoe';
-    const user_details = JSON.stringify({[fieldName]: fieldValue});
-
-    // AsyncStorage mock to return user details
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(user_details);
-
-    // Act
-    const result = await getUserDetails(fieldName);
-
-    // Assert
-    expect(result).toBe(fieldValue);
-    expect(AsyncStorage.getItem).toHaveBeenCalledWith('user-details-key');
-  });
-
-  it('Throws error when field not present', async () => {
-    // Arrange
-    const fieldName = 'username';
-    const fieldValue = 'johndoe';
-    const user_details = JSON.stringify({[fieldName]: fieldValue});
-    const target_field = 'email';
-
-    // AsyncStorage mock to return user details
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(user_details);
-
-    // Act and Assert
-    //getUserDetails(target_field)
-    await expect(getUserDetails(target_field)).rejects.toThrow(
-      'Error retrieving user details: Field email not found in user details',
-    );
-  });
-
-  it('Throws error when user details not present', async () => {
-    // Arrange
-    const target_field = 'email';
-
-    // AsyncStorage mock to return user details
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-
-    // Act and Assert
-    //getUserDetails(target_field)
-    await expect(getUserDetails(target_field)).rejects.toThrow(
-      'Error retrieving user details: User details not found in AsyncStorage',
-    );
   });
 
   it('storeFailedSyncPushErrors first time failure', async () => {
@@ -420,65 +369,5 @@ describe('getUserDetails', () => {
 
     // Assert
     expect(response).toEqual([]);
-  });
-
-  it('getStoredDeviceIdMap key is null', async () => {
-    // Arrange
-    (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve(null));
-
-    // Act
-    const response = await getStoredDeviceIdMap(fakeDeviceId);
-
-    // Assert
-    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-    );
-    expect(response).toEqual({
-      internalDeviceId: null,
-      deviceId: null,
-    });
-  });
-
-  it('getStoredDeviceIdMap key is invalid', async () => {
-    // Arrange
-    (AsyncStorage.getItem as jest.Mock).mockReturnValue(
-      Promise.resolve('{{{{{{{'),
-    );
-
-    // Act
-    const response = await getStoredDeviceIdMap(fakeDeviceId);
-
-    // Assert
-    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-    );
-    expect(response).toEqual({
-      internalDeviceId: null,
-      deviceId: null,
-    });
-  });
-
-  it('getStoredDeviceIdMap key is valid', async () => {
-    // Arrange
-    (AsyncStorage.getItem as jest.Mock).mockReturnValue(
-      Promise.resolve(
-        JSON.stringify({
-          internalDeviceId: fakeDeviceId,
-          deviceId: '21db11ea-4dd6-4e1d-a697-7c62a11dce4b',
-        }),
-      ),
-    );
-
-    // Act
-    const response = await getStoredDeviceIdMap(fakeDeviceId);
-
-    // Assert
-    expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(0);
-    expect(response).toEqual({
-      internalDeviceId: fakeDeviceId,
-      deviceId: '21db11ea-4dd6-4e1d-a697-7c62a11dce4b',
-    });
   });
 });

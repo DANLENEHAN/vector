@@ -8,6 +8,8 @@ import {runSyncProcess} from '@services/db/sync/SyncProcess';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
+import {insertUser} from '@services/db/user/Functions';
+import {v4 as uuid4} from 'uuid';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
 import {
@@ -17,6 +19,7 @@ import {
   HeightUnit,
   WeightUnit,
   ProfileStatus,
+  UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {timestampFields} from '@shared/Constants';
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
@@ -65,8 +68,10 @@ export const handleLogin = async (
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
     await retrieveOrRegisterDeviceId(response);
-    handleClientSessionEvent(ClientSessionEventType.LoggedIn);
-    runSyncProcess();
+    await runSyncProcess();
+    // Also captured if login is avoided in the Splash screen
+    await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+    await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
   }
 };
 
@@ -100,8 +105,9 @@ export const handleCreateAccount = async (
     return;
   }
   const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-  let createResponse = await createUser({
+  const userObject: UserCreateSchema = {
     // NOTE: Remove these hard-coded values when the UI is implemented fully
+    user_id: uuid4(),
     email: params.email,
     password: params.password,
     age: 125,
@@ -120,12 +126,14 @@ export const handleCreateAccount = async (
     weight_unit_pref: WeightUnit.Kg,
     [timestampFields.createdAt]: timestampTimezone.timestamp,
     [timestampFields.timezone]: timestampTimezone.timezone,
-  });
+  };
+  let createResponse = await createUser(userObject);
   if (createResponse instanceof SwaggerValidationError) {
     logger.error(`Error: ${createResponse.message}`);
     return createResponse.message;
   } else {
     logger.info('Account creation successful, logging in.');
+    await insertUser(userObject);
     const loginResponse = await loginUser({
       email: params.email,
       password: params.password,
@@ -136,7 +144,10 @@ export const handleCreateAccount = async (
     } else {
       await retrieveOrRegisterDeviceId(loginResponse);
       params.navigation.navigate('App', {screen: 'Home'});
-      runSyncProcess();
+      await runSyncProcess();
+      // Also captured if login is avoided in the Splash screen
+      await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+      await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
     }
   }
 };

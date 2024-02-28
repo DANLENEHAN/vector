@@ -8,7 +8,7 @@ import {layoutStyles} from '@styles/Main';
 // Components
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 import BodyMap from '@components/visualisations/BodyMap/BodyMap';
-import GenericMeasurementTracking from './GenericMeasurementTracking';
+import GenericMeasurementTracking from '@screens/track/bodyMeasurement/GenericMeasurementTracking';
 import Header from '@components/navbar/Header';
 
 // Types

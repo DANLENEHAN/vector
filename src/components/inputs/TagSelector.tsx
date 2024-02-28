@@ -25,12 +25,14 @@ import {useSystem} from '@context/SystemContext';
  *
  * @param {string} label - The label for the tag
  * @param {string} icon - The icon for the tag
- * @param {string} color - The color for the tag
+ * @param {string} color - The color for the tag (optional)
+ * @param {string} tagID - The ID for the tag
  */
 export interface TagProps {
   label: string;
   icon: string;
-  color: string;
+  color?: string;
+  tagId: string;
 }
 
 /**
@@ -45,6 +47,8 @@ export interface TagProps {
 export interface TagSelectorProps {
   tags: TagProps[];
   tagSelectorLabel: string;
+  selectedTags: string[];
+  onTagSelect: (tagID: string) => void;
   style?: object;
 }
 
@@ -62,8 +66,10 @@ export const Tag: React.FC<
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
+  if (!color) {
+    color = currentTheme.primary;
+  }
   // Function to toggle selection state
-
   const fontColor = active ? currentTheme.background : currentTheme.text;
   const backgroundColor = active ? color : currentTheme.background;
 
@@ -93,23 +99,16 @@ export const Tag: React.FC<
 export const TagSelector: React.FC<TagSelectorProps> = ({
   tagSelectorLabel,
   tags,
+  selectedTags,
+  onTagSelect,
   style = {},
 }) => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [isCollapsed, setIsCollapsed] = useState(false); // State to track collapse
-  const [selectedTags, setSelectedTags] = useState<string[]>([]); // Track selected tags by label
-
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
-
-  const toggleTagSelection = (label: string) => {
-    setSelectedTags(prev =>
-      prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label],
-    );
-  };
-
   return (
     <View
       style={[
@@ -159,10 +158,11 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
             <Tag
               key={index}
               label={tag.label}
+              tagId={tag.tagId}
               icon={tag.icon}
               color={tag.color}
-              active={selectedTags.includes(tag.label)}
-              onPress={() => toggleTagSelection(tag.label)}
+              active={selectedTags.includes(tag.tagId)}
+              onPress={() => onTagSelect(tag.tagId)}
             />
           ))}
         </View>

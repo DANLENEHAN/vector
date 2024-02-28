@@ -36,30 +36,26 @@ export const runSyncProcess = async (): Promise<void> => {
         getCurrentTimestampTimezone();
       const syncStart: string = timestampTimezone.timestamp;
 
-      if (tableFunctions[SyncType.Pull] !== undefined) {
-        // Process synchronization pull for create operations
-        await processSyncTypePull(
-          tableName as syncDbTables,
-          tableFunctions[SyncType.Pull],
-          SyncOperation.Creates,
-          syncStart,
-        );
+      // Process synchronization pull for create operations
+      await processSyncTypePull(
+        tableName as syncDbTables,
+        tableFunctions[SyncType.Pull],
+        SyncOperation.Creates,
+        syncStart,
+      );
 
-        // Process synchronization pull for update operations
-        await processSyncTypePull(
-          tableName as syncDbTables,
-          tableFunctions[SyncType.Pull],
-          SyncOperation.Updates,
-          syncStart,
-        );
+      // Process synchronization pull for update operations
+      await processSyncTypePull(
+        tableName as syncDbTables,
+        tableFunctions[SyncType.Pull],
+        SyncOperation.Updates,
+        syncStart,
+      );
 
-        // Log information about the completion of synchronization pull
-        logger.info(
-          `Sync '${SyncType.Pull}' completed successfully for table: '${tableName}'.`,
-        );
-      } else {
-        logger.info(`Table '${tableName}' does not Sync Pull`);
-      }
+      // Log information about the completion of synchronization pull
+      logger.info(
+        `Sync '${SyncType.Pull}' completed successfully for table: '${tableName}'.`,
+      );
 
       logger.info(
         `Processing Sync type '${SyncType.Push}' for table: '${tableName}'`,

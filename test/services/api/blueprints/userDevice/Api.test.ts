@@ -6,9 +6,7 @@ import {DeviceCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Functions
 import {createDevice} from '@services/api/blueprints/device/Api';
-import * as dbFunctions from '@services/db/Functions';
-import {syncDbTables} from '@shared/Constants';
-import * as UserDeviceLinkFunctions from '@services/api/blueprints/user_device_link/Api';
+import * as DeviceDbFunctions from '@services/db/device/Functions';
 import logger from '@utils/Logger';
 
 // Mocks
@@ -24,10 +22,6 @@ jest.mock('react-native-device-info', () => ({
   getBrand: jest.fn().mockReturnValue('mockedBrand'),
   getDeviceId: jest.fn().mockReturnValue('mockedModel'),
 }));
-jest.mock('@services/db/Functions', () => ({
-  ...jest.requireActual('@services/db/Functions'),
-  insertRows: jest.fn(),
-}));
 jest.mock('uuid', () => ({
   v4: jest.fn().mockReturnValue('fakeUuid'),
 }));
@@ -40,6 +34,10 @@ jest.mock('axios', () => ({
   ...jest.requireActual('axios'),
   isAxiosError: jest.fn().mockReturnValue(true),
 }));
+jest.mock('@services/db/device/Functions', () => ({
+  ...jest.requireActual('@services/db/device/Functions'),
+  insertDevice: jest.fn(),
+}));
 
 describe('Device Api tests', () => {
   beforeEach(() => {
@@ -50,6 +48,7 @@ describe('Device Api tests', () => {
   const fakeUserId = 'fakeUserId';
   const fakeDeviceId = 'fakeDeviceId';
   let deviceRow: DeviceCreateSchema = {
+    user_id: fakeUserId,
     brand: 'mockedBrand',
     created_at: '2025-01-01T00:00:00.000',
     device_fcm: 'mockedFcmToken',
@@ -64,9 +63,6 @@ describe('Device Api tests', () => {
     jest
       .spyOn(Apis.DeviceApi, 'createCreate')
       .mockResolvedValue({status: 201} as any);
-    jest
-      .spyOn(UserDeviceLinkFunctions, 'createUserDeviceLink')
-      .mockResolvedValue();
 
     // Act
     const response = await createDevice(fakeUserId, fakeDeviceId);
@@ -74,25 +70,9 @@ describe('Device Api tests', () => {
     // Assert
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledWith(deviceRow);
-
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.insertRows).toHaveBeenCalledWith(
-      syncDbTables.deviceTable,
-      [deviceRow],
-    );
-
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledTimes(
-      1,
-    );
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledWith(
-      'fakeUuid',
-      fakeUserId,
-    );
-
-    expect(response).toEqual({
-      internalDeviceId: fakeDeviceId,
-      deviceId: 'fakeUuid',
-    });
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledWith(deviceRow);
+    expect(response).toEqual(deviceRow);
   });
 
   test('createDevice api returns success, deviceInternalId not passed', async () => {
@@ -103,9 +83,6 @@ describe('Device Api tests', () => {
     jest
       .spyOn(Apis.DeviceApi, 'createCreate')
       .mockResolvedValue({status: 201} as any);
-    jest
-      .spyOn(UserDeviceLinkFunctions, 'createUserDeviceLink')
-      .mockResolvedValue();
 
     // Act
     const response = await createDevice(fakeUserId);
@@ -113,25 +90,9 @@ describe('Device Api tests', () => {
     // Assert
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledWith(deviceRow2);
-
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.insertRows).toHaveBeenCalledWith(
-      syncDbTables.deviceTable,
-      [deviceRow2],
-    );
-
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledTimes(
-      1,
-    );
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledWith(
-      'fakeUuid',
-      fakeUserId,
-    );
-
-    expect(response).toEqual({
-      internalDeviceId: 'mockedDeviceId',
-      deviceId: 'fakeUuid',
-    });
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledWith(deviceRow2);
+    expect(response).toEqual(deviceRow2);
   });
 
   test('createDevice api request returns wrong status code', async () => {
@@ -139,9 +100,6 @@ describe('Device Api tests', () => {
     jest
       .spyOn(Apis.DeviceApi, 'createCreate')
       .mockResolvedValue({status: 209} as any);
-    jest
-      .spyOn(UserDeviceLinkFunctions, 'createUserDeviceLink')
-      .mockResolvedValue();
 
     // Act
     const response = await createDevice(fakeUserId, fakeDeviceId);
@@ -149,11 +107,7 @@ describe('Device Api tests', () => {
     // Assert
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledWith(deviceRow);
-
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledTimes(
-      0,
-    );
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledTimes(0);
 
     expect(logger.warn).toHaveBeenCalledWith(
       `Unexpected status code for Device createCreate: ${209}`,
@@ -169,9 +123,6 @@ describe('Device Api tests', () => {
       status: 500,
       message: fakeErrorMessage,
     } as any);
-    jest
-      .spyOn(UserDeviceLinkFunctions, 'createUserDeviceLink')
-      .mockResolvedValue();
 
     // Act
     const response = await createDevice(fakeUserId, fakeDeviceId);
@@ -179,12 +130,7 @@ describe('Device Api tests', () => {
     // Assert
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.createCreate).toHaveBeenCalledWith(deviceRow);
-
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
-    expect(UserDeviceLinkFunctions.createUserDeviceLink).toHaveBeenCalledTimes(
-      0,
-    );
-
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledTimes(0);
     expect(logger.warn).toHaveBeenCalledWith(
       `Unexpected error for Device createCreate: ${fakeErrorMessage}`,
     );

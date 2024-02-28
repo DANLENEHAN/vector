@@ -1,13 +1,13 @@
 // Functions
-import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 
 // Types
 import {
   BodyStatType,
   BodyStatCreateSchema,
+  UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
 import {insertBodyStat} from '@services/db/bodyStat/Functions';
@@ -16,6 +16,7 @@ import {TimestampTimezone} from '@services/date/Type';
 
 // Logger
 import logger from '@utils/Logger';
+import {getUser} from '@services/db/user/Functions';
 
 /**
  * Interface for the createNewBodyStat function.
@@ -46,21 +47,25 @@ export const createNewBodyStat = async ({
   onSuccessfulCreate,
 }: createNewBodyStatParams): Promise<void> => {
   try {
-    const user_id = await getUserDetails('user_id');
+    const user: UserCreateSchema | null = await getUser();
     const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
 
-    await insertBodyStat([
-      {
-        body_stat_id: uuidv4(),
-        unit: unitValue,
-        stat_type: statType,
-        user_id: user_id,
-        value: value,
-        [timestampFields.createdAt]: timestampTimezone.timestamp,
-        [timestampFields.timezone]: timestampTimezone.timezone,
-      },
-    ]);
-    onSuccessfulCreate();
+    if (user != null) {
+      await insertBodyStat([
+        {
+          body_stat_id: uuid4(),
+          unit: unitValue,
+          stat_type: statType,
+          user_id: user.user_id,
+          value: value,
+          [timestampFields.createdAt]: timestampTimezone.timestamp,
+          [timestampFields.timezone]: timestampTimezone.timezone,
+        },
+      ]);
+      onSuccessfulCreate();
+    } else {
+      logger.warn('Unable to retrieve user will not insert body stat.');
+    }
   } catch (error) {
     logger.error(`Error: ${error}`);
   }
@@ -86,18 +91,22 @@ export const getUserStats = async ({
   bodyStatType,
 }: GetUserStatsParams): Promise<BodyStatCreateSchema[] | undefined> => {
   try {
-    const user_id = await getUserDetails('user_id');
-    const response = await getStats({
-      filters: {
-        user_id: {eq: user_id},
-        stat_type: {eq: bodyStatType},
-      },
-      sort: [`${timestampFields.createdAt}:desc`],
-    });
-    if (response instanceof SwaggerValidationError) {
-      logger.error(`Error: ${response.message}`);
+    const user: UserCreateSchema | null = await getUser();
+    if (user != null) {
+      const response = await getStats({
+        filters: {
+          user_id: {eq: user.user_id},
+          stat_type: {eq: bodyStatType},
+        },
+        sort: [`${timestampFields.createdAt}:desc`],
+      });
+      if (response instanceof SwaggerValidationError) {
+        logger.error(`Error: ${response.message}`);
+      } else {
+        return response;
+      }
     } else {
-      return response;
+      logger.warn("Unable to retreive user can't get stats.");
     }
   } catch (error) {
     logger.error(`Error: ${error}`);

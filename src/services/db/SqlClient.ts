@@ -27,34 +27,23 @@ const getDocumentDirectoryPath = (): void => {
 };
 
 /**
- * Initializes and returns an instance of the SQLite database with foreign key constraints enabled.
+ * Initializes and returns an instance of the SQLite database.
  * This function opens the database using the specified database name. Upon successful connection,
- * it executes the PRAGMA statement to enable foreign key enforcement to ensure referential integrity.
- * Logs are generated to indicate the success or failure of database opening and the foreign key setting.
+ * it prints the location of the devices documents.
  *
  * @type {SQLiteDatabase} db - The SQLite Database instance. This instance allows for executing SQL
  *                              queries, transactions, and interacting with the database.
  *
  * @param {Object} {name: dbName} - Configuration object for the database, where `dbName` is the name
  *                                  of the database file to open or create if it does not exist.
- * @param {Function} successCallback - A callback function that executes a PRAGMA SQL command to enable
- *                                     foreign key constraints upon successful database connection.
+ * @param {Function} successCallback - A callback function prints the location of the Devices document
+ *                                     dir for devs to find the local db.
  * @param {Function} errorCallback - A callback function that logs errors encountered during the
  *                                   database opening process.
  */
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: dbName},
-  () => {
-    // find DB location
-    getDocumentDirectoryPath();
-    // Success callback: Enable foreign key constraints
-    db.executeSql(
-      'PRAGMA foreign_keys = ON;',
-      [],
-      () => logger.info('Foreign key enforcement is enabled.'),
-      error => logger.error('Error enabling foreign keys:', error),
-    );
-  },
+  getDocumentDirectoryPath,
   (error: SQLError) => {
     // Error callback: Log database opening error
     logger.error('Error opening database:', error);

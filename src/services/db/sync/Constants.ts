@@ -17,10 +17,8 @@ import {
   ClientSessionEventUpdateSchema,
   DeviceCreateSchema,
   DeviceUpdateSchema,
-  UserDeviceLinkCreateSchema,
-  UserDeviceLinkUpdateSchema,
-  // UserCreateSchema,
-  // UserUpdateSchema,
+  UserCreateSchema,
+  UserUpdateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
@@ -34,25 +32,49 @@ import {
   ClientSessionEventApi,
   NutritionApi,
   DeviceApi,
-  UserDeviceLinkApi,
-  // UserApi,
+  UserApi,
 } from '@services/api/ApiService';
 
 // Order In Which Tables Are Synced
 export const apiFunctions: SyncApiFunctions = {
-  // NOTE: Will being in after backend changes
-  // [syncDbTables.userTable]: {
-  //   [SyncOperation.Creates]: (
-  //     data: UserCreateSchema,
-  //     query?: SyncObject,
-  //   ): Promise<AxiosResponse> => UserApi.createCreate(data, query),
-  //   [SyncOperation.Updates]: (
-  //     data: UserUpdateSchema,
-  //     query?: SyncObject,
-  //   ): Promise<AxiosResponse> => UserApi.updateUpdate(data, query),
-  //   [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-  //     UserApi.postUser(data),
-  // },
+  [syncDbTables.userTable]: {
+    [SyncOperation.Creates]: (
+      data: UserCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: UserUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => UserApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      UserApi.postUser(data),
+  },
+  [syncDbTables.deviceTable]: {
+    [SyncOperation.Creates]: (
+      data: DeviceCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: DeviceUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      DeviceApi.postDevice(data),
+  },
+  [syncDbTables.clientSessionEventTable]: {
+    [SyncOperation.Creates]: (
+      data: ClientSessionEventCreateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.createCreate(data, query),
+    [SyncOperation.Updates]: (
+      data: ClientSessionEventUpdateSchema,
+      query?: SyncObject,
+    ): Promise<AxiosResponse> =>
+      ClientSessionEventApi.updateUpdate(data, query),
+    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
+      ClientSessionEventApi.postClientSessionEvent(data),
+  },
   [syncDbTables.bodyStatTable]: {
     [SyncOperation.Creates]: (
       data: BodyStatCreateSchema,
@@ -112,40 +134,6 @@ export const apiFunctions: SyncApiFunctions = {
     ): Promise<AxiosResponse> => NutritionApi.updateUpdate(data, query),
     [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
       NutritionApi.postNutrition(data),
-  },
-  [syncDbTables.clientSessionEventTable]: {
-    [SyncOperation.Creates]: (
-      data: ClientSessionEventCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> =>
-      ClientSessionEventApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: ClientSessionEventUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> =>
-      ClientSessionEventApi.updateUpdate(data, query),
-    [SyncType.Pull]: (data: QuerySchema): Promise<AxiosResponse> =>
-      ClientSessionEventApi.postClientSessionEvent(data),
-  },
-  [syncDbTables.deviceTable]: {
-    [SyncOperation.Creates]: (
-      data: DeviceCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: DeviceUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => DeviceApi.updateUpdate(data, query),
-  },
-  [syncDbTables.userDeviceLinkTable]: {
-    [SyncOperation.Creates]: (
-      data: UserDeviceLinkCreateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => UserDeviceLinkApi.createCreate(data, query),
-    [SyncOperation.Updates]: (
-      data: UserDeviceLinkUpdateSchema,
-      query?: SyncObject,
-    ): Promise<AxiosResponse> => UserDeviceLinkApi.updateUpdate(data, query),
   },
 };
 

@@ -17,6 +17,7 @@ import ButtonComponent from '@components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {Mood} from '@screens/track/mood/Types';
+import {MoodTagGroups} from '@screens/track/mood/Types';
 // Styling
 import {useSystem} from '@context/SystemContext';
 import {
@@ -31,9 +32,9 @@ import {
   paddingSizes,
   bodyTextStyles,
 } from '@styles/Main';
-// Constants
-import {moodTagGroups} from '@screens/track/mood/Constants';
 //Services
+import {v4 as uuidv4} from 'uuid';
+import {createNewMoodTagLink} from '@services/api/blueprints/moodTagLink/Functions';
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 import {MoodValue} from '@services/api/swagger/data-contracts';
 import {transformsInternalNameToDisplay} from '@shared/Functions';
@@ -56,31 +57,77 @@ const MoodTagScreen: React.FC<any> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  // Get the mood from the route params
+  // Get the mood and tags from the route params
   const mood = route.params.mood as Mood;
+  const moodTags = route.params.moodTags as MoodTagGroups;
 
   // Get the current date
   const now = utcTimestampNow();
   const currentDatetime = formatDate(now, DateFormat.DOW_DD_MM);
 
+  // State for the note popup
   const [notePopupVisible, setNotePopupVisible] = useState(false);
   const [note, setNote] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // State for the mood tags
+  const [selectedMoodTags, setMoodTags] = useState<{[key: string]: string[]}>(
+    {},
+  );
+
+  /**
+   * Function to select a tag
+   * @param category <string> The category of the tag
+   * @param tag_id <string> The id of the tag
+   */
+  const selectTag = (category: string, tag_id: string) => {
+    setMoodTags(prev => ({
+      ...prev,
+      [category]: prev[category]
+        ? prev[category].includes(tag_id)
+          ? prev[category].filter((l: string) => l !== tag_id)
+          : [...prev[category], tag_id]
+        : [tag_id],
+    }));
+  };
+
+  /**
+   * Function to toggle the note popup
+   */
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  /**
+   * Function to change the note popup visibility
+   */
   const changeNotePopupVisibility = () => {
     setNotePopupVisible(!notePopupVisible);
   };
 
-  const saveMood = () => {
+  /**
+   * Function to save the mood
+   */
+  const saveMood = async () => {
+    const moodId = uuidv4();
     createNewMood({
+      mood_id: moodId,
       value: mood.value,
-      callback: () => navigation.navigate('WellnessTracking'),
+      callback: () => saveMoodTagLinks(moodId),
       note: note !== '' ? note : undefined,
       label: mood.label as MoodValue,
+    });
+  };
+
+  /**
+   * Function to save the mood tag links
+   * @param mood_id <string> The id of the mood
+   */
+  const saveMoodTagLinks = (mood_id: string) => {
+    createNewMoodTagLink({
+      mood_id: mood_id,
+      mood_tag_ids: Object.values(selectedMoodTags).flat(),
+      callback: () => navigation.navigate('WellnessTracking'),
     });
   };
 
@@ -108,12 +155,14 @@ const MoodTagScreen: React.FC<any> = ({
           {
             // For group in MoodTagGroups
             // add a TagSelector
-            Object.entries(moodTagGroups).map(([category, tags]) => (
+            Object.entries(moodTags).map(([category, tags]) => (
               <TagSelector
                 tags={tags}
                 tagSelectorLabel={transformsInternalNameToDisplay(category)}
                 style={styles.tagSelectors}
                 key={category}
+                selectedTags={selectedMoodTags[category] || []}
+                onTagSelect={(tag_id: string) => selectTag(category, tag_id)}
               />
             ))
           }

@@ -2,7 +2,6 @@
 import {HttpClient} from '@services/api/swagger/http-client';
 
 // Api Classes
-import {UserDeviceLink} from '@services/api/swagger/UserDeviceLink';
 import {BodyStat} from '@services/api/swagger/BodyStat';
 import {Device} from '@services/api/swagger/Device';
 import {User} from '@services/api/swagger/User';
@@ -35,7 +34,6 @@ const api = new HttpClient({
 
 // Apis
 export const UserApi = new User(api);
-export const UserDeviceLinkApi = new UserDeviceLink(api);
 export const BodyStatApi = new BodyStat(api);
 export const DeviceApi = new Device(api);
 export const SyncErrorDumpApi = new SyncErrorDump(api);
