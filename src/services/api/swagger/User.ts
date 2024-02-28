@@ -12,7 +12,6 @@
 import {
   QuerySchema,
   UserCreateSchema,
-  UserGetSchema,
   UserUpdateSchema,
 } from './data-contracts';
 import {ContentType, HttpClient, RequestParams} from './http-client';
@@ -91,25 +90,6 @@ export class User<SecurityDataType = unknown> {
       path: `/user/delete/{string${userId}}`,
       method: 'DELETE',
       secure: true,
-      ...params,
-    });
-  /**
-   * @description Get user details.
-   *
-   * @tags Users
-   * @name DetailsList
-   * @summary Get User.
-   * @request GET:/user/details
-   * @secure
-   * @response `200` `UserGetSchema` User details retrieved
-   * @response `500` `void` User not authenticated
-   */
-  detailsList = (params: RequestParams = {}) =>
-    this.http.request<UserGetSchema, void>({
-      path: `/user/details`,
-      method: 'GET',
-      secure: true,
-      format: 'json',
       ...params,
     });
   /**
