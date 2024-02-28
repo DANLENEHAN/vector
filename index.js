@@ -62,7 +62,7 @@ PushNotification.configure({
    * - if you are not using remote notification or do not have Firebase installed, use this:
    *     requestPermissions: Platform.OS === 'ios'
    */
-  requestPermissions: false,
+  requestPermissions: true,
 });
 
 AppRegistry.registerComponent(appName, () => App);
