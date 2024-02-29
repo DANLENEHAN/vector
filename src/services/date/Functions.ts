@@ -1,19 +1,25 @@
-import momentTz from 'moment-timezone';
+import moment from 'moment-timezone';
 import {getTimeZone} from 'react-native-localize';
 
 import {TimestampTimezone, DayBounds} from '@services/date/Type';
 import {DateFormat, TimestampFormat} from '@shared/Enums';
 
-export const timezoneTimestampNow = (
-  timezone: string = 'UTC',
-): momentTz.Moment => {
-  return momentTz.tz(timezone);
+export const utcTimestampNow = (): moment.Moment => {
+  return moment.utc();
+};
+
+export const deviceTimezoneNow = (): moment.Moment => {
+  return moment.tz(getTimeZone());
+};
+
+export const timezoneTimestampNow = (timezone: string): moment.Moment => {
+  return moment.tz(timezone);
 };
 
 export const getUtcNowAndDeviceTimezone = (): TimestampTimezone => {
   return {
     timestamp: momentToDateStr(
-      timezoneTimestampNow(),
+      utcTimestampNow(),
       TimestampFormat.YYYYMMDDHHMMssSSS,
     ),
     timezone: getTimeZone(),
@@ -21,7 +27,7 @@ export const getUtcNowAndDeviceTimezone = (): TimestampTimezone => {
 };
 
 export const momentToDateStr = (
-  timestamp: momentTz.Moment,
+  timestamp: moment.Moment,
   format: TimestampFormat | DateFormat,
 ): string => {
   const formattedDate = timestamp.format(format);
@@ -31,20 +37,20 @@ export const momentToDateStr = (
 export const dateStrToMoment = (
   dateStr: string,
   format: TimestampFormat | DateFormat,
-): momentTz.Moment => {
-  return momentTz(dateStr, format);
+): moment.Moment => {
+  return moment(dateStr, format);
 };
 
 export const fromDateTzToDateTz = (
-  fromDate: momentTz.Moment,
+  fromDate: moment.Moment,
   fromTz: string,
   toTz: string,
 ) => {
-  const adjustedFromDate = momentTz.tz(fromDate, fromTz);
+  const adjustedFromDate = moment.tz(fromDate, fromTz);
   return adjustedFromDate.tz(toTz);
 };
 
-export const getDayBoundsOfDate = (date: momentTz.Moment): DayBounds => {
+export const getDayBoundsOfDate = (date: moment.Moment): DayBounds => {
   const startOfDay = date.clone().startOf('day');
   const endOfDay = date.clone().endOf('day');
   return {startOfDay, endOfDay};

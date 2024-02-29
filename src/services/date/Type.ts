@@ -1,4 +1,4 @@
-import momentTz from 'moment-timezone';
+import moment from 'moment-timezone';
 
 export interface TimestampTimezone {
   timestamp: string;
@@ -6,6 +6,6 @@ export interface TimestampTimezone {
 }
 
 export interface DayBounds {
-  startOfDay: momentTz.Moment;
-  endOfDay: momentTz.Moment;
+  startOfDay: moment.Moment;
+  endOfDay: moment.Moment;
 }
