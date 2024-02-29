@@ -300,6 +300,7 @@ export interface ClientSessionEventCreateSchema {
  * session event types.
  */
 export enum ClientSessionEventType {
+  CreateAccount = 'create_account',
   LoggedIn = 'logged_in',
   Logout = 'logout',
   AppOpen = 'app_open',

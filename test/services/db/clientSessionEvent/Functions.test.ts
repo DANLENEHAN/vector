@@ -21,7 +21,7 @@ import {sampleDeviceRow, sampleUser, sampleUserId} from '../../../Objects';
 
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
-  getCurrentTimestampTimezone: jest.fn().mockReturnValue({
+  getUtcNowAndDeviceTimezone: jest.fn().mockReturnValue({
     timestamp: '2025-01-01T00:00:00.000',
     timezone: 'UTC',
   }),
@@ -84,7 +84,7 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
@@ -111,7 +111,7 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
@@ -135,7 +135,7 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
@@ -159,7 +159,7 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
 
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 

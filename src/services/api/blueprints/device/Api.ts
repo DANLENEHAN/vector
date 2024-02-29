@@ -4,7 +4,7 @@ import logger from '@utils/Logger';
 import DeviceInfo from 'react-native-device-info';
 import {v4 as uuid4} from 'uuid';
 import messaging from '@react-native-firebase/messaging';
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 // Services
 import {DeviceApi} from '@services/api/ApiService';
 // Types
@@ -44,7 +44,7 @@ export const createDevice = async (
   const model: string = DeviceInfo.getDeviceId(); // e.g. Iphone7,2
   const deviceFcm: string = await messaging().getToken();
 
-  const {timestamp, timezone} = getCurrentTimestampTimezone();
+  const {timestamp, timezone} = getUtcNowAndDeviceTimezone();
 
   try {
     const deviceRow: DeviceCreateSchema = {
@@ -60,7 +60,7 @@ export const createDevice = async (
     const response: AxiosResponse<void> = await DeviceApi.createCreate(
       deviceRow,
     );
-    if (response.status == 201) {
+    if (response.status === 201) {
       await insertDevice(deviceRow);
       return deviceRow;
     } else {

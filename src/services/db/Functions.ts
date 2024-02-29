@@ -1,6 +1,6 @@
 // Types
 import {RowData} from '@services/db/Types';
-import {timestampFields} from '@shared/Constants';
+import {syncDbTables, timestampFields} from '@shared/Constants';
 import {SqlQuery, ExecutionResult} from '@services/db/Types';
 // Functions
 import {executeSqlBatch} from '@services/db/SqlClient';
@@ -101,5 +101,49 @@ export const updateRows = async (
     logger.info(
       `None of the Update rows for Ttble '${tableName}' are more recent their existing data...skipping`,
     );
+  }
+};
+
+export const getRows = async <T>(
+  tableName: syncDbTables,
+  selectColumns?: Array<string>,
+  whereClause?: string,
+  orderByClause?: string,
+  limit?: number,
+): Promise<T[] | null> => {
+  try {
+    selectColumns = selectColumns || ['*'];
+    const columnsToSelect = selectColumns.join(', ');
+    let sqlStatement = `SELECT ${columnsToSelect} FROM ${tableName} ${
+      whereClause ? `WHERE ${whereClause} ` : ''
+    }`;
+
+    if (orderByClause) {
+      sqlStatement += `ORDER BY ${orderByClause} `; // Append the ORDER BY clause if provided
+    }
+
+    if (limit) {
+      sqlStatement += `LIMIT ${limit};`;
+    } else {
+      sqlStatement += ';';
+    }
+
+    const sqlResult: ExecutionResult[] = await executeSqlBatch([
+      {sqlStatement},
+    ]);
+
+    if (sqlResult[0].error) {
+      logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
+      return null;
+    }
+
+    const result = sqlResult[0].result;
+    if (!result || result.length === 0) {
+      return null;
+    }
+    return result as T[];
+  } catch (error) {
+    logger.warn('Error fetching data', {error});
+    return null;
   }
 };

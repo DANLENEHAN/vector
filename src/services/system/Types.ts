@@ -15,3 +15,10 @@ export interface SessionEventDeviceInfo {
   userAgent: string;
   version: string;
 }
+
+export enum AppEntryType {
+  LoginTokenOnline = 'LoginTokenOnline',
+  LoginTokenOffline = 'LoginTokenOffline',
+  LoginAuthed = 'LoginAuthenticated',
+  CreateAccAuthed = 'CreateAccAuthed',
+}

@@ -169,9 +169,9 @@ describe('User Functions Tests', () => {
 
     jest.spyOn(Apis, 'loginUser').mockResolvedValueOnce('fakeUuid');
     jest.spyOn(Apis, 'createUser').mockResolvedValueOnce();
-    // Spy on getCurrentTimestampTimezone
+    // Spy on getUtcNowAndDeviceTimezone
     jest
-      .spyOn(DateFunctions, 'getCurrentTimestampTimezone')
+      .spyOn(DateFunctions, 'getUtcNowAndDeviceTimezone')
       .mockReturnValueOnce(timestampTimezone);
     // Act
     await handleCreateAccount(params);
@@ -207,9 +207,9 @@ describe('User Functions Tests', () => {
     // Arrange
     const params = mockParams;
     jest.spyOn(Apis, 'createUser').mockResolvedValueOnce(validationError);
-    // Spy on getCurrentTimestampTimezone
+    // Spy on getUtcNowAndDeviceTimezone
     jest
-      .spyOn(DateFunctions, 'getCurrentTimestampTimezone')
+      .spyOn(DateFunctions, 'getUtcNowAndDeviceTimezone')
       .mockReturnValueOnce(timestampTimezone);
     // Act
     await handleCreateAccount(params);

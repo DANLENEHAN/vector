@@ -1,6 +1,6 @@
 // Functions
 import {getUser} from '@services/db/user/Functions';
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 
 // Types
@@ -47,8 +47,7 @@ export const createNewMood = async ({
   try {
     const user: UserCreateSchema | null = await getUser();
     if (user != null) {
-      const timestampTimezone: TimestampTimezone =
-        getCurrentTimestampTimezone();
+      const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
       const moodId = mood_id ? mood_id : uuid4();
       await insertMoods([
         {

@@ -1,63 +1,51 @@
-import moment from 'moment';
+import momentTz from 'moment-timezone';
 import {getTimeZone} from 'react-native-localize';
 
-import {TimestampTimezone} from '@services/date/Type';
-import {TimestampFormat} from '@shared/Enums';
+import {TimestampTimezone, DayBounds} from '@services/date/Type';
+import {DateFormat, TimestampFormat} from '@shared/Enums';
 
-/**
- * Generates the current UTC timestamp as a formatted date string.
- *
- * @returns {string} - A formatted date string representing the current UTC timestamp in the format 'YYYY-MM-DDTHH:mm:ss.SSS'.
- */
-export const utcTimestampNow = (): string => {
-  // Get the current timestamp in milliseconds
-  const millisecondsNow: number = new Date().getTime();
-
-  // Convert the current timestamp to a formatted date string
-  const timestampNow: string = formatDate(
-    millisecondsNow,
-    TimestampFormat.YYYYMMDDHHMMssSSS,
-  );
-
-  return timestampNow;
+export const timezoneTimestampNow = (
+  timezone: string = 'UTC',
+): momentTz.Moment => {
+  return momentTz.tz(timezone);
 };
 
-/**
- * Retrieves the current UTC timestamp and the timezone.
- *
- * @returns {TimestampTimezone} - An object containing the current UTC timestamp and the timezone.
- */
-export const getCurrentTimestampTimezone = (): TimestampTimezone => {
+export const getUtcNowAndDeviceTimezone = (): TimestampTimezone => {
   return {
-    timestamp: utcTimestampNow(),
+    timestamp: momentToDateStr(
+      timezoneTimestampNow(),
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    ),
     timezone: getTimeZone(),
   };
 };
 
-/**
- * Formats a timestamp into a UTC date string with a specified format.
- *
- * @param timestamp - The timestamp to be formatted. Can be a number (for Unix timestamp), a date string, or a Moment object.
- * @param format - The format of the output date string.
- * @returns A string representing the formatted date in UTC.
- */
-export const formatDate = (
-  timestamp: number | string | moment.Moment,
-  format: string,
+export const momentToDateStr = (
+  timestamp: momentTz.Moment,
+  format: TimestampFormat | DateFormat,
 ): string => {
-  const date = moment.utc(timestamp);
-  const formattedDate = date.format(format);
+  const formattedDate = timestamp.format(format);
   return formattedDate;
 };
 
-/**
- * Parses a formatted date string into a Unix timestamp (number of milliseconds since the Unix Epoch).
- *
- * @param formattedDate - The date string to parse.
- * @param format - The format of the input date string.
- * @returns The Unix timestamp corresponding to the given date string.
- */
-export const parseDate = (formattedDate: string, format: string): number => {
-  const parsedDate = moment.utc(formattedDate, format);
-  return parsedDate.valueOf();
+export const dateStrToMoment = (
+  dateStr: string,
+  format: TimestampFormat | DateFormat,
+): momentTz.Moment => {
+  return momentTz(dateStr, format);
+};
+
+export const fromDateTzToDateTz = (
+  fromDate: momentTz.Moment,
+  fromTz: string,
+  toTz: string,
+) => {
+  const adjustedFromDate = momentTz.tz(fromDate, fromTz);
+  return adjustedFromDate.tz(toTz);
+};
+
+export const getDayBoundsOfDate = (date: momentTz.Moment): DayBounds => {
+  const startOfDay = date.clone().startOf('day');
+  const endOfDay = date.clone().endOf('day');
+  return {startOfDay, endOfDay};
 };

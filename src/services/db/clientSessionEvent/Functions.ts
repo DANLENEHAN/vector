@@ -9,7 +9,7 @@ import {
 import {syncDbTables} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 // Functions
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {insertRows} from '@services/db/Functions';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuid4} from 'uuid';
@@ -31,7 +31,7 @@ export const insertClientSessionEvent = async (
   eventType: ClientSessionEventType,
 ): Promise<void> => {
   const sessionEventDeviceInfo = await getDeviceInfo();
-  const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+  const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
 
   let userId = null;
   try {
