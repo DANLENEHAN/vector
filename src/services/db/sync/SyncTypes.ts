@@ -5,6 +5,7 @@ import {
   SyncCreateSchemas,
   SyncUpdateSchemas,
   LastSyncedTimestamps,
+  GetsFunction,
 } from '@services/db/sync/Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
@@ -39,7 +40,7 @@ import logger from '@utils/Logger';
  */
 export const processSyncTypePull = async (
   tableName: syncDbTables,
-  syncFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
+  getFunction: GetsFunction,
   syncOperation: SyncOperation,
   syncStart: string,
 ): Promise<void> => {
@@ -56,7 +57,7 @@ export const processSyncTypePull = async (
   );
 
   try {
-    const response = await syncFunctions[SyncType.Pull](tableQuerySchema);
+    const response = await getFunction(tableQuerySchema);
     // Process synchronization based on the Sync operation type
     const rowsToSync = response.data || [];
 

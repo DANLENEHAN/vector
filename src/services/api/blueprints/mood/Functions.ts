@@ -1,7 +1,7 @@
 // Functions
-import {getUserDetails} from '@services/asyncStorage/Functions';
+import {getUser} from '@services/db/user/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 import {getMoods} from '@services/db/mood/Functions';
 import {generateGraphData} from '@services/timeSeries/Functions';
 
@@ -12,6 +12,7 @@ import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {syncDbTables} from '@shared/Constants';
+import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 
 // Logger
 import logger from '@utils/Logger';
@@ -49,21 +50,26 @@ export const createNewMood = async ({
   note,
 }: CreateNewMoodParams): Promise<void> => {
   try {
-    const user_id = await getUserDetails('user_id');
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
-    const moodId = mood_id ? mood_id : uuidv4();
-    await insertMoods([
-      {
-        mood_id: moodId,
-        user_id: user_id,
-        value: value,
-        label: label,
-        note: note,
-        [timestampFields.createdAt]: timestampTimezone.timestamp,
-        [timestampFields.timezone]: timestampTimezone.timezone,
-      },
-    ]);
-    callback();
+    const user: UserCreateSchema | null = await getUser();
+    if (user != null) {
+      const timestampTimezone: TimestampTimezone =
+        getCurrentTimestampTimezone();
+      const moodId = mood_id ? mood_id : uuid4();
+      await insertMoods([
+        {
+          mood_id: moodId,
+          user_id: user.user_id,
+          value: value,
+          label: label,
+          note: note,
+          [timestampFields.createdAt]: timestampTimezone.timestamp,
+          [timestampFields.timezone]: timestampTimezone.timezone,
+        },
+      ]);
+      callback();
+    } else {
+      logger.warn('Unable to retreive user will not insert mood get stats.');
+    }
   } catch (error) {
     logger.error(`Error: ${error}`);
   }
@@ -72,18 +78,22 @@ export const createNewMood = async ({
 /**
  * Function to get the mood data.
  * @returns {Promise<graphPeriodData>} A promise that resolves to an object containing the mood data.
+ * @throws {Error} Throws an error if there's a problem executing the SQL queries.
  */
 export const getMoodData = async (): Promise<graphPeriodData> => {
-  const user_id = await getUserDetails('user_id');
-  // Get all moods for the user that are not deleted
-
-  const moods = await getMoods({
-    columns: ['value', 'created_at'],
-    whereClause: `user_id = '${user_id}' AND deleted IS false`,
-  });
-  return generateGraphData({
-    table: syncDbTables.moodTable,
-    data: moods,
-    targetDate: moment.utc(),
-  });
+  const user: UserCreateSchema | null = await getUser();
+  if (user != null) {
+    // Get all moods for the user that are not deleted
+    const moods = await getMoods({
+      columns: ['value', 'created_at'],
+      whereClause: `user_id = '${user.user_id}' AND deleted IS false`,
+    });
+    return generateGraphData({
+      table: syncDbTables.moodTable,
+      data: moods,
+      targetDate: moment.utc(),
+    });
+  } else {
+    throw new Error('Unable to retreive user will not insert mood get stats.');
+  }
 };

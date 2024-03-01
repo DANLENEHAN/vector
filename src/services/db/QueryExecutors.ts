@@ -61,10 +61,10 @@ export const deleteDB = async (): Promise<void> => {
       return {sqlStatement: Object.values(item)[0]};
     });
     const deleteResults = await executeSqlBatch(deleteStatements);
-    for (const result of deleteResults) {
-      if (result.error) {
+    for (const delResult of deleteResults) {
+      if (delResult.error) {
         logger.warn(
-          `SQL '${result.originalQuery.sqlStatement} failed with error: ${result.error}`,
+          `SQL '${delResult.originalQuery.sqlStatement} failed with error: ${delResult.error}`,
         );
       }
     }

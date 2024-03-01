@@ -27,14 +27,25 @@ const getDocumentDirectoryPath = (): void => {
 };
 
 /**
- * @description Represents the SQLite database instance.
+ * Initializes and returns an instance of the SQLite database.
+ * This function opens the database using the specified database name. Upon successful connection,
+ * it prints the location of the devices documents.
  *
- * @type {SQLiteDatabase}
+ * @type {SQLiteDatabase} db - The SQLite Database instance. This instance allows for executing SQL
+ *                              queries, transactions, and interacting with the database.
+ *
+ * @param {Object} {name: dbName} - Configuration object for the database, where `dbName` is the name
+ *                                  of the database file to open or create if it does not exist.
+ * @param {Function} successCallback - A callback function prints the location of the Devices document
+ *                                     dir for devs to find the local db.
+ * @param {Function} errorCallback - A callback function that logs errors encountered during the
+ *                                   database opening process.
  */
 export const db: SQLiteDatabase = SQLite.openDatabase(
   {name: dbName},
   getDocumentDirectoryPath,
   (error: SQLError) => {
+    // Error callback: Log database opening error
     logger.error('Error opening database:', error);
   },
 );

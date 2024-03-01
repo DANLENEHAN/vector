@@ -4,11 +4,12 @@ import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEv
 // Components
 import AuthNavigator from '@navigation/Navigation';
 import {SystemProvider} from '@context/SystemContext';
-// NetInfo
+// Services
 import NetInfo from '@react-native-community/netinfo';
-import {apiBaseUrl} from '@services/api/ApiService';
+import PushNotification from 'react-native-push-notification';
 // Types
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
+import {apiBaseUrl} from '@services/api/ApiService';
 // Constants
 const config = require('./app.config.js');
 
@@ -25,8 +26,8 @@ NetInfo.configure({
 
 function App(): JSX.Element {
   useEffect(() => {
-    // Component Mounts
-    handleClientSessionEvent(ClientSessionEventType.AppOpen);
+    // Clears notifcation badge count on app open
+    PushNotification.setApplicationIconBadgeNumber(0);
     return () => {
       // Component Unmounts
       handleClientSessionEvent(ClientSessionEventType.AppClose);

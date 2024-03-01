@@ -1,14 +1,12 @@
 // Functions
-import * as AsyncStorageFunctions from '@services/asyncStorage/Functions';
 import * as Apis from '@services/api/ApiService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DeviceApiFunctions from '@services/api/blueprints/device/Api';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
 import DeviceInfo from 'react-native-device-info';
+import * as DeviceDbFunctions from '@services/db/device/Functions';
 
 // Types
 import {DeviceCreateSchema} from '@services/api/swagger/data-contracts';
-import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 import logger from '@utils/Logger';
 
 jest.mock('react-native-device-info', () => ({
@@ -32,15 +30,8 @@ describe('User Device Function Tests', () => {
   const fakeUserId = 'fakeUserId';
   const fakeUuid = 'fakeUuid';
   const fakeDeviceId = 'fakeDeviceId';
-  const mockedDeviceIdMap = {
-    internalDeviceId: fakeDeviceId,
-    deviceId: fakeUuid,
-  };
-  const mockedNullDeviceIdMap = {
-    internalDeviceId: null,
-    deviceId: null,
-  };
   const deviceRow: DeviceCreateSchema = {
+    user_id: fakeUserId,
     brand: 'mockedBrand',
     created_at: '2025-01-01T00:00:00.000',
     device_fcm: 'mockedFcmToken',
@@ -57,58 +48,90 @@ describe('User Device Function Tests', () => {
     },
   };
 
-  test('retrieveOrRegisterDeviceId have Device Info and return', async () => {
+  test('retrieveOrRegisterDeviceId getUniqueId empty string', async () => {
     // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedDeviceIdMap);
+    jest.spyOn(DeviceInfo, 'getUniqueId').mockResolvedValueOnce('');
 
     // Act
     const response = await retrieveOrRegisterDeviceId(fakeUserId);
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
-      fakeDeviceId,
-    );
-    expect(response).toEqual(mockedDeviceIdMap);
+    expect(response).toEqual(null);
+  });
+
+  test('retrieveOrRegisterDeviceId have Device Info and return', async () => {
+    // Arrange
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(deviceRow);
+
+    // Act
+    const response = await retrieveOrRegisterDeviceId(fakeUserId);
+
+    // Assert
+    expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
+    expect(response).toEqual(deviceRow);
   });
 
   test('retrieveOrRegisterDeviceId - postDevice returns data, ', async () => {
     // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
       .spyOn(Apis.DeviceApi, 'postDevice')
       .mockResolvedValue({status: 201, data: [deviceRow]} as any);
+
+    jest.spyOn(DeviceDbFunctions, 'insertDevice').mockResolvedValue();
 
     // Act
     const response = await retrieveOrRegisterDeviceId(fakeUserId);
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
       fakeDeviceId,
+      fakeUserId,
     );
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
 
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedDeviceIdMap),
-    );
-    expect(response).toEqual(mockedDeviceIdMap);
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.insertDevice).toHaveBeenCalledWith(deviceRow);
+    expect(response).toEqual(deviceRow);
   });
 
   test('retrieveOrRegisterDeviceId - postDevice no data, createDevice returns null', async () => {
     // Arrange
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
+      .spyOn(Apis.DeviceApi, 'postDevice')
+      .mockResolvedValue({status: 201, data: []} as any);
+    jest.spyOn(DeviceApiFunctions, 'createDevice').mockResolvedValue(deviceRow);
+
+    // Act
+    const response = await retrieveOrRegisterDeviceId(fakeUserId);
+
+    // Assert
+    expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
+      fakeDeviceId,
+      fakeUserId,
+    );
+    expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
+    expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
+
+    expect(DeviceApiFunctions.createDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceApiFunctions.createDevice).toHaveBeenCalledWith(
+      fakeUserId,
+      fakeDeviceId,
+    );
+
+    expect(response).toEqual(deviceRow);
+  });
+
+  test('retrieveOrRegisterDeviceId - postDevice no data, createDevice returns null', async () => {
+    // Arrange
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
       .spyOn(Apis.DeviceApi, 'postDevice')
       .mockResolvedValue({status: 201, data: []} as any);
@@ -119,10 +142,12 @@ describe('User Device Function Tests', () => {
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
       fakeDeviceId,
+      fakeUserId,
     );
+
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
 
@@ -131,58 +156,12 @@ describe('User Device Function Tests', () => {
       fakeUserId,
       fakeDeviceId,
     );
-
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedNullDeviceIdMap),
-    );
-    expect(response).toEqual(mockedNullDeviceIdMap);
-  });
-
-  test('retrieveOrRegisterDeviceId - postDevice no data, createDevice returns null', async () => {
-    // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
-    jest
-      .spyOn(Apis.DeviceApi, 'postDevice')
-      .mockResolvedValue({status: 201, data: []} as any);
-    jest
-      .spyOn(DeviceApiFunctions, 'createDevice')
-      .mockResolvedValue(mockedDeviceIdMap);
-
-    // Act
-    const response = await retrieveOrRegisterDeviceId(fakeUserId);
-
-    // Assert
-    expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
-      fakeDeviceId,
-    );
-    expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
-    expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
-
-    expect(DeviceApiFunctions.createDevice).toHaveBeenCalledTimes(1);
-    expect(DeviceApiFunctions.createDevice).toHaveBeenCalledWith(
-      fakeUserId,
-      fakeDeviceId,
-    );
-
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedDeviceIdMap),
-    );
-    expect(response).toEqual(mockedDeviceIdMap);
+    expect(response).toEqual(null);
   });
 
   test('retrieveOrRegisterDeviceId - postDevice invalid status code', async () => {
     // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
       .spyOn(Apis.DeviceApi, 'postDevice')
       .mockResolvedValue({status: 209, data: []} as any);
@@ -192,32 +171,24 @@ describe('User Device Function Tests', () => {
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
       fakeDeviceId,
+      fakeUserId,
     );
+
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
-
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedNullDeviceIdMap),
-    );
-
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(logger.warn).toHaveBeenCalledWith(
       `Unexpected status code for postDevice: 209`,
     );
-
-    expect(response).toEqual(mockedNullDeviceIdMap);
+    expect(response).toEqual(null);
   });
 
   test('retrieveOrRegisterDeviceId - postDevice throws error', async () => {
     // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
       .spyOn(Apis.DeviceApi, 'postDevice')
       .mockRejectedValue({message: 'Error!'});
@@ -227,32 +198,24 @@ describe('User Device Function Tests', () => {
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
       fakeDeviceId,
+      fakeUserId,
     );
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
-
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedNullDeviceIdMap),
-    );
-
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(logger.warn).toHaveBeenCalledWith(
       `Error in retrieveOrRegisterDeviceId: Error!`,
     );
 
-    expect(response).toEqual(mockedNullDeviceIdMap);
+    expect(response).toEqual(null);
   });
 
   test('retrieveOrRegisterDeviceId - postDevice no data, createDevice throws error', async () => {
     // Arrange
-    jest
-      .spyOn(AsyncStorageFunctions, 'getStoredDeviceIdMap')
-      .mockResolvedValue(mockedNullDeviceIdMap);
+    jest.spyOn(DeviceDbFunctions, 'getDevice').mockResolvedValue(null);
     jest
       .spyOn(Apis.DeviceApi, 'postDevice')
       .mockResolvedValue({status: 201, data: []} as any);
@@ -265,9 +228,10 @@ describe('User Device Function Tests', () => {
 
     // Assert
     expect(DeviceInfo.getUniqueId).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledTimes(1);
-    expect(AsyncStorageFunctions.getStoredDeviceIdMap).toHaveBeenCalledWith(
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledTimes(1);
+    expect(DeviceDbFunctions.getDevice).toHaveBeenCalledWith(
       fakeDeviceId,
+      fakeUserId,
     );
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledTimes(1);
     expect(Apis.DeviceApi.postDevice).toHaveBeenCalledWith(queryFilters);
@@ -277,21 +241,10 @@ describe('User Device Function Tests', () => {
       fakeUserId,
       fakeDeviceId,
     );
-
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      AsyncStorageKeys.DeviceId,
-      JSON.stringify(mockedNullDeviceIdMap),
-    );
-
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(logger.warn).toHaveBeenCalledWith(
       `Error in retrieveOrRegisterDeviceId: Error!`,
     );
-
-    expect(response).toEqual(mockedNullDeviceIdMap);
+    expect(response).toEqual(null);
   });
-
-  // a throw for either createDevice or postDevice
-  // test log
 });

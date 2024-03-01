@@ -1,19 +1,20 @@
 // Mocked Functions
 import {insertBodyStat} from '@services/db/bodyStat/Functions';
 import * as statApiFunctions from '@services/api/blueprints/bodyStat/Api';
-import * as asyncStorageFunctions from '@services/asyncStorage/Functions';
 import logger from '@utils/Logger';
 // Test Functions
 import {
   createNewBodyStat,
   getUserStats,
 } from '@services/api/blueprints/bodyStat/Functions';
+import * as UserFunctions from '@services/db/user/Functions';
 // Data
-import {sampleStat, mockNavigation} from '../../../../Objects';
+import {sampleStat, mockNavigation, sampleUser} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
+import {QuerySchema} from '@services/api/swagger/data-contracts';
 
 jest.mock('uuid', () => ({
-  v4: jest.fn().mockReturnValue('67f6127d-13cc-4c27-b91f-2b1f83c48eeb'),
+  v4: jest.fn().mockReturnValue('mockedUuid'),
 }));
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
@@ -32,6 +33,18 @@ describe('Body BodyStat Functions Tests', () => {
     jest.clearAllMocks();
   });
 
+  const queryObject: QuerySchema = {
+    filters: {
+      stat_type: {
+        eq: sampleStat.stat_type,
+      },
+      user_id: {
+        eq: sampleUser.user_id,
+      },
+    },
+    sort: ['created_at:desc'],
+  };
+
   test('createNewBodyStat', async () => {
     // Arrange
     const params = {
@@ -40,7 +53,7 @@ describe('Body BodyStat Functions Tests', () => {
       statType: sampleStat.stat_type,
       onSuccessfulCreate: mockNavigation.goBack,
     };
-    jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
+    jest.spyOn(UserFunctions, 'getUser').mockResolvedValue(sampleUser);
 
     // Act
     await createNewBodyStat(params);
@@ -49,10 +62,10 @@ describe('Body BodyStat Functions Tests', () => {
     expect(insertBodyStat).toHaveBeenCalledTimes(1);
     expect(insertBodyStat).toHaveBeenCalledWith([
       {
-        body_stat_id: '67f6127d-13cc-4c27-b91f-2b1f83c48eeb',
+        body_stat_id: 'mockedUuid',
         unit: params.unitValue,
         stat_type: params.statType,
-        user_id: 1,
+        user_id: sampleUser.user_id,
         value: params.value,
         created_at: sampleStat.created_at,
         timezone: sampleStat.timezone,
@@ -66,26 +79,49 @@ describe('Body BodyStat Functions Tests', () => {
     const params = {
       value: sampleStat.value,
       navigation: mockNavigation,
-      bodyStatType: sampleStat.stat_type,
+      statType: sampleStat.stat_type,
       unitValue: sampleStat.unit,
+      onSuccessfulCreate: mockNavigation.goBack,
     };
-    jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
+    jest.spyOn(UserFunctions, 'getUser').mockRejectedValue(null);
     // Act
     await createNewBodyStat(params);
 
     // Assert
     expect(insertBodyStat).toHaveBeenCalledTimes(0);
-    expect(logger.error).toHaveBeenCalledWith('Error: ');
+    expect(logger.error).toHaveBeenCalledWith('Error: null');
+  });
+
+  test('createNewBodyStat getUser returns null', async () => {
+    // Arrange
+    const params = {
+      value: sampleStat.value,
+      navigation: mockNavigation,
+      statType: sampleStat.stat_type,
+      unitValue: sampleStat.unit,
+      onSuccessfulCreate: mockNavigation.goBack,
+    };
+    jest.spyOn(UserFunctions, 'getUser').mockResolvedValue(null);
+    // Act
+    await createNewBodyStat(params);
+
+    // Assert
+    expect(insertBodyStat).toHaveBeenCalledTimes(0);
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Unable to retrieve user will not insert body stat.',
+    );
   });
 
   test('getUserStats', async () => {
     // Arrange
-    jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
+    jest.spyOn(UserFunctions, 'getUser').mockResolvedValue(sampleUser);
     jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue([sampleStat]);
     const bodyStatType = sampleStat.stat_type;
     // Act
     const result = await getUserStats({bodyStatType: bodyStatType});
     // Assert
+    expect(statApiFunctions.getStats).toHaveBeenCalledTimes(1);
+    expect(statApiFunctions.getStats).toHaveBeenCalledWith(queryObject);
     expect(result).toEqual([sampleStat]);
   });
 
@@ -93,24 +129,27 @@ describe('Body BodyStat Functions Tests', () => {
     // Arrange
     const validationMessage = 'test';
     const validationError = new SwaggerValidationError(validationMessage);
-    jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockResolvedValue(1);
+    jest.spyOn(UserFunctions, 'getUser').mockResolvedValue(sampleUser);
     jest.spyOn(statApiFunctions, 'getStats').mockResolvedValue(validationError);
     const bodyStatType = sampleStat.stat_type;
     // Act
-    await getUserStats({bodyStatType: bodyStatType});
+    const response = await getUserStats({bodyStatType: bodyStatType});
     // Assert
+    expect(statApiFunctions.getStats).toHaveBeenCalledTimes(1);
+    expect(statApiFunctions.getStats).toHaveBeenCalledWith(queryObject);
     expect(logger.error).toHaveBeenCalledWith(`Error: ${validationMessage}`);
+    expect(response).toEqual(undefined);
   });
 
   test('getUserStats with error', async () => {
     // Arrange
     // Cause an error by rejecting the promise
-    jest.spyOn(asyncStorageFunctions, 'getUserDetails').mockRejectedValue('');
+    jest.spyOn(UserFunctions, 'getUser').mockRejectedValue(null);
     const bodyStatType = sampleStat.stat_type;
     // Act
-    const result = await getUserStats({bodyStatType: bodyStatType});
+    const response = await getUserStats({bodyStatType: bodyStatType});
     // Assert
-    expect(logger.error).toHaveBeenCalledWith('Error: ');
-    expect(result).toEqual(undefined);
+    expect(logger.error).toHaveBeenCalledWith('Error: null');
+    expect(response).toEqual(undefined);
   });
 });

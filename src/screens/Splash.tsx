@@ -19,10 +19,12 @@ import {
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
+import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 // Functions
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
+import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 
 /**
  * Splash screen that checks if the user is logged in or not
@@ -51,7 +53,8 @@ const Splash: React.FC<ScreenProps> = ({
       if (isConnected === true) {
         const response = await testAuthentication();
         if (response === undefined) {
-          runSyncProcess();
+          await runSyncProcess();
+          await handleClientSessionEvent(ClientSessionEventType.AppOpen);
           navigation.navigate('App', {screen: 'Home'});
         } else {
           logger.info(

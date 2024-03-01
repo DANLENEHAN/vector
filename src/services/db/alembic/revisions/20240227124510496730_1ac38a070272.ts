@@ -1,6 +1,6 @@
-export const revisionID = 'c5c5086c17d2';
+export const revisionID = '1ac38a070272';
 
-export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
+export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL,
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -10,19 +10,6 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    muscle_group VARCHAR(100) NOT NULL,
 	    specific_muscle VARCHAR(100) NOT NULL,
 	    PRIMARY KEY (bodypart_id)
-	);`,
-  `CREATE TABLE device (
-	    device_id VARCHAR(36) NOT NULL,
-	    device_internal_id VARCHAR(200) NOT NULL,
-	    brand VARCHAR(50),
-	    model VARCHAR(100),
-	    device_fcm VARCHAR(500),
-	    created_at TIMESTAMP NOT NULL,
-	    updated_at TIMESTAMP,
-	    timezone VARCHAR(100) NOT NULL,
-	    deleted BOOLEAN DEFAULT false NOT NULL,
-	    PRIMARY KEY (device_id),
-	    UNIQUE (device_internal_id)
 	);`,
   `CREATE TABLE sync_error_dump (
 	    id INTEGER NOT NULL,
@@ -45,7 +32,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    PRIMARY KEY (sync_progress_id),
 	    CONSTRAINT uq_table_sync_type_sync_operation UNIQUE (table_name, sync_type, sync_operation)
 	);`,
-  `CREATE TABLE user_account (
+  `CREATE TABLE "user" (
 	    user_id VARCHAR(36) NOT NULL,
 	    username VARCHAR(100) NOT NULL,
 	    email VARCHAR(50) NOT NULL,
@@ -63,7 +50,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    height_unit_pref VARCHAR(25) NOT NULL,
 	    weight_unit_pref VARCHAR(25) NOT NULL,
 	    date_format_pref VARCHAR(25) NOT NULL,
-	    language VARCHAR(25),
+	    language VARCHAR(25) NOT NULL,
 	    goal VARCHAR(50) NOT NULL,
 	    superuser BOOLEAN NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
@@ -85,24 +72,23 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (body_stat_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
-  `CREATE TABLE client_session_event (
-	    client_session_event_id VARCHAR(36) NOT NULL,
-	    client_type VARCHAR(50) NOT NULL,
-	    event_type VARCHAR(100) NOT NULL,
-	    system_version VARCHAR(50),
-	    user_agent VARCHAR(500),
-	    application_version VARCHAR(50),
-	    user_id VARCHAR(36) NOT NULL,
+  `CREATE TABLE device (
 	    device_id VARCHAR(36) NOT NULL,
+	    device_internal_id VARCHAR(200) NOT NULL,
+	    brand VARCHAR(50),
+	    model VARCHAR(100),
+	    device_fcm VARCHAR(500),
+	    user_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
-	    PRIMARY KEY (client_session_event_id),
-	    FOREIGN KEY(device_id) REFERENCES device (device_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    PRIMARY KEY (device_id),
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id),
+	    UNIQUE (device_internal_id),
+	    CONSTRAINT uq_device_user UNIQUE (device_internal_id, user_id)
 	);`,
   `CREATE TABLE equipment (
 	    equipment_id VARCHAR(36) NOT NULL,
@@ -121,7 +107,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (equipment_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE exercise (
 	    exercise_id VARCHAR(36) NOT NULL,
@@ -138,7 +124,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (exercise_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE mood (
 	    mood_id VARCHAR(36) NOT NULL,
@@ -151,7 +137,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (mood_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE mood_tag (
 	    mood_tag_id VARCHAR(36) NOT NULL,
@@ -164,7 +150,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (mood_tag_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE nutrition (
 	    nutrition_id VARCHAR(36) NOT NULL,
@@ -177,7 +163,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (nutrition_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE plan (
 	    plan_id VARCHAR(36) NOT NULL,
@@ -192,19 +178,24 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (plan_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id)
+	    FOREIGN KEY(created_by) REFERENCES "user" (user_id)
 	);`,
-  `CREATE TABLE user_device_link (
-	    user_device_link_id VARCHAR(36) NOT NULL,
+  `CREATE TABLE client_session_event (
+	    client_session_event_id VARCHAR(36) NOT NULL,
+	    client_type VARCHAR(50) NOT NULL,
+	    event_type VARCHAR(100) NOT NULL,
+	    system_version VARCHAR(50),
+	    user_agent VARCHAR(500),
+	    application_version VARCHAR(50),
 	    user_id VARCHAR(36) NOT NULL,
 	    device_id VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
-	    PRIMARY KEY (user_device_link_id),
+	    PRIMARY KEY (client_session_event_id),
 	    FOREIGN KEY(device_id) REFERENCES device (device_id),
-	    FOREIGN KEY(user_id) REFERENCES user_account (user_id)
+	    FOREIGN KEY(user_id) REFERENCES "user" (user_id)
 	);`,
   `CREATE TABLE exercise_bodypart (
 	    exercise_bodypart_id VARCHAR(36) NOT NULL,
@@ -273,7 +264,7 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    timezone VARCHAR(100) NOT NULL,
 	    deleted BOOLEAN DEFAULT false NOT NULL,
 	    PRIMARY KEY (workout_id),
-	    FOREIGN KEY(created_by) REFERENCES user_account (user_id),
+	    FOREIGN KEY(created_by) REFERENCES "user" (user_id),
 	    FOREIGN KEY(plan_component_id) REFERENCES plan_component (plan_component_id)
 	);`,
   `CREATE TABLE workout_component (
@@ -336,5 +327,5 @@ export const sqlCommands_20240226110632992965_c5c5086c17d2: string[] = [
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id),
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('c5c5086c17d2');",
+  "INSERT INTO alembic_version (version_num) VALUES ('1ac38a070272');",
 ];
