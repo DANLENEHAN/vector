@@ -1,149 +1,151 @@
-// Types
-import {RowData} from '@services/db/Types';
-import {syncDbTables, timestampFields} from '@shared/Constants';
-import {SqlQuery, ExecutionResult} from '@services/db/Types';
-// Functions
-import {executeSqlBatch} from '@services/db/SqlClient';
-import {getTimestampForRow} from '@services/db/QueryExecutors';
-import 'react-native-get-random-values';
-// Logger
-import logger from '@utils/Logger';
+import moment, {isMoment} from 'moment-timezone';
+import {QueryOperators} from '@services/db/Types';
+import {OperatorMap, StringOperatorMap} from '@services/db/Constants';
+import {
+  BaseOperators,
+  BooleanOperators,
+  StringOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
+import {isInEnum} from '@shared/Functions';
+import {timestampColumns, AndOrOperatos} from '@shared/Constants';
+import {
+  momentToDateStr,
+  fromDateTzToDateTz,
+  deviceTimezone,
+} from '@services/date/Functions';
+import {TimestampFormat} from '@shared/Enums';
 
-export const insertRows = async (
-  tableName: string,
-  data: RowData[],
-): Promise<void> => {
-  if (data.length === 0) {
-    throw Error('No data to insert.');
-  }
+const getQueryCondition = (
+  columnName: string,
+  columnValue: moment.Moment | number | string | Array<number | string>,
+  operator: QueryOperators,
+): string => {
+  let transformedColumnName: string = columnName;
+  let transformedColumnValue:
+    | moment.Moment
+    | number
+    | string
+    | Array<number | string> = columnValue;
 
-  const schema = Object.keys(data[0]);
-  const columns = schema.join(', ');
-  const results = await executeSqlBatch(
-    data.map(row => ({
-      sqlStatement: `INSERT INTO ${tableName} (${columns}) VALUES (${schema
-        .map(() => '?')
-        .join(', ')});`,
-      params: Object.values(row),
-    })),
-  );
-
-  results.forEach((result, index) => {
-    if (result.error) {
-      logger.error(
-        `Error during insertion of row ${index + 1}: ${result.error}`,
-      );
-    } else {
-      logger.info(`Successfully inserted row ${index + 1} in '${tableName}'.`);
+  // Handling Timestamp Columns
+  if (isInEnum(timestampColumns, columnName)) {
+    if (
+      !isInEnum(BaseOperators, operator) &&
+      !isInEnum(NumericOperators, operator)
+    ) {
+      throw Error('operator for timestamp columm incorrect');
     }
-  });
-};
-
-export const updateRows = async (
-  tableName: string,
-  data: RowData[],
-): Promise<void> => {
-  if (data.length === 0) {
-    throw Error('No data to insert.');
+    if (isMoment(columnValue)) {
+      transformedColumnName = `datetime(${columnName})`;
+      transformedColumnValue = `'${momentToDateStr(
+        fromDateTzToDateTz(columnValue, deviceTimezone(), 'UTC'),
+        TimestampFormat.YYYYMMDDHHMMss,
+      )}'`;
+      return `${transformedColumnName} ${
+        OperatorMap[operator as BaseOperators | NumericOperators]
+      } ${transformedColumnValue}`;
+    } else {
+      throw Error('Date value must be a single moment.Moment');
+    }
   }
 
-  let replaceCount = 0;
-  const schema = Object.keys(data[0]);
-
-  const columns = schema.join(', ');
-  const placeholders = `${Object.keys(schema)
-    .map(() => '?')
-    .join(', ')}`;
-
-  const rowIdColumn = `${tableName}_id`;
-  const currentTimestamps: any = {};
-  for (const obj of data) {
-    currentTimestamps[obj[rowIdColumn]] = await getTimestampForRow(
-      tableName,
-      timestampFields.updatedAt,
-      obj[rowIdColumn],
-    );
-  }
-
-  const filteredData = data.filter(newRowObject => {
-    const rowId = newRowObject[rowIdColumn];
-    const currentRowTimestamp = currentTimestamps[rowId];
-    return (
-      currentRowTimestamp === null ||
-      newRowObject[timestampFields.updatedAt] > currentRowTimestamp
-    );
-  });
-
-  if (filteredData.length > 0) {
-    const queries: SqlQuery[] = filteredData.map(newRowObject => ({
-      sqlStatement: `REPLACE INTO ${tableName} (${columns}) VALUES (${placeholders});`,
-      params: Object.values(newRowObject),
-    }));
-
-    const results: ExecutionResult[] = await executeSqlBatch(queries);
-
-    results.forEach(result => {
-      if (result.error) {
-        logger.error(`Error updating rows: ${result.error}`);
-      } else {
-        replaceCount++;
-      }
-    });
-
-    logger.info(
-      `Successfully replaced ${replaceCount} row${
-        replaceCount !== 1 ? 's' : ''
-      } in '${tableName}' out of the ${
-        filteredData.length
-      } pulled in the sync.`,
-    );
-  } else {
-    logger.info(
-      `None of the Update rows for Ttble '${tableName}' are more recent their existing data...skipping`,
-    );
-  }
-};
-
-export const getRows = async <T>(
-  tableName: syncDbTables,
-  selectColumns?: Array<string>,
-  whereClause?: string,
-  orderByClause?: string,
-  limit?: number,
-): Promise<T[] | null> => {
-  try {
-    selectColumns = selectColumns || ['*'];
-    const columnsToSelect = selectColumns.join(', ');
-    let sqlStatement = `SELECT ${columnsToSelect} FROM ${tableName} ${
-      whereClause ? `WHERE ${whereClause} ` : ''
+  // Handling Boolean and Null checks
+  else if (
+    isInEnum(BooleanOperators, operator) ||
+    operator === BaseOperators.Isnull ||
+    operator === BaseOperators.Notnull
+  ) {
+    if (columnValue !== null) {
+      throw Error('Boolean and Null checks cannot include a non null value');
+    }
+    return `${columnName} ${
+      OperatorMap[operator as BooleanOperators | BaseOperators]
     }`;
-
-    if (orderByClause) {
-      sqlStatement += `ORDER BY ${orderByClause} `; // Append the ORDER BY clause if provided
-    }
-
-    if (limit) {
-      sqlStatement += `LIMIT ${limit};`;
-    } else {
-      sqlStatement += ';';
-    }
-
-    const sqlResult: ExecutionResult[] = await executeSqlBatch([
-      {sqlStatement},
-    ]);
-
-    if (sqlResult[0].error) {
-      logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
-      return null;
-    }
-
-    const result = sqlResult[0].result;
-    if (!result || result.length === 0) {
-      return null;
-    }
-    return result as T[];
-  } catch (error) {
-    logger.warn('Error fetching data', {error});
-    return null;
   }
+
+  // Handling Number Values
+  else if (typeof columnValue === 'number') {
+    if (
+      !isInEnum(BaseOperators, operator) &&
+      !isInEnum(NumericOperators, operator)
+    ) {
+      throw Error('operator for number value incorrect');
+    }
+    return `${columnName} ${
+      OperatorMap[operator as BaseOperators | NumericOperators]
+    } ${columnValue}`;
+  }
+
+  // Handling String Values
+  else if (typeof columnValue === 'string') {
+    if (
+      !isInEnum(BaseOperators, operator) &&
+      !isInEnum(NumericOperators, operator) &&
+      !isInEnum(StringOperators, operator)
+    ) {
+      throw Error('operator for string value incorrect');
+    } else if (isInEnum(StringOperators, operator)) {
+      return `${columnName} ${StringOperatorMap[operator as StringOperators](
+        columnValue,
+      )}`;
+    } else {
+      return `${columnName} ${
+        OperatorMap[operator as BaseOperators | NumericOperators]
+      } '${columnValue}'`;
+    }
+  }
+
+  // Handling Array Values
+  else if (Array.isArray(columnValue)) {
+    if (operator !== BaseOperators.NotIn && operator !== BaseOperators.In) {
+      throw Error('operator for array value incorrect');
+    } else {
+      const transformedArray: string = columnValue
+        .map(item => {
+          if (typeof item === 'string') {
+            return `'${item}'`;
+          } else {
+            return item;
+          }
+        })
+        .join(', ');
+      transformedColumnValue = `(${transformedArray})`;
+      return `${columnName} ${OperatorMap[operator]} ${transformedColumnValue}`;
+    }
+  } else {
+    throw Error('Incorrect query');
+  }
+};
+
+export const buildWhereClause = (obj: object) => {
+  const conditions: any = [];
+  for (const key in obj) {
+    // If the key is a booleanOperator we must recursively call the function
+    // and join the result on this booleanOperator key
+    if (isInEnum(AndOrOperatos, key)) {
+      const nestedCondition = buildWhereClause((obj as any)[key]).join(
+        ` ${key} `,
+      );
+      conditions.push(`(${nestedCondition})`);
+    } else {
+      // If key is not a booleanOperator It's a column so gather the conditionals
+      for (const [operator, value] of Object.entries((obj as any)[key])) {
+        if (
+          isInEnum(BaseOperators, operator) ||
+          isInEnum(BooleanOperators, operator) ||
+          isInEnum(StringOperators, operator) ||
+          isInEnum(NumericOperators, operator)
+        ) {
+          console.log(key, value, operator);
+          conditions.push(
+            getQueryCondition(key, value as any, operator as QueryOperators),
+          );
+        } else {
+          console.error('Invalid Query Structure.', operator);
+        }
+      }
+    }
+  }
+  return conditions;
 };

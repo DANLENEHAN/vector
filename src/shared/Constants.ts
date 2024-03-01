@@ -57,3 +57,13 @@ export enum SortOrders {
   DESC = 'DESC',
   ASC = 'ASC',
 }
+
+export enum timestampColumns {
+  CREATED_AT = 'created_at',
+  UPDATED_AT = 'updated_at',
+}
+
+export enum AndOrOperatos {
+  OR = 'or',
+  AND = 'and',
+}

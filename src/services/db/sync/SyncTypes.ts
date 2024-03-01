@@ -19,7 +19,7 @@ import {
   insertSyncUpdate,
   filterRowsForInsertion,
 } from '@services/db/sync/Functions';
-import {insertRows, updateRows} from '@services/db/Functions';
+import {insertRows, updateRows} from '@services/db/Operations';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,

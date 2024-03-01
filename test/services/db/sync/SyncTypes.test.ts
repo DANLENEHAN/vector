@@ -16,7 +16,7 @@ import {
   processSyncTypePull,
 } from '@services/db/sync/SyncTypes';
 import * as SyncOperationFunctions from '@services/db/sync/SyncOperations';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 
 // Types
 import {syncDbTables} from '@shared/Constants';

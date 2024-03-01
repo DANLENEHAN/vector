@@ -2,7 +2,7 @@
 import {MoodCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 
 /**
  * @description Inserts an array of moods into the mood table.

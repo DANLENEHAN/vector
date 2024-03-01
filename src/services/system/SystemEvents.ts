@@ -12,7 +12,7 @@ import {
 } from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
-import {getRows} from '@services/db/Functions';
+import {getRows} from '@services/db/Operations';
 import {SortOrders, syncDbTables, timestampFields} from '@shared/Constants';
 import {
   deviceTimezone,

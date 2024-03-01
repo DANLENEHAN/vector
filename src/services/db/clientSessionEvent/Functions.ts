@@ -10,7 +10,7 @@ import {syncDbTables} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 // Functions
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuid4} from 'uuid';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';

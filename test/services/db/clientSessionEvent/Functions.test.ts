@@ -1,7 +1,7 @@
 // Functions
 import * as SystemFunctions from '@services/system/Functions';
 import * as Devicefunctions from '@services/api/blueprints/device/Functions';
-import * as dbFunctions from '@services/db/Functions';
+import * as dbFunctions from '@services/db/Operations';
 import {insertClientSessionEvent} from '@services/db/clientSessionEvent/Functions';
 import * as dateFunctions from '@services/date/Functions';
 import logger from '@utils/Logger';

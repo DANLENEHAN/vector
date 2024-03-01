@@ -9,6 +9,19 @@
  */
 
 /**
+ * BaseOperators
+ * Base operators for filters.
+ */
+export enum BaseOperators {
+  Eq = 'eq',
+  Ne = 'ne',
+  In = 'in',
+  NotIn = 'not_in',
+  Isnull = 'isnull',
+  Notnull = 'notnull',
+}
+
+/**
  * BodyStatCreateSchema
  * Validation schema for the BodyStat model.
  */
@@ -198,6 +211,15 @@ export interface BodypartGetSchema {
    * @example "2021-05-18T20:00:00"
    */
   updated_at: string;
+}
+
+/**
+ * BooleanOperators
+ * Boolean operators for filters.
+ */
+export enum BooleanOperators {
+  Istrue = 'istrue',
+  Isfalse = 'isfalse',
 }
 
 /**
@@ -402,6 +424,19 @@ export enum DateFormat {
   ValueYMD = '%Y-%m-%d',
   ValueMDY = '%m-%d-%Y',
   ValueDMY = '%d-%m-%Y',
+}
+
+/**
+ * DateTimeOperators
+ * Datetime operators for filters.
+ */
+export enum DateTimeOperators {
+  Year = 'year',
+  Month = 'month',
+  Day = 'day',
+  Hour = 'hour',
+  Minute = 'minute',
+  Second = 'second',
 }
 
 /**
@@ -1488,6 +1523,17 @@ export enum MuscleMeasurementUnit {
 }
 
 /**
+ * NumericOperators
+ * Numeric operators for filters.
+ */
+export enum NumericOperators {
+  Lt = 'lt',
+  Le = 'le',
+  Gt = 'gt',
+  Ge = 'ge',
+}
+
+/**
  * NutritionCreateSchema
  * Validation schema for the Nutrition model.
  */
@@ -2403,6 +2449,17 @@ export enum SeverityLevel {
   Value1 = 1,
   Value2 = 2,
   Value3 = 3,
+}
+
+/**
+ * StringOperators
+ * String operators for filters.
+ */
+export enum StringOperators {
+  Contains = 'contains',
+  Startswith = 'startswith',
+  Endswith = 'endswith',
+  Like = 'like',
 }
 
 /**

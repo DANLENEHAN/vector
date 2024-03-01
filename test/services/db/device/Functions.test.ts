@@ -3,7 +3,7 @@ import * as SqlClientFuncs from '@services/db/SqlClient';
 import {syncDbTables} from '@shared/Constants';
 import {sampleDeviceRow} from '../../../Objects';
 import {getDevice, insertDevice} from '@services/db/device/Functions';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import logger from '@utils/Logger';
 
 describe('Test Device Db Functions', () => {

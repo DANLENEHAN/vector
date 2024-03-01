@@ -1,5 +1,11 @@
-export const dbName = 'vector.db';
+import {
+  BaseOperators,
+  BooleanOperators,
+  StringOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
 
+export const dbName = 'vector.db';
 export const alembicTable: string = 'alembic_version';
 
 /**
@@ -30,3 +36,9 @@ export interface SqlQuery {
   sqlStatement: string;
   params?: any[];
 }
+
+export type QueryOperators =
+  | BaseOperators
+  | BooleanOperators
+  | NumericOperators
+  | StringOperators;

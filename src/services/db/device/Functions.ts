@@ -2,7 +2,7 @@
 import {DeviceCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 import {executeSqlBatch} from '../SqlClient';
 
 // Services

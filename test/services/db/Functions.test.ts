@@ -1,5 +1,5 @@
 // Functions
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import * as SqlClientFuncs from '@services/db/SqlClient';
 import * as QueryExecutors from '@services/db/QueryExecutors';
 
