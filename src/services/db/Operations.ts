@@ -1,6 +1,6 @@
 // Types
-import {RowData} from '@services/db/Types';
-import {syncDbTables, timestampFields} from '@shared/Constants';
+import {GetRowsParams, RowData} from '@services/db/Types';
+import {SortOrders, timestampFields} from '@shared/Constants';
 import {SqlQuery, ExecutionResult} from '@services/db/Types';
 // Functions
 import {executeSqlBatch} from '@services/db/SqlClient';
@@ -8,6 +8,7 @@ import {getTimestampForRow} from '@services/db/QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
+import {buildWhereClause} from './Functions';
 
 export const insertRows = async (
   tableName: string,
@@ -105,28 +106,23 @@ export const updateRows = async (
 };
 
 export const getRows = async <T>(
-  tableName: syncDbTables,
-  selectColumns?: Array<string>,
-  whereClause?: string,
-  orderByClause?: string,
-  limit?: number,
+  params: GetRowsParams,
 ): Promise<T[] | null> => {
   try {
-    selectColumns = selectColumns || ['*'];
-    const columnsToSelect = selectColumns.join(', ');
-    let sqlStatement = `SELECT ${columnsToSelect} FROM ${tableName} ${
-      whereClause ? `WHERE ${whereClause} ` : ''
-    }`;
-
-    if (orderByClause) {
-      sqlStatement += `ORDER BY ${orderByClause} `; // Append the ORDER BY clause if provided
-    }
-
-    if (limit) {
-      sqlStatement += `LIMIT ${limit};`;
-    } else {
-      sqlStatement += ';';
-    }
+    const columnsToSelect = (params.selectColumns || ['*']).join(', ');
+    const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
+    const whereString = params.whereConditions
+      ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted != 1`
+      : 'WHERE deleted != 1';
+    const orderByString = params.orderConditions
+      ? `ORDER BY ${Object.entries(params.orderConditions)
+          .map((item: [string, SortOrders]) => {
+            return `${item[0]} ${item[1]}`;
+          })
+          .join(', ')}`
+      : '';
+    const limitString = params.limit ? `LIMIT ${params.limit}` : '';
+    const sqlStatement = `${selectString} ${whereString} ${orderByString} ${limitString}`;
 
     const sqlResult: ExecutionResult[] = await executeSqlBatch([
       {sqlStatement},

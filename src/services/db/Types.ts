@@ -4,6 +4,7 @@ import {
   StringOperators,
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
+import {SortOrders, syncDbTables} from '@shared/Constants';
 
 export const dbName = 'vector.db';
 export const alembicTable: string = 'alembic_version';
@@ -42,3 +43,11 @@ export type QueryOperators =
   | BooleanOperators
   | NumericOperators
   | StringOperators;
+
+export interface GetRowsParams {
+  tableName: syncDbTables;
+  selectColumns?: Array<string>;
+  whereConditions?: Record<string, any>;
+  orderConditions?: Record<string, SortOrders>;
+  limit?: number;
+}
