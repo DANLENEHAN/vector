@@ -305,6 +305,7 @@ export enum ClientSessionEventType {
   Logout = 'logout',
   AppOpen = 'app_open',
   AppClose = 'app_close',
+  StreakBreak = 'streak_break',
 }
 
 /**

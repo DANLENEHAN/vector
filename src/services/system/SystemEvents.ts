@@ -15,14 +15,15 @@ import logger from '@utils/Logger';
 import {getRows} from '@services/db/Functions';
 import {SortOrders, syncDbTables, timestampFields} from '@shared/Constants';
 import {
+  deviceTimezone,
+  deviceTimestampNow,
   fromDateTzToDateTz,
-  // deviceTimezoneNow,
-  timezoneTimestampNow,
   getDayBoundsOfDate,
   momentToDateStr,
 } from '@services/date/Functions';
 import {DayBounds} from '@services/date/Type';
 import {TimestampFormat} from '@shared/Enums';
+import {checkStreakBreak} from '@services/notifcations/streak/Functions';
 
 export const appEntryCallback = async (appEntryType: AppEntryType) => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
@@ -30,12 +31,11 @@ export const appEntryCallback = async (appEntryType: AppEntryType) => {
   const user: UserCreateSchema | null = await getUser();
   await handleClientSessionEvent(ClientSessionEventType.AppOpen);
 
-  // Is First Login Of Today
-  // call isFirstAppEntry();
+  const isFirstAppEntry: boolean = await isFirstAppEntryToday();
 
-  // isFirstEntry
-  // Streak Break
-  // call checkStreakBreak
+  if (isFirstAppEntry) {
+    checkStreakBreak();
+  }
 
   if (
     appEntryType === AppEntryType.LoginAuthed ||
@@ -54,19 +54,16 @@ export const appEntryCallback = async (appEntryType: AppEntryType) => {
     }
   }
 
-  // isFirstEntry
-  // Streak Setup (All)
+  if (isFirstAppEntry) {
+    // Streak Setup (All)
+  }
 };
 
-export const isFirstAppEntryToday = async () => {
-  // Time Now in Local
-  // Get Bounds of Local Today in UTC time
-  // Is there more than one AppOpen Today
-  console.log('In isFirstAppEntryToday');
-  const timezone = 'America/Toronto';
-  const timestampNow = timezoneTimestampNow(timezone);
+export const isFirstAppEntryToday = async (): Promise<boolean> => {
+  const timestampNow = deviceTimestampNow();
   const dayBounds: DayBounds = getDayBoundsOfDate(timestampNow);
 
+  const timezone = deviceTimezone();
   const appOpenEvent = await getRows<ClientSessionEventCreateSchema>(
     syncDbTables.clientSessionEventTable,
     ['*'],
@@ -80,7 +77,10 @@ export const isFirstAppEntryToday = async () => {
         TimestampFormat.YYYYMMDDHHMMss,
       )}'`,
     `${timestampFields.createdAt} ${SortOrders.DESC}`,
-    1,
   );
-  console.log(appOpenEvent?.length);
+
+  if (appOpenEvent && appOpenEvent?.length === 1) {
+    return true;
+  }
+  return false;
 };

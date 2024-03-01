@@ -8,8 +8,12 @@ export const utcTimestampNow = (): moment.Moment => {
   return moment.utc();
 };
 
-export const deviceTimezoneNow = (): moment.Moment => {
+export const deviceTimestampNow = (): moment.Moment => {
   return moment.tz(getTimeZone());
+};
+
+export const deviceTimezone = (): string => {
+  return getTimeZone();
 };
 
 export const timezoneTimestampNow = (timezone: string): moment.Moment => {
@@ -22,7 +26,7 @@ export const getUtcNowAndDeviceTimezone = (): TimestampTimezone => {
       utcTimestampNow(),
       TimestampFormat.YYYYMMDDHHMMssSSS,
     ),
-    timezone: getTimeZone(),
+    timezone: deviceTimezone(),
   };
 };
 
