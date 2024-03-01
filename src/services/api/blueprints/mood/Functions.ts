@@ -2,15 +2,20 @@
 import {getUserDetails} from '@services/asyncStorage/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuidv4} from 'uuid';
+import {getMoods} from '@services/db/mood/Functions';
+import {generateGraphData} from '@services/timeSeries/Functions';
 
 // Types
 import {MoodValue} from '@services/api/swagger/data-contracts';
 import {insertMoods} from '@services/db/mood/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {syncDbTables} from '@shared/Constants';
 
 // Logger
 import logger from '@utils/Logger';
+import moment from 'moment';
 
 /**
  * Interface for the CreateNewMoodParams function.
@@ -62,4 +67,23 @@ export const createNewMood = async ({
   } catch (error) {
     logger.error(`Error: ${error}`);
   }
+};
+
+/**
+ * Function to get the mood data.
+ * @returns {Promise<graphPeriodData>} A promise that resolves to an object containing the mood data.
+ */
+export const getMoodData = async (): Promise<graphPeriodData> => {
+  const user_id = await getUserDetails('user_id');
+  // Get all moods for the user that are not deleted
+
+  const moods = await getMoods({
+    columns: ['value', 'created_at'],
+    whereClause: `user_id = '${user_id}' AND deleted IS false`,
+  });
+  return generateGraphData({
+    table: syncDbTables.moodTable,
+    data: moods,
+    targetDate: moment.utc(),
+  });
 };

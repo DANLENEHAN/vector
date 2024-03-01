@@ -67,6 +67,7 @@
     "@tsconfig/react-native": "^3.0.2",
     "@types/convert-units": "^2.3.9",
     "@types/jest": "^29.5.10",
+    "@types/node": "^20.11.24",
     "@types/react": "^18.2.40",
     "@types/react-native": "^0.72.7",
     "@types/react-native-sqlite-storage": "^6.0.5",

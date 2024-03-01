@@ -25,7 +25,7 @@ import {AverageValueText} from '@components/visualisations/graphs/Line/AverageVa
 import {useFont} from '@shopify/react-native-skia';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
-import {graphDataPoint} from '@components/visualisations/graphs/Line/Types';
+import {graphDataPoint} from '@services/timeSeries/Types';
 
 /**
  * Interface for the LineGraph component
@@ -38,10 +38,12 @@ import {graphDataPoint} from '@components/visualisations/graphs/Line/Types';
  * @param {string} unit - The unit for the average value
  */
 interface LineGraphProps {
-  data: graphDataPoint[]; // The data to be displayed on the graph
-  averageValue: number; // The average value of the data
-  averageLabel: string; // The label for the average value
-  unit: string; // The unit for the average value
+  data: graphDataPoint[];
+  averageValue: number | null;
+  averageLabel: string;
+  unit: string;
+  maxYValue?: number;
+  minYValue?: number;
 }
 
 /**
@@ -56,6 +58,8 @@ const LineGraph: React.FC<LineGraphProps> = ({
   averageLabel,
   averageValue,
   unit,
+  maxYValue,
+  minYValue,
 }: LineGraphProps): React.ReactElement<LineGraphProps> => {
   const INIT_STATE = {x: 0, y: {value: 0}} as const;
   const {state: firstPress, isActive: isFirstPressActive} =
@@ -65,7 +69,6 @@ const LineGraph: React.FC<LineGraphProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   // Needed for font for Victory Charts
   const font = useFont(Lato, fontSizes.xxSmall);
-
   //// Functions
   // Function sets the current value for the average value text component
   const currentValue = useDerivedValue(() => {
@@ -73,19 +76,33 @@ const LineGraph: React.FC<LineGraphProps> = ({
     if (isFirstPressActive) {
       const value = firstPress.y.value.value.value.toFixed(2);
       if (value === undefined || value === null || value === 'NaN') {
+        // If the value is null i.e. no values.
         return '-';
       }
       return value;
     }
     // If graph not clicked
+    // If the data is null i.e. no values.
+    if (averageValue === null) {
+      return '-';
+    }
     return averageValue.toFixed(2);
   });
+
+  const formatXLabel = (ms: number) => {
+    const result = data.filter(d => d.index === ms);
+    // If no data
+    if (result.length == 0) {
+      return '';
+    }
+    return result[0].axisLabel;
+  };
 
   // Function sets the current date for the average value text component
   const currentDate = useDerivedValue(() => {
     // If graph clicked
     if (isFirstPressActive) {
-      const currDate = data[firstPress.x.value.value].dateStr;
+      const currDate = data[firstPress.x.value.value].label;
       if (currDate === undefined || currDate === null) {
         return '-';
       }
@@ -94,6 +111,20 @@ const LineGraph: React.FC<LineGraphProps> = ({
     // If graph not clicked
     return averageLabel;
   });
+
+  // Sets the axis domain for the graph
+  const domain: {
+    x: [number, number];
+    y: [number, number] | undefined;
+  } = {
+    // If the graph has a max and min y value
+    y:
+      maxYValue !== undefined && minYValue !== undefined
+        ? [minYValue, maxYValue]
+        : undefined,
+    // The x domain is the range of the data
+    x: [0, data.length - 1],
+  };
 
   //// Return
   /**
@@ -116,7 +147,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
       <View style={styles.chartContainer}>
         <CartesianChart
           data={data}
-          xKey="date"
+          xKey="index"
           yKeys={['value']}
           // Curve type
           curve="linear"
@@ -126,6 +157,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
             top: marginSizes.large,
             bottom: marginSizes.xSmall,
           }}
+          domain={domain}
           // Padding outside the chart
           padding={{
             top: marginSizes.large,
@@ -138,7 +170,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
             font: font,
             lineColor: currentTheme.borders,
             labelColor: {x: currentTheme.text, y: currentTheme.text},
-            formatXLabel: ms => data[ms].dateStr,
+            formatXLabel: formatXLabel,
           }}
           // Render the tooltip if the graph is clicked
           renderOutside={({chartBounds}) => (
@@ -201,9 +233,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   averageValueContainer: {
-    flex: 2,
+    flex: 4,
   },
   chartContainer: {
-    flex: 19,
+    flex: 15,
   },
 });

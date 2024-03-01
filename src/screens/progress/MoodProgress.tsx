@@ -1,5 +1,5 @@
 // React imports
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
@@ -11,10 +11,15 @@ import LineGraph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
 import {useSystem} from '@context/SystemContext';
+import {getMoodData} from '@services/api/blueprints/mood/Functions';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {GraphPlotData} from '@components/visualisations/graphs/Line/Types';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {timePeriodLabels, timePeriods} from '@services/timeSeries/Types';
 
+// Give me typing for an object with keys of dateOptions and values of GraphPlotData
+// I think that's what's happening here
+// const graphData: {[key: string]: GraphPlotData} = {
 /**
  *  Weight progress screen
  *
@@ -28,20 +33,17 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
+  const dateOptions = Object.keys(timePeriodLabels);
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
+  const [graphData, setGraphData] = useState<graphPeriodData>();
 
-  const graphData = new GraphPlotData(
-    [
-      {value: 4, date: '2024-01-01T11:35:36.961Z'},
-      {value: 3, date: '2024-01-02T11:35:36.961Z'},
-      {value: 3, date: '2024-01-03T11:35:36.961Z'},
-      {value: 2, date: '2024-01-04T11:35:36.961Z'},
-      {value: 1, date: '2024-01-05T11:35:36.961Z'},
-      {value: 3, date: '2024-01-06T11:35:36.961Z'},
-    ],
-    'Feeling',
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getMoodData();
+      setGraphData(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -66,12 +68,29 @@ const MoodProgress: React.FC<ScreenProps> = ({
           />
         </View>
         <View style={styles.graphSection}>
-          <LineGraph
-            data={graphData.graphData}
-            averageLabel={graphData.averagePeriodLabel}
-            averageValue={graphData.averageValue}
-            unit={graphData.unit}
-          />
+          {graphData &&
+            activePeriod &&
+            timePeriodLabels[activePeriod as timePeriods] &&
+            graphData[timePeriodLabels[activePeriod as timePeriods]] && (
+              <LineGraph
+                data={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].data
+                }
+                averageLabel={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averagePeriodLabel
+                }
+                averageValue={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averageValue
+                }
+                unit={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].unit
+                }
+                minYValue={0}
+                maxYValue={7}
+              />
+            )}
         </View>
       </View>
     </ScreenWrapper>

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "esModuleInterop": true,
-    "baseUrl": ".",                                      
+    "baseUrl": ".",
     "paths": {
       "@components/*": ["./src/components/*"],
       "@context/*": ["./src/context/*"],
@@ -14,7 +14,8 @@
       "@assets/*": ["./assets/*"],
       "@shared/*": ["./src/shared/*"],
       "@validation/*": ["./src/validation/*"]
-    }
+    },
+    "types": ["node", "jest"] // Removes type errors for apiService
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
 }

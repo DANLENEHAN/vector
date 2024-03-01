@@ -98,13 +98,14 @@ export const AverageValueText: React.FC<AverageValueText> = ({
 const styles = StyleSheet.create({
   componentWrapper: {
     flex: 1,
-    ...layoutStyles.centerVertically,
+    marginLeft: marginSizes.large,
+    ...layoutStyles.flexStretchVertical,
   },
   header: {
     ...bodyTextStyles.small,
   },
   averageContainer: {
-    ...layoutStyles.centerHorizontally,
+    ...layoutStyles.flexStartHorizontal,
   },
   unitLabel: {
     ...bodyTextStyles.small,
