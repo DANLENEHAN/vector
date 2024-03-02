@@ -2,7 +2,7 @@
 import moment from 'moment-timezone';
 
 // Functions
-import {getQueryCondition} from '@services/db/Functions';
+import {getQueryCondition, buildWhereClause} from '@services/db/Functions';
 
 // Constants
 import {timestampColumns} from '@shared/Constants';
@@ -12,14 +12,19 @@ import {
   StringOperators,
 } from '@services/api/swagger/data-contracts';
 
+// Test Objects
+import {
+  sampleWhereConditionsFlatObject,
+  sampleTimeStamp,
+  timezone,
+  sampleWhereConditionsNestedObject,
+} from './Objects';
+
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
 }));
 
 describe('DB Functions Tests', () => {
-  const sampleTimeStamp = '2024-02-29T04:00:00.000';
-  const timezone = 'America/Toronto';
-
   test('getQueryCondition - timestamp column, valid value and operator', () => {
     // Arrange
     const columnName = timestampColumns.CREATED_AT;
@@ -193,5 +198,41 @@ describe('DB Functions Tests', () => {
     expect(() =>
       getQueryCondition(columnName, columnValue as any, operator),
     ).toThrow(`Cannot Query with nested array values ${columnValue}`);
+  });
+
+  test('buildWhereClause - basic whereConditions object ', () => {
+    // Arrange
+    // Act
+    const response = buildWhereClause({
+      fakeCol: {
+        eq: 1,
+      },
+    });
+    // Assert
+    expect(response).toEqual('(fakeCol = 1)');
+  });
+
+  test('buildWhereClause - flat whereConditions object ', () => {
+    // Arrange
+    // Act
+    const response = buildWhereClause(sampleWhereConditionsFlatObject);
+    // Assert
+    expect(response).toEqual(
+      '(numberCol = 20 AND numberCol <= 30 AND stringCol = 10 AND stringCol <= 20)',
+    );
+  });
+
+  test('buildWhereClause - flat whereConditions object ', () => {
+    // Arrange
+    // Act
+    const response = buildWhereClause(sampleWhereConditionsNestedObject);
+
+    // Assert
+    expect(response).toEqual(
+      "((((datetime(created_at) = '2024-02-29 09:00:00' or datetime(created_at) " +
+        "<= '2024-02-29 09:00:00' or datetime(updated_at) = '2024-02-29 09:00:00' or " +
+        "datetime(updated_at) <= '2024-02-29 09:00:00') and numberColumn = 10 and " +
+        "stringColumn = '2') or arrayColumn IN ('10', 2, 3, '62')))",
+    );
   });
 });

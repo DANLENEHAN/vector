@@ -158,14 +158,13 @@ export const getQueryCondition = (
   }
 };
 
-export const buildWhereClause = (obj: any) => {
+export const buildWhereClause = (obj: any, logicalOperator: string = 'AND') => {
   const conditions: string[] = [];
   for (const key in obj) {
     // If the key is a booleanOperator we must recursively call the function
     // and join the result on this booleanOperator key
     if (isInEnum(AndOrOperatos, key)) {
-      const nestedCondition = buildWhereClause(obj[key]).join(` ${key} `);
-      conditions.push(`(${nestedCondition})`);
+      conditions.push(buildWhereClause(obj[key], key));
     } else {
       // If key is not a booleanOperator It's a column so gather the conditionals
       for (const [operator, value] of Object.entries(obj[key])) {
@@ -187,5 +186,5 @@ export const buildWhereClause = (obj: any) => {
       }
     }
   }
-  return conditions;
+  return `(${conditions.join(` ${logicalOperator} `)})`;
 };
