@@ -9,11 +9,7 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {isInEnum} from '@shared/Functions';
 import {timestampColumns, AndOrOperatos} from '@shared/Constants';
-import {
-  momentToDateStr,
-  fromDateTzToDateTz,
-  deviceTimezone,
-} from '@services/date/Functions';
+import {momentToDateStr} from '@services/date/Functions';
 import {TimestampFormat} from '@shared/Enums';
 
 /**
@@ -31,9 +27,9 @@ import {TimestampFormat} from '@shared/Enums';
  * @throws {Error} - Throws an error if the operator is not compatible with the column type
  *  or if the column value type is not handled properly.
  */
-const getQueryCondition = (
+export const getQueryCondition = (
   columnName: string,
-  columnValue: moment.Moment | number | string | Array<number | string>,
+  columnValue: moment.Moment | number | string | Array<number | string> | null,
   operator: QueryOperators,
 ): string => {
   // Transformation variables with initial values identical to the input parameters.
@@ -42,10 +38,30 @@ const getQueryCondition = (
     | moment.Moment
     | number
     | string
-    | Array<number | string> = columnValue;
+    | Array<number | string>
+    | null = columnValue;
+
+  // Handling Boolean and Null checks
+  if (
+    isInEnum(BooleanOperators, operator) ||
+    operator === BaseOperators.Isnull ||
+    operator === BaseOperators.Notnull
+  ) {
+    if (columnValue !== null) {
+      throw new Error(
+        'Boolean and Null checks must not include a column value.',
+      );
+    } else {
+      return `${transformedColumnName} ${
+        OperatorMap[
+          operator as BaseOperators | NumericOperators | BooleanOperators
+        ]
+      }`;
+    }
+  }
 
   // Handling Timestamp Columns
-  if (isInEnum(timestampColumns, columnName)) {
+  else if (isInEnum(timestampColumns, columnName)) {
     if (
       !isInEnum(BaseOperators, operator) &&
       !isInEnum(NumericOperators, operator)
@@ -58,25 +74,12 @@ const getQueryCondition = (
     if (isMoment(columnValue)) {
       transformedColumnName = `datetime(${columnName})`;
       transformedColumnValue = `'${momentToDateStr(
-        fromDateTzToDateTz(columnValue, deviceTimezone(), 'UTC'),
+        columnValue.tz('UTC'),
         TimestampFormat.YYYYMMDDHHMMss,
       )}'`;
     } else {
       throw new Error(
         'Date value must be a moment.Moment object for timestamp columns.',
-      );
-    }
-  }
-
-  // Handling Boolean and Null checks
-  else if (
-    isInEnum(BooleanOperators, operator) ||
-    operator === BaseOperators.Isnull ||
-    operator === BaseOperators.Notnull
-  ) {
-    if (columnValue !== null) {
-      throw new Error(
-        'Boolean and Null checks must not include a column value.',
       );
     }
   }
@@ -105,6 +108,8 @@ const getQueryCondition = (
         `Operator '${operator}' is not allowed for string values. Allowed ` +
           'operators include BaseOperators, NumericOperators, and StringOperators.',
       );
+    } else {
+      transformedColumnValue = `'${transformedColumnValue}'`;
     }
   }
 
@@ -118,7 +123,11 @@ const getQueryCondition = (
     } else {
       const transformedArray: string = columnValue
         .map(item => {
-          if (typeof item === 'string') {
+          if (typeof item === 'object') {
+            throw new Error(
+              `Cannot Query with nested array values ${columnValue}`,
+            );
+          } else if (typeof item === 'string') {
             return `'${item}'`;
           } else {
             return item;

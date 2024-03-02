@@ -1,216 +1,197 @@
+// Services
+import moment from 'moment-timezone';
+
 // Functions
-import * as DbFunctions from '@services/db/Operations';
-import * as SqlClientFuncs from '@services/db/SqlClient';
-import * as QueryExecutors from '@services/db/QueryExecutors';
+import {getQueryCondition} from '@services/db/Functions';
 
-// Test Objects
-import {sampleStat} from '../../Objects';
+// Constants
+import {timestampColumns} from '@shared/Constants';
+import {
+  BaseOperators,
+  NumericOperators,
+  StringOperators,
+} from '@services/api/swagger/data-contracts';
 
-// Types
-import {syncDbTables} from '@shared/Constants';
-import {timestampFields} from '@shared/Constants';
-
-jest.mock('@services/db/QueryExecutors', () => ({
-  ...jest.requireActual('@services/db/QueryExecutors'),
-  getTimestampForRow: jest
-    .fn()
-    .mockImplementation(
-      (_: any, timestampField: timestampFields, uuid: string) => {
-        const responseObject: any = {
-          // Greater than updated at timestamp in 'sampleStat'
-          '1': '2025-01-01T00:02:00.000',
-          '2': '2025-01-01T00:02:00.000',
-        };
-        return responseObject[uuid] || null;
-      },
-    ),
+jest.mock('@services/date/Functions', () => ({
+  ...jest.requireActual('@services/date/Functions'),
 }));
 
 describe('DB Functions Tests', () => {
-  beforeEach(() => {
-    // Clears 'toHaveBeenCalledTimes' cache
-    jest.clearAllMocks();
-  });
+  const sampleTimeStamp = '2024-02-29T04:00:00.000';
+  const timezone = 'America/Toronto';
 
-  test('insertRows works with array of data', async () => {
+  test('getQueryCondition - timestamp column, valid value and operator', () => {
     // Arrange
-    const columns = Object.keys(sampleStat);
-    const placeholders = columns.map(_ => '?').join(', ');
-    const params = [sampleStat, sampleStat];
-    const sqlStatement = `INSERT INTO ${
-      syncDbTables.bodyStatTable
-    } (${columns.join(', ')}) VALUES (${placeholders});`;
-
-    const executeSqlBatchRes = {
-      originalQuery: {
-        sqlStatement: sqlStatement,
-        params: params,
-      },
-      result: [],
-      error: null,
-    };
-
-    jest
-      .spyOn(SqlClientFuncs, 'executeSqlBatch')
-      .mockResolvedValueOnce([executeSqlBatchRes, executeSqlBatchRes]);
+    const columnName = timestampColumns.CREATED_AT;
+    const columnValue = moment.tz(sampleTimeStamp, timezone);
+    const operator = NumericOperators.Lt;
 
     // Act
-    const response = await DbFunctions.insertRows(
-      syncDbTables.bodyStatTable,
-      params,
-    );
+    const response = getQueryCondition(columnName, columnValue, operator);
 
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
-      {
-        sqlStatement: sqlStatement,
-        params: Object.values(sampleStat),
-      },
-      {
-        sqlStatement: sqlStatement,
-        params: Object.values(sampleStat),
-      },
-    ]);
-    expect(response).toEqual(undefined);
+    // Assert
+    expect(response).toEqual("datetime(created_at) < '2024-02-29 09:00:00'");
   });
 
-  test('insertRows should throw if given now data', async () => {
-    try {
-      await DbFunctions.insertRows(syncDbTables.bodyStatTable, []);
-      fail('Function did not throw as expected');
-    } catch (error: any) {
-      expect(error.message).toBe('No data to insert.');
-    }
+  test('getQueryCondition - timestamp column, invalid value valid operator', () => {
+    // Arrange
+    const columnName = timestampColumns.CREATED_AT;
+    const columnValue = timezone;
+    const operator = NumericOperators.Lt;
+
+    // Act
+    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+      'Date value must be a moment.Moment object for timestamp columns.',
+    );
   });
 
-  test('updateRows, no rows should be filtered out', async () => {
-    const tableName = syncDbTables.bodyStatTable;
-    const columns = Object.keys(sampleStat);
-    const placeholders = columns.map(_ => '?');
-    const sqlStatement = `REPLACE INTO ${tableName} (${columns.join(
-      ', ',
-    )}) VALUES (${placeholders.join(', ')});`;
-    const params = Object.values(sampleStat);
+  test('getQueryCondition - timestamp column, valid value invalid operator', () => {
+    // Arrange
+    const columnName = timestampColumns.CREATED_AT;
+    const columnValue = moment.tz(sampleTimeStamp, timezone);
+    const operator = 'fakeOperator';
 
-    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
-      {
-        originalQuery: {
-          sqlStatement: sqlStatement,
-          params: params,
-        },
-        result: [],
-        error: null,
-      },
-    ]);
-
-    const response = await DbFunctions.updateRows(tableName, [sampleStat]);
-
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(1);
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledWith(
-      tableName,
-      timestampFields.updatedAt,
-      sampleStat.body_stat_id,
+    // Act
+    expect(() =>
+      getQueryCondition(columnName, columnValue, operator as any),
+    ).toThrow(
+      `Operator '${operator}' is not allowed for timestamp columns. ` +
+        'Allowed operators include BaseOperators and NumericOperators.',
     );
-
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
-      {
-        sqlStatement: sqlStatement,
-        params: params,
-      },
-    ]);
-
-    expect(response).toEqual(undefined);
   });
 
-  test('updateRows, row filtered out due to older updated at', async () => {
-    const tableName = syncDbTables.bodyStatTable;
-    const columns = Object.keys(sampleStat);
-    const placeholders = columns.map(_ => '?');
-    const sqlStatement = `REPLACE INTO ${tableName} (${columns.join(
-      ', ',
-    )}) VALUES (${placeholders.join(', ')});`;
-    const sampleStatTwo = {...sampleStat, body_stat_id: '1'};
-    const params = Object.values(sampleStat);
+  test('getQueryCondition - boolean operation, valid value and operator', () => {
+    // Arrange
+    const columnName = 'boolColumn';
+    const columnValue = null;
+    const operator = BaseOperators.Isnull;
 
-    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
-      {
-        originalQuery: {
-          sqlStatement: sqlStatement,
-          params: params,
-        },
-        result: [],
-        error: null,
-      },
-    ]);
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
 
-    const response = await DbFunctions.updateRows(tableName, [
-      sampleStat,
-      sampleStatTwo,
-    ]);
-
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(2);
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
-      1,
-      tableName,
-      timestampFields.updatedAt,
-      sampleStat.body_stat_id,
-    );
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
-      2,
-      tableName,
-      timestampFields.updatedAt,
-      sampleStatTwo.body_stat_id,
-    );
-
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
-      {
-        sqlStatement: sqlStatement,
-        params: params,
-      },
-    ]);
-
-    expect(response).toEqual(undefined);
+    // Assert
+    expect(response).toEqual('boolColumn IS NULL');
   });
 
-  test('updateRows, all rows filtered out', async () => {
-    const tableName = syncDbTables.bodyStatTable;
-    const sampleStatTwo = {...sampleStat, body_stat_id: '1'};
+  test('getQueryCondition - boolean operation, non null value and valid operator', () => {
+    // Arrange
+    const columnName = 'boolColumn';
+    const columnValue = 1;
+    const operator = BaseOperators.Isnull;
 
-    const response = await DbFunctions.updateRows(tableName, [
-      {...sampleStat, body_stat_id: '2'},
-      sampleStatTwo,
-    ]);
-
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(2);
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
-      1,
-      tableName,
-      timestampFields.updatedAt,
-      '2',
+    // Act
+    // Assert
+    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+      'Boolean and Null checks must not include a column value.',
     );
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenNthCalledWith(
-      2,
-      tableName,
-      timestampFields.updatedAt,
-      sampleStatTwo.body_stat_id,
-    );
-
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(0);
-
-    expect(response).toEqual(undefined);
   });
 
-  test('updateRows, no rows passed', async () => {
-    try {
-      await DbFunctions.updateRows(syncDbTables.bodyStatTable, []);
-      fail('Function did not throw as expected');
-    } catch (error: any) {
-      expect(error.message).toBe('No data to insert.');
-    }
+  test('getQueryCondition - number value, valid operator', () => {
+    // Arrange
+    const columnName = 'numberColumn';
+    const columnValue = 1;
+    const operator = BaseOperators.Eq;
 
-    expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(0);
-    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(0);
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
+
+    // Assert
+    expect(response).toEqual('numberColumn = 1');
+  });
+
+  test('getQueryCondition - number value, invalid operator', () => {
+    // Arrange
+    const columnName = 'numberColumn';
+    const columnValue = 1;
+    const operator = StringOperators.Startswith;
+
+    // Act
+    // Assert
+    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+      `Operator '${operator}' is not allowed for number values. ` +
+        'Allowed operators include BaseOperators and NumericOperators.',
+    );
+  });
+
+  test('getQueryCondition - string value, valid operator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = '1';
+    const operator = BaseOperators.Eq;
+
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
+
+    // Assert
+    expect(response).toEqual("stringColumn = '1'");
+  });
+
+  test('getQueryCondition - string value, invalid operator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = '1';
+    const operator = 'fakeOperator';
+
+    // Act
+    // Assert
+    expect(() =>
+      getQueryCondition(columnName, columnValue, operator as any),
+    ).toThrow(
+      `Operator '${operator}' is not allowed for string values. Allowed ` +
+        'operators include BaseOperators, NumericOperators, and StringOperators.',
+    );
+  });
+
+  test('getQueryCondition - string value, StringOperator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = 'cap';
+    const operator = StringOperators.Startswith;
+
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
+
+    // Assert
+    expect(response).toEqual("stringColumn LIKE 'cap%'");
+  });
+
+  test('getQueryCondition - array value, valid operator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = [2, '1', 3, '5'];
+    const operator = BaseOperators.In;
+
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
+
+    // Assert
+    expect(response).toEqual("stringColumn IN (2, '1', 3, '5')");
+  });
+
+  test('getQueryCondition - array value, invalid operator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = [2, '1', 3, '5'];
+    const operator = BaseOperators.Eq;
+
+    // Act
+    // Assert
+    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+      `Operator '${operator}' is not allowed for array values. Allowed ` +
+        'operators include BaseOperators.NotIn and BaseOperators.NotIn.',
+    );
+  });
+
+  test('getQueryCondition - nested object value, valid operator', () => {
+    // Arrange
+    const columnName = 'stringColumn';
+    const columnValue = [2, '1', 3, '5', [1]];
+    const operator = BaseOperators.In;
+
+    // Act
+    // Assert
+    expect(() =>
+      getQueryCondition(columnName, columnValue as any, operator),
+    ).toThrow(`Cannot Query with nested array values ${columnValue}`);
   });
 });
