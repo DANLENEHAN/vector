@@ -16,11 +16,27 @@ import {
 } from '@services/date/Functions';
 import {TimestampFormat} from '@shared/Enums';
 
+/**
+ * Generates a query condition string based on column name, value, and operator.
+ * This function handles different data types including moment.Moment, number, string,
+ * and arrays of numbers or strings. It ensures that the operator is appropriate for
+ * the type of the column value and formats the condition accordingly.
+ *
+ * @param {string} columnName - The name of the database column.
+ * @param {moment.Moment | number | string | Array<number | string>} columnValue - The value
+ *  for the column, which can be a date (moment.Moment), number, string, or an array of
+ *  numbers or strings.
+ * @param {QueryOperators} operator - The operator used in the query condition.
+ * @returns {string} - The formatted query condition as a string.
+ * @throws {Error} - Throws an error if the operator is not compatible with the column type
+ *  or if the column value type is not handled properly.
+ */
 const getQueryCondition = (
   columnName: string,
   columnValue: moment.Moment | number | string | Array<number | string>,
   operator: QueryOperators,
 ): string => {
+  // Transformation variables with initial values identical to the input parameters.
   let transformedColumnName: string = columnName;
   let transformedColumnValue:
     | moment.Moment
@@ -34,7 +50,10 @@ const getQueryCondition = (
       !isInEnum(BaseOperators, operator) &&
       !isInEnum(NumericOperators, operator)
     ) {
-      throw Error('operator for timestamp columm incorrect');
+      throw new Error(
+        `Operator '${operator}' is not allowed for timestamp columns. ` +
+          'Allowed operators include BaseOperators and NumericOperators.',
+      );
     }
     if (isMoment(columnValue)) {
       transformedColumnName = `datetime(${columnName})`;
@@ -42,11 +61,10 @@ const getQueryCondition = (
         fromDateTzToDateTz(columnValue, deviceTimezone(), 'UTC'),
         TimestampFormat.YYYYMMDDHHMMss,
       )}'`;
-      return `${transformedColumnName} ${
-        OperatorMap[operator as BaseOperators | NumericOperators]
-      } ${transformedColumnValue}`;
     } else {
-      throw Error('Date value must be a single moment.Moment');
+      throw new Error(
+        'Date value must be a moment.Moment object for timestamp columns.',
+      );
     }
   }
 
@@ -57,11 +75,10 @@ const getQueryCondition = (
     operator === BaseOperators.Notnull
   ) {
     if (columnValue !== null) {
-      throw Error('Boolean and Null checks cannot include a non null value');
+      throw new Error(
+        'Boolean and Null checks must not include a column value.',
+      );
     }
-    return `${columnName} ${
-      OperatorMap[operator as BooleanOperators | BaseOperators]
-    }`;
   }
 
   // Handling Number Values
@@ -70,11 +87,11 @@ const getQueryCondition = (
       !isInEnum(BaseOperators, operator) &&
       !isInEnum(NumericOperators, operator)
     ) {
-      throw Error('operator for number value incorrect');
+      throw new Error(
+        `Operator '${operator}' is not allowed for number values. ` +
+          'Allowed operators include BaseOperators and NumericOperators.',
+      );
     }
-    return `${columnName} ${
-      OperatorMap[operator as BaseOperators | NumericOperators]
-    } ${columnValue}`;
   }
 
   // Handling String Values
@@ -84,22 +101,20 @@ const getQueryCondition = (
       !isInEnum(NumericOperators, operator) &&
       !isInEnum(StringOperators, operator)
     ) {
-      throw Error('operator for string value incorrect');
-    } else if (isInEnum(StringOperators, operator)) {
-      return `${columnName} ${StringOperatorMap[operator as StringOperators](
-        columnValue,
-      )}`;
-    } else {
-      return `${columnName} ${
-        OperatorMap[operator as BaseOperators | NumericOperators]
-      } '${columnValue}'`;
+      throw new Error(
+        `Operator '${operator}' is not allowed for string values. Allowed ` +
+          'operators include BaseOperators, NumericOperators, and StringOperators.',
+      );
     }
   }
 
   // Handling Array Values
   else if (Array.isArray(columnValue)) {
     if (operator !== BaseOperators.NotIn && operator !== BaseOperators.In) {
-      throw Error('operator for array value incorrect');
+      throw new Error(
+        `Operator '${operator}' is not allowed for array values. Allowed ` +
+          'operators include BaseOperators.NotIn and BaseOperators.NotIn.',
+      );
     } else {
       const transformedArray: string = columnValue
         .map(item => {
@@ -111,26 +126,40 @@ const getQueryCondition = (
         })
         .join(', ');
       transformedColumnValue = `(${transformedArray})`;
-      return `${columnName} ${OperatorMap[operator]} ${transformedColumnValue}`;
     }
+  }
+
+  // Error for unhandled columnValue types
+  else {
+    throw new Error(`Unhandled column value type: ${typeof columnValue}.`);
+  }
+
+  // Constructing and returning the query condition string
+  if (isInEnum(StringOperators, operator) && typeof columnValue === 'string') {
+    return `${columnName} ${StringOperatorMap[operator as StringOperators](
+      columnValue,
+    )}`;
   } else {
-    throw Error('Incorrect query');
+    // Handling cases where columnValue is directly usable (number or formatted string)
+    return `${transformedColumnName} ${
+      OperatorMap[
+        operator as BaseOperators | NumericOperators | BooleanOperators
+      ]
+    } ${transformedColumnValue}`;
   }
 };
 
-export const buildWhereClause = (obj: object) => {
-  const conditions: any = [];
+export const buildWhereClause = (obj: any) => {
+  const conditions: string[] = [];
   for (const key in obj) {
     // If the key is a booleanOperator we must recursively call the function
     // and join the result on this booleanOperator key
     if (isInEnum(AndOrOperatos, key)) {
-      const nestedCondition = buildWhereClause((obj as any)[key]).join(
-        ` ${key} `,
-      );
+      const nestedCondition = buildWhereClause(obj[key]).join(` ${key} `);
       conditions.push(`(${nestedCondition})`);
     } else {
       // If key is not a booleanOperator It's a column so gather the conditionals
-      for (const [operator, value] of Object.entries((obj as any)[key])) {
+      for (const [operator, value] of Object.entries(obj[key])) {
         if (
           isInEnum(BaseOperators, operator) ||
           isInEnum(BooleanOperators, operator) ||
@@ -142,7 +171,9 @@ export const buildWhereClause = (obj: object) => {
             getQueryCondition(key, value as any, operator as QueryOperators),
           );
         } else {
-          console.error('Invalid Query Structure.', operator);
+          throw new Error(
+            `Invalid Query Structure for operator '${operator}'.`,
+          );
         }
       }
     }
