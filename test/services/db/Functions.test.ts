@@ -2,7 +2,12 @@
 import moment from 'moment-timezone';
 
 // Functions
-import {getQueryCondition, buildWhereClause} from '@services/db/Functions';
+import {
+  getQueryCondition,
+  buildWhereClause,
+  transformDbRows,
+} from '@services/db/Functions';
+import * as DateFunctions from '@services/date/Functions';
 
 // Constants
 import {timestampColumns} from '@shared/Constants';
@@ -11,6 +16,7 @@ import {
   NumericOperators,
   StringOperators,
 } from '@services/api/swagger/data-contracts';
+import {TimestampFormat} from '@shared/Enums';
 
 // Test Objects
 import {
@@ -20,11 +26,12 @@ import {
   sampleWhereConditionsNestedObject,
 } from './Objects';
 
-jest.mock('@services/date/Functions', () => ({
-  ...jest.requireActual('@services/date/Functions'),
-}));
-
 describe('DB Functions Tests', () => {
+  beforeEach(() => {
+    // Clears 'toHaveBeenCalledTimes' cache
+    jest.clearAllMocks();
+  });
+
   test('getQueryCondition - timestamp column, valid value and operator', () => {
     // Arrange
     const columnName = timestampColumns.CREATED_AT;
@@ -234,5 +241,66 @@ describe('DB Functions Tests', () => {
         "datetime(updated_at) <= '2024-02-29 09:00:00') and numberColumn = 10 and " +
         "stringColumn = '2') or arrayColumn IN ('10', 2, 3, '62')))",
     );
+  });
+
+  test('transformDbRows - object contains timestamp rows', () => {
+    // Arrange
+    const deviceTimezone = 'America/Toronto';
+    const deviceTimezoneSpy = jest
+      .spyOn(DateFunctions, 'deviceTimezone')
+      .mockReturnValue('America/Toronto');
+    const momentToDateStrSpy = jest
+      .spyOn(DateFunctions, 'momentToDateStr')
+      .mockReturnValue('transformedDate');
+
+    // Act
+    const response = transformDbRows([
+      {
+        created_at: '2024-02-08T10:30:36.989',
+        updated_at: '2024-02-08T10:30:36.989000Z',
+      },
+    ]);
+
+    // Assert
+    expect(deviceTimezoneSpy).toHaveBeenCalledTimes(2);
+    expect(momentToDateStrSpy).toHaveBeenCalledTimes(2);
+    expect(momentToDateStrSpy).toHaveBeenNthCalledWith(
+      1,
+      moment.tz('2024-02-08T10:30:36.989', 'UTC').tz(deviceTimezone),
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    );
+    expect(momentToDateStrSpy).toHaveBeenNthCalledWith(
+      2,
+      moment.tz('2024-02-08T10:30:36.989000Z', 'UTC').tz(deviceTimezone),
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    );
+
+    expect(response).toEqual([
+      {created_at: 'transformedDate', updated_at: 'transformedDate'},
+    ]);
+  });
+
+  test('transformDbRows - object contains timestamp rows', () => {
+    // Arrange
+    const fakeData = [
+      {
+        fakeCol1: 1,
+        fakeCol2: 2,
+      },
+    ];
+    const deviceTimezoneSpy = jest
+      .spyOn(DateFunctions, 'deviceTimezone')
+      .mockReturnValue('');
+    const momentToDateStrSpy = jest
+      .spyOn(DateFunctions, 'momentToDateStr')
+      .mockReturnValue('');
+
+    // Act
+    const response = transformDbRows(fakeData);
+
+    // Assert
+    expect(deviceTimezoneSpy).toHaveBeenCalledTimes(0);
+    expect(momentToDateStrSpy).toHaveBeenCalledTimes(0);
+    expect(response).toEqual(fakeData);
   });
 });

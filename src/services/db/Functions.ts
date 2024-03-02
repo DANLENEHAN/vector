@@ -1,5 +1,7 @@
+// Services
 import moment, {isMoment} from 'moment-timezone';
-import {QueryOperators} from '@services/db/Types';
+
+// Constants
 import {OperatorMap, StringOperatorMap} from '@services/db/Constants';
 import {
   BaseOperators,
@@ -7,10 +9,13 @@ import {
   StringOperators,
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
-import {isInEnum} from '@shared/Functions';
-import {timestampColumns, AndOrOperatos} from '@shared/Constants';
-import {momentToDateStr} from '@services/date/Functions';
 import {TimestampFormat} from '@shared/Enums';
+import {timestampColumns, AndOrOperatos} from '@shared/Constants';
+// Types
+import {isInEnum} from '@shared/Functions';
+// Functions
+import {QueryOperators} from '@services/db/Types';
+import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
 
 /**
  * Generates a query condition string based on column name, value, and operator.
@@ -158,12 +163,28 @@ export const getQueryCondition = (
   }
 };
 
+/**
+ * Constructs a WHERE clause for SQL queries from a given set of conditions. This function
+ * supports recursive construction of nested conditions using logical operators (AND, OR)
+ * and handles a variety of operators for different data types. It defaults to using 'AND'
+ * between conditions unless specified otherwise in `whereConditions`.
+ *
+ * @param {Object} whereConditions - An object representing the conditions for the WHERE clause.
+ *                                   Keys represent column names or logical operators, and values
+ *                                   are the conditions or nested conditions.
+ * @param {string} logicalOperator - The logical operator ('AND' or 'OR') to use between conditions.
+ *                                   Defaults to 'AND'.
+ *
+ * @returns {string} - The constructed WHERE clause as a string, enclosed in parentheses.
+ *
+ * @throws {Error} - Throws an error if an invalid operator is encountered.
+ */
 export const buildWhereClause = (
   whereConditions: any,
   // If a logicalOperator is not specified in the
   // whereConditions it will default to AND
   logicalOperator: string = 'AND',
-) => {
+): string => {
   const conditions: string[] = [];
   for (const key in whereConditions) {
     // If the key is a booleanOperator we must recursively call the function
@@ -191,4 +212,44 @@ export const buildWhereClause = (
   }
   // Join the conditions on the Logical Operator before returning
   return `(${conditions.join(` ${logicalOperator} `)})`;
+};
+
+/**
+ * Transforms an array of database rows, converting UTC timestamps in specified
+ * columns to the device's local timezone format. It utilizes the `moment.js` library
+ * for accurate timezone conversion, targeting columns identified within the
+ * `timestampColumns` object. The function operates generically on arrays of objects
+ * where each object's structure is defined by the type parameter `T`, extending
+ * `Record<string, string | number>`.
+ *
+ * @template T - Represents the database row structure, ensuring the function's
+ *               versatility across different data types.
+ *
+ * @param {T[]} rows - The database rows to transform, where each row is an object of type `T`.
+ *
+ * @returns {T[]} - The transformed rows with updated timestamps in the local timezone, formatted
+ *                  according to `TimestampFormat.YYYYMMDDHHMMssSSS`.
+ *
+ * @throws {Error} - If timezone conversion fails due to invalid data or if a valid timezone
+ *                   string cannot be obtained.
+ */
+export const transformDbRows = <T extends Record<string, string | number>>(
+  rows: T[],
+): T[] => {
+  return rows.map(row => {
+    let transformedRow: T = {...row};
+    for (const column of Object.values(timestampColumns)) {
+      try {
+        if (column in transformedRow) {
+          // as any to allow us to reassign a generic here
+          // Transform stored UTC timestamp to timezone of the device
+          (transformedRow as any)[column] = momentToDateStr(
+            moment.tz(row[column], 'UTC').tz(deviceTimezone()),
+            TimestampFormat.YYYYMMDDHHMMssSSS,
+          );
+        }
+      } catch {}
+    }
+    return transformedRow;
+  });
 };
