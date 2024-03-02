@@ -108,48 +108,37 @@ export const updateRows = async (
 export const getRows = async <T>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
-  try {
-    // Build Query Components
-    const columnsToSelect = (params.selectColumns || ['*']).join(', ');
-    const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
-    const whereString = params.whereConditions
-      ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted != 1`
-      : 'WHERE deleted != 1';
-    const orderByString = params.orderConditions
-      ? `ORDER BY ${Object.entries(params.orderConditions)
-          .map((item: [string, SortOrders]) => {
-            return `${item[0]} ${item[1]}`;
-          })
-          .join(', ')}`
-      : '';
-    const limitString = params.limit ? `LIMIT ${params.limit}` : '';
+  // Build Query Components
+  const columnsToSelect = (params.selectColumns || ['*']).join(', ');
+  const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
+  const whereString = params.whereConditions
+    ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted != 1`
+    : 'WHERE deleted != 1';
+  const orderByString = params.orderConditions
+    ? `ORDER BY ${Object.entries(params.orderConditions)
+        .map((item: [string, SortOrders]) => {
+          return `${item[0]} ${item[1]}`;
+        })
+        .join(', ')}`
+    : '';
+  const limitString = params.limit ? `LIMIT ${params.limit}` : '';
 
-    // Build full query from components
-    const sqlStatement = `${[
-      selectString,
-      whereString,
-      orderByString,
-      limitString,
-    ]
-      .filter(string => string)
-      .join(' ')};`;
+  // Build full query from components
+  const sqlStatement = `${[
+    selectString,
+    whereString,
+    orderByString,
+    limitString,
+  ]
+    .filter(string => string)
+    .join(' ')};`;
 
-    const sqlResult: ExecutionResult[] = await executeSqlBatch([
-      {sqlStatement},
-    ]);
+  const sqlResult: ExecutionResult[] = await executeSqlBatch([{sqlStatement}]);
 
-    if (sqlResult[0].error) {
-      logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
-      return null;
-    }
-
-    const result = sqlResult[0].result;
-    if (!result || result.length === 0) {
-      return null;
-    }
-    return result as T[];
-  } catch (error) {
-    logger.warn('Error fetching data', {error});
+  if (sqlResult[0].error) {
+    logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
     return null;
   }
+  const result = sqlResult[0].result;
+  return result as T[];
 };

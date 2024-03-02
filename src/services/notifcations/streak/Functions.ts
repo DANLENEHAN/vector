@@ -2,22 +2,17 @@
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 // Types
 import {
+  BaseOperators,
   ClientSessionEventCreateSchema,
   ClientSessionEventType,
+  NumericOperators,
 } from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {getRows} from '@services/db/Operations';
 import {SortOrders, syncDbTables, timestampFields} from '@shared/Constants';
-import {
-  fromDateTzToDateTz,
-  deviceTimezone,
-  deviceTimestampNow,
-  getDayBoundsOfDate,
-  momentToDateStr,
-} from '@services/date/Functions';
+import {deviceTimestampNow, getDayBoundsOfDate} from '@services/date/Functions';
 import {DayBounds} from '@services/date/Type';
-import {TimestampFormat} from '@shared/Enums';
 
 export const registerStreakNotifcation = async () => {
   // Get Streak
@@ -94,28 +89,26 @@ export const checkStreakBreak = async () => {
   // Streak break of local must be converted to UTC before inserting
 
   const timestampNow = deviceTimestampNow();
-
   const yesterday = timestampNow.clone().subtract(1, 'days');
   const dayBounds: DayBounds = getDayBoundsOfDate(yesterday);
 
-  const timezone = deviceTimezone();
-  const appOpenEvent = await getRows<ClientSessionEventCreateSchema>(
-    syncDbTables.clientSessionEventTable,
-    ['*'],
-    `event_type = '${ClientSessionEventType.AppOpen}' ` +
-      `AND datetime(${timestampFields.createdAt}) >= '${momentToDateStr(
-        fromDateTzToDateTz(dayBounds.startOfDay, timezone, 'UTC'),
-        TimestampFormat.YYYYMMDDHHMMss,
-      )}' ` +
-      `AND datetime(${timestampFields.createdAt}) <= '${momentToDateStr(
-        fromDateTzToDateTz(dayBounds.endOfDay, timezone, 'UTC'),
-        TimestampFormat.YYYYMMDDHHMMss,
-      )}'`,
-    `${timestampFields.createdAt} ${SortOrders.DESC}`,
-    1,
-  );
-
-  if (appOpenEvent && appOpenEvent.length === 0) {
+  const appOpenEvent = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    whereConditions: {
+      [timestampFields.createdAt]: {
+        [NumericOperators.Ge]: dayBounds.startOfDay,
+        [NumericOperators.Le]: dayBounds.endOfDay,
+      },
+      event_type: {
+        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+      },
+    },
+    orderConditions: {
+      [timestampFields.createdAt]: SortOrders.DESC,
+    },
+    limit: 1,
+  });
+  if (appOpenEvent !== null && appOpenEvent.length === 0) {
     await handleClientSessionEvent(ClientSessionEventType.StreakBreak);
   } else {
     logger.info('User logged in yesterday will not end streak');
