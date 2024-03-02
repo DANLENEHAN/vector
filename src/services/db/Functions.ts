@@ -174,7 +174,6 @@ export const buildWhereClause = (obj: any, logicalOperator: string = 'AND') => {
           isInEnum(StringOperators, operator) ||
           isInEnum(NumericOperators, operator)
         ) {
-          console.log(key, value, operator);
           conditions.push(
             getQueryCondition(key, value as any, operator as QueryOperators),
           );

@@ -8,7 +8,7 @@ import {getTimestampForRow} from '@services/db/QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
-import {buildWhereClause} from './Functions';
+import {buildWhereClause} from '@services/db/Functions';
 
 export const insertRows = async (
   tableName: string,
@@ -109,6 +109,7 @@ export const getRows = async <T>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
   try {
+    // Build Query Components
     const columnsToSelect = (params.selectColumns || ['*']).join(', ');
     const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
     const whereString = params.whereConditions
@@ -122,7 +123,16 @@ export const getRows = async <T>(
           .join(', ')}`
       : '';
     const limitString = params.limit ? `LIMIT ${params.limit}` : '';
-    const sqlStatement = `${selectString} ${whereString} ${orderByString} ${limitString}`;
+
+    // Build full query from components
+    const sqlStatement = `${[
+      selectString,
+      whereString,
+      orderByString,
+      limitString,
+    ]
+      .filter(string => string)
+      .join(' ')};`;
 
     const sqlResult: ExecutionResult[] = await executeSqlBatch([
       {sqlStatement},
