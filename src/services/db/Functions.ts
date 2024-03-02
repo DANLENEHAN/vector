@@ -75,7 +75,7 @@ export const getQueryCondition = (
       transformedColumnName = `datetime(${columnName})`;
       transformedColumnValue = `'${momentToDateStr(
         columnValue.tz('UTC'),
-        TimestampFormat.YYYYMMDDHHMMss,
+        TimestampFormat.SqlLiteDatetimeFormat,
       )}'`;
     } else {
       throw new Error(
