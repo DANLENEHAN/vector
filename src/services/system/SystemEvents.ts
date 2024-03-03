@@ -12,10 +12,8 @@ import {
 } from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
-import {
-  checkStreakBreak,
-  registerStreakNotifcation,
-} from '@services/notifcations/streak/Functions';
+import {checkStreakBreak} from '@services/notifcations/streak/Functions';
+import {registerStreakNotifcation} from '@services/notifcations/streak/Events';
 
 /**
  * Handles various app entry events, logging the entry type, checking and updating user session

@@ -6,6 +6,7 @@ import * as ClientSessionEventFunctions from '@services/api/blueprints/clientSes
 import * as StreakFunctions from '@services/notifcations/streak/Functions';
 import * as SyncProcessFunctions from '@services/db/sync/SyncProcess';
 import * as DeviceFunctions from '@services/api/blueprints/device/Functions';
+import * as StreakEvents from '@services/notifcations/streak/Events';
 
 // Types
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
@@ -29,6 +30,10 @@ jest.mock('@services/api/blueprints/clientSessionEvent/Functions', () => ({
 jest.mock('@services/notifcations/streak/Functions', () => ({
   ...jest.requireActual('@services/notifcations/streak/Functions'),
   checkStreakBreak: jest.fn().mockResolvedValue(null),
+}));
+
+jest.mock('@services/notifcations/streak/Events', () => ({
+  ...jest.requireActual('@services/notifcations/streak/Events'),
   registerStreakNotifcation: jest.fn().mockResolvedValue(null),
 }));
 
@@ -71,7 +76,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(1);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -99,7 +104,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(0);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(0);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(0);
     expect(response).toEqual(undefined);
   });
 
@@ -127,7 +132,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(1);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -155,7 +160,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(0);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(1);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -186,7 +191,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(1);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -220,7 +225,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
     expect(DeviceFunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
-    expect(StreakFunctions.registerStreakNotifcation).toHaveBeenCalledTimes(1);
+    expect(StreakEvents.registerStreakNotifcation).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 });
