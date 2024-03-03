@@ -37,8 +37,8 @@ jest.mock('@services/db/sync/Functions', () => ({
   getRowsToSyncPush: jest.fn(),
 }));
 
-jest.mock('@services/db/Functions', () => ({
-  ...jest.requireActual('@services/db/Functions'),
+jest.mock('@services/db/Operations', () => ({
+  ...jest.requireActual('@services/db/Operations'),
   insertRows: jest.fn(),
   updateRows: jest.fn(),
 }));

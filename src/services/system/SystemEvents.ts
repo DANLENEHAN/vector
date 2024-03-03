@@ -52,7 +52,9 @@ import {
  *                 network problems, or other unforeseen circumstances. These are handled
  *                 internally within the called functions, ensuring the app's flow is not disrupted.
  */
-export const appEntryCallback = async (appEntryType: AppEntryType) => {
+export const appEntryCallback = async (
+  appEntryType: AppEntryType,
+): Promise<void> => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
 
   const user: UserCreateSchema | null = await getUser();

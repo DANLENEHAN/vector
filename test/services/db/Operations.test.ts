@@ -248,7 +248,7 @@ describe('DB Functions Tests', () => {
       {sqlStatement: 'SELECT * FROM client_session_event WHERE deleted != 1;'},
     ]);
 
-    expect(response).toEqual(null);
+    expect(response).toEqual([]);
   });
 
   test('getRows - table name and select columns', async () => {
@@ -281,7 +281,7 @@ describe('DB Functions Tests', () => {
       },
     ]);
 
-    expect(response).toEqual(null);
+    expect(response).toEqual([]);
   });
 
   test('getRows - table name and where object', async () => {
@@ -321,7 +321,7 @@ describe('DB Functions Tests', () => {
       },
     ]);
 
-    expect(response).toEqual(null);
+    expect(response).toEqual([]);
   });
 
   test('getRows - table name and order by object', async () => {
@@ -358,7 +358,7 @@ describe('DB Functions Tests', () => {
           'SELECT * FROM client_session_event WHERE deleted != 1 ORDER BY created_at DESC, updated_at ASC;',
       },
     ]);
-    expect(response).toEqual(null);
+    expect(response).toEqual([]);
   });
 
   test('getRows - table name and limit string', async () => {
@@ -391,7 +391,7 @@ describe('DB Functions Tests', () => {
           'SELECT * FROM client_session_event WHERE deleted != 1 LIMIT 1;',
       },
     ]);
-    expect(response).toEqual(null);
+    expect(response).toEqual([]);
   });
 
   test('getRows - all params', async () => {
