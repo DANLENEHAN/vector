@@ -206,7 +206,7 @@ describe('SystemEvents Functions Tests', () => {
     expect(UserFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledTimes(2);
+    ).toHaveBeenCalledTimes(3);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenNthCalledWith(1, ClientSessionEventType.AppOpen);
