@@ -45,15 +45,6 @@ export const dateStrToMoment = (
   return moment(dateStr, format);
 };
 
-export const fromDateTzToDateTz = (
-  fromDate: moment.Moment,
-  fromTz: string,
-  toTz: string,
-) => {
-  const adjustedFromDate = moment.tz(fromDate, fromTz);
-  return adjustedFromDate.tz(toTz);
-};
-
 export const getDayBoundsOfDate = (date: moment.Moment): DayBounds => {
   const startOfDay = date.clone().startOf('day');
   const endOfDay = date.clone().endOf('day');
