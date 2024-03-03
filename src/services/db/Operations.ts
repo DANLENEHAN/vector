@@ -10,6 +10,28 @@ import 'react-native-get-random-values';
 import logger from '@utils/Logger';
 import {buildWhereClause, transformDbRows} from '@services/db/Functions';
 
+/**
+ * Inserts multiple rows of data into the specified table.
+ *
+ * This generic function `insertRows` takes a table name and an array of data objects to be
+ * inserted into the specified database table. It first checks if the data array is empty, throwing
+ * an error if so to prevent futile operations. The function then dynamically constructs an SQL
+ * insert statement for each row based on the keys of the first object in the data array, which
+ * are assumed to represent the table's columns. It uses a batch execution strategy to insert
+ * multiple rows efficiently, logging the outcome of each insertion.
+ *
+ * The generic type parameter `T` extends `RowData`, ensuring the function can handle any data
+ * structure that conforms to a basic row data interface. This approach allows for a flexible and
+ * type-safe way to interact with different tables within the database.
+ *
+ * @template T - The data type of the rows to be inserted, extending the basic `RowData` structure.
+ * @param {string} tableName - The name of the table into which the rows will be inserted.
+ * @param {T[]} data - An array of data objects, each representing a row to be inserted.
+ * @async
+ * @returns {Promise<void>} A promise that resolves when all rows have been attempted to be inserted,
+ *                          logging each insertion's success or failure without returning any value.
+ * @throws {Error} Throws an error if the data array is empty or if any SQL execution fails.
+ */
 export const insertRows = async <T extends RowData>(
   tableName: string,
   data: T[],
@@ -40,6 +62,28 @@ export const insertRows = async <T extends RowData>(
   });
 };
 
+/**
+ * Updates or replaces rows in the specified table based on the provided data array.
+ *
+ * This function, `updateRows`, first verifies that the provided data array is not empty, throwing
+ * an error if it is. It then constructs a dynamic SQL REPLACE statement for each row in the data
+ * array, which allows for either updating existing rows or inserting new rows if they don't already
+ * exist based on a unique identifier column (assumed to be `<tableName>_id`). It checks against
+ * existing timestamps to ensure only rows with newer data are updated, aiming to maintain data
+ * integrity and prevent overwriting with stale data.
+ *
+ * The function uses a batch execution approach for efficiency and logs the outcome of each
+ * operation, including the total number of rows successfully updated or replaced.
+ *
+ * @template T - The data type of the rows to be updated, extending the basic `RowData` structure.
+ * @param {string} tableName - The name of the table to update.
+ * @param {T[]} data - An array of data objects, each representing a row to be updated or replaced.
+ * @async
+ * @returns {Promise<void>} A promise that resolves when all operations are complete, providing logs
+ *                          of the process but not returning any value.
+ * @throws {Error} Throws an error if the data array is empty or if any SQL operation encounters an
+ *                 error.
+ */
 export const updateRows = async <T extends RowData>(
   tableName: string,
   data: T[],
@@ -105,6 +149,26 @@ export const updateRows = async <T extends RowData>(
   }
 };
 
+/**
+ * Retrieves rows from a specified table in the database, filtered by the provided parameters.
+ *
+ * This generic function constructs and executes a SQL query to fetch data from a database table
+ * based on a set of parameters including selected columns, where conditions, order conditions, and
+ * a limit on the number of rows to retrieve. It automatically filters out logically deleted rows
+ * (where `deleted` is not equal to 1) to ensure only relevant data is fetched. The function is
+ * capable of transforming the fetched rows into a specified type `T`, extending the basic `RowData`
+ * structure, allowing for a typed and convenient way to work with the retrieved data.
+ *
+ * @template T - The type into which the database rows will be transformed, extending `RowData`.
+ * @param {GetRowsParams} params - An object containing parameters to filter, sort, and limit the
+ *                                  query results.
+ * @async
+ * @returns {Promise<T[] | null>} A promise that resolves to an array of rows of type `T` if any
+ *                                rows match the query criteria, or `null` if an error occurs during
+ *                                the query execution.
+ * @throws {Error} This function captures errors encountered during SQL execution and logs a warning,
+ *                 returning `null` to indicate that the data retrieval was unsuccessful.
+ */
 export const getRows = async <T extends RowData>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
