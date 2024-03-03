@@ -38,13 +38,6 @@ export const momentToDateStr = (
   return formattedDate;
 };
 
-export const dateStrToMoment = (
-  dateStr: string,
-  format: TimestampFormat | DateFormat,
-): moment.Moment => {
-  return moment(dateStr, format);
-};
-
 export const getDayBoundsOfDate = (date: moment.Moment): DayBounds => {
   const startOfDay = date.clone().startOf('day');
   const endOfDay = date.clone().endOf('day');
