@@ -8,7 +8,7 @@ import {getTimestampForRow} from '@services/db/QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
-import {buildWhereClause} from '@services/db/Functions';
+import {buildWhereClause, transformDbRows} from '@services/db/Functions';
 
 export const insertRows = async (
   tableName: string,
@@ -134,11 +134,16 @@ export const getRows = async <T>(
     .join(' ')};`;
 
   const sqlResult: ExecutionResult[] = await executeSqlBatch([{sqlStatement}]);
-
   if (sqlResult[0].error) {
     logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
     return null;
   }
   const result = sqlResult[0].result;
-  return result as T[];
+
+  if (result.length > 0) {
+    // Fix typing later
+    return transformDbRows(result);
+  } else {
+    return result as T[];
+  }
 };

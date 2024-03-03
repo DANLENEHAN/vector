@@ -1,5 +1,7 @@
 // Functions
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
+import PushNotification from 'react-native-push-notification';
+import {getRows} from '@services/db/Operations';
 // Types
 import {
   BaseOperators,
@@ -7,12 +9,16 @@ import {
   ClientSessionEventType,
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
+import {DayBounds} from '@services/date/Type';
 // Logger
 import logger from '@utils/Logger';
-import {getRows} from '@services/db/Operations';
+
+// Constants
 import {SortOrders, syncDbTables, timestampFields} from '@shared/Constants';
 import {deviceTimestampNow, getDayBoundsOfDate} from '@services/date/Functions';
-import {DayBounds} from '@services/date/Type';
+
+import moment from 'moment-timezone';
+import {StreakNotifcationId} from './Constants';
 
 export const registerStreakNotifcation = async () => {
   // Get Streak
@@ -21,23 +27,46 @@ export const registerStreakNotifcation = async () => {
   // Scheduled Tomorrow at 9:00am local time
   // Message Extended Your Streak to Streak + 1
   // Send Streak
+
+  const tomorrow = deviceTimestampNow().add(1, 'days');
+  const scheduleDate = new Date(
+    tomorrow.year(),
+    tomorrow.month(),
+    tomorrow.date(),
+    9,
+    0,
+    0,
+  );
+  const streak: number | null = await getStreak();
+  if (streak === null) {
+    logger.warn("Can't get streak will not setup streak notifcation");
+  } else {
+    PushNotification.localNotificationSchedule({
+      id: StreakNotifcationId,
+      message:
+        `You've logged in ${streak} day${streak > 1 ? 's' : ''} in a row. \n` +
+        `Log in before Midnight to make it ${streak + 1}`,
+      date: scheduleDate,
+      allowWhileIdle: true,
+    });
+    logger.info(`Streak notifcation scheduled for ${scheduleDate}`);
+  }
 };
 
 export const getStreak = async () => {
-  // Get Last Streak Break
-  // Get Latest AppOpen
-  // Convert both to Local Timezone
-  // Work out Streak
-  // AppOpen - Streak Break in days
-
   // Get the Latest App Open
-  const latestAppOpen = await getRows<ClientSessionEventCreateSchema>(
-    syncDbTables.clientSessionEventTable,
-    ['*'],
-    `event_type = '${ClientSessionEventType.AppOpen}'`,
-    `${timestampFields.createdAt} ${SortOrders.DESC}`,
-    1,
-  );
+  const latestAppOpen = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [timestampFields.createdAt],
+    whereConditions: {
+      event_type: {
+        eq: ClientSessionEventType.AppOpen,
+      },
+    },
+    orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
+    limit: 1,
+  });
+
   if (!latestAppOpen || latestAppOpen.length === 0) {
     logger.warn(
       "Unable to calculate streak: can't retrieve latest App Open Event.",
@@ -48,21 +77,31 @@ export const getStreak = async () => {
 
   // Get the Latest Streak Break Or First App Open
   let startTime;
-  const latestAppStreakBreak = await getRows<ClientSessionEventCreateSchema>(
-    syncDbTables.clientSessionEventTable,
-    ['*'],
-    `event_type = '${ClientSessionEventType.StreakBreak}'`,
-    `${timestampFields.createdAt} ${SortOrders.DESC}`,
-    1,
-  );
+  const latestAppStreakBreak = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [timestampFields.createdAt],
+    whereConditions: {
+      event_type: {
+        eq: ClientSessionEventType.StreakBreak,
+      },
+    },
+    orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
+    limit: 1,
+  });
+
   if (!latestAppStreakBreak || latestAppStreakBreak.length === 0) {
-    const firstAppOpen = await getRows<ClientSessionEventCreateSchema>(
-      syncDbTables.clientSessionEventTable,
-      ['*'],
-      `event_type = '${ClientSessionEventType.AppOpen}'`,
-      `${timestampFields.createdAt} ${SortOrders.ASC}`,
-      1,
-    );
+    const firstAppOpen = await getRows<ClientSessionEventCreateSchema>({
+      tableName: syncDbTables.clientSessionEventTable,
+      selectColumns: [timestampFields.createdAt],
+      whereConditions: {
+        event_type: {
+          eq: ClientSessionEventType.AppOpen,
+        },
+      },
+      orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},
+      limit: 1,
+    });
+
     if (!firstAppOpen || firstAppOpen.length === 0) {
       logger.warn(
         "Unable to calculate streak: can't retrieve first App Open Event.",
@@ -74,7 +113,8 @@ export const getStreak = async () => {
     startTime = latestAppStreakBreak![0].created_at;
   }
 
-  console.log(startTime, endTime);
+  // the number of full days between the two dates
+  return moment(endTime).diff(moment(startTime), 'days');
 };
 
 export const checkStreakBreak = async () => {
@@ -94,6 +134,7 @@ export const checkStreakBreak = async () => {
 
   const appOpenEvent = await getRows<ClientSessionEventCreateSchema>({
     tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [`${syncDbTables.clientSessionEventTable}_id`],
     whereConditions: {
       [timestampFields.createdAt]: {
         [NumericOperators.Ge]: dayBounds.startOfDay,

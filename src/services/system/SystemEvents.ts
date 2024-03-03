@@ -6,23 +6,18 @@ import {getUser} from '@services/db/user/Functions';
 // Types
 import {AppEntryType} from '@services/system/Types';
 import {
+  BaseOperators,
   ClientSessionEventCreateSchema,
   ClientSessionEventType,
+  NumericOperators,
   UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {getRows} from '@services/db/Operations';
-import {SortOrders, syncDbTables, timestampFields} from '@shared/Constants';
-import {
-  deviceTimezone,
-  deviceTimestampNow,
-  fromDateTzToDateTz,
-  getDayBoundsOfDate,
-  momentToDateStr,
-} from '@services/date/Functions';
+import {syncDbTables, timestampFields} from '@shared/Constants';
+import {deviceTimestampNow, getDayBoundsOfDate} from '@services/date/Functions';
 import {DayBounds} from '@services/date/Type';
-import {TimestampFormat} from '@shared/Enums';
 import {checkStreakBreak} from '@services/notifcations/streak/Functions';
 
 export const appEntryCallback = async (appEntryType: AppEntryType) => {
@@ -34,7 +29,7 @@ export const appEntryCallback = async (appEntryType: AppEntryType) => {
   const isFirstAppEntry: boolean = await isFirstAppEntryToday();
 
   if (isFirstAppEntry) {
-    checkStreakBreak();
+    await checkStreakBreak();
   }
 
   if (
@@ -60,27 +55,19 @@ export const appEntryCallback = async (appEntryType: AppEntryType) => {
 };
 
 export const isFirstAppEntryToday = async (): Promise<boolean> => {
-  const timestampNow = deviceTimestampNow();
-  const dayBounds: DayBounds = getDayBoundsOfDate(timestampNow);
-
-  const timezone = deviceTimezone();
-  const appOpenEvent = await getRows<ClientSessionEventCreateSchema>(
-    syncDbTables.clientSessionEventTable,
-    ['*'],
-    `event_type = '${ClientSessionEventType.AppOpen}' ` +
-      `AND datetime(${timestampFields.createdAt}) >= '${momentToDateStr(
-        fromDateTzToDateTz(dayBounds.startOfDay, timezone, 'UTC'),
-        TimestampFormat.YYYYMMDDHHMMss,
-      )}' ` +
-      `AND datetime(${timestampFields.createdAt}) <= '${momentToDateStr(
-        fromDateTzToDateTz(dayBounds.endOfDay, timezone, 'UTC'),
-        TimestampFormat.YYYYMMDDHHMMss,
-      )}'`,
-    `${timestampFields.createdAt} ${SortOrders.DESC}`,
-  );
-
-  if (appOpenEvent && appOpenEvent?.length === 1) {
-    return true;
-  }
-  return false;
+  const dayBounds: DayBounds = getDayBoundsOfDate(deviceTimestampNow());
+  const appOpenEvent = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [`${syncDbTables.clientSessionEventTable}_id`],
+    whereConditions: {
+      [timestampFields.createdAt]: {
+        [NumericOperators.Ge]: dayBounds.startOfDay,
+        [NumericOperators.Le]: dayBounds.endOfDay,
+      },
+      event_type: {
+        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+      },
+    },
+  });
+  return appOpenEvent !== null && appOpenEvent.length === 1;
 };
