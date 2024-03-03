@@ -19,6 +19,6 @@ export interface SessionEventDeviceInfo {
 export enum AppEntryType {
   LoginTokenOnline = 'LoginTokenOnline',
   LoginTokenOffline = 'LoginTokenOffline',
-  LoginAuthed = 'LoginAuthenticated',
+  LoginAuthed = 'LoginAuthed',
   CreateAccAuthed = 'CreateAccAuthed',
 }
