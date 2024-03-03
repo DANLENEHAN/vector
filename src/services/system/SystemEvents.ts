@@ -18,7 +18,10 @@ import {getRows} from '@services/db/Operations';
 import {syncDbTables, timestampFields} from '@shared/Constants';
 import {deviceTimestampNow, getDayBoundsOfDate} from '@services/date/Functions';
 import {DayBounds} from '@services/date/Type';
-import {checkStreakBreak} from '@services/notifcations/streak/Functions';
+import {
+  checkStreakBreak,
+  registerStreakNotifcation,
+} from '@services/notifcations/streak/Functions';
 
 export const appEntryCallback = async (appEntryType: AppEntryType) => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
@@ -50,7 +53,7 @@ export const appEntryCallback = async (appEntryType: AppEntryType) => {
   }
 
   if (isFirstAppEntry) {
-    // Streak Setup (All)
+    await registerStreakNotifcation();
   }
 };
 

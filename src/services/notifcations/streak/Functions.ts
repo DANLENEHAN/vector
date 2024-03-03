@@ -44,8 +44,8 @@ export const registerStreakNotifcation = async () => {
     PushNotification.localNotificationSchedule({
       id: StreakNotifcationId,
       message:
-        `You've logged in ${streak} day${streak > 1 ? 's' : ''} in a row. \n` +
-        `Log in before Midnight to make it ${streak + 1}`,
+        `You've logged in ${streak} day${streak > 1 ? 's' : ''} in a row! \n` +
+        `Log in before Midnight to make it ${streak + 1}!`,
       date: scheduleDate,
       allowWhileIdle: true,
     });
