@@ -19,11 +19,12 @@ export const runDbMigrationProcess = async (revisionObject: {
 }): Promise<void> => {
   try {
     // Fetch the revision ID from the database
-    const migrationResult: ExecutionResult[] = await executeSqlBatch([
-      {
-        sqlStatement: `SELECT version_num FROM ${alembicTable};`,
-      },
-    ]);
+    const migrationResult: ExecutionResult<{version_num: string}>[] =
+      await executeSqlBatch([
+        {
+          sqlStatement: `SELECT version_num FROM ${alembicTable};`,
+        },
+      ]);
 
     // Extract the revision ID from the query result
     let revisionId: string | null;
@@ -58,7 +59,9 @@ export const runDbMigrationProcess = async (revisionObject: {
     }
 
     // Execute migration queries in a batch
-    const results: ExecutionResult[] = await executeSqlBatch(migrationQueries);
+    const results: ExecutionResult<{}>[] = await executeSqlBatch(
+      migrationQueries,
+    );
 
     // Handle the results of migration queries
     results.forEach(result => {

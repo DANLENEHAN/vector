@@ -69,11 +69,11 @@ export const processSyncTypePull = async (
           rowsToSync,
         );
         if (rowsToInsert.length > 0) {
-          await insertRows(tableName, rowsToInsert);
+          await insertRows<SyncCreateSchemas>(tableName, rowsToInsert);
         }
       } else {
         if (rowsToSync.length > 0) {
-          await updateRows(tableName, rowsToSync);
+          await updateRows<SyncCreateSchemas>(tableName, rowsToSync);
         }
       }
 

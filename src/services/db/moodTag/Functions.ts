@@ -15,7 +15,7 @@ export const getMoodTags = async (): Promise<MoodTagCreateSchema[]> => {
     sqlStatement: 'SELECT * FROM mood_tag;',
     params: [],
   };
-  const result = await executeSqlBatch([query]);
+  const result = await executeSqlBatch<MoodTagCreateSchema>([query]);
   // Ensure that the result is not empty
   if (result[0].result.length === 0) {
     throw new Error('No mood tags found.');

@@ -21,12 +21,12 @@ export interface RowData {
   [key: string]: any;
 }
 
-export interface ExecutionResult {
+export interface ExecutionResult<T> {
   /**
    * Original SQL statement and parameters associated with this execution.
    */
   originalQuery: {sqlStatement: string; params?: RowData[]};
-  result: RowData[];
+  result: T[];
   error: string | null;
 }
 

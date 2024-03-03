@@ -17,12 +17,14 @@ import logger from '@utils/Logger';
  * @returns {Promise<string | null>} A promise resolving to the timestamp value if the row is found, otherwise null.
  * @throws {Error} Throws an error if there's a problem executing the SQL query.
  */
-export const getTimestampForRow = async (
+export const getTimestampForRow = async <
+  T extends {[key in timestampFields]?: string},
+>(
   tableName: string,
   timestampField: timestampFields,
   uuid: string,
 ): Promise<string | null> => {
-  const results = await executeSqlBatch([
+  const results = await executeSqlBatch<T>([
     {
       sqlStatement: getRowByIdQuery(tableName, uuid),
     },
@@ -35,7 +37,7 @@ export const getTimestampForRow = async (
     return null;
   } else {
     return executionResult.result.length === 1
-      ? executionResult.result[0][timestampField]
+      ? executionResult.result[0][timestampField] || null
       : null;
   }
 };

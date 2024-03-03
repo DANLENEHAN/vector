@@ -14,7 +14,7 @@ import {timestampColumns, AndOrOperatos} from '@shared/Constants';
 // Types
 import {isInEnum} from '@shared/Functions';
 // Functions
-import {QueryOperators} from '@services/db/Types';
+import {QueryOperators, RowData} from '@services/db/Types';
 import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
 
 /**
@@ -233,9 +233,7 @@ export const buildWhereClause = (
  * @throws {Error} - If timezone conversion fails due to invalid data or if a valid timezone
  *                   string cannot be obtained.
  */
-export const transformDbRows = <T extends Record<string, string | number>>(
-  rows: T[],
-): T[] => {
+export const transformDbRows = <T extends RowData>(rows: T[]): T[] => {
   return rows.map(row => {
     let transformedRow: T = {...row};
     for (const column of Object.values(timestampColumns)) {

@@ -14,5 +14,8 @@ import {insertRows} from '@services/db/Operations';
 export const insertMoodTagLinks = async (
   moodTagLinks: MoodTagLinkCreateSchema[],
 ): Promise<void> => {
-  await insertRows(syncDbTables.moodTagLinkTable, moodTagLinks);
+  await insertRows<MoodTagLinkCreateSchema>(
+    syncDbTables.moodTagLinkTable,
+    moodTagLinks,
+  );
 };

@@ -14,5 +14,5 @@ import {insertRows} from '@services/db/Operations';
 export const insertBodyStat = async (
   stats: BodyStatCreateSchema[],
 ): Promise<void> => {
-  await insertRows(syncDbTables.bodyStatTable, stats);
+  await insertRows<BodyStatCreateSchema>(syncDbTables.bodyStatTable, stats);
 };

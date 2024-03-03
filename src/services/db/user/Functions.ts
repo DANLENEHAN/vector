@@ -40,11 +40,12 @@ export const insertUser = async (user: UserCreateSchema): Promise<void> => {
  */
 export const getUser = async (): Promise<UserCreateSchema | null> => {
   try {
-    const sqlResult: ExecutionResult[] = await executeSqlBatch([
-      {
-        sqlStatement: `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`,
-      },
-    ]);
+    const sqlResult: ExecutionResult<UserCreateSchema>[] =
+      await executeSqlBatch([
+        {
+          sqlStatement: `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`,
+        },
+      ]);
 
     if (sqlResult[0].error) {
       if (

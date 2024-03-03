@@ -14,5 +14,8 @@ import {insertRows} from '@services/db/Operations';
 export const insertNutritions = async (
   nutritions: NutritionCreateSchema[],
 ): Promise<void> => {
-  await insertRows(syncDbTables.nutritionTable, nutritions);
+  await insertRows<NutritionCreateSchema>(
+    syncDbTables.nutritionTable,
+    nutritions,
+  );
 };

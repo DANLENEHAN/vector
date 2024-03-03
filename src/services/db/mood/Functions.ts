@@ -12,5 +12,5 @@ import {insertRows} from '@services/db/Operations';
  * @throws {string} Throws an error with a message describing the issue if the operation fails.
  */
 export const insertMoods = async (moods: MoodCreateSchema[]): Promise<void> => {
-  await insertRows(syncDbTables.moodTable, moods);
+  await insertRows<MoodCreateSchema>(syncDbTables.moodTable, moods);
 };

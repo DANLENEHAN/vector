@@ -53,9 +53,10 @@ export const insertClientSessionEvent = async (
           user_agent: sessionEventDeviceInfo?.userAgent,
           device_id: deviceRow.device_id,
         };
-        await insertRows(syncDbTables.clientSessionEventTable, [
-          clientSessionEvent,
-        ]);
+        await insertRows<ClientSessionEventCreateSchema>(
+          syncDbTables.clientSessionEventTable,
+          [clientSessionEvent],
+        );
       }
     }
   } catch (error) {

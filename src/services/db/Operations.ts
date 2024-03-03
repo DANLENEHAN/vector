@@ -10,9 +10,9 @@ import 'react-native-get-random-values';
 import logger from '@utils/Logger';
 import {buildWhereClause, transformDbRows} from '@services/db/Functions';
 
-export const insertRows = async (
+export const insertRows = async <T extends RowData>(
   tableName: string,
-  data: RowData[],
+  data: T[],
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
@@ -20,7 +20,7 @@ export const insertRows = async (
 
   const schema = Object.keys(data[0]);
   const columns = schema.join(', ');
-  const results = await executeSqlBatch(
+  const results = await executeSqlBatch<T>(
     data.map(row => ({
       sqlStatement: `INSERT INTO ${tableName} (${columns}) VALUES (${schema
         .map(() => '?')
@@ -40,9 +40,9 @@ export const insertRows = async (
   });
 };
 
-export const updateRows = async (
+export const updateRows = async <T extends RowData>(
   tableName: string,
-  data: RowData[],
+  data: T[],
 ): Promise<void> => {
   if (data.length === 0) {
     throw Error('No data to insert.');
@@ -56,10 +56,10 @@ export const updateRows = async (
     .map(() => '?')
     .join(', ')}`;
 
-  const rowIdColumn = `${tableName}_id`;
+  const rowIdColumn: string = `${tableName}_id`;
   const currentTimestamps: any = {};
   for (const obj of data) {
-    currentTimestamps[obj[rowIdColumn]] = await getTimestampForRow(
+    currentTimestamps[obj[rowIdColumn]] = await getTimestampForRow<T>(
       tableName,
       timestampFields.updatedAt,
       obj[rowIdColumn],
@@ -81,7 +81,7 @@ export const updateRows = async (
       params: Object.values(newRowObject),
     }));
 
-    const results: ExecutionResult[] = await executeSqlBatch(queries);
+    const results: ExecutionResult<T>[] = await executeSqlBatch(queries);
 
     results.forEach(result => {
       if (result.error) {
@@ -105,7 +105,7 @@ export const updateRows = async (
   }
 };
 
-export const getRows = async <T>(
+export const getRows = async <T extends RowData>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
   // Build Query Components
@@ -133,7 +133,9 @@ export const getRows = async <T>(
     .filter(string => string)
     .join(' ')};`;
 
-  const sqlResult: ExecutionResult[] = await executeSqlBatch([{sqlStatement}]);
+  const sqlResult: ExecutionResult<T>[] = await executeSqlBatch<T>([
+    {sqlStatement},
+  ]);
   if (sqlResult[0].error) {
     logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
     return null;
@@ -142,7 +144,7 @@ export const getRows = async <T>(
 
   if (result.length > 0) {
     // Fix typing later
-    return transformDbRows(result);
+    return transformDbRows<T>(result);
   } else {
     return result as T[];
   }
