@@ -56,6 +56,7 @@ export const appEntryCallback = async (
 
   if (isFirstAppEntry) {
     await checkStreakBreak();
+    await registerStreakNotifcation();
   }
 
   if (
@@ -73,9 +74,5 @@ export const appEntryCallback = async (
     if (user != null) {
       await retrieveOrRegisterDeviceId(user.user_id);
     }
-  }
-
-  if (isFirstAppEntry) {
-    await registerStreakNotifcation();
   }
 };

@@ -183,13 +183,15 @@ export const buildWhereClause = (
   whereConditions: any,
   // If a logicalOperator is not specified in the
   // whereConditions it will default to AND
-  logicalOperator: string = 'AND',
+  logicalOperator: AndOrOperatos = AndOrOperatos.AND,
 ): string => {
   const conditions: string[] = [];
   for (const key in whereConditions) {
     // If the key is a booleanOperator we must recursively call the function
     if (isInEnum(AndOrOperatos, key)) {
-      conditions.push(buildWhereClause(whereConditions[key], key));
+      conditions.push(
+        buildWhereClause(whereConditions[key], key as AndOrOperatos),
+      );
     } else {
       // If key is not a booleanOperator It's a column so gather the conditionals
       for (const [operator, value] of Object.entries(whereConditions[key])) {

@@ -176,8 +176,8 @@ export const getRows = async <T extends RowData>(
   const columnsToSelect = (params.selectColumns || ['*']).join(', ');
   const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
   const whereString = params.whereConditions
-    ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted != 1`
-    : 'WHERE deleted != 1';
+    ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted is False`
+    : 'WHERE deleted is False';
   const orderByString = params.orderConditions
     ? `ORDER BY ${Object.entries(params.orderConditions)
         .map((item: [string, SortOrders]) => {

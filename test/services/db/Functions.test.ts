@@ -225,7 +225,7 @@ describe('DB Functions Tests', () => {
     const response = buildWhereClause(sampleWhereConditionsFlatObject);
     // Assert
     expect(response).toEqual(
-      '(numberCol = 20 AND numberCol <= 30 AND stringCol = 10 AND stringCol <= 20)',
+      '(numberCol = 20 and numberCol <= 30 and stringCol = 10 and stringCol <= 20)',
     );
   });
 

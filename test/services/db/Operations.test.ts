@@ -245,7 +245,10 @@ describe('DB Functions Tests', () => {
     expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(0);
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
-      {sqlStatement: 'SELECT * FROM client_session_event WHERE deleted != 1;'},
+      {
+        sqlStatement:
+          'SELECT * FROM client_session_event WHERE deleted is False;',
+      },
     ]);
 
     expect(response).toEqual([]);
@@ -277,7 +280,7 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT col1, col2 FROM client_session_event WHERE deleted != 1;',
+          'SELECT col1, col2 FROM client_session_event WHERE deleted is False;',
       },
     ]);
 
@@ -317,7 +320,7 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE (fakeCol = 1) AND deleted != 1;',
+          'SELECT * FROM client_session_event WHERE (fakeCol = 1) AND deleted is False;',
       },
     ]);
 
@@ -355,7 +358,7 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE deleted != 1 ORDER BY created_at DESC, updated_at ASC;',
+          'SELECT * FROM client_session_event WHERE deleted is False ORDER BY created_at DESC, updated_at ASC;',
       },
     ]);
     expect(response).toEqual([]);
@@ -388,7 +391,7 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE deleted != 1 LIMIT 1;',
+          'SELECT * FROM client_session_event WHERE deleted is False LIMIT 1;',
       },
     ]);
     expect(response).toEqual([]);
@@ -401,7 +404,7 @@ describe('DB Functions Tests', () => {
     const orderConditions = {fakeCol: SortOrders.DESC};
     const sqlQuery =
       'SELECT fakeCol FROM client_session_event WHERE (fakeCol = 1) ' +
-      'AND deleted != 1 ORDER BY fakeCol DESC LIMIT 1;';
+      'AND deleted is False ORDER BY fakeCol DESC LIMIT 1;';
 
     jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
       {
