@@ -43,7 +43,6 @@ const WeightProgress: React.FC<ScreenProps> = ({
         BodyStatType.Weight,
         WeightUnit.Kg,
       );
-      console.log('data', data);
       setGraphData(data);
     };
     fetchData();

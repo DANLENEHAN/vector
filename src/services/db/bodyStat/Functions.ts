@@ -18,7 +18,7 @@ export const insertBodyStat = async (
   await insertRows(syncDbTables.bodyStatTable, stats);
 };
 
-interface getBodyStatsInserface {
+interface getBodyStatsInterface {
   columns: string[];
   whereClause?: string;
 }
@@ -33,7 +33,7 @@ interface getBodyStatsInserface {
 export const getBodyStats = async ({
   columns,
   whereClause,
-}: getBodyStatsInserface): Promise<BodyStatCreateSchema[]> => {
+}: getBodyStatsInterface): Promise<BodyStatCreateSchema[]> => {
   const query = {
     sqlStatement: `SELECT ${columns.join(', ')} FROM body_stat ${
       whereClause ? `WHERE ${whereClause}` : ''

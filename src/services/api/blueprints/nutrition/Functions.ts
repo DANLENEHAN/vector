@@ -2,6 +2,9 @@
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getUser} from '@services/db/user/Functions';
+import {getNutritions} from '@services/db/nutrition/Functions';
+import moment from 'moment';
+import {generateGraphData} from '@services/timeSeries/Functions';
 
 // Types
 import {
@@ -14,9 +17,13 @@ import {
 import {insertNutritions} from '@services/db/nutrition/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {syncDbTables} from '@shared/Constants';
 
 // Logger
 import logger from '@utils/Logger';
+
+// Ge
 
 /**
  * Interface for the CreateNewNutritionParams function.
@@ -68,5 +75,26 @@ export const createNewNutrition = async ({
     }
   } catch (error) {
     logger.error(`Error: ${error}`);
+  }
+};
+
+export const getNutritionGraphData = async (
+  nutritionType: NutritionType,
+  targetUnit: NutritionWeightUnit | WaterUnit | CaloriesUnit,
+): Promise<graphPeriodData> => {
+  const user: UserCreateSchema | null = await getUser();
+  if (user != null) {
+    const stats = await getNutritions({
+      columns: ['value', 'created_at', 'unit'],
+      whereClause: `user_id = '${user.user_id}' AND type = '${nutritionType}' AND deleted IS false`,
+    });
+    return generateGraphData({
+      table: syncDbTables.nutritionTable,
+      data: stats,
+      targetDate: moment.utc(),
+      targetUnit: targetUnit,
+    });
+  } else {
+    throw new Error('Unable to retreive user, cannot get body stat data.');
   }
 };

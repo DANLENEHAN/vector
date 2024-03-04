@@ -1,5 +1,5 @@
 // React imports
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
@@ -7,14 +7,18 @@ import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
-import LineGraph from '@components/visualisations/graphs/Line/Graph';
+import Graph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
 import {useSystem} from '@context/SystemContext';
+import {getNutritionGraphData} from '@services/api/blueprints/nutrition/Functions';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {GraphPlotData} from '@components/visualisations/graphs/Line/Types';
-import {WaterUnit} from '@services/api/swagger/data-contracts';
+import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {timePeriods} from '@services/timeSeries/Types';
+// Constants
+import {timePeriodLabels} from '@services/timeSeries/Types';
 
 /**
  *  Weight progress screen
@@ -29,20 +33,20 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
+  const dateOptions = Object.keys(timePeriodLabels);
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
+  const [graphData, setGraphData] = useState<graphPeriodData>();
 
-  const graphData = new GraphPlotData(
-    [
-      {value: 4000, date: '2024-01-01T11:35:36.961Z'},
-      {value: 3000, date: '2024-01-02T11:35:36.961Z'},
-      {value: 3500, date: '2024-01-03T11:35:36.961Z'},
-      {value: 2000, date: '2024-01-04T11:35:36.961Z'},
-      {value: 1000, date: '2024-01-05T11:35:36.961Z'},
-      {value: 3666, date: '2024-01-06T11:35:36.961Z'},
-    ],
-    WaterUnit.Ml,
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getNutritionGraphData(
+        NutritionType.Water,
+        WaterUnit.Ml,
+      );
+      setGraphData(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -67,12 +71,30 @@ const MoodProgress: React.FC<ScreenProps> = ({
           />
         </View>
         <View style={styles.graphSection}>
-          <LineGraph
-            data={graphData.graphData}
-            averageLabel={graphData.averagePeriodLabel}
-            averageValue={graphData.averageValue}
-            unit={graphData.unit}
-          />
+          {graphData &&
+            activePeriod &&
+            timePeriodLabels[activePeriod as timePeriods] &&
+            graphData[timePeriodLabels[activePeriod as timePeriods]] && (
+              <Graph
+                data={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].data
+                }
+                averageLabel={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averagePeriodLabel || ''
+                }
+                averageValue={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averageValue
+                }
+                unit={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].unit
+                }
+                minYValue={0}
+                chartType="line"
+                showUnit={true}
+              />
+            )}
         </View>
       </View>
     </ScreenWrapper>
