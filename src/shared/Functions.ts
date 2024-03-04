@@ -56,3 +56,6 @@ export const transformsInternalNameToDisplay = (name: string) => {
     .map(word => capitalizeString(word))
     .join(' ');
 };
+
+export const isInEnum = <T>(enumType: T, value: any): boolean =>
+  Object.values(enumType as object).includes(value);

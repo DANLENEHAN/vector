@@ -1,7 +1,7 @@
 // Functions
 import * as SystemFunctions from '@services/system/Functions';
 import * as Devicefunctions from '@services/api/blueprints/device/Functions';
-import * as dbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import {insertClientSessionEvent} from '@services/db/clientSessionEvent/Functions';
 import * as dateFunctions from '@services/date/Functions';
 import logger from '@utils/Logger';
@@ -21,16 +21,16 @@ import {sampleDeviceRow, sampleUser, sampleUserId} from '../../../Objects';
 
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
-  getCurrentTimestampTimezone: jest.fn().mockReturnValue({
+  getUtcNowAndDeviceTimezone: jest.fn().mockReturnValue({
     timestamp: '2025-01-01T00:00:00.000',
     timezone: 'UTC',
   }),
 }));
-jest.mock('@services/api/blueprints/device/Api', () => ({
+jest.mock('@services/api/blueprints/device/Functions', () => ({
   retrieveOrRegisterDeviceId: jest.fn(),
 }));
-jest.mock('@services/db/Functions', () => ({
-  ...jest.requireActual('@services/db/Functions'),
+jest.mock('@services/db/Operations', () => ({
+  ...jest.requireActual('@services/db/Operations'),
   insertRows: jest.fn(),
 }));
 jest.mock('uuid', () => ({
@@ -84,15 +84,15 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
       sampleUserId,
     );
 
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(1);
-    expect(dbFunctions.insertRows).toHaveBeenCalledWith(
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.insertRows).toHaveBeenCalledWith(
       syncDbTables.clientSessionEventTable,
       [clientSessionEvent],
     );
@@ -111,11 +111,11 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
 
     expect(response).toEqual(undefined);
   });
@@ -135,14 +135,14 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(1);
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledWith(
       sampleUserId,
     );
 
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
 
     expect(response).toEqual(undefined);
   });
@@ -159,12 +159,12 @@ describe('Test Client Session Event Functions', () => {
 
     // Assert
     expect(SystemFunctions.getDeviceInfo).toHaveBeenCalledTimes(1);
-    expect(dateFunctions.getCurrentTimestampTimezone).toHaveBeenCalledTimes(1);
+    expect(dateFunctions.getUtcNowAndDeviceTimezone).toHaveBeenCalledTimes(1);
 
     expect(UserDbFunctions.getUser).toHaveBeenCalledTimes(1);
 
     expect(Devicefunctions.retrieveOrRegisterDeviceId).toHaveBeenCalledTimes(0);
-    expect(dbFunctions.insertRows).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.insertRows).toHaveBeenCalledTimes(0);
 
     expect(logger.info).toHaveBeenCalledTimes(1);
     expect(logger.info).toHaveBeenCalledWith(

@@ -2,7 +2,7 @@
 import {NutritionCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 
 /**
  * @description Inserts an array of nutrition entries into the nutrition table.
@@ -14,5 +14,8 @@ import {insertRows} from '@services/db/Functions';
 export const insertNutritions = async (
   nutritions: NutritionCreateSchema[],
 ): Promise<void> => {
-  await insertRows(syncDbTables.nutritionTable, nutritions);
+  await insertRows<NutritionCreateSchema>(
+    syncDbTables.nutritionTable,
+    nutritions,
+  );
 };

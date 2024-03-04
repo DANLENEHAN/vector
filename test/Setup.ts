@@ -3,6 +3,7 @@
  */
 import '@testing-library/jest-native/extend-expect';
 
+jest.mock('react-native-push-notification', () => {});
 jest.mock('react-native-fs', () => {});
 jest.mock('@react-native-firebase/messaging', () => {});
 jest.mock('react-native-device-info', () => {});

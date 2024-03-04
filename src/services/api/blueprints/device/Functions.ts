@@ -29,7 +29,7 @@ export const retrieveOrRegisterDeviceId = async (
 ): Promise<DeviceCreateSchema | null> => {
   try {
     const actualInternalDeviceId = await DeviceInfo.getUniqueId();
-    if (userId == null || actualInternalDeviceId === '') {
+    if (userId === null || actualInternalDeviceId === '') {
       return null;
     }
 

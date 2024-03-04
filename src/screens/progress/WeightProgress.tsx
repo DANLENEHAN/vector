@@ -48,7 +48,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
         let user_weights = await getUserStats({
           bodyStatType: BodyStatType.Weight,
         });
-        if (user_weights == null) {
+        if (user_weights === null) {
           logger.info('No user weights found');
           return;
         }

@@ -1,6 +1,6 @@
 // Functions
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 
 // Types
@@ -48,7 +48,7 @@ export const createNewBodyStat = async ({
 }: createNewBodyStatParams): Promise<void> => {
   try {
     const user: UserCreateSchema | null = await getUser();
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+    const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
 
     if (user != null) {
       await insertBodyStat([

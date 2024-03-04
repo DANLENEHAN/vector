@@ -39,7 +39,8 @@ export const getLastSyncedForTable = async (
     sqlStatement: getLastSyncedForTableQuery(tableName, syncType),
   };
 
-  const executionResult: ExecutionResult[] = await executeSqlBatch([query]);
+  const executionResult: ExecutionResult<SyncCreateSchemas>[] =
+    await executeSqlBatch([query]);
 
   if (executionResult[0].error) {
     logger.error('Error executing SQL query:', executionResult[0]?.error);
@@ -125,7 +126,7 @@ export const insertSyncUpdate = async (
     params: Object.values(syncUpdate),
   };
 
-  const executionResult: ExecutionResult[] = await executeSqlBatch([query]);
+  const executionResult: ExecutionResult<{}>[] = await executeSqlBatch([query]);
 
   if (executionResult[0].error) {
     throw new Error(
@@ -235,7 +236,8 @@ export const filterRowsForInsertion = async (
     params: tableUuids,
   };
 
-  const executionResult: ExecutionResult[] = await executeSqlBatch([query]);
+  const executionResult: ExecutionResult<SyncCreateSchemas>[] =
+    await executeSqlBatch([query]);
 
   if (executionResult[0].error) {
     throw new Error(

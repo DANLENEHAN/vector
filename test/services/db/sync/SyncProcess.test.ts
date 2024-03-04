@@ -28,7 +28,7 @@ describe('Sync Process Tests', () => {
   });
   test('runSyncProcess', async () => {
     // Arrange
-    jest.spyOn(DateFunctions, 'getCurrentTimestampTimezone').mockReturnValue({
+    jest.spyOn(DateFunctions, 'getUtcNowAndDeviceTimezone').mockReturnValue({
       timestamp: sampleTimestampOne,
       timezone: sampleTimezone,
     });

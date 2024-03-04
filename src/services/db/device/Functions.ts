@@ -2,7 +2,7 @@
 import {DeviceCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 import {executeSqlBatch} from '../SqlClient';
 
 // Services
@@ -24,7 +24,7 @@ import {ExecutionResult} from '../Types';
 export const insertDevice = async (
   device: DeviceCreateSchema,
 ): Promise<void> => {
-  await insertRows(syncDbTables.deviceTable, [device]);
+  await insertRows<DeviceCreateSchema>(syncDbTables.deviceTable, [device]);
 };
 
 /**
@@ -48,14 +48,15 @@ export const getDevice = async (
   userId: string,
 ): Promise<DeviceCreateSchema | null> => {
   try {
-    const sqlResult: ExecutionResult[] = await executeSqlBatch([
-      {
-        sqlStatement:
-          `SELECT * FROM ${syncDbTables.deviceTable} ` +
-          `WHERE device_internal_id = '${internalDeviceId}' ` +
-          `AND user_id = '${userId}';`,
-      },
-    ]);
+    const sqlResult: ExecutionResult<DeviceCreateSchema>[] =
+      await executeSqlBatch([
+        {
+          sqlStatement:
+            `SELECT * FROM ${syncDbTables.deviceTable} ` +
+            `WHERE device_internal_id = '${internalDeviceId}' ` +
+            `AND user_id = '${userId}';`,
+        },
+      ]);
 
     if (sqlResult[0].error) {
       logger.warn(`Unable to get Device with error: ${sqlResult[0].error}`);

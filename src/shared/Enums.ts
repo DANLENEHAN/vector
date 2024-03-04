@@ -10,6 +10,8 @@ export enum SyncType {
 
 export enum TimestampFormat {
   YYYYMMDDHHMMssSSS = 'YYYY-MM-DDTHH:mm:ss.SSS', // Example: 2024-02-08T10:30:36.989
+  // Used to transform date strings into the SqlLite 'datetime' function
+  SqlLiteDatetimeFormat = 'YYYY-MM-DD HH:mm:ss', // Example: 2024-02-29 16:07:41
 }
 
 export enum DateFormat {

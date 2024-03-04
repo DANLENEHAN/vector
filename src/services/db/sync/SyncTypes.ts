@@ -19,7 +19,7 @@ import {
   insertSyncUpdate,
   filterRowsForInsertion,
 } from '@services/db/sync/Functions';
-import {insertRows, updateRows} from '@services/db/Functions';
+import {insertRows, updateRows} from '@services/db/Operations';
 import {
   processCreatesSyncTypePush,
   processUpdatesSyncTypePush,
@@ -69,11 +69,11 @@ export const processSyncTypePull = async (
           rowsToSync,
         );
         if (rowsToInsert.length > 0) {
-          await insertRows(tableName, rowsToInsert);
+          await insertRows<SyncCreateSchemas>(tableName, rowsToInsert);
         }
       } else {
         if (rowsToSync.length > 0) {
-          await updateRows(tableName, rowsToSync);
+          await updateRows<SyncCreateSchemas>(tableName, rowsToSync);
         }
       }
 

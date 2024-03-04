@@ -19,12 +19,11 @@ import {
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
-import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 // Functions
-import {runSyncProcess} from '@services/db/sync/SyncProcess';
-import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
+import {appEntryCallback} from '@services/system/SystemEvents';
+import {AppEntryType} from '@services/system/Types';
 
 /**
  * Splash screen that checks if the user is logged in or not
@@ -53,9 +52,8 @@ const Splash: React.FC<ScreenProps> = ({
       if (isConnected === true) {
         const response = await testAuthentication();
         if (response === undefined) {
-          await runSyncProcess();
-          await handleClientSessionEvent(ClientSessionEventType.AppOpen);
           navigation.navigate('App', {screen: 'Home'});
+          appEntryCallback(AppEntryType.LoginAuthed);
         } else {
           logger.info(
             `Trouble logging in with key ${AsyncStorageKeys.FlaskLoginCookie} value ${value}. Deleting...`,
@@ -64,8 +62,8 @@ const Splash: React.FC<ScreenProps> = ({
           navigation.navigate('Login');
         }
       } else {
-        // If user has cookie but isn't connected we allow them through
         navigation.navigate('App', {screen: 'Home'});
+        appEntryCallback(AppEntryType.LoginTokenOffline);
       }
     }
   }, [isConnected, navigation]);

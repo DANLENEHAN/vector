@@ -9,8 +9,8 @@ import {
 import {syncDbTables} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 // Functions
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {insertRows} from '@services/db/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
+import {insertRows} from '@services/db/Operations';
 import {getDeviceInfo} from '@services/system/Functions';
 import {v4 as uuid4} from 'uuid';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
@@ -31,7 +31,7 @@ export const insertClientSessionEvent = async (
   eventType: ClientSessionEventType,
 ): Promise<void> => {
   const sessionEventDeviceInfo = await getDeviceInfo();
-  const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+  const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
 
   let userId = null;
   try {
@@ -53,9 +53,10 @@ export const insertClientSessionEvent = async (
           user_agent: sessionEventDeviceInfo?.userAgent,
           device_id: deviceRow.device_id,
         };
-        await insertRows(syncDbTables.clientSessionEventTable, [
-          clientSessionEvent,
-        ]);
+        await insertRows<ClientSessionEventCreateSchema>(
+          syncDbTables.clientSessionEventTable,
+          [clientSessionEvent],
+        );
       }
     }
   } catch (error) {
