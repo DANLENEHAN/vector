@@ -40,6 +40,10 @@ import {maxValuePadding} from '@services/timeSeries/Constants';
  * @param {number} averageValue - The average value of the data
  * @param {string} averageLabel - The label for the average value
  * @param {string} unit - The unit for the average value
+ * @param {'bar' | 'line'} chartType - The type of chart to be displayed
+ * @param {number} maxYValue - The maximum y value for the graph
+ * @param {number} minYValue - The minimum y value for the graph
+ * @param {boolean} showUnit - Whether to show the unit on the average value
  */
 interface GraphProps {
   data: graphDataPoint[];

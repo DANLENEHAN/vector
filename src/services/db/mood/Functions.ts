@@ -32,10 +32,6 @@ export const getMoods = async ({
     params: [],
   };
   const result = await executeSqlBatch([query]);
-  // Ensure that the result is not empty
-  if (result[0].result.length === 0) {
-    throw new Error('No moods found.');
-  }
   const moods = result[0].result;
   return moods as MoodCreateSchema[];
 };

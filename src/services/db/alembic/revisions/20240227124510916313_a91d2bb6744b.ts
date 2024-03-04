@@ -1,7 +1,6 @@
 export const revisionID = 'a91d2bb6744b';
 
 export const sqlCommands_20240227124510916313_a91d2bb6744b: string[] = [
-  "INSERT INTO \"user\" (user_id, username, email, password, status, premium, age, birthday, first_name, last_name, gender, phone_number, height_unit_pref, weight_unit_pref, date_format_pref, language, goal, superuser, created_at, timezone) VALUES ('c87ec315-2a56-40dd-9b96-22840ab11088', 'AdminUser', 'sheiva.health@gmail.com', 'gAAAAABl3dlXOyCd-B6gTUY2Nhv6CaL7eawK7ZXlNdvYtsuRfc-0e7hJCWJS71uSfJNuBZ6r97216T51te9WCTVeJhm5TpdMOw==', 'active', true, 33, '1997-05-18', 'Daniel', 'Lenehan', 'male', 'tel:+44-7308-831531', 'cm', 'kg', '%d-%m-%Y', 'en', 'build_muscle', true, '2024-02-27 12:45:11.195503', 'GMT');",
   "INSERT INTO mood_tag (mood_tag_id, label, category, icon, user_id, created_at, timezone) VALUES ('f5ec1ca1-373c-452e-91a1-e18870aed1ec', 'Restful Night', 'sleep', 'bed', 'c87ec315-2a56-40dd-9b96-22840ab11088', '2024-02-27 12:45:11.196217', 'GMT');",
   "INSERT INTO mood_tag (mood_tag_id, label, category, icon, user_id, created_at, timezone) VALUES ('4c6422b3-0111-4c25-b5f9-aff81627ab39', 'Insomnia', 'sleep', 'face-tired', 'c87ec315-2a56-40dd-9b96-22840ab11088', '2024-02-27 12:45:11.196222', 'GMT');",
   "INSERT INTO mood_tag (mood_tag_id, label, category, icon, user_id, created_at, timezone) VALUES ('531807fa-e3e2-4b96-8fa8-4d92ead56ef4', 'Late Night', 'sleep', 'moon', 'c87ec315-2a56-40dd-9b96-22840ab11088', '2024-02-27 12:45:11.196224', 'GMT');",
