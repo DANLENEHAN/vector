@@ -62,6 +62,7 @@ export type graphDataPoint = {
   label: string;
   axisLabel: string;
   numberOfDataPoints: number;
+  color?: string;
 };
 
 /**
@@ -69,8 +70,8 @@ export type graphDataPoint = {
  */
 export interface graphData {
   data: graphDataPoint[];
-  averagePeriodLabel: string;
-  averageValue: number | null;
+  averagePeriodLabel: string | null;
+  averageValue: number | null | string;
   unit: string;
 }
 

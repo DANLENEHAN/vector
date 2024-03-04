@@ -1,3 +1,4 @@
+// Types
 import {
   SchemaMapping,
   timePeriodLabels,
@@ -10,18 +11,23 @@ import {
   graphDataPoint,
   timePeriods,
 } from '@services/timeSeries/Types';
+// Constants
 import {timestampFields} from '@shared/Constants';
-import {convertValue, UnitType} from '@utils/Conversion';
-import {parseDate} from '@services/date/Functions';
-import {TimestampFormat, TimeFormat, DateFormat} from '@shared/Enums';
-import moment, {Moment} from 'moment';
-import {formatDate} from '@services/date/Functions';
 import {
   timePeriodLookbacks,
   intervalLengths,
   axisLabelGenerators,
   labelGaps,
+  emptyGraphPeriodData,
 } from '@services/timeSeries/Constants';
+import {TimestampFormat, TimeFormat, DateFormat} from '@shared/Enums';
+// Functions
+import {convertValue, UnitType} from '@utils/Conversion';
+import {parseDate} from '@services/date/Functions';
+import moment, {Moment} from 'moment';
+import {formatDate} from '@services/date/Functions';
+// Logger
+import logger from '@utils/Logger';
 
 /**
  * Function creates a string representation of the interval dates
@@ -366,6 +372,9 @@ export function getGraphData(
 ): graphPeriodData {
   let output = {} as graphPeriodData;
   const periods = Object.values(timePeriodLabels);
+  // If no target unit is provided, use the unit of the first data point
+  // If target unit is provided, use that
+  // If no data points are provided, use an empty string
   const unit = targetUnit || data.length > 0 ? data[0].unit : '';
   periods.forEach(period => {
     const intervals = getIntervals(period, targetDate);
@@ -412,6 +421,10 @@ export function generateGraphData<T extends keyof SchemaMapping>({
   targetUnit?: UnitType;
   targetDate?: Moment;
 }): graphPeriodData {
+  if (data.length === 0) {
+    logger.warn('No data provided');
+    return emptyGraphPeriodData;
+  }
   const transformedData = transformData({table, data});
   const convertedData = targetUnit
     ? convertData(transformedData, targetUnit)

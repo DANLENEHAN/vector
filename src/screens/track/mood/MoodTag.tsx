@@ -124,6 +124,12 @@ const MoodTagScreen: React.FC<any> = ({
    * @param mood_id <string> The id of the mood
    */
   const saveMoodTagLinks = (mood_id: string) => {
+    const selectedMoodTagsArray = Object.values(selectedMoodTags).flat();
+    if (selectedMoodTagsArray.length === 0) {
+      // If no tags are selected, navigate to the wellness tracking screen
+      navigation.navigate('WellnessTracking');
+      return;
+    }
     createNewMoodTagLink({
       mood_id: mood_id,
       mood_tag_ids: Object.values(selectedMoodTags).flat(),

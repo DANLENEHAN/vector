@@ -8,14 +8,17 @@ import {
   lightThemeColors,
   darkThemeColors,
   marginSizes,
+  borderRadius,
+  headingTextStyles,
 } from '@styles/Main';
 // Services
 import {useSystem} from '@context/SystemContext';
 // Components
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {
   CartesianChart,
   Line,
+  Bar,
   useChartPressState,
   Scatter,
 } from 'victory-native';
@@ -26,41 +29,46 @@ import {useFont} from '@shopify/react-native-skia';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
 import {graphDataPoint} from '@services/timeSeries/Types';
+import {maxValuePadding} from '@services/timeSeries/Constants';
 
 /**
  * Interface for the LineGraph component
  *
- * @interface LineGraphProps
+ * @interface GraphProps
  *
  * @param {graphDataPoint[]} data - The data to be displayed on the graph
  * @param {number} averageValue - The average value of the data
  * @param {string} averageLabel - The label for the average value
  * @param {string} unit - The unit for the average value
  */
-interface LineGraphProps {
+interface GraphProps {
   data: graphDataPoint[];
-  averageValue: number | null;
+  averageValue: number | null | string;
   averageLabel: string;
   unit: string;
+  chartType: 'bar' | 'line';
   maxYValue?: number;
   minYValue?: number;
+  showUnit?: boolean;
 }
 
 /**
- *  Line Graph Component
+ *  Graph Component
  *
- * @component LineGraph
- * @param {Object} props - Component Line Graph Props
+ * @component Graph
+ * @param {Object} props - Component Graph Props
  * @returns {React.FC<LineGraphProps>} - React Component
  */
-const LineGraph: React.FC<LineGraphProps> = ({
+const Graph: React.FC<GraphProps> = ({
   data,
   averageLabel,
   averageValue,
   unit,
   maxYValue,
   minYValue,
-}: LineGraphProps): React.ReactElement<LineGraphProps> => {
+  chartType = 'line',
+  showUnit,
+}): React.ReactElement<GraphProps> => {
   const INIT_STATE = {x: 0, y: {value: 0}} as const;
   const {state: firstPress, isActive: isFirstPressActive} =
     useChartPressState(INIT_STATE);
@@ -86,6 +94,10 @@ const LineGraph: React.FC<LineGraphProps> = ({
     if (averageValue === null) {
       return '-';
     }
+    // If average value is a string
+    if (typeof averageValue === 'string') {
+      return averageValue;
+    }
     return averageValue.toFixed(2);
   });
 
@@ -102,6 +114,13 @@ const LineGraph: React.FC<LineGraphProps> = ({
   const currentDate = useDerivedValue(() => {
     // If graph clicked
     if (isFirstPressActive) {
+      if (
+        firstPress.x.value.value === undefined ||
+        firstPress.x.value.value === null ||
+        data.length === 0
+      ) {
+        return '-';
+      }
       const currDate = data[firstPress.x.value.value].label;
       if (currDate === undefined || currDate === null) {
         return '-';
@@ -112,16 +131,36 @@ const LineGraph: React.FC<LineGraphProps> = ({
     return averageLabel;
   });
 
+  const getYBounds = (
+    minYVal: number | undefined,
+    maxYVal: number | undefined,
+  ): [number, number] => {
+    // If the graph has a max and min y value
+    if (minYVal !== undefined && maxYVal !== undefined) {
+      return [minYVal, maxYVal];
+    }
+    const yValues = data.map(d => d.value || 0);
+    // If the graph has no y values return 0 and the max value
+    if (yValues.length === 0) {
+      return [0, maxValuePadding];
+    }
+    // If the graph has no min y value
+    if (minYVal === undefined && maxYVal !== undefined) {
+      return [0, maxYVal];
+    }
+    // If the graph has no max y value
+    if (minYVal !== undefined && maxYVal === undefined) {
+      return [minYVal, Math.max(...yValues) + maxValuePadding];
+    }
+    return [0, Math.max(...yValues) + maxValuePadding];
+  };
+
   // Sets the axis domain for the graph
   const domain: {
     x: [number, number];
     y: [number, number] | undefined;
   } = {
-    // If the graph has a max and min y value
-    y:
-      maxYValue !== undefined && minYValue !== undefined
-        ? [minYValue, maxYValue]
-        : undefined,
+    y: getYBounds(minYValue, maxYValue),
     // The x domain is the range of the data
     x: [0, data.length - 1],
   };
@@ -141,7 +180,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
         <AverageValueText
           currentValue={currentValue}
           currentDate={currentDate}
-          unit={unit}
+          unit={unit && showUnit ? unit : ''}
         />
       </View>
       <View style={styles.chartContainer}>
@@ -175,7 +214,7 @@ const LineGraph: React.FC<LineGraphProps> = ({
           // Render the tooltip if the graph is clicked
           renderOutside={({chartBounds}) => (
             <>
-              {isFirstPressActive && (
+              {isFirstPressActive && data.length > 0 && (
                 <ToolTip
                   xPosition={firstPress.x.position}
                   yPosition={firstPress.y.value.position}
@@ -187,46 +226,69 @@ const LineGraph: React.FC<LineGraphProps> = ({
               )}
             </>
           )}>
-          {({points}) => (
-            <>
-              {
-                // Render the line
-              }
-              <Line
-                connectMissingData
+          {({points, chartBounds}) =>
+            chartType === 'bar' ? (
+              <Bar
+                chartBounds={chartBounds}
                 points={points.value}
+                roundedCorners={{
+                  topLeft: borderRadius.medium,
+                  topRight: borderRadius.medium,
+                }}
                 color={currentTheme.primary}
-                strokeWidth={3}
-                animate={{type: 'timing', duration: 300}}
               />
-              {
-                // Render the inner points
-              }
-              <Scatter
-                points={points.value}
-                color={currentTheme.background}
-                radius={5}
-                style={'fill'}
-              />
-              {
-                // Render the outer points
-              }
-              <Scatter
-                points={points.value}
-                color={currentTheme.primary}
-                radius={5}
-                style={'stroke'}
-                strokeWidth={4}
-              />
-            </>
-          )}
+            ) : (
+              <>
+                {
+                  // Render the line
+                }
+                <Line
+                  connectMissingData
+                  points={points.value}
+                  color={currentTheme.primary}
+                  strokeWidth={3}
+                  animate={{type: 'timing', duration: 300}}
+                />
+                {
+                  // Render the inner points
+                }
+                <Scatter
+                  points={points.value}
+                  color={currentTheme.background}
+                  radius={5}
+                  style={'fill'}
+                />
+                {
+                  // Render the outer points
+                }
+                <Scatter
+                  points={points.value}
+                  color={currentTheme.primary}
+                  radius={5}
+                  style={'stroke'}
+                  strokeWidth={4}
+                />
+              </>
+            )
+          }
         </CartesianChart>
+        {
+          // Overlay if no data is available
+          !data ||
+            (data.length === 0 && (
+              <View style={styles.overlayContainer}>
+                <Text style={[styles.overlayText, {color: currentTheme.text}]}>
+                  No Data Available
+                </Text>
+              </View>
+            ))
+        }
       </View>
     </View>
   );
 };
 
-export default LineGraph;
+export default Graph;
 
 const styles = StyleSheet.create({
   componentWrapper: {
@@ -237,5 +299,14 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     flex: 15,
+  },
+  overlayContainer: {
+    ...StyleSheet.absoluteFillObject, // Make overlay cover the chart container completely
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  overlayText: {
+    ...headingTextStyles.xSmall,
   },
 });

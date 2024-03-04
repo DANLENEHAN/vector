@@ -7,7 +7,7 @@ import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
-import LineGraph from '@components/visualisations/graphs/Line/Graph';
+import Graph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 // Services
 import {useSystem} from '@context/SystemContext';
@@ -16,6 +16,7 @@ import {getMoodData} from '@services/api/blueprints/mood/Functions';
 import {ScreenProps} from '@screens/Types';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriodLabels, timePeriods} from '@services/timeSeries/Types';
+import {defaultNullString} from '@services/timeSeries/Constants';
 
 // Give me typing for an object with keys of dateOptions and values of GraphPlotData
 // I think that's what's happening here
@@ -72,13 +73,13 @@ const MoodProgress: React.FC<ScreenProps> = ({
             activePeriod &&
             timePeriodLabels[activePeriod as timePeriods] &&
             graphData[timePeriodLabels[activePeriod as timePeriods]] && (
-              <LineGraph
+              <Graph
                 data={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].data
                 }
                 averageLabel={
                   graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averagePeriodLabel
+                    .averagePeriodLabel || defaultNullString
                 }
                 averageValue={
                   graphData[timePeriodLabels[activePeriod as timePeriods]]
@@ -89,6 +90,8 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 }
                 minYValue={0}
                 maxYValue={7}
+                chartType="bar"
+                showUnit={false}
               />
             )}
         </View>

@@ -94,6 +94,6 @@ export const getMoodData = async (): Promise<graphPeriodData> => {
       targetDate: moment.utc(),
     });
   } else {
-    throw new Error('Unable to retreive user will not insert mood get stats.');
+    throw new Error('Unable to retreive user, cannot get mood data.');
   }
 };

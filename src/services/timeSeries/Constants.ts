@@ -4,10 +4,18 @@ import {
   labelGenerators,
   intervalDates,
   labelGap,
+  graphData,
+  graphPeriodData,
 } from '@services/timeSeries/Types';
 import {Moment} from 'moment';
 import {DateFormat, TimeFormat} from '@shared/Enums';
 import {formatDate} from '@services/date/Functions';
+
+// The extra value added to the max value of the graph to
+// prevent the max value from being the top of the graph
+export const maxValuePadding = 10;
+
+export const defaultNullString = '-';
 
 /**
  * Object to map interval lengths to their respective values and cadences.
@@ -100,4 +108,34 @@ export const labelGaps: labelGap = {
   month: 5, // Every 5 days
   halfYear: 1, // Every month
   year: 1, // Every month
+};
+
+/**
+ * Object to represent the data for the graph when no data is available.
+ * @typedef {Object} graphData
+ * @property {Array} data - The data for the graph.
+ * @property {string} averageValue - The average value for the graph.
+ * @property {string} unit - The unit for the graph.
+ * @property {string} averagePeriodLabel - The label for the average period.
+ */
+const emptyGraphData: graphData = {
+  data: [],
+  averageValue: 'No Data',
+  unit: '',
+  averagePeriodLabel: '',
+};
+/**
+ * Object to represent the data for the graph for each time period when no data is available.
+ * @typedef {Object} graphPeriodData
+ * @property {graphData} day - The data for the day time period.
+ * @property {graphData} week - The data for the week time period.
+ * @property {graphData} month - The data for the month time period.
+ * @property {graphData} halfYear - The data for the half year time period.
+ */
+export const emptyGraphPeriodData: graphPeriodData = {
+  day: emptyGraphData,
+  week: emptyGraphData,
+  month: emptyGraphData,
+  halfYear: emptyGraphData,
+  year: emptyGraphData,
 };

@@ -19,7 +19,7 @@ type ApiConfigMap = {
 };
 
 const API_URLS: ApiConfigMap = {
-  development: 'http://localhost:5000',
+  development: 'http://192.168.0.91:5000',
   production: 'https://api.example.com',
   staging: 'https://api.staging.example.com',
 };

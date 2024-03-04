@@ -1,26 +1,24 @@
 // React imports
-import React, {useState} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
 import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
-import LineGraph from '@components/visualisations/graphs/Line/Graph';
+import Graph from '@components/visualisations/graphs/Line/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 import {View, StyleSheet} from 'react-native';
 // Services
-import {getUserStats} from '@services/api/blueprints/bodyStat/Functions';
 import {useSystem} from '@context/SystemContext';
-// Utils
-import {convertStats} from '@utils/Conversion';
+import {getBodyStatGraphData} from '@services/api/blueprints/bodyStat/Functions';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
-import {GraphPlotData} from '@components/visualisations/graphs/Line/Types';
-// Logger
-import logger from '@utils/Logger';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {timePeriods} from '@services/timeSeries/Types';
+// Constants
+import {timePeriodLabels} from '@services/timeSeries/Types';
 
 /**
  *  Weight progress screen
@@ -32,80 +30,24 @@ import logger from '@utils/Logger';
 const WeightProgress: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const [data, setData] = useState<any>({});
   const {theme} = useSystem();
-
-  const dateOptions = ['D', 'W', 'M', '6M', 'Y'];
-  const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
-
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const getUserWeights = async () => {
-        // NOTE: This is a temporary solution until we have a user profile page
-        const weightUnitPref = WeightUnit.Kg;
-        let user_weights = await getUserStats({
-          bodyStatType: BodyStatType.Weight,
-        });
-        if (user_weights == null) {
-          logger.info('No user weights found');
-          return;
-        }
-        user_weights = convertStats({
-          stats: user_weights,
-          targetUnit: weightUnitPref,
-        });
-        // Inside your useEffect
-        if (user_weights) {
-          const tempData = new GraphPlotData(
-            [
-              {
-                date: '2024-01-01T11:35:36.961Z',
-                value: 70,
-              },
-              {
-                date: '2024-01-02T11:35:36.961Z',
-                value: 71,
-              },
-              {
-                date: '2024-01-03T11:35:36.961Z',
-                value: 70,
-              },
-              {
-                date: '2024-01-04T11:35:36.961Z',
-                value: null,
-              },
-              {
-                date: '2024-01-05T11:35:36.961Z',
-                value: 70,
-              },
-              {
-                date: '2024-01-06T11:35:36.961Z',
-                value: 65,
-              },
-              {
-                date: '2024-01-07T11:35:36.961Z',
-                value: 64,
-              },
-            ],
-            weightUnitPref,
-          );
+  const dateOptions = Object.keys(timePeriodLabels);
+  const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
+  const [graphData, setGraphData] = useState<graphPeriodData>();
 
-          const graphData = {
-            D: tempData,
-            W: tempData,
-            M: tempData,
-            '6M': tempData,
-            Y: tempData,
-          };
-          setData(graphData);
-        }
-      };
-      getUserWeights();
-      return () => {};
-    }, []),
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getBodyStatGraphData(
+        BodyStatType.Weight,
+        WeightUnit.Kg,
+      );
+      console.log('data', data);
+      setGraphData(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -130,14 +72,30 @@ const WeightProgress: React.FC<ScreenProps> = ({
           />
         </View>
         <View style={styles.graphSection}>
-          {data && activePeriod && data[activePeriod] && (
-            <LineGraph
-              data={data[activePeriod].graphData}
-              averageLabel={data[activePeriod].averagePeriodLabel}
-              averageValue={data[activePeriod].averageValue}
-              unit={data[activePeriod].unit}
-            />
-          )}
+          {graphData &&
+            activePeriod &&
+            timePeriodLabels[activePeriod as timePeriods] &&
+            graphData[timePeriodLabels[activePeriod as timePeriods]] && (
+              <Graph
+                data={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].data
+                }
+                averageLabel={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averagePeriodLabel || ''
+                }
+                averageValue={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]]
+                    .averageValue
+                }
+                unit={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].unit
+                }
+                minYValue={0}
+                chartType="line"
+                showUnit={true}
+              />
+            )}
         </View>
       </View>
     </ScreenWrapper>

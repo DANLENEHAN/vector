@@ -2,6 +2,12 @@
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
+import {getBodyStats} from '@services/db/bodyStat/Functions';
+import {generateGraphData} from '@services/timeSeries/Functions';
+import moment from 'moment';
+
+// Constants
+import {syncDbTables} from '@shared/Constants';
 
 // Types
 import {
@@ -13,6 +19,7 @@ import {SwaggerValidationError} from '@services/api/Types';
 import {insertBodyStat} from '@services/db/bodyStat/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
+import {graphPeriodData} from '@services/timeSeries/Types';
 
 // Logger
 import logger from '@utils/Logger';
@@ -112,4 +119,25 @@ export const getUserStats = async ({
     logger.error(`Error: ${error}`);
   }
   return undefined;
+};
+
+export const getBodyStatGraphData = async (
+  bodyStatType: BodyStatType,
+  targetUnit: BodyStatCreateSchema['unit'],
+): Promise<graphPeriodData> => {
+  const user: UserCreateSchema | null = await getUser();
+  if (user != null) {
+    const stats = await getBodyStats({
+      columns: ['value', 'created_at', 'unit'],
+      whereClause: `user_id = '${user.user_id}' AND stat_type = '${bodyStatType}' AND deleted IS false`,
+    });
+    return generateGraphData({
+      table: syncDbTables.bodyStatTable,
+      data: stats,
+      targetDate: moment.utc(),
+      targetUnit: targetUnit,
+    });
+  } else {
+    throw new Error('Unable to retreive user, cannot get body stat data.');
+  }
 };
