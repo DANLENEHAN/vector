@@ -3,7 +3,7 @@ import {getUser} from '@services/db/user/Functions';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getMoods} from '@services/db/mood/Functions';
-import {generateGraphData} from '@services/timeSeries/Functions';
+import {generateGraphData} from '@services/timeSeries/timeSeries';
 
 // Types
 import {MoodValue} from '@services/api/swagger/data-contracts';

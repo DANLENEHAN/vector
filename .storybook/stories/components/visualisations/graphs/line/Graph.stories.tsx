@@ -1,5 +1,5 @@
 import React from 'react';
-import Graph from '../../../../../../src/components/visualisations/graphs/Line/Graph'; // Adjust the import path as necessary
+import Graph from '../../../../../../src/components/visualisations/graphs/Graph'; // Adjust the import path as necessary
 import {SystemProvider} from '../../../../../../src/context/SystemContext'; // Adjust the import path as necessary
 
 export default {

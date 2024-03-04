@@ -57,7 +57,6 @@ export type graphDataPoint = {
   index: number;
   startDate: number;
   endDate: number;
-  showLabel: boolean;
   unit: string;
   label: string;
   axisLabel: string;

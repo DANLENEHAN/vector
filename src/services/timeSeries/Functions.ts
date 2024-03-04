@@ -17,8 +17,6 @@ import {
   timePeriodLookbacks,
   intervalLengths,
   axisLabelGenerators,
-  labelGaps,
-  emptyGraphPeriodData,
 } from '@services/timeSeries/Constants';
 import {TimestampFormat, TimeFormat, DateFormat} from '@shared/Enums';
 // Functions
@@ -26,8 +24,6 @@ import {convertValue, UnitType} from '@utils/Conversion';
 import {parseDate} from '@services/date/Functions';
 import moment, {Moment} from 'moment';
 import {formatDate} from '@services/date/Functions';
-// Logger
-import logger from '@utils/Logger';
 
 /**
  * Function creates a string representation of the interval dates
@@ -202,7 +198,6 @@ export function convertDataPointDate(data: dataPoint): graphDataPoint {
     // These are individual points not intervals
     startDate: date,
     endDate: date,
-    showLabel: false,
     unit: data.unit,
     // These will be updated later
     label: '',
@@ -345,7 +340,6 @@ export function getPeriodData(
       value: Number(averageValue?.toFixed(2)) || null,
       startDate: interval.startDate,
       endDate: interval.endDate,
-      showLabel: count % labelGaps[period] === 0,
       axisLabel: axisLabelGenerators[period](interval),
       unit: unit,
       index: count,
@@ -400,35 +394,4 @@ export function getGraphData(
     output[period] = periodGraphData;
   });
   return output;
-}
-
-/**
- * Function to generate graph data
- * @param table {T} - The table name
- * @param data {Array<GetSchemaType<T>>} - The data from the database
- * @param targetUnit {UnitType} - The target unit
- * @param targetDate {Moment} - The target date
- * @returns {graphPeriodData} - The graph data
- * */
-export function generateGraphData<T extends keyof SchemaMapping>({
-  table,
-  data,
-  targetUnit,
-  targetDate,
-}: {
-  table: T;
-  data: Array<GetSchemaType<T>>;
-  targetUnit?: UnitType;
-  targetDate?: Moment;
-}): graphPeriodData {
-  if (data.length === 0) {
-    logger.warn('No data provided');
-    return emptyGraphPeriodData;
-  }
-  const transformedData = transformData({table, data});
-  const convertedData = targetUnit
-    ? convertData(transformedData, targetUnit)
-    : transformedData;
-  const graphData = convertDataDate(convertedData);
-  return getGraphData(graphData, targetDate, targetUnit);
 }

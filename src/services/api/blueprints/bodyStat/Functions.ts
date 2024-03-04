@@ -3,7 +3,7 @@ import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getCurrentTimestampTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getBodyStats} from '@services/db/bodyStat/Functions';
-import {generateGraphData} from '@services/timeSeries/Functions';
+import {generateGraphData} from '@services/timeSeries/timeSeries';
 import moment from 'moment';
 
 // Constants

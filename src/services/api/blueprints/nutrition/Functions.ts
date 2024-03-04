@@ -4,7 +4,7 @@ import {v4 as uuid4} from 'uuid';
 import {getUser} from '@services/db/user/Functions';
 import {getNutritions} from '@services/db/nutrition/Functions';
 import moment from 'moment';
-import {generateGraphData} from '@services/timeSeries/Functions';
+import {generateGraphData} from '@services/timeSeries/timeSeries';
 
 // Types
 import {
@@ -22,8 +22,6 @@ import {syncDbTables} from '@shared/Constants';
 
 // Logger
 import logger from '@utils/Logger';
-
-// Ge
 
 /**
  * Interface for the CreateNewNutritionParams function.

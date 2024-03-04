@@ -2,7 +2,7 @@
 import React from 'react';
 // Styling
 // @ts-ignore
-import Lato from '../../../../../assets/fonts/Lato-Regular.ttf';
+import Lato from '../../../../assets/fonts/Lato-Regular.ttf';
 import {
   fontSizes,
   lightThemeColors,
@@ -10,6 +10,7 @@ import {
   marginSizes,
   borderRadius,
   headingTextStyles,
+  layoutStyles,
 } from '@styles/Main';
 // Services
 import {useSystem} from '@context/SystemContext';
@@ -22,8 +23,8 @@ import {
   useChartPressState,
   Scatter,
 } from 'victory-native';
-import ToolTip from '@components/visualisations/graphs/Line/Tooltip';
-import {AverageValueText} from '@components/visualisations/graphs/Line/AverageValue';
+import ToolTip from '@components/visualisations/graphs/Tooltip';
+import {AverageValueText} from '@components/visualisations/graphs/AverageValue';
 // Utils
 import {useFont} from '@shopify/react-native-skia';
 // Types
@@ -306,8 +307,7 @@ const styles = StyleSheet.create({
   },
   overlayContainer: {
     ...StyleSheet.absoluteFillObject, // Make overlay cover the chart container completely
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...layoutStyles.centerVertically,
     backgroundColor: 'transparent',
   },
   overlayText: {

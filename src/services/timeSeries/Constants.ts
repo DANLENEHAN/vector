@@ -3,7 +3,6 @@ import {
   timePeriodLookbacksMappings,
   labelGenerators,
   intervalDates,
-  labelGap,
   graphData,
   graphPeriodData,
 } from '@services/timeSeries/Types';
@@ -91,23 +90,6 @@ export const axisLabelGenerators: labelGenerators = {
   halfYear: (args: intervalDates) => formatDate(args.startDate, DateFormat.MMM),
   year: (args: intervalDates) =>
     formatDate(args.startDate, DateFormat.MMM).substring(0, 1),
-};
-
-/**
- * Object to map time periods to their respective label gap values.
- * @typedef {Object} labelGap
- * @property {number} N - The gap between labels for the time period.
- * @example
- * day: 1, // Every interval
- * @example
- * month: 5, // Every 5 intervals
- */
-export const labelGaps: labelGap = {
-  day: 1, // Every hour
-  week: 1, // Every day
-  month: 5, // Every 5 days
-  halfYear: 1, // Every month
-  year: 1, // Every month
 };
 
 /**

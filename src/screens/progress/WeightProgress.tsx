@@ -6,7 +6,7 @@ import ScreenWrapper from '@components/layout/ScreenWrapper';
 import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
-import Graph from '@components/visualisations/graphs/Line/Graph';
+import Graph from '@components/visualisations/graphs/Graph';
 import UnitSelector from '@components/buttons/UnitSelector';
 import {View, StyleSheet} from 'react-native';
 // Services
