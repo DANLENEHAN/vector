@@ -6,9 +6,8 @@ import {
   graphData,
   graphPeriodData,
 } from '@services/timeSeries/Types';
-import {Moment} from 'moment';
+import moment, {Moment} from 'moment-timezone';
 import {DateFormat, TimeFormat} from '@shared/Enums';
-import {formatDate} from '@services/date/Functions';
 
 // The extra value added to the max value of the graph to
 // prevent the max value from being the top of the graph
@@ -84,12 +83,14 @@ export const timePeriodLookbacks: timePeriodLookbacksMappings = {
  * @property {function} N - The function to generate the label for the time period.
  */
 export const axisLabelGenerators: labelGenerators = {
-  day: (args: intervalDates) => formatDate(args.startDate, TimeFormat.HHMM),
-  week: (args: intervalDates) => formatDate(args.startDate, DateFormat.DOW),
-  month: (args: intervalDates) => formatDate(args.startDate, DateFormat.DDMM),
-  halfYear: (args: intervalDates) => formatDate(args.startDate, DateFormat.MMM),
+  day: (args: intervalDates) => moment(args.startDate).format(TimeFormat.HHMM),
+  week: (args: intervalDates) => moment(args.startDate).format(DateFormat.DOW),
+  month: (args: intervalDates) =>
+    moment(args.startDate).format(DateFormat.DDMM),
+  halfYear: (args: intervalDates) =>
+    moment(args.startDate).format(DateFormat.MMM),
   year: (args: intervalDates) =>
-    formatDate(args.startDate, DateFormat.MMM).substring(0, 1),
+    moment(args.startDate).format(DateFormat.MMM).substring(0, 1),
 };
 
 /**
@@ -103,6 +104,13 @@ export const axisLabelGenerators: labelGenerators = {
 const emptyGraphData: graphData = {
   data: [],
   averageValue: 'No Data',
+  unit: '',
+  averagePeriodLabel: '',
+};
+
+const loadingGraphData: graphData = {
+  data: [],
+  averageValue: 'Loading...',
   unit: '',
   averagePeriodLabel: '',
 };
@@ -120,4 +128,12 @@ export const emptyGraphPeriodData: graphPeriodData = {
   month: emptyGraphData,
   halfYear: emptyGraphData,
   year: emptyGraphData,
+};
+
+export const loadingGraphPeriodData: graphPeriodData = {
+  day: loadingGraphData,
+  week: loadingGraphData,
+  month: loadingGraphData,
+  halfYear: loadingGraphData,
+  year: loadingGraphData,
 };

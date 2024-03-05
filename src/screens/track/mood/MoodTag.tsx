@@ -38,8 +38,9 @@ import {createNewMoodTagLink} from '@services/api/blueprints/moodTagLink/Functio
 import {createNewMood} from '@services/api/blueprints/mood/Functions';
 import {MoodValue} from '@services/api/swagger/data-contracts';
 import {transformsInternalNameToDisplay} from '@shared/Functions';
-import {formatDate, utcTimestampNow} from '@services/date/Functions';
+import {utcTimestampNow} from '@services/date/Functions';
 import {DateFormat} from '@shared/Enums';
+import moment from 'moment-timezone';
 
 /**
  *  Mood tag tracking screen
@@ -63,7 +64,7 @@ const MoodTagScreen: React.FC<any> = ({
 
   // Get the current date
   const now = utcTimestampNow();
-  const currentDatetime = formatDate(now, DateFormat.DOW_DD_MM);
+  const currentDatetime = moment(now).format(DateFormat.DOW_DD_MM);
 
   // State for the note popup
   const [notePopupVisible, setNotePopupVisible] = useState(false);

@@ -37,11 +37,13 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const dateOptions = Object.keys(timePeriodLabels);
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
   const [graphData, setGraphData] = useState<graphPeriodData>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getMoodData();
       setGraphData(data);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -89,9 +91,10 @@ const MoodProgress: React.FC<ScreenProps> = ({
                   graphData[timePeriodLabels[activePeriod as timePeriods]].unit
                 }
                 minYValue={0}
-                maxYValue={7}
+                maxYValue={6.1} // 6 is the max + 0.1 for padding
                 chartType="bar"
                 showUnit={false}
+                loading={loading}
               />
             )}
         </View>

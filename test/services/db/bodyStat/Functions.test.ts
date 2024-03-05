@@ -1,5 +1,5 @@
 import {insertBodyStat} from '@services/db/bodyStat/Functions';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import {BodyStatType} from '@services/api/swagger/data-contracts';
 import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 

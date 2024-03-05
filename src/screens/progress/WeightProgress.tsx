@@ -19,6 +19,7 @@ import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriods} from '@services/timeSeries/Types';
 // Constants
 import {timePeriodLabels} from '@services/timeSeries/Types';
+import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
 
 /**
  *  Weight progress screen
@@ -35,15 +36,21 @@ const WeightProgress: React.FC<ScreenProps> = ({
 
   const dateOptions = Object.keys(timePeriodLabels);
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
-  const [graphData, setGraphData] = useState<graphPeriodData>();
+  const [graphData, setGraphData] = useState<graphPeriodData>(
+    loadingGraphPeriodData,
+  );
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setGraphData(loadingGraphPeriodData);
       const data = await getBodyStatGraphData(
         BodyStatType.Weight,
-        WeightUnit.Kg,
+        WeightUnit.Stone,
       );
       setGraphData(data);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -68,6 +75,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
                 color: currentTheme.text,
               },
             ]}
+            disabled={loading}
           />
         </View>
         <View style={styles.graphSection}>
@@ -80,12 +88,16 @@ const WeightProgress: React.FC<ScreenProps> = ({
                   graphData[timePeriodLabels[activePeriod as timePeriods]].data
                 }
                 averageLabel={
-                  graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averagePeriodLabel || ''
+                  loading
+                    ? ''
+                    : graphData[timePeriodLabels[activePeriod as timePeriods]]
+                        .averagePeriodLabel || ''
                 }
                 averageValue={
-                  graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averageValue
+                  loading
+                    ? 'Loading'
+                    : graphData[timePeriodLabels[activePeriod as timePeriods]]
+                        .averageValue
                 }
                 unit={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].unit
@@ -93,6 +105,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
                 minYValue={0}
                 chartType="line"
                 showUnit={true}
+                loading={loading}
               />
             )}
         </View>

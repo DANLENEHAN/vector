@@ -17,7 +17,6 @@ import {ScreenProps} from '@screens/Types';
 import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriods} from '@services/timeSeries/Types';
-// Constants
 import {timePeriodLabels} from '@services/timeSeries/Types';
 
 /**
@@ -36,6 +35,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const dateOptions = Object.keys(timePeriodLabels);
   const [activePeriod, setActivePeriod] = useState<string>(dateOptions[0]);
   const [graphData, setGraphData] = useState<graphPeriodData>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +44,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
         WaterUnit.Ml,
       );
       setGraphData(data);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -93,6 +94,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 minYValue={0}
                 chartType="line"
                 showUnit={true}
+                loading={loading}
               />
             )}
         </View>

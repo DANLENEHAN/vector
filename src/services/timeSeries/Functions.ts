@@ -21,9 +21,7 @@ import {
 import {TimestampFormat, TimeFormat, DateFormat} from '@shared/Enums';
 // Functions
 import {convertValue, UnitType} from '@utils/Conversion';
-import {parseDate} from '@services/date/Functions';
-import moment, {Moment} from 'moment';
-import {formatDate} from '@services/date/Functions';
+import moment, {Moment} from 'moment-timezone';
 
 /**
  * Function creates a string representation of the interval dates
@@ -32,12 +30,10 @@ import {formatDate} from '@services/date/Functions';
  * @returns {string} - The string representation of the interval dates
  */
 export function getIntervalDatesLabel(interval: intervalDates): string {
-  const parsedStartDate = formatDate(
-    interval.startDate,
+  const parsedStartDate = moment(interval.startDate).format(
     TimestampFormat.DD_MMM_YYYY_HHMMss,
   );
-  let parsedEndDate = formatDate(
-    interval.endDate,
+  let parsedEndDate = moment(interval.endDate).format(
     TimestampFormat.DD_MMM_YYYY_HHMMss,
   );
   let startDay = parsedStartDate.split(' ')[0];
@@ -52,8 +48,7 @@ export function getIntervalDatesLabel(interval: intervalDates): string {
   if (endTime === '00:00') {
     // If the end time is midnight, we can assume the end date is the day before as
     // the interval is not inclusive of the end date
-    parsedEndDate = formatDate(
-      interval.endDate - 1, // Minus 1 minute
+    parsedEndDate = moment(interval.endDate - 1).format(
       TimestampFormat.DD_MMM_YYYY_HHMMss,
     );
   }
@@ -88,11 +83,13 @@ export function getIntervalDatesLabel(interval: intervalDates): string {
  * @returns {string} - The axis label for the interval
  */
 export const valueLabelGenerators: labelGenerators = {
-  day: (args: intervalDates) => formatDate(args.startDate, TimeFormat.HHMM),
-  week: (args: intervalDates) => formatDate(args.startDate, DateFormat.DOW),
-  month: (args: intervalDates) => formatDate(args.startDate, DateFormat.DD_MMM),
+  day: (args: intervalDates) => moment(args.startDate).format(TimeFormat.HHMM),
+  week: (args: intervalDates) => moment(args.startDate).format(DateFormat.DOW),
+  month: (args: intervalDates) =>
+    moment(args.startDate).format(DateFormat.DD_MMM),
   halfYear: (args: intervalDates) => getIntervalDatesLabel(args),
-  year: (args: intervalDates) => formatDate(args.startDate, DateFormat.MM_YYYY),
+  year: (args: intervalDates) =>
+    moment(args.startDate).format(DateFormat.MM_YYYY),
 };
 
 /**
@@ -118,10 +115,10 @@ export function transformData<T extends keyof SchemaMapping>({
   if ('unitValue' in fieldMappings) {
     const unitValue = fieldMappings.unitValue;
     return data.map(
-      dataPoint =>
+      entry =>
         ({
-          value: dataPoint[valueColumn],
-          date: dataPoint[dateColumn],
+          value: entry[valueColumn],
+          date: entry[dateColumn],
           unit: unitValue,
         } as dataPoint),
     );
@@ -135,11 +132,11 @@ export function transformData<T extends keyof SchemaMapping>({
   const unitColumn = fieldMappings.unitColumn as keyof GetSchemaType<T>;
 
   return data.map(
-    dataPoint =>
+    point =>
       ({
-        value: dataPoint[valueColumn],
-        date: dataPoint[dateColumn],
-        unit: dataPoint[unitColumn],
+        value: point[valueColumn],
+        date: point[dateColumn],
+        unit: point[unitColumn],
       } as dataPoint),
   );
 }
@@ -191,7 +188,7 @@ export function convertData(
  * @returns {graphDataPoint} - The graph data point
  */
 export function convertDataPointDate(data: dataPoint): graphDataPoint {
-  const date = parseDate(data.date, TimestampFormat.YYYYMMDDHHMMssSSS);
+  const date = moment(data.date, TimestampFormat.YYYYMMDDHHMMssSSS).valueOf();
   return {
     value: data.value,
     // Date is same for start and end
@@ -214,8 +211,8 @@ export function convertDataPointDate(data: dataPoint): graphDataPoint {
  * @returns {Array<graphDataPoint>} - The data with the values converted to the target unit
  */
 export function convertDataDate(data: Array<dataPoint>): Array<graphDataPoint> {
-  return data.map((dataPoint, index) => {
-    const graphDataPoint = convertDataPointDate(dataPoint);
+  return data.map((point, index) => {
+    const graphDataPoint = convertDataPointDate(point);
     graphDataPoint.index = index;
     return graphDataPoint;
   });
@@ -273,7 +270,7 @@ export function getIntervals(
   targetDate?: Moment,
 ): Array<intervalDates> {
   // If no target date is provided, use the current date
-  const date = targetDate ? targetDate : moment.utc();
+  const date = targetDate ? targetDate : moment();
   const intervalLength = intervalLengths[period];
   const lookback = timePeriodLookbacks[period];
   const startDate = lookback.getStart(date.clone()).valueOf();
@@ -281,8 +278,7 @@ export function getIntervals(
   const output = [];
   let currentDate = startDate;
   while (currentDate <= endDate) {
-    let nextDate = moment
-      .utc(currentDate)
+    let nextDate = moment(currentDate)
       .add(intervalLength.value, intervalLength.cadence)
       .valueOf();
     output.push({
@@ -395,3 +391,25 @@ export function getGraphData(
   });
   return output;
 }
+
+/**
+ * Function to get the earliest lookback date for the target date
+ * @param targetDate The target date
+ * @returns The earliest lookback date for the target date
+ */
+export const getEarliestLookbackDate = (
+  targetDate: moment.Moment,
+): moment.Moment => {
+  const periodOptions = Object.values(timePeriodLabels) as timePeriods[];
+  // Get all the start dates for the time periods
+  const startDates = periodOptions.map(period => {
+    const lookback = timePeriodLookbacks[period];
+    return lookback.getStart(targetDate.clone());
+  });
+  // Get the minimum start date
+  const minStartDate = startDates.reduce(
+    (min, date) => (date < min ? date : min),
+    startDates[0],
+  );
+  return minStartDate;
+};

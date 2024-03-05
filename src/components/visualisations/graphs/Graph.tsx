@@ -15,7 +15,7 @@ import {
 // Services
 import {useSystem} from '@context/SystemContext';
 // Components
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import {
   CartesianChart,
   Line,
@@ -45,6 +45,7 @@ import {maxValuePadding} from '@services/timeSeries/Constants';
  * @param {number} maxYValue - The maximum y value for the graph
  * @param {number} minYValue - The minimum y value for the graph
  * @param {boolean} showUnit - Whether to show the unit on the average value
+ * @param {boolean} loading - Whether the graph is loading
  */
 interface GraphProps {
   data: graphDataPoint[];
@@ -55,6 +56,7 @@ interface GraphProps {
   maxYValue?: number;
   minYValue?: number;
   showUnit?: boolean;
+  loading?: boolean;
 }
 
 /**
@@ -73,6 +75,7 @@ const Graph: React.FC<GraphProps> = ({
   minYValue,
   chartType = 'line',
   showUnit,
+  loading,
 }): React.ReactElement<GraphProps> => {
   const INIT_STATE = {x: 0, y: {value: 0}} as const;
   const {state: firstPress, isActive: isFirstPressActive} =
@@ -109,7 +112,7 @@ const Graph: React.FC<GraphProps> = ({
   const formatXLabel = (ms: number) => {
     const result = data.filter(d => d.index === ms);
     // If no data
-    if (result.length == 0) {
+    if (result.length === 0) {
       return '';
     }
     return result[0].axisLabel;
@@ -186,6 +189,7 @@ const Graph: React.FC<GraphProps> = ({
           currentValue={currentValue}
           currentDate={currentDate}
           unit={unit && showUnit ? unit : ''}
+          loading={loading}
         />
       </View>
       <View style={styles.chartContainer}>
@@ -279,15 +283,22 @@ const Graph: React.FC<GraphProps> = ({
         </CartesianChart>
         {
           // Overlay if no data is available
-          !data ||
-            (data.length === 0 && (
-              <View style={styles.overlayContainer}>
-                <Text style={[styles.overlayText, {color: currentTheme.text}]}>
-                  No Data Available
-                </Text>
-              </View>
-            ))
+          !loading &&
+            (!data ||
+              (data.length === 0 && (
+                <View style={styles.overlayContainer}>
+                  <Text
+                    style={[styles.overlayText, {color: currentTheme.text}]}>
+                    No Data Available
+                  </Text>
+                </View>
+              )))
         }
+        {loading && (
+          <View style={styles.overlayContainer}>
+            <ActivityIndicator size={70} color={currentTheme.primary} />
+          </View>
+        )}
       </View>
     </View>
   );

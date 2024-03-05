@@ -1,5 +1,5 @@
 import {insertNutritions} from '@services/db/nutrition/Functions';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import {
   NutritionType,
   WaterUnit,

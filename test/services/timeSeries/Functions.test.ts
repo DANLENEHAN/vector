@@ -13,11 +13,11 @@ import {
   getDataForPeriod,
   getIntervals,
   getPeriodData,
+  getEarliestLookbackDate,
 } from '@services/timeSeries/Functions';
 import {syncDbTables} from '@shared/Constants';
-import {parseDate} from '@services/date/Functions';
 import {TimestampFormat} from '@shared/Enums';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 describe('Time Series Functions Tests', () => {
   beforeEach(() => {
@@ -163,8 +163,8 @@ describe('Time Series Functions Tests', () => {
     };
     const expectedOutput = {
       value: 3,
-      startDate: 1625097600000,
-      endDate: 1625097600000,
+      startDate: 1625094000000,
+      endDate: 1625094000000,
       numberOfDataPoints: 1,
       axisLabel: '',
       unit: 'kg',
@@ -193,8 +193,8 @@ describe('Time Series Functions Tests', () => {
     const expectedOutput = [
       {
         value: 3,
-        startDate: 1625097600000,
-        endDate: 1625097600000,
+        startDate: 1625094000000,
+        endDate: 1625094000000,
         numberOfDataPoints: 1,
         axisLabel: '',
         unit: 'kg',
@@ -203,8 +203,8 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 4,
-        startDate: 1625101200000,
-        endDate: 1625101200000,
+        startDate: 1625097600000,
+        endDate: 1625097600000,
         numberOfDataPoints: 1,
         axisLabel: '',
         unit: 'kg',
@@ -266,14 +266,14 @@ describe('Time Series Functions Tests', () => {
     const data = [
       {
         value: 3,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         unit: 'kg',
         label: '',
         index: 0,
@@ -282,14 +282,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 4,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-02T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-02T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         unit: 'kg',
         label: '',
         index: 1,
@@ -301,14 +301,14 @@ describe('Time Series Functions Tests', () => {
     const expectedOutput = [
       {
         value: 3,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         unit: 'kg',
         label: '',
         index: 0,
@@ -328,250 +328,250 @@ describe('Time Series Functions Tests', () => {
   it('getIntervals works as expected for a day', () => {
     // Arrange
     const period = 'day';
-    const targetDate = moment.utc(
+    const targetDate = moment(
       '2021-07-01T04:15:00.000Z',
       TimestampFormat.YYYYMMDDHHMMssSSS,
     );
     const expectedOutput = [
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T02:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T02:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T03:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T03:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T04:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T04:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T05:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T05:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T06:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T06:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T07:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T07:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T08:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T08:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T09:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T09:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T10:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T10:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T11:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T11:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T12:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T12:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T13:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T13:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T14:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T14:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T15:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T15:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T16:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T16:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T17:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T17:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T18:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T18:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T19:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T19:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T20:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T20:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T21:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T21:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T22:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T22:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T23:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
       {
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T23:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-02T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
       },
     ];
     // Act
@@ -585,14 +585,14 @@ describe('Time Series Functions Tests', () => {
     const data = [
       {
         value: 3,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: '',
         numberOfDataPoints: 1,
         unit: 'kg',
@@ -601,14 +601,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 4,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: '',
         numberOfDataPoints: 1,
         unit: 'kg',
@@ -617,14 +617,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 5,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-03T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-03T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: '',
         numberOfDataPoints: 1,
         unit: 'kg',
@@ -633,7 +633,7 @@ describe('Time Series Functions Tests', () => {
       },
     ];
     const period = 'week';
-    const targetDate = moment.utc(
+    const targetDate = moment(
       '2021-07-07T04:15:00.000Z',
       TimestampFormat.YYYYMMDDHHMMssSSS,
     );
@@ -642,14 +642,14 @@ describe('Time Series Functions Tests', () => {
     const expectedOutput = [
       {
         value: 3.5,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-01T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-02T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Thu',
         numberOfDataPoints: 2,
         unit: 'kg',
@@ -658,14 +658,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: null,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-02T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-03T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Fri',
         numberOfDataPoints: 0,
         unit: 'kg',
@@ -674,14 +674,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 5,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-03T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-04T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Sat',
         numberOfDataPoints: 1,
         unit: 'kg',
@@ -690,14 +690,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: null,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-04T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-05T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Sun',
         numberOfDataPoints: 0,
         unit: 'kg',
@@ -706,14 +706,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: null,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-05T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-06T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Mon',
         numberOfDataPoints: 0,
         unit: 'kg',
@@ -722,14 +722,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: null,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-06T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-07T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Tue',
         numberOfDataPoints: 0,
         unit: 'kg',
@@ -738,14 +738,14 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: null,
-        startDate: parseDate(
+        startDate: moment(
           '2021-07-07T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
-        endDate: parseDate(
+        ).valueOf(),
+        endDate: moment(
           '2021-07-08T00:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
-        ),
+        ).valueOf(),
         axisLabel: 'Wed',
         numberOfDataPoints: 0,
         unit: 'kg',
@@ -757,5 +757,23 @@ describe('Time Series Functions Tests', () => {
     const result = getPeriodData(data, intervals, period, 'kg');
     // Assert
     expect(result).toEqual(expectedOutput);
+  });
+
+  test('getEarliestLookbackDate works as expected', () => {
+    // Arrange
+    const targetDate = moment(
+      '2022-07-01T04:15:00.000',
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    );
+    const expectedOutput = moment(
+      '2021-08-01T00:00:00.000',
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    );
+    // Act
+    const result = getEarliestLookbackDate(targetDate.clone());
+    // Assert
+    expect(result.format(TimestampFormat.YYYYMMDDHHMMssSSS)).toEqual(
+      expectedOutput.format(TimestampFormat.YYYYMMDDHHMMssSSS),
+    );
   });
 });

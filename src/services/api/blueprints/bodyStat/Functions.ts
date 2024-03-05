@@ -2,13 +2,15 @@
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
-import {getBodyStats} from '@services/db/bodyStat/Functions';
 import {generateGraphData} from '@services/timeSeries/timeSeries';
-import moment from 'moment';
-
+import moment from 'moment-timezone';
+import {getRows} from '@services/db/Operations';
+import {deviceTimestampNow} from '@services/date/Functions';
+import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
+import {insertBodyStat} from '@services/db/bodyStat/Functions';
 // Constants
 import {syncDbTables} from '@shared/Constants';
-
+import {timestampFields} from '@shared/Constants';
 // Types
 import {
   BodyStatType,
@@ -16,11 +18,12 @@ import {
   UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
-import {insertBodyStat} from '@services/db/bodyStat/Functions';
-import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 import {graphPeriodData} from '@services/timeSeries/Types';
-
+import {
+  BaseOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {getUser} from '@services/db/user/Functions';
@@ -127,14 +130,28 @@ export const getBodyStatGraphData = async (
 ): Promise<graphPeriodData> => {
   const user: UserCreateSchema | null = await getUser();
   if (user != null) {
-    const stats = await getBodyStats({
-      columns: ['value', 'created_at', 'unit'],
-      whereClause: `user_id = '${user.user_id}' AND stat_type = '${bodyStatType}' AND deleted IS false`,
+    const timestampNow = deviceTimestampNow();
+    const minStartDate = getEarliestLookbackDate(timestampNow.clone());
+    const stats = await getRows<BodyStatCreateSchema>({
+      tableName: syncDbTables.bodyStatTable,
+      selectColumns: ['value', 'created_at', 'unit'],
+      whereConditions: {
+        [timestampFields.createdAt]: {
+          [NumericOperators.Ge]: minStartDate.startOf('day'),
+          [NumericOperators.Le]: timestampNow.endOf('day'),
+        },
+        user_id: {
+          [BaseOperators.Eq]: user.user_id,
+        },
+        stat_type: {
+          [BaseOperators.Eq]: bodyStatType,
+        },
+      },
     });
     return generateGraphData({
       table: syncDbTables.bodyStatTable,
-      data: stats,
-      targetDate: moment.utc(),
+      data: stats || [],
+      targetDate: moment(),
       targetUnit: targetUnit,
     });
   } else {

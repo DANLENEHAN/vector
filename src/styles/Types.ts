@@ -51,6 +51,7 @@ export interface themeColors {
   background: string;
   button: string;
   disabledButton: string;
+  disabledSelectedButton: string;
   buttonText: string;
   icon: string;
   borders: string;

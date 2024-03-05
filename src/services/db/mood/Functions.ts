@@ -2,7 +2,6 @@
 import {MoodCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {executeSqlBatch} from '@services/db/SqlClient';
 import {insertRows} from '@services/db/Operations';
 
 /**
@@ -14,24 +13,4 @@ import {insertRows} from '@services/db/Operations';
  */
 export const insertMoods = async (moods: MoodCreateSchema[]): Promise<void> => {
   await insertRows<MoodCreateSchema>(syncDbTables.moodTable, moods);
-};
-
-interface getMoodsInserface {
-  columns: string[];
-  whereClause?: string;
-}
-
-export const getMoods = async ({
-  columns,
-  whereClause,
-}: getMoodsInserface): Promise<MoodCreateSchema[]> => {
-  const query = {
-    sqlStatement: `SELECT ${columns.join(', ')} FROM mood ${
-      whereClause ? `WHERE ${whereClause}` : ''
-    };`,
-    params: [],
-  };
-  const result = await executeSqlBatch([query]);
-  const moods = result[0].result;
-  return moods as MoodCreateSchema[];
 };

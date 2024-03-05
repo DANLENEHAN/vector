@@ -1,5 +1,5 @@
 // Functions
-import {Moment} from 'moment';
+import {Moment} from 'moment-timezone';
 import {
   transformData,
   convertData,

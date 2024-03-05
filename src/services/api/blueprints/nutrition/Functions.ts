@@ -1,10 +1,15 @@
 // Functions
-import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
+import {
+  deviceTimestampNow,
+  getUtcNowAndDeviceTimezone,
+} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getUser} from '@services/db/user/Functions';
-import {getNutritions} from '@services/db/nutrition/Functions';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {generateGraphData} from '@services/timeSeries/timeSeries';
+import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
+import {getRows} from '@services/db/Operations';
+import {insertNutritions} from '@services/db/nutrition/Functions';
 
 // Types
 import {
@@ -13,13 +18,18 @@ import {
   NutritionWeightUnit,
   CaloriesUnit,
   UserCreateSchema,
+  NutritionCreateSchema,
 } from '@services/api/swagger/data-contracts';
-import {insertNutritions} from '@services/db/nutrition/Functions';
-import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
 import {graphPeriodData} from '@services/timeSeries/Types';
-import {syncDbTables} from '@shared/Constants';
 
+import {
+  BaseOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
+//Constants
+import {syncDbTables} from '@shared/Constants';
+import {timestampFields} from '@shared/Constants';
 // Logger
 import logger from '@utils/Logger';
 
@@ -82,17 +92,31 @@ export const getNutritionGraphData = async (
 ): Promise<graphPeriodData> => {
   const user: UserCreateSchema | null = await getUser();
   if (user != null) {
-    const stats = await getNutritions({
-      columns: ['value', 'created_at', 'unit'],
-      whereClause: `user_id = '${user.user_id}' AND type = '${nutritionType}' AND deleted IS false`,
+    const timestampNow = deviceTimestampNow();
+    const minStartDate = getEarliestLookbackDate(timestampNow.clone());
+    const nutritionData = await getRows<NutritionCreateSchema>({
+      tableName: syncDbTables.nutritionTable,
+      selectColumns: ['value', 'created_at', 'unit'],
+      whereConditions: {
+        [timestampFields.createdAt]: {
+          [NumericOperators.Ge]: minStartDate.startOf('day'),
+          [NumericOperators.Le]: timestampNow.endOf('day'),
+        },
+        user_id: {
+          [BaseOperators.Eq]: user.user_id,
+        },
+        type: {
+          [BaseOperators.Eq]: nutritionType,
+        },
+      },
     });
     return generateGraphData({
       table: syncDbTables.nutritionTable,
-      data: stats,
-      targetDate: moment.utc(),
+      data: nutritionData || [],
+      targetDate: moment(),
       targetUnit: targetUnit,
     });
   } else {
-    throw new Error('Unable to retreive user, cannot get body stat data.');
+    throw new Error('Unable to retreive user, cannot get nutrition data.');
   }
 };

@@ -4,7 +4,7 @@ import {
   NutritionCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
-import {Moment} from 'moment';
+import {Moment} from 'moment-timezone';
 
 /**
  * @description Represents a schema for data that can be synchronized during a create operation.

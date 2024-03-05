@@ -59,6 +59,7 @@ export const lightThemeColors: themeColors = {
   shadow: 'rgba(150, 150, 150, 0.3)',
   lowOpacityBackground: 'rgba(51, 51, 51, 0.5)',
   secondaryBackground: '#F0F0F0',
+  disabledSelectedButton: '#D3D3D3',
 };
 
 export const darkThemeColors: themeColors = {
@@ -77,6 +78,7 @@ export const darkThemeColors: themeColors = {
   shadow: 'rgba(50, 50, 50, 0.3)',
   lowOpacityBackground: 'rgba(255, 255, 255, 0.5)',
   secondaryBackground: '#383838',
+  disabledSelectedButton: '#4d4d4d',
 };
 
 export const paddingSizes = {

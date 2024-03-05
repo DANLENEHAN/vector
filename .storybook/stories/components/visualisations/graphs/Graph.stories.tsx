@@ -1,6 +1,7 @@
 import React from 'react';
-import Graph from '../../../../../../src/components/visualisations/graphs/Graph'; // Adjust the import path as necessary
-import {SystemProvider} from '../../../../../../src/context/SystemContext'; // Adjust the import path as necessary
+import Graph from '../../../../../src/components/visualisations/graphs/Graph'; // Adjust the import path as necessary
+import {SystemProvider} from '../../../../../src/context/SystemContext'; // Adjust the import path as necessary
+import {loadingGraphPeriodData} from '../../../../../src/services/timeSeries/Constants'; // Adjust the import path as necessary
 
 export default {
   title: 'components/visualisations/graphs/Graph',
@@ -75,4 +76,10 @@ export const NoData = Template.bind({});
 NoData.args = {
   data: [],
   ...remainingArgs,
+};
+
+export const Loading = Template.bind({});
+Loading.args = {
+  ...loadingGraphPeriodData.day,
+  loading: true,
 };
