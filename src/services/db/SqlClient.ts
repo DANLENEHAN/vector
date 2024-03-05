@@ -6,7 +6,7 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import RNFS from 'react-native-fs';
 // Types
-import {RowData, dbName} from '@services/db/Types';
+import {dbName} from '@services/db/Types';
 import 'react-native-get-random-values';
 import {ExecutionResult, SqlQuery} from '@services/db/Types';
 // Logger
@@ -57,11 +57,11 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
  * @returns {Promise<ExecutionResult[]>} A promise that resolves to an array of execution results for each query.
  * @throws {Error} Throws an error if there's a problem executing the SQL queries.
  */
-export const executeSqlBatch = (
+export const executeSqlBatch = <T>(
   queries: SqlQuery[],
-): Promise<ExecutionResult[]> => {
+): Promise<ExecutionResult<T>[]> => {
   return new Promise(resolve => {
-    const executionResults: ExecutionResult[] = [];
+    const executionResults: ExecutionResult<T>[] = [];
     db.transaction((tx: Transaction) => {
       const promises: Promise<void>[] = queries.map(
         ({sqlStatement, params = []}, index) => {
@@ -70,7 +70,7 @@ export const executeSqlBatch = (
               sqlStatement,
               params,
               (_, result: ResultSet) => {
-                const rows: RowData[] = [];
+                const rows: T[] = [];
                 for (let i = 0; i < result.rows.length; i++) {
                   rows.push(result.rows.item(i));
                 }

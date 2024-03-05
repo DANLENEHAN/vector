@@ -2,7 +2,7 @@
 import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
+import {insertRows} from '@services/db/Operations';
 import {executeSqlBatch} from '../SqlClient';
 // Types
 import {ExecutionResult} from '../Types';
@@ -40,11 +40,12 @@ export const insertUser = async (user: UserCreateSchema): Promise<void> => {
  */
 export const getUser = async (): Promise<UserCreateSchema | null> => {
   try {
-    const sqlResult: ExecutionResult[] = await executeSqlBatch([
-      {
-        sqlStatement: `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`,
-      },
-    ]);
+    const sqlResult: ExecutionResult<UserCreateSchema>[] =
+      await executeSqlBatch([
+        {
+          sqlStatement: `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`,
+        },
+      ]);
 
     if (sqlResult[0].error) {
       if (

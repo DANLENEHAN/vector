@@ -1,50 +1,62 @@
-import {formatDate, parseDate} from '@services/date/Functions';
-import {TimestampFormat, DateFormat} from '@shared/Enums';
+// Functions
+import * as MomentFunctions from 'moment-timezone';
+import moment from 'moment';
+import * as LocalizeFunctions from 'react-native-localize';
+import {
+  getUtcNowAndDeviceTimezone,
+  momentToDateStr,
+  getDayBoundsOfDate,
+} from '@services/date/Functions';
+import {DateFormat} from '@shared/Enums';
 
 jest.mock('react-native-localize', () => ({
   getTimeZone: jest.fn().mockReturnValue('Europe/Dublin'),
 }));
 
-describe('Date and Time Functions', () => {
-  it('formats a timestamp into a UTC timestamp string with ISO8601WithMilliseconds format', () => {
-    const timestamp = 1705664136961;
-    const formattedDate = formatDate(
-      timestamp,
-      TimestampFormat.YYYYMMDDHHMMssSSS,
-    );
-    expect(formattedDate).toBe('2024-01-19T11:35:36.961');
+jest.mock('moment-timezone', () => ({
+  ...jest.requireActual('moment-timezone'),
+  utc: jest.fn(),
+  tz: jest.fn(),
+}));
+
+describe('Date Function Tests', () => {
+  const fakeTimezone = 'America/Toronto';
+  const sampleDateString = '2024-01-01T00:00:00.000';
+  const sampleMoment1 = moment(sampleDateString);
+
+  test('getUtcNowAndDeviceTimezone', () => {
+    // Arrange
+    jest.spyOn(MomentFunctions, 'utc').mockReturnValue(sampleMoment1);
+    jest.spyOn(LocalizeFunctions, 'getTimeZone').mockReturnValue(fakeTimezone);
+
+    // Act
+    const response = getUtcNowAndDeviceTimezone();
+
+    // Assert
+    expect(MomentFunctions.utc).toHaveBeenCalledTimes(1);
+    expect(LocalizeFunctions.getTimeZone).toHaveBeenCalledTimes(1);
+    expect(response).toEqual({
+      timestamp: '2024-01-01T00:00:00.000',
+      timezone: 'America/Toronto',
+    });
   });
 
-  it('formats a timestamp into a UTC date string with MMDDWithSlash format', () => {
-    const timestamp = 1705664136961;
-    const formattedDate = formatDate(timestamp, DateFormat.DDMM);
-    expect(formattedDate).toBe('19/01');
+  test('momentToDateStr', () => {
+    // Arrange
+    // Act
+    const response = momentToDateStr(sampleMoment1, DateFormat.DDMM);
+    // Assert
+    expect(response).toEqual('01/01');
   });
 
-  it('formats a timestamp into a UTC date string with ISO8601WithMilliseconds format', () => {
-    const timestamp = 1705664136961;
-    const formattedDate = formatDate(
-      timestamp,
-      TimestampFormat.YYYYMMDDHHMMssSSS,
-    );
-    expect(formattedDate).toBe('2024-01-19T11:35:36.961');
-  });
-
-  it('parses a formatted date string into a Unix timestamp', () => {
-    const formattedDate = '2021-05-03T12:34:56.789';
-    const timestamp = parseDate(
-      formattedDate,
-      TimestampFormat.YYYYMMDDHHMMssSSS,
-    );
-    expect(timestamp).toBe(1620045296789);
-  });
-
-  it('parses a formatted date string with timezone into a Unix timestamp', () => {
-    const formattedDate = '2024-01-19T11:35:36.961Z';
-    const timestamp = parseDate(
-      formattedDate,
-      TimestampFormat.YYYYMMDDHHMMssSSS,
-    );
-    expect(timestamp).toBe(1705664136961);
+  test('getDayBoundsOfDate', () => {
+    // Arrange
+    // Act
+    const response = getDayBoundsOfDate(sampleMoment1);
+    // Assert
+    expect(response).toEqual({
+      startOfDay: sampleMoment1.clone().startOf('day'),
+      endOfDay: sampleMoment1.clone().endOf('day'),
+    });
   });
 });

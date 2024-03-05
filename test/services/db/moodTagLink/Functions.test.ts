@@ -1,5 +1,5 @@
 import {insertMoodTagLinks} from '@services/db/moodTagLink/Functions';
-import * as dbFunctions from '@services/db/Functions';
+import * as dbFunctions from '@services/db/Operations';
 
 describe('insertMoodTagLinks', () => {
   beforeEach(() => {

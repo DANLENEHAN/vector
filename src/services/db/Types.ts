@@ -1,5 +1,12 @@
-export const dbName = 'vector.db';
+import {
+  BaseOperators,
+  BooleanOperators,
+  StringOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
+import {SortOrders, syncDbTables} from '@shared/Constants';
 
+export const dbName = 'vector.db';
 export const alembicTable: string = 'alembic_version';
 
 /**
@@ -14,12 +21,12 @@ export interface RowData {
   [key: string]: any;
 }
 
-export interface ExecutionResult {
+export interface ExecutionResult<T> {
   /**
    * Original SQL statement and parameters associated with this execution.
    */
   originalQuery: {sqlStatement: string; params?: RowData[]};
-  result: RowData[];
+  result: T[];
   error: string | null;
 }
 
@@ -29,4 +36,18 @@ export interface SqlQuery {
    */
   sqlStatement: string;
   params?: any[];
+}
+
+export type QueryOperators =
+  | BaseOperators
+  | BooleanOperators
+  | NumericOperators
+  | StringOperators;
+
+export interface GetRowsParams {
+  tableName: syncDbTables;
+  selectColumns?: Array<string>;
+  whereConditions?: Record<string, any>;
+  orderConditions?: Record<string, SortOrders>;
+  limit?: number;
 }

@@ -1,5 +1,5 @@
 // Functions
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuidv4} from 'uuid';
 
 // Types
@@ -37,7 +37,7 @@ export const createNewMoodTagLink = async ({
   mood_tag_ids,
 }: CreateNewMoodTagLinkParams): Promise<void> => {
   try {
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+    const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
     const mood_tag_links = mood_tag_ids.map(mood_tag_id => ({
       mood_id: mood_id,
       mood_tag_id: mood_tag_id,

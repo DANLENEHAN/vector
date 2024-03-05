@@ -18,7 +18,7 @@ jest.mock('uuid', () => ({
 }));
 jest.mock('@services/date/Functions', () => ({
   ...jest.requireActual('@services/date/Functions'),
-  getCurrentTimestampTimezone: jest.fn().mockReturnValue({
+  getUtcNowAndDeviceTimezone: jest.fn().mockReturnValue({
     timestamp: '2025-01-01T00:00:00.000',
     timezone: 'UTC',
   }),

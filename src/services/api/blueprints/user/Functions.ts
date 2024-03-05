@@ -4,11 +4,9 @@ import logger from '@utils/Logger';
 import {loginUser, createUser} from '@services/api/blueprints/user/Api';
 import {SwaggerValidationError} from '@services/api/Types';
 import {Keyboard} from 'react-native';
-import {runSyncProcess} from '@services/db/sync/SyncProcess';
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
-import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
-import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {insertUser} from '@services/db/user/Functions';
+import {appEntryCallback} from '@services/system/SystemEvents';
 import {v4 as uuid4} from 'uuid';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
@@ -22,7 +20,7 @@ import {
   UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {timestampFields} from '@shared/Constants';
-import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
+import {AppEntryType} from '@services/system/Types';
 
 /**
  * Interface for the login parameters.
@@ -67,11 +65,7 @@ export const handleLogin = async (
   } else {
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
-    await retrieveOrRegisterDeviceId(response);
-    await runSyncProcess();
-    // Also captured if login is avoided in the Splash screen
-    await handleClientSessionEvent(ClientSessionEventType.AppOpen);
-    await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
+    appEntryCallback(AppEntryType.LoginAuthed);
   }
 };
 
@@ -104,7 +98,7 @@ export const handleCreateAccount = async (
   if (!params.isConnected) {
     return;
   }
-  const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+  const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
   const userObject: UserCreateSchema = {
     // NOTE: Remove these hard-coded values when the UI is implemented fully
     user_id: uuid4(),
@@ -142,12 +136,8 @@ export const handleCreateAccount = async (
       logger.error(`Error: ${loginResponse.message}`);
       return loginResponse.message;
     } else {
-      await retrieveOrRegisterDeviceId(loginResponse);
       params.navigation.navigate('App', {screen: 'Home'});
-      await runSyncProcess();
-      // Also captured if login is avoided in the Splash screen
-      await handleClientSessionEvent(ClientSessionEventType.AppOpen);
-      await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
+      appEntryCallback(AppEntryType.CreateAccAuthed);
     }
   }
 };

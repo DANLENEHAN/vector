@@ -1,5 +1,5 @@
 // Functions
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getUser} from '@services/db/user/Functions';
 import {getNutritions} from '@services/db/nutrition/Functions';
@@ -53,7 +53,7 @@ export const createNewNutrition = async ({
 }: CreateNewNutritionParams): Promise<void> => {
   try {
     const user: UserCreateSchema | null = await getUser();
-    const timestampTimezone: TimestampTimezone = getCurrentTimestampTimezone();
+    const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
 
     if (user != null) {
       await insertNutritions([

@@ -2,8 +2,8 @@
 import {BodyStatCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Functions';
 import {executeSqlBatch} from '@services/db/SqlClient';
+import {insertRows} from '@services/db/Operations';
 
 /**
  * @description Inserts an array of stats into the body_stat table.
@@ -15,7 +15,7 @@ import {executeSqlBatch} from '@services/db/SqlClient';
 export const insertBodyStat = async (
   stats: BodyStatCreateSchema[],
 ): Promise<void> => {
-  await insertRows(syncDbTables.bodyStatTable, stats);
+  await insertRows<BodyStatCreateSchema>(syncDbTables.bodyStatTable, stats);
 };
 
 interface getBodyStatsInterface {

@@ -52,3 +52,18 @@ export enum timestampFields {
 }
 
 export const unixEpoch: string = '1970-01-01T00:00:00.000';
+
+export enum SortOrders {
+  DESC = 'DESC',
+  ASC = 'ASC',
+}
+
+export enum timestampColumns {
+  CREATED_AT = 'created_at',
+  UPDATED_AT = 'updated_at',
+}
+
+export enum AndOrOperatos {
+  OR = 'or',
+  AND = 'and',
+}

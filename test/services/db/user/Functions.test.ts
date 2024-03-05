@@ -3,7 +3,7 @@ import * as SqlClientFuncs from '@services/db/SqlClient';
 import {syncDbTables} from '@shared/Constants';
 import {sampleUser} from '../../../Objects';
 import {getUser, insertUser} from '@services/db/user/Functions';
-import * as DbFunctions from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Operations';
 import logger from '@utils/Logger';
 
 describe('Test User Db Functions', () => {

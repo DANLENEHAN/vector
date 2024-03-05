@@ -1,5 +1,6 @@
-import {parseDate, formatDate} from '@services/date/Functions';
+import {momentToDateStr} from '@services/date/Functions';
 import {TimestampFormat, DateFormat} from '@shared/Enums';
+import moment from 'moment-timezone';
 
 export type graphInputData = {
   date: string;
@@ -47,12 +48,15 @@ export class GraphPlotData {
     );
     const sortedInputData = validatedData.sort(
       (a, b) =>
-        parseDate(a.date, TimestampFormat.YYYYMMDDHHMMssSSS) -
-        parseDate(b.date, TimestampFormat.YYYYMMDDHHMMssSSS),
+        moment(a.date, TimestampFormat.YYYYMMDDHHMMssSSS).valueOf() -
+        moment(b.date, TimestampFormat.YYYYMMDDHHMMssSSS).valueOf(),
     );
     return sortedInputData.map((dataPoint, index) => ({
       date: index,
-      dateStr: formatDate(dataPoint.date, DateFormat.DDMM),
+      dateStr: momentToDateStr(
+        moment(dataPoint.date, TimestampFormat.YYYYMMDDHHMMssSSS),
+        DateFormat.DDMM,
+      ),
       value: dataPoint.value,
     }));
   }

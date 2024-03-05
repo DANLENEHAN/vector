@@ -14,7 +14,7 @@ import {apiFunctions} from '@services/db/sync/Constants';
 import logger from '@utils/Logger';
 
 // Functions
-import {getCurrentTimestampTimezone} from '@services/date/Functions';
+import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 
 /**
  * Runs the synchronization process for pulling and pushing data between the local and remote databases.
@@ -32,8 +32,7 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       // Need a sync stsrt time here to make sure we don't miss out on any data created during thr sync process
-      const timestampTimezone: TimestampTimezone =
-        getCurrentTimestampTimezone();
+      const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
       const syncStart: string = timestampTimezone.timestamp;
 
       // Process synchronization pull for create operations
