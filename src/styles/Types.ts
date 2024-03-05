@@ -63,5 +63,4 @@ export interface themeColors {
   error: string;
   shadow: string;
   lowOpacityBackground: string;
-  secondaryBackground: string;
 }
