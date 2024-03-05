@@ -51,7 +51,6 @@ export interface themeColors {
   background: string;
   button: string;
   disabledButton: string;
-  disabledSelectedButton: string;
   buttonText: string;
   icon: string;
   borders: string;
@@ -63,4 +62,5 @@ export interface themeColors {
   error: string;
   shadow: string;
   lowOpacityBackground: string;
+  secondaryBackground: string;
 }
