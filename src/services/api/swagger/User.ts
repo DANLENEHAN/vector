@@ -26,7 +26,7 @@ export class User<SecurityDataType = unknown> {
   /**
    * @description Test authentication.
    *
-   * @tags Users
+   * @tags User
    * @name AuthenticatedList
    * @summary Test authentication.
    * @request GET:/user/authenticated
@@ -114,7 +114,7 @@ export class User<SecurityDataType = unknown> {
   /**
  * @description Logs in and returns the authentication cookie
  *
- * @tags Users
+ * @tags User
  * @name LoginCreate
  * @summary Login a user
  * @request POST:/user/login
@@ -157,7 +157,7 @@ export class User<SecurityDataType = unknown> {
   /**
    * @description Logout a user.
    *
-   * @tags Users
+   * @tags User
    * @name LogoutCreate
    * @summary Logout a user.
    * @request POST:/user/logout

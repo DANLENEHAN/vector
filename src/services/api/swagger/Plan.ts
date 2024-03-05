@@ -11,6 +11,7 @@
 
 import {
   PlanCreateSchema,
+  PlanTreeCreateSchema,
   PlanUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -65,7 +66,7 @@ export class Plan<SecurityDataType = unknown> {
    * @response `204` `void` Plan tree created successfully
    * @response `400` `void` Plan tree validation error
    */
-  createTreeCreate = (data: any, params: RequestParams = {}) =>
+  createTreeCreate = (data: PlanTreeCreateSchema, params: RequestParams = {}) =>
     this.http.request<void, void>({
       path: `/plan/create/tree`,
       method: 'POST',
