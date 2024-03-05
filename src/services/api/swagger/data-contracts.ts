@@ -1731,6 +1731,70 @@ export interface PlanComponentCreateSchema {
 }
 
 /**
+ * PlanComponentTreeCreateSchema
+ * A tree version of the SetCreateSchema where
+ * all child components are included nested within set.
+ * The set in this case is not nested within the workout componet.
+ * It is the root of the workout tree. So the 'workout_component_id' is
+ * required.
+ */
+export interface PlanComponentTreeCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Description
+   * The description of the plan component
+   * @default null
+   * @example "My plan component description"
+   */
+  description?: string | null;
+  /**
+   * Name
+   * The name of the plan component
+   * @maxLength 100
+   * @example "Plan Day 1"
+   */
+  name: string;
+  /**
+   * Plan Component Id
+   * ID for the plan component entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  plan_component_id: string;
+  /**
+   * Plan Id
+   * The ID of the plan this plan component belongs to
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  plan_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /** Workouts */
+  workouts: WorkoutTreeCreateSchema[];
+}
+
+/**
  * PlanComponentUpdateSchema
  * Validation schema for the Plan Component model.
  */
@@ -1824,6 +1888,84 @@ export interface PlanCreateSchema {
    * @example "My plan"
    */
   name: string;
+  /**
+   * Plan Id
+   * ID for the plan entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  plan_id: string;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+  /**
+   * Verified
+   * @default false
+   */
+  verified?: boolean | null;
+}
+
+/**
+ * PlanTreeCreateSchema
+ * A tree version of the SetCreateSchema where
+ * all child components are included nested within set.
+ * The set in this case is not nested within the workout componet.
+ * It is the root of the workout tree. So the 'workout_component_id' is
+ * required.
+ */
+export interface PlanTreeCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Created By
+   * The ID for the user creating the plan
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  created_by: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Description
+   * The description of the plan
+   * @default null
+   * @example "My plan description"
+   */
+  description?: string | null;
+  /** @default null */
+  goal?: FitnessGoal | null;
+  /**
+   * Is Active
+   * The plan is activly being used by the user
+   * @default true
+   * @example true
+   */
+  is_active?: boolean;
+  /**
+   * Name
+   * The name of the plan
+   * @maxLength 100
+   * @example "My plan"
+   */
+  name: string;
+  /** Plan Components */
+  plan_components: PlanComponentTreeCreateSchema[];
   /**
    * Plan Id
    * ID for the plan entry

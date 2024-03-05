@@ -11,6 +11,7 @@
 
 import {
   PlanComponentCreateSchema,
+  PlanComponentTreeCreateSchema,
   PlanComponentUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -65,7 +66,10 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @response `204` `void` PlanComponent tree created successfully
    * @response `400` `void` PlanComponent tree validation error
    */
-  createTreeCreate = (data: any, params: RequestParams = {}) =>
+  createTreeCreate = (
+    data: PlanComponentTreeCreateSchema,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
       path: `/plan_component/create/tree`,
       method: 'POST',
