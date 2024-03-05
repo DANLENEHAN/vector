@@ -2,16 +2,30 @@
 import {getUser} from '@services/db/user/Functions';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
+import {getRows} from '@services/db/Operations';
+import {generateGraphData} from '@services/timeSeries/timeSeries';
+import {deviceTimestampNow} from '@services/date/Functions';
 
 // Types
-import {MoodValue} from '@services/api/swagger/data-contracts';
+import {
+  MoodCreateSchema,
+  MoodValue,
+} from '@services/api/swagger/data-contracts';
 import {insertMoods} from '@services/db/mood/Functions';
 import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {syncDbTables} from '@shared/Constants';
 import {UserCreateSchema} from '@services/api/swagger/data-contracts';
+import {
+  BaseOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
+import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
 
 // Logger
 import logger from '@utils/Logger';
+import moment from 'moment-timezone';
 
 /**
  * Interface for the CreateNewMoodParams function.
@@ -66,5 +80,39 @@ export const createNewMood = async ({
     }
   } catch (error) {
     logger.error(`Error: ${error}`);
+  }
+};
+
+/**
+ * Function to get the mood data.
+ * @returns {Promise<graphPeriodData>} A promise that resolves to an object containing the mood data.
+ * @throws {Error} Throws an error if there's a problem executing the SQL queries.
+ */
+export const getMoodData = async (): Promise<graphPeriodData> => {
+  const user: UserCreateSchema | null = await getUser();
+  if (user != null) {
+    const timestampNow = deviceTimestampNow();
+    const minStartDate = getEarliestLookbackDate(timestampNow.clone());
+    // Get all moods for the user that are not deleted
+    const moods = await getRows<MoodCreateSchema>({
+      tableName: syncDbTables.moodTable,
+      selectColumns: ['value', 'created_at'],
+      whereConditions: {
+        [timestampFields.createdAt]: {
+          [NumericOperators.Ge]: minStartDate.startOf('day'),
+          [NumericOperators.Le]: timestampNow.endOf('day'),
+        },
+        user_id: {
+          [BaseOperators.Eq]: user.user_id,
+        },
+      },
+    });
+    return generateGraphData({
+      table: syncDbTables.moodTable,
+      data: moods || [],
+      targetDate: moment(),
+    });
+  } else {
+    throw new Error('Unable to retreive user, cannot get mood data.');
   }
 };

@@ -24,11 +24,13 @@ import {type SharedValue} from 'react-native-reanimated';
  * @param {string} unit - The unit for the average value
  * @param {SharedValue<string>} currentValue - The current value of the graph
  * @param {SharedValue<string>} currentDate - The current date of the graph
+ * @param {boolean} loading - Whether the graph is loading
  */
 interface AverageValueText {
-  unit: string; // The unit for the average value
-  currentValue: SharedValue<string>; // The current value of the graph
-  currentDate: SharedValue<string>; // The current date of the graph
+  unit: string;
+  currentValue: SharedValue<string>;
+  currentDate: SharedValue<string>;
+  loading?: boolean;
 }
 
 /**
@@ -42,11 +44,13 @@ export const AverageValueText: React.FC<AverageValueText> = ({
   currentValue,
   currentDate,
   unit,
-}: AverageValueText): React.ReactElement<AverageValueText> => {
+  loading,
+}): React.ReactElement<AverageValueText> => {
   // Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-
+  const topLabel = loading ? '' : 'Average:';
+  const unitLabel = loading ? '' : unit;
   // Render the component
   /**
    * Returns AverageValueText component with the following props:
@@ -64,7 +68,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
           styles.header,
           {color: currentTheme.lightText, marginBottom: marginSizes.xSmall},
         ]}>
-        Average:
+        {topLabel}
       </Text>
 
       <View style={styles.averageContainer}>
@@ -78,7 +82,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
           ]}
         />
         <Text style={[styles.unitLabel, {color: currentTheme.lightText}]}>
-          {` ${unit}`}
+          {` ${unitLabel}`}
         </Text>
       </View>
 
@@ -98,13 +102,14 @@ export const AverageValueText: React.FC<AverageValueText> = ({
 const styles = StyleSheet.create({
   componentWrapper: {
     flex: 1,
-    ...layoutStyles.centerVertically,
+    marginLeft: marginSizes.large,
+    ...layoutStyles.flexStretchVertical,
   },
   header: {
     ...bodyTextStyles.small,
   },
   averageContainer: {
-    ...layoutStyles.centerHorizontally,
+    ...layoutStyles.flexStartHorizontal,
   },
   unitLabel: {
     ...bodyTextStyles.small,

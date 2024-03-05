@@ -2,7 +2,15 @@
 import {getStats} from '@services/api/blueprints/bodyStat/Api';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
-
+import {generateGraphData} from '@services/timeSeries/timeSeries';
+import moment from 'moment-timezone';
+import {getRows} from '@services/db/Operations';
+import {deviceTimestampNow} from '@services/date/Functions';
+import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
+import {insertBodyStat} from '@services/db/bodyStat/Functions';
+// Constants
+import {syncDbTables} from '@shared/Constants';
+import {timestampFields} from '@shared/Constants';
 // Types
 import {
   BodyStatType,
@@ -10,10 +18,12 @@ import {
   UserCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
-import {insertBodyStat} from '@services/db/bodyStat/Functions';
-import {timestampFields} from '@shared/Constants';
 import {TimestampTimezone} from '@services/date/Type';
-
+import {graphPeriodData} from '@services/timeSeries/Types';
+import {
+  BaseOperators,
+  NumericOperators,
+} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {getUser} from '@services/db/user/Functions';
@@ -112,4 +122,39 @@ export const getUserStats = async ({
     logger.error(`Error: ${error}`);
   }
   return undefined;
+};
+
+export const getBodyStatGraphData = async (
+  bodyStatType: BodyStatType,
+  targetUnit: BodyStatCreateSchema['unit'],
+): Promise<graphPeriodData> => {
+  const user: UserCreateSchema | null = await getUser();
+  if (user != null) {
+    const timestampNow = deviceTimestampNow();
+    const minStartDate = getEarliestLookbackDate(timestampNow.clone());
+    const stats = await getRows<BodyStatCreateSchema>({
+      tableName: syncDbTables.bodyStatTable,
+      selectColumns: ['value', 'created_at', 'unit'],
+      whereConditions: {
+        [timestampFields.createdAt]: {
+          [NumericOperators.Ge]: minStartDate.startOf('day'),
+          [NumericOperators.Le]: timestampNow.endOf('day'),
+        },
+        user_id: {
+          [BaseOperators.Eq]: user.user_id,
+        },
+        stat_type: {
+          [BaseOperators.Eq]: bodyStatType,
+        },
+      },
+    });
+    return generateGraphData({
+      table: syncDbTables.bodyStatTable,
+      data: stats || [],
+      targetDate: moment(),
+      targetUnit: targetUnit,
+    });
+  } else {
+    throw new Error('Unable to retreive user, cannot get body stat data.');
+  }
 };

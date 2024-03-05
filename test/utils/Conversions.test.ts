@@ -1,63 +1,29 @@
-import {convertStats} from '@utils/Conversion';
-import {
-  BodyStatCreateSchema,
-  BodyStatType,
-  WeightUnit,
-} from '@services/api/swagger/data-contracts';
+import {convertValue} from '@utils/Conversion';
+import {WeightUnit} from '@services/api/swagger/data-contracts';
 
 describe('convertStats', () => {
   it('Converts stats to the target unit', () => {
     // Arrange
-    const stats = [
-      {
-        stat_type: BodyStatType.Weight,
-        unit: WeightUnit.Kg,
-        user_id: 1,
-        value: 1,
-      } as BodyStatCreateSchema,
-    ];
-
     // Act
-    const result = convertStats({
-      stats: stats,
-      targetUnit: WeightUnit.Lbs,
+    const result = convertValue({
+      value: 1,
+      fromUnit: WeightUnit.Kg,
+      toUnit: WeightUnit.Lbs,
     });
 
     // Assert
-    expect(result).toEqual([
-      {
-        stat_type: BodyStatType.Weight,
-        unit: WeightUnit.Lbs,
-        user_id: 1,
-        value: 2.2,
-      } as BodyStatCreateSchema,
-    ]);
+    expect(result).toEqual(2.2046244201837775);
   });
-  it('Converts weight from kg to stone', () => {
-    // Arrange
-    const stats = [
-      {
-        stat_type: BodyStatType.Weight,
-        unit: WeightUnit.Kg,
-        user_id: 1,
-        value: 1,
-      } as BodyStatCreateSchema,
-    ];
 
-    // Act
-    const result = convertStats({
-      stats: stats,
-      targetUnit: WeightUnit.Stone,
+  it('Converts weight from kg to stone', () => {
+    // Arrange + Act
+    const result = convertValue({
+      value: 1,
+      toUnit: WeightUnit.Stone,
+      fromUnit: WeightUnit.Kg,
     });
 
     // Assert
-    expect(result).toEqual([
-      {
-        stat_type: BodyStatType.Weight,
-        unit: WeightUnit.Stone,
-        user_id: 1,
-        value: 0.16,
-      } as BodyStatCreateSchema,
-    ]);
+    expect(result).toEqual(0.15747317287026982);
   });
 });

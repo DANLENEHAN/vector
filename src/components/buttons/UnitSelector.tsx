@@ -21,12 +21,14 @@ import {useSystem} from '@context/SystemContext';
  * @param {string} activeUnit - The currently active unit
  * @param {React.Dispatch<React.SetStateAction<string>>} setActiveUnit - Function to set the active unit
  * @param {object} style - Additional styles for the unit selector (optional)
+ * @param {boolean} disabled - Whether the unit selector is disabled (optional)
  */
 interface UnitSelectorProps {
   units: string[];
   activeUnit: string;
   setActiveUnit: React.Dispatch<React.SetStateAction<any>>;
   style?: object;
+  disabled?: boolean;
 }
 
 /**
@@ -41,6 +43,7 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
   activeUnit,
   setActiveUnit,
   style,
+  disabled,
 }: UnitSelectorProps): React.ReactElement<UnitSelectorProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -58,9 +61,11 @@ const UnitSelector: React.FC<UnitSelectorProps> = ({
       {units.map((unit, index) => (
         <TouchableOpacity
           key={unit}
+          disabled={disabled}
           style={[
             styles.unitOption,
-            activeUnit === unit && {backgroundColor: currentTheme.primary},
+            activeUnit === unit &&
+              !disabled && {backgroundColor: currentTheme.primary},
             index === 0 && styles.firstUnit,
             index === units.length - 1 && styles.lastUnit,
           ]}

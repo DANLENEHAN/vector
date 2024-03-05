@@ -1,3 +1,7 @@
+import {
+  MoodTagCategory,
+  MoodTagCreateSchema,
+} from '@services/api/swagger/data-contracts';
 import {getMoodTags} from '@services/db/moodTag/Functions';
 import * as SqlClientFuncs from '@services/db/SqlClient';
 import {ExecutionResult} from '@services/db/Types';
@@ -20,17 +24,21 @@ describe('getMoodTags', () => {
         label: 'Happy',
         created_at: '2025-01-01T00:00:00.000',
         timezone: 'UTC',
-        category: 'positive',
+        category: MoodTagCategory.Emotions,
+        icon: 'sad',
+        user_id: '1',
       },
       {
         mood_tag_id: '2',
         label: 'Sad',
         created_at: '2025-01-01T00:00:00.000',
         timezone: 'UTC',
-        category: 'negative',
+        category: MoodTagCategory.Emotions,
+        icon: 'happy',
+        user_id: '1',
       },
-    ];
-    const result: ExecutionResult[] = [
+    ] as MoodTagCreateSchema[];
+    const result: ExecutionResult<MoodTagCreateSchema>[] = [
       {
         originalQuery: query,
         result: testTags,
@@ -56,7 +64,7 @@ describe('getMoodTags', () => {
       sqlStatement: 'SELECT * FROM mood_tag;',
       params: [],
     };
-    const result: ExecutionResult[] = [
+    const result: ExecutionResult<MoodTagCreateSchema>[] = [
       {
         originalQuery: query,
         result: [],

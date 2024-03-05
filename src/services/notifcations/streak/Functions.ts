@@ -45,7 +45,7 @@ export const getStreak = async (): Promise<number | null> => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        eq: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
@@ -80,7 +80,7 @@ export const getStreak = async (): Promise<number | null> => {
       selectColumns: [timestampFields.createdAt],
       whereConditions: {
         event_type: {
-          eq: ClientSessionEventType.AppOpen,
+          [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
         },
       },
       orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},

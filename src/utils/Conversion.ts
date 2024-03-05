@@ -1,9 +1,12 @@
 // Types
 import {Unit} from 'convert-units';
 import {
-  BodyStatCreateSchema,
+  HeightUnit,
+  MuscleMeasurementUnit,
   WaterUnit,
   WeightUnit,
+  NutritionWeightUnit,
+  CaloriesUnit,
 } from '@services/api/swagger/data-contracts';
 // Functions
 import convert from 'convert-units';
@@ -11,20 +14,28 @@ import convert from 'convert-units';
 // Constants for bespoke conversions
 const STONE_TO_POUNDS = 14;
 
+export type UnitType =
+  | MuscleMeasurementUnit
+  | HeightUnit
+  | WeightUnit
+  | WaterUnit
+  | NutritionWeightUnit
+  | CaloriesUnit;
+
 /**
  * Interface for the convertUnit function.
  *
  * @interface convertUnitParams
  *
- * @property {BodyStatCreateSchema['unit']} unit  The unit to be converted.
+ * @property {UnitType} unit  The unit to be converted.
  */
 interface convertUnitParams {
-  unit: BodyStatCreateSchema['unit'];
+  unit: UnitType;
 }
 
 /**
  * @description Convert the unit to a format that the convert-units package can understand.
- * @param {convertUnitParams} unit  The unit to be converted.
+ * @param {UnitType} unit  The unit to be converted.
  * @returns {Unit} The converted unit.
  */
 const convertUnit = ({unit}: convertUnitParams): Unit => {
@@ -53,8 +64,8 @@ const convertUnit = ({unit}: convertUnitParams): Unit => {
  */
 interface convertValueParams {
   value: number;
-  fromUnit: BodyStatCreateSchema['unit'];
-  toUnit: BodyStatCreateSchema['unit'];
+  fromUnit: UnitType;
+  toUnit: UnitType;
 }
 
 /**
@@ -62,7 +73,7 @@ interface convertValueParams {
  * @param {convertValueParams} {value, fromUnit, toUnit}  The value to be converted, the unit of the value, and the target unit.
  * @returns {number} The converted value.
  */
-const convertValue = ({
+export const convertValue = ({
   value,
   fromUnit,
   toUnit,
@@ -100,41 +111,4 @@ const convertValue = ({
   return convert(value)
     .from(convertUnit({unit: fromUnit}))
     .to(convertUnit({unit: toUnit}));
-};
-
-/**
- * Interface for the convertStats function.
- *
- * @interface unitConversion
- *
- * @property {BodyStatCreateSchema[]} stats  The stats to be converted.
- * @property {BodyStatCreateSchema['unit']} targetUnit  The target unit.
- */
-interface unitConversion {
-  stats: BodyStatCreateSchema[];
-  targetUnit: BodyStatCreateSchema['unit'];
-}
-
-/**
- * Convert the stats to the target unit.
- *
- * @function convertStats
- * @param {unitConversion} {stats, targetUnit} The stats to be converted and the target unit.
- * @returns {BodyStatCreateSchema[]} The converted stats.
- */
-export const convertStats = ({
-  stats,
-  targetUnit,
-}: unitConversion): BodyStatCreateSchema[] => {
-  return stats.map(bodyStat => ({
-    ...bodyStat,
-    value: Number(
-      convertValue({
-        value: bodyStat.value,
-        fromUnit: bodyStat.unit,
-        toUnit: targetUnit,
-      }).toFixed(2),
-    ),
-    unit: targetUnit,
-  }));
 };
