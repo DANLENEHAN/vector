@@ -17,6 +17,8 @@ import {ScreenProps} from '@screens/Types';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriodLabels, timePeriods} from '@services/timeSeries/Types';
 import {defaultNullString} from '@services/timeSeries/Constants';
+// Constants
+import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
 
 // Give me typing for an object with keys of dateOptions and values of GraphPlotData
 // I think that's what's happening here
@@ -41,6 +43,8 @@ const MoodProgress: React.FC<ScreenProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setGraphData(loadingGraphPeriodData);
       const data = await getMoodData();
       setGraphData(data);
       setLoading(false);

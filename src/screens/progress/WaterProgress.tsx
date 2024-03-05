@@ -18,6 +18,8 @@ import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriods} from '@services/timeSeries/Types';
 import {timePeriodLabels} from '@services/timeSeries/Types';
+// Constants
+import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
 
 /**
  *  Weight progress screen
@@ -39,6 +41,8 @@ const MoodProgress: React.FC<ScreenProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setGraphData(loadingGraphPeriodData);
       const data = await getNutritionGraphData(
         NutritionType.Water,
         WaterUnit.Ml,
