@@ -161,10 +161,14 @@ describe('Time Series Functions Tests', () => {
       date: '2021-07-01T00:00:00.000Z',
       unit: 'kg',
     };
+    const dateVal = moment(
+      '2021-07-01T00:00:00.000Z',
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    ).valueOf();
     const expectedOutput = {
       value: 3,
-      startDate: 1625094000000,
-      endDate: 1625094000000,
+      startDate: dateVal,
+      endDate: dateVal,
       numberOfDataPoints: 1,
       axisLabel: '',
       unit: 'kg',
@@ -190,11 +194,19 @@ describe('Time Series Functions Tests', () => {
         unit: 'kg',
       },
     ];
+    const dateVal1 = moment(
+      '2021-07-01T00:00:00.000Z',
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    ).valueOf();
+    const dateVal2 = moment(
+      '2021-07-01T01:00:00.000Z',
+      TimestampFormat.YYYYMMDDHHMMssSSS,
+    ).valueOf();
     const expectedOutput = [
       {
         value: 3,
-        startDate: 1625094000000,
-        endDate: 1625094000000,
+        startDate: dateVal1,
+        endDate: dateVal1,
         numberOfDataPoints: 1,
         axisLabel: '',
         unit: 'kg',
@@ -203,8 +215,8 @@ describe('Time Series Functions Tests', () => {
       },
       {
         value: 4,
-        startDate: 1625097600000,
-        endDate: 1625097600000,
+        startDate: dateVal2,
+        endDate: dateVal2,
         numberOfDataPoints: 1,
         axisLabel: '',
         unit: 'kg',
