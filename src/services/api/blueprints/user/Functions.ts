@@ -69,6 +69,7 @@ export const handleLogin = async (
     // we won't have the user. If we insert the user after login we avoid
     // having to wait for a sync to get the user data.
     if ((await getUser()) === null) {
+      // If we get a failure here we could force a sync to get the user back
       logger.info(
         `Device does not have the user in the DB. Requesting it (user_id)=(${response}) now.`,
       );
