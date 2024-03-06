@@ -59,20 +59,17 @@ export class Nutrition<SecurityDataType = unknown> {
    * @description Delete a Nutrition.
    *
    * @tags Nutrition
-   * @name DeleteStringNutritionIdDelete
+   * @name DeleteDelete
    * @summary Delete a Nutrition.
-   * @request DELETE:/nutrition/delete/{string:nutrition_id}
+   * @request DELETE:/nutrition/delete/{nutrition_id}
    * @secure
    * @response `204` `void` Nutrition deleted successfully
    * @response `400` `void` Nutrition validation error
    * @response `404` `void` Nutrition not found
    */
-  deleteStringNutritionIdDelete = (
-    nutritionId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (nutritionId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/nutrition/delete/{string${nutritionId}}`,
+      path: `/nutrition/delete/${nutritionId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -81,19 +78,16 @@ export class Nutrition<SecurityDataType = unknown> {
    * @description Get specific Nutrition for a user.
    *
    * @tags Nutrition
-   * @name GetStringNutritionIdList
+   * @name GetNutrition
    * @summary Get a specific Nutrition for a user.
-   * @request GET:/nutrition/get/{string:nutrition_id}
+   * @request GET:/nutrition/get/{nutrition_id}
    * @secure
    * @response `200` `NutritionCreateSchema` Nutrition for user retrieved successfully
    * @response `404` `void` Nutrition not found
    */
-  getStringNutritionIdList = (
-    nutritionId: string,
-    params: RequestParams = {},
-  ) =>
+  getNutrition = (nutritionId: string, params: RequestParams = {}) =>
     this.http.request<NutritionCreateSchema, void>({
-      path: `/nutrition/get/{string${nutritionId}}`,
+      path: `/nutrition/get/${nutritionId}`,
       method: 'GET',
       secure: true,
       format: 'json',

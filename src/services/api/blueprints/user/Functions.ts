@@ -1,14 +1,13 @@
-// Utils
-import logger from '@utils/Logger';
 // Functions
 import {loginUser, createUser} from '@services/api/blueprints/user/Api';
 import {SwaggerValidationError} from '@services/api/Types';
 import {Keyboard} from 'react-native';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
-import {insertUser} from '@services/db/user/Functions';
+import {getUser, insertUser} from '@services/db/user/Functions';
 import {appEntryCallback} from '@services/system/SystemEvents';
 import {v4 as uuid4} from 'uuid';
 // Types
+import {AxiosResponse} from 'axios';
 import {TimestampTimezone} from '@services/date/Type';
 import {
   DateFormat,
@@ -21,6 +20,9 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {timestampFields} from '@shared/Constants';
 import {AppEntryType} from '@services/system/Types';
+// Services
+import {UserApi} from '@services/api/ApiService';
+import logger from '@utils/Logger';
 
 /**
  * Interface for the login parameters.
@@ -63,6 +65,20 @@ export const handleLogin = async (
     logger.error(`Error: ${response.message}`);
     return response.message;
   } else {
+    // If the user has existing data but the device needs to pull it in
+    // we won't have the user. If we insert the user after login we avoid
+    // having to wait for a sync to get the user data.
+    if ((await getUser()) === null) {
+      logger.info(
+        `Device does not have the user in the DB. Requesting it (user_id)=(${response}) now.`,
+      );
+      const user: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
+        response,
+      );
+      if (user.data) {
+        await insertUser(user.data);
+      }
+    }
     logger.info('Login successful, navigating to home screen.');
     params.navigation.navigate('App', {screen: 'Home'});
     appEntryCallback(AppEntryType.LoginAuthed);

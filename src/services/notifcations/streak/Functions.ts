@@ -136,6 +136,20 @@ export const checkStreakBreak = async (): Promise<void> => {
   const yesterday = timestampNow.clone().subtract(1, 'days');
   const dayBounds: DayBounds = getDayBoundsOfDate(yesterday);
 
+  const tableIdCol: string = `${syncDbTables.clientSessionEventTable}_id`;
+  const allTimeAppOpens = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [`count(${tableIdCol}) as ${tableIdCol}`],
+    whereConditions: {
+      [timestampFields.createdAt]: {
+        [NumericOperators.Le]: dayBounds.startOfDay,
+      },
+      event_type: {
+        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+      },
+    },
+  });
+
   const yesterdaysAppOpenEvent = await getRows<ClientSessionEventCreateSchema>({
     tableName: syncDbTables.clientSessionEventTable,
     selectColumns: [`${syncDbTables.clientSessionEventTable}_id`],
@@ -153,9 +167,16 @@ export const checkStreakBreak = async (): Promise<void> => {
     },
     limit: 1,
   });
-  if (yesterdaysAppOpenEvent !== null && yesterdaysAppOpenEvent.length === 0) {
+  if (
+    yesterdaysAppOpenEvent !== null &&
+    yesterdaysAppOpenEvent.length === 0 &&
+    // Is not the first day they logged in....
+    allTimeAppOpens !== null &&
+    allTimeAppOpens.length > 0 &&
+    // Will be an number given the select
+    (allTimeAppOpens[0].client_session_event_id as any) > 0
+  ) {
     await handleClientSessionEvent(ClientSessionEventType.StreakBreak);
-  } else {
-    logger.info('User logged in yesterday will not end streak');
+    logger.info('User failed to log in yesterday, adding streak break...');
   }
 };

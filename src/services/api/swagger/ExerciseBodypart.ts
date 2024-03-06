@@ -59,20 +59,17 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Delete a ExerciseBodypart.
    *
    * @tags ExerciseBodypart
-   * @name DeleteStringExerciseBodypartIdDelete
+   * @name DeleteDelete
    * @summary Delete a ExerciseBodypart.
-   * @request DELETE:/exercise_bodypart/delete/{string:exercise_bodypart_id}
+   * @request DELETE:/exercise_bodypart/delete/{exercise_bodypart_id}
    * @secure
    * @response `204` `void` ExerciseBodypart deleted successfully
    * @response `400` `void` ExerciseBodypart validation error
    * @response `404` `void` ExerciseBodypart not found
    */
-  deleteStringExerciseBodypartIdDelete = (
-    exerciseBodypartId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (exerciseBodypartId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/exercise_bodypart/delete/{string${exerciseBodypartId}}`,
+      path: `/exercise_bodypart/delete/${exerciseBodypartId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -81,19 +78,19 @@ export class ExerciseBodypart<SecurityDataType = unknown> {
    * @description Get specific ExerciseBodypart for a user.
    *
    * @tags ExerciseBodypart
-   * @name GetStringExerciseBodypartIdList
+   * @name GetExerciseBodypart
    * @summary Get a specific ExerciseBodypart for a user.
-   * @request GET:/exercise_bodypart/get/{string:exercise_bodypart_id}
+   * @request GET:/exercise_bodypart/get/{exercise_bodypart_id}
    * @secure
    * @response `200` `ExerciseBodypartCreateSchema` ExerciseBodypart for user retrieved successfully
    * @response `404` `void` ExerciseBodypart not found
    */
-  getStringExerciseBodypartIdList = (
+  getExerciseBodypart = (
     exerciseBodypartId: string,
     params: RequestParams = {},
   ) =>
     this.http.request<ExerciseBodypartCreateSchema, void>({
-      path: `/exercise_bodypart/get/{string${exerciseBodypartId}}`,
+      path: `/exercise_bodypart/get/${exerciseBodypartId}`,
       method: 'GET',
       secure: true,
       format: 'json',

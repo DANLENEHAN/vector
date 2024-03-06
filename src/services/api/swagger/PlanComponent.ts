@@ -11,6 +11,7 @@
 
 import {
   PlanComponentCreateSchema,
+  PlanComponentTreeCreateSchema,
   PlanComponentUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -65,7 +66,10 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @response `204` `void` PlanComponent tree created successfully
    * @response `400` `void` PlanComponent tree validation error
    */
-  createTreeCreate = (data: any, params: RequestParams = {}) =>
+  createTreeCreate = (
+    data: PlanComponentTreeCreateSchema,
+    params: RequestParams = {},
+  ) =>
     this.http.request<void, void>({
       path: `/plan_component/create/tree`,
       method: 'POST',
@@ -77,20 +81,17 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Delete a PlanComponent.
    *
    * @tags PlanComponent
-   * @name DeleteStringPlanComponentIdDelete
+   * @name DeleteDelete
    * @summary Delete a PlanComponent.
-   * @request DELETE:/plan_component/delete/{string:plan_component_id}
+   * @request DELETE:/plan_component/delete/{plan_component_id}
    * @secure
    * @response `204` `void` PlanComponent deleted successfully
    * @response `400` `void` PlanComponent validation error
    * @response `404` `void` PlanComponent not found
    */
-  deleteStringPlanComponentIdDelete = (
-    planComponentId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (planComponentId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/plan_component/delete/{string${planComponentId}}`,
+      path: `/plan_component/delete/${planComponentId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -99,19 +100,16 @@ export class PlanComponent<SecurityDataType = unknown> {
    * @description Get specific PlanComponent for a user.
    *
    * @tags PlanComponent
-   * @name GetStringPlanComponentIdList
+   * @name GetPlanComponent
    * @summary Get a specific PlanComponent for a user.
-   * @request GET:/plan_component/get/{string:plan_component_id}
+   * @request GET:/plan_component/get/{plan_component_id}
    * @secure
    * @response `200` `PlanComponentCreateSchema` PlanComponent for user retrieved successfully
    * @response `404` `void` PlanComponent not found
    */
-  getStringPlanComponentIdList = (
-    planComponentId: string,
-    params: RequestParams = {},
-  ) =>
+  getPlanComponent = (planComponentId: string, params: RequestParams = {}) =>
     this.http.request<PlanComponentCreateSchema, void>({
-      path: `/plan_component/get/{string${planComponentId}}`,
+      path: `/plan_component/get/${planComponentId}`,
       method: 'GET',
       secure: true,
       format: 'json',

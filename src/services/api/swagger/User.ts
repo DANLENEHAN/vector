@@ -26,7 +26,7 @@ export class User<SecurityDataType = unknown> {
   /**
    * @description Test authentication.
    *
-   * @tags Users
+   * @tags User
    * @name AuthenticatedList
    * @summary Test authentication.
    * @request GET:/user/authenticated
@@ -77,17 +77,17 @@ export class User<SecurityDataType = unknown> {
    * @description Delete a User.
    *
    * @tags User
-   * @name DeleteStringUserIdDelete
+   * @name DeleteDelete
    * @summary Delete a User.
-   * @request DELETE:/user/delete/{string:user_id}
+   * @request DELETE:/user/delete/{user_id}
    * @secure
    * @response `204` `void` User deleted successfully
    * @response `400` `void` User validation error
    * @response `404` `void` User not found
    */
-  deleteStringUserIdDelete = (userId: string, params: RequestParams = {}) =>
+  deleteDelete = (userId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/user/delete/{string${userId}}`,
+      path: `/user/delete/${userId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -96,16 +96,16 @@ export class User<SecurityDataType = unknown> {
    * @description Get specific User for a user.
    *
    * @tags User
-   * @name GetStringUserIdList
+   * @name GetUser
    * @summary Get a specific User for a user.
-   * @request GET:/user/get/{string:user_id}
+   * @request GET:/user/get/{user_id}
    * @secure
    * @response `200` `UserCreateSchema` User for user retrieved successfully
    * @response `404` `void` User not found
    */
-  getStringUserIdList = (userId: string, params: RequestParams = {}) =>
+  getUser = (userId: string, params: RequestParams = {}) =>
     this.http.request<UserCreateSchema, void>({
-      path: `/user/get/{string${userId}}`,
+      path: `/user/get/${userId}`,
       method: 'GET',
       secure: true,
       format: 'json',
@@ -114,7 +114,7 @@ export class User<SecurityDataType = unknown> {
   /**
  * @description Logs in and returns the authentication cookie
  *
- * @tags Users
+ * @tags User
  * @name LoginCreate
  * @summary Login a user
  * @request POST:/user/login
@@ -157,7 +157,7 @@ export class User<SecurityDataType = unknown> {
   /**
    * @description Logout a user.
    *
-   * @tags Users
+   * @tags User
    * @name LogoutCreate
    * @summary Logout a user.
    * @request POST:/user/logout

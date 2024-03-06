@@ -1,6 +1,6 @@
-export const revisionID = '1ac38a070272';
+export const revisionID = 'f4b8dc103763';
 
-export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
+export const sqlCommands_20240305153202863586_f4b8dc103763: string[] = [
   `CREATE TABLE alembic_version (
 	    version_num VARCHAR(32) NOT NULL,
 	    CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
@@ -100,7 +100,7 @@ export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
 	    max_weight FLOAT,
 	    increment FLOAT,
 	    type VARCHAR(50),
-	    verified BOOLEAN NOT NULL,
+	    verified BOOLEAN DEFAULT false NOT NULL,
 	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -117,7 +117,7 @@ export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
 	    difficulty_level INTEGER,
 	    category VARCHAR(100) NOT NULL,
 	    laterality VARCHAR(50) NOT NULL,
-	    verified BOOLEAN NOT NULL,
+	    verified BOOLEAN DEFAULT false NOT NULL,
 	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -171,7 +171,7 @@ export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
 	    description VARCHAR(500),
 	    is_active BOOLEAN NOT NULL,
 	    goal VARCHAR(50),
-	    verified BOOLEAN NOT NULL,
+	    verified BOOLEAN DEFAULT false NOT NULL,
 	    created_by VARCHAR(36) NOT NULL,
 	    created_at TIMESTAMP NOT NULL,
 	    updated_at TIMESTAMP,
@@ -256,7 +256,7 @@ export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
 	    start_time TIMESTAMP NOT NULL,
 	    end_time TIMESTAMP NOT NULL,
 	    goal VARCHAR(50),
-	    verified BOOLEAN NOT NULL,
+	    verified BOOLEAN DEFAULT false NOT NULL,
 	    created_by VARCHAR(36) NOT NULL,
 	    plan_component_id VARCHAR(36),
 	    created_at TIMESTAMP NOT NULL,
@@ -327,5 +327,5 @@ export const sqlCommands_20240227124510496730_1ac38a070272: string[] = [
 	    FOREIGN KEY(exercise_id) REFERENCES exercise (exercise_id),
 	    FOREIGN KEY(set_id) REFERENCES set_ (set_id)
 	);`,
-  "INSERT INTO alembic_version (version_num) VALUES ('1ac38a070272');",
+  "INSERT INTO alembic_version (version_num) VALUES ('f4b8dc103763');",
 ];

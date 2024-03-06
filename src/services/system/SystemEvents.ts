@@ -1,15 +1,10 @@
 // Functions
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
-import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
-import {getUser} from '@services/db/user/Functions';
 import {isFirstAppEntryToday} from './Functions';
 // Types
 import {AppEntryType} from '@services/system/Types';
-import {
-  ClientSessionEventType,
-  UserCreateSchema,
-} from '@services/api/swagger/data-contracts';
+import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {checkStreakBreak} from '@services/notifcations/streak/Functions';
@@ -49,11 +44,11 @@ export const appEntryCallback = async (
 ): Promise<void> => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
 
-  const user: UserCreateSchema | null = await getUser();
+  // Add Entry Session Event
   await handleClientSessionEvent(ClientSessionEventType.AppOpen);
 
+  // Only Update Streak info on the first login of the day
   const isFirstAppEntry: boolean = await isFirstAppEntryToday();
-
   if (isFirstAppEntry) {
     await checkStreakBreak();
     await registerStreakNotifcation();
@@ -69,10 +64,8 @@ export const appEntryCallback = async (
     handleClientSessionEvent(ClientSessionEventType.LoggedIn);
   }
 
+  // Run Sync if Online
   if (appEntryType !== AppEntryType.LoginTokenOffline) {
     await runSyncProcess();
-    if (user != null) {
-      await retrieveOrRegisterDeviceId(user.user_id);
-    }
   }
 };
