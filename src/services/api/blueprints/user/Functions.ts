@@ -72,11 +72,17 @@ export const handleLogin = async (
       logger.info(
         `Device does not have the user in the DB. Requesting it (user_id)=(${response}) now.`,
       );
-      const user: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
-        response,
-      );
-      if (user.data) {
-        await insertUser(user.data);
+      try {
+        const user: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
+          response,
+        );
+        if (user.data) {
+          await insertUser(user.data);
+        }
+      } catch (error) {
+        logger.error(
+          `(user_id)=(${response}); Unable to save user after logging in...`,
+        );
       }
     }
     logger.info('Login successful, navigating to home screen.');
