@@ -9,7 +9,7 @@ import {
 } from '@services/db/sync/Types';
 import {QuerySchema} from '@services/api/swagger/data-contracts';
 import {SyncOperation, SyncType} from '@services/api/swagger/data-contracts';
-import {syncDbTables, timestampFields} from '@shared/Constants';
+import {syncDbTables, timestampFields, unixEpoch} from '@shared/Constants';
 
 // Functions
 import {
@@ -49,6 +49,19 @@ export const processSyncTypePull = async (
     SyncType.Pull,
   );
 
+  // Get time when the Sync Type Push Operation 'syncOperation' happened for
+  // this table
+  const lastSyncedPush: LastSyncedTimestamps = await getLastSyncedForTable(
+    tableName,
+    SyncType.Push,
+  );
+  const lastSyncedPushOperation =
+    lastSyncedPush[
+      syncOperation === SyncOperation.Creates
+        ? timestampFields.createdAt
+        : timestampFields.updatedAt
+    ];
+
   const tableQuerySchema: QuerySchema = getQueryObjForTable(
     lastSynced.created_at,
     lastSynced.updated_at,
@@ -56,10 +69,14 @@ export const processSyncTypePull = async (
     syncStart,
   );
 
+  // Default the lastSyncedTimestamp to the syncStart.
+  // In the event there are no rows to sync this will be used.
+  let lastSyncedTimestamp = syncStart;
+
   try {
     const response = await getFunction(tableQuerySchema);
     // Process synchronization based on the Sync operation type
-    const rowsToSync = response.data || [];
+    const rowsToSync = response.data;
 
     if (response.status === 201 && rowsToSync.length > 0) {
       if (syncOperation === SyncOperation.Creates) {
@@ -70,43 +87,57 @@ export const processSyncTypePull = async (
         );
         if (rowsToInsert.length > 0) {
           await insertRows<SyncCreateSchemas>(tableName, rowsToInsert);
+          lastSyncedTimestamp =
+            rowsToInsert.slice(-1)[0][timestampFields.createdAt];
         }
       } else {
         if (rowsToSync.length > 0) {
           await updateRows<SyncCreateSchemas>(tableName, rowsToSync);
+          lastSyncedTimestamp =
+            rowsToSync.slice(-1)[0][timestampFields.updatedAt]!;
         }
       }
-
-      // Update the synchronization log
-      await insertSyncUpdate({
-        table_name: tableName,
-        // IMPORTANT:
-        // This 'last_synced' must the timestamp of the last sync'd
-        // row as this allows us to sync in batches. See 'syncBatchLimit'.
-        last_synced:
-          syncOperation === SyncOperation.Creates
-            ? rowsToSync.slice(-1)[0][timestampFields.createdAt]
-            : rowsToSync.slice(-1)[0][timestampFields.updatedAt],
-        sync_type: SyncType.Pull,
-        sync_operation: syncOperation,
-      });
-
       logger.info(
-        `Sync type '${SyncType.Pull}' operation '${syncOperation}' completed successfully on table: '${tableName}'`,
+        `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - Sync Complete`,
       );
     } else if (response.status !== 201) {
       logger.error(
-        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed due to unexpected response status code: '${response.status}'`,
+        `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - failed with status code (${response.status})`,
       );
     } else {
       logger.info(
-        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has received no rows to sync.`,
+        `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - has no rows to Sync`,
       );
+    }
+
+    // Update the synchronization log
+    await insertSyncUpdate({
+      table_name: tableName,
+      // IMPORTANT:
+      // If there are rows to be sync. The 'last_synced'
+      // must the timestamp of the last sync'd row as
+      // this allows us to sync in batches. See 'syncBatchLimit'.
+      last_synced: lastSyncedTimestamp,
+      sync_type: SyncType.Pull,
+      sync_operation: syncOperation,
+    });
+    // We Sync Pull always before Push
+    // After the first ever Pull for a table we will look to push
+    // The Last Push will not exist so we'll try push everything we've got
+    // Adding a last push here to equate to the first pull means we'll prevent
+    // this scenairo from happening
+    if (lastSyncedPushOperation === unixEpoch) {
+      await insertSyncUpdate({
+        table_name: tableName,
+        last_synced: lastSyncedTimestamp,
+        sync_type: SyncType.Push,
+        sync_operation: syncOperation,
+      });
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      logger.warn(
-        `Sync type '${SyncType.Pull}' Sync operation '${syncOperation}' has failed with error message '${error.message}'`,
+      logger.error(
+        `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - failed with error (${error.message})`,
       );
     }
     return Promise.resolve();
@@ -145,12 +176,24 @@ export const processSyncTypePush = async (
     );
 
     if (syncOperation === SyncOperation.Creates) {
-      processCreatesSyncTypePush(rowsToSync, tableName, syncFunctions);
+      await processCreatesSyncTypePush(
+        rowsToSync,
+        tableName,
+        syncFunctions,
+        syncStart,
+      );
     } else {
-      processUpdatesSyncTypePush(rowsToSync, tableName, syncFunctions);
+      await processUpdatesSyncTypePush(
+        rowsToSync,
+        tableName,
+        syncFunctions,
+        syncStart,
+      );
     }
   } catch (error) {
-    logger.error('Error processing synchronization push operation:', error);
+    logger.error(
+      `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - Sync failed with error (${error})`,
+    );
     throw error;
   }
 };

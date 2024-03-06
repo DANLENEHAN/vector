@@ -64,9 +64,9 @@ export const appEntryCallback = async (
     appEntryType === AppEntryType.CreateAccAuthed
   ) {
     if (appEntryType === AppEntryType.CreateAccAuthed) {
-      await handleClientSessionEvent(ClientSessionEventType.CreateAccount);
+      handleClientSessionEvent(ClientSessionEventType.CreateAccount);
     }
-    await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
+    handleClientSessionEvent(ClientSessionEventType.LoggedIn);
   }
 
   if (appEntryType !== AppEntryType.LoginTokenOffline) {

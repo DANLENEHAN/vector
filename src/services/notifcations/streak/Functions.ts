@@ -93,13 +93,20 @@ export const getStreak = async (): Promise<number | null> => {
       );
       return null;
     }
-    startTime = firstAppOpen[0].created_at;
+    startTime = moment(firstAppOpen[0].created_at);
   } else {
-    startTime = latestAppStreakBreak[0].created_at;
+    // A streak break is added the day after the streak is actually broken
+    // Therefore the streak was actually broken at 23:59:59 the night before.
+    // With only 'created_at' and 'updated_at' columns we cannot insert into the
+    // past as the insertion may never be picked up in the sync. To counter this
+    // we'd need a third timestamp column or create a new table for the streaks.
+    // For now we'll handle this below with the above situation in mind.
+    startTime = moment(latestAppStreakBreak[0].created_at);
+    startTime.subtract(1, 'days');
+    startTime.hour(23).minute(59).second(59).milliseconds(999);
   }
-
   // the number of full days between the two dates
-  return moment(endTime).diff(moment(startTime), 'days');
+  return moment(endTime).diff(startTime, 'days');
 };
 
 /**

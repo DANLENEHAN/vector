@@ -29,6 +29,7 @@ export const processUpdatesSyncTypePush = async (
   rows: SyncCreateSchemas[],
   tableName: syncDbTables,
   tableFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
+  syncStart: string,
 ) => {
   let successfulRequests = 0;
   const failedPushes: SyncUpdateSchemas[] = [];
@@ -41,8 +42,14 @@ export const processUpdatesSyncTypePush = async (
 
   if (failedSyncPushesForTable.length === 0 && rows.length === 0) {
     logger.info(
-      `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Updates}'.`,
+      `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Updates}); (tableName)=(${tableName}) - has no rows to sync`,
     );
+    await insertSyncUpdate({
+      table_name: tableName,
+      last_synced: syncStart,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Updates,
+    });
   } else {
     // Convert the CreateSchemas to UpdateSchemas
     const rowsToSync: SyncUpdateSchemas[] =
@@ -65,10 +72,14 @@ export const processUpdatesSyncTypePush = async (
           successfulRequests++;
         } else {
           failedPushes.push(row);
-          logger.error('Unexpected response status code: ', response.status);
+          logger.warn(
+            `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Updates}); (tableName)=(${tableName}) - received unexpected status code (${response.status})`,
+          );
         }
       } catch (error) {
-        logger.error('Error sending request:', error);
+        logger.warn(
+          `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Updates}); (tableName)=(${tableName}) - request failed with error (${error})`,
+        );
         failedPushes.push(row);
       }
     }
@@ -103,12 +114,13 @@ export const processUpdatesSyncTypePush = async (
       }
     }
   }
+
   logger.info(
-    `Sync type '${SyncType.Push}' operation '${
+    `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${
       SyncOperation.Updates
-    }' completed successfully on table: '${tableName}'. ${successfulRequests}/${
+    }); (tableName)=(${tableName}) - complete with (${successfulRequests}/${
       failedSyncPushesForTable.length + rows.length
-    } succeeded.`,
+    }) requests succeeded.`,
   );
 };
 
@@ -116,6 +128,7 @@ export const processCreatesSyncTypePush = async (
   rowsToSync: SyncCreateSchemas[],
   tableName: syncDbTables,
   tableFunctions: SyncTableFunctions<SyncCreateSchemas, SyncUpdateSchemas>,
+  syncStart: string,
 ) => {
   let successfulRequests = 0;
 
@@ -129,8 +142,14 @@ export const processCreatesSyncTypePush = async (
 
   if (allRowsToSync.length === 0) {
     logger.info(
-      `No rows to sync for table '${tableName}' Sync type '${SyncType.Push}' Sync operation '${SyncOperation.Creates}'.`,
+      `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - has no rows to sync`,
     );
+    await insertSyncUpdate({
+      table_name: tableName,
+      last_synced: syncStart,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Creates,
+    });
   } else {
     // Use the last (Latest Updated) row as the 'lastRow' not the last
     // of allRowsToSync
@@ -147,11 +166,15 @@ export const processCreatesSyncTypePush = async (
           successfulPushUuids.push((row as any)[tableUuidColumn]);
           successfulRequests++;
         } else {
+          logger.warn(
+            `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - received unexpected status code (${response.status})`,
+          );
           failedPushes.push(row);
-          logger.error('Unexpected response status code: ', response.status);
         }
       } catch (error) {
-        logger.error('Error sending request:', error);
+        logger.warn(
+          `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - request failed with error (${error})`,
+        );
         failedPushes.push(row);
       }
     }
@@ -165,6 +188,8 @@ export const processCreatesSyncTypePush = async (
         sync_operation: SyncOperation.Creates,
       });
     }
+
+    // Stored any unsuccessful pushes
     if (failedPushes.length > 0) {
       await storeFailedSyncPushErrors(
         tableName,
@@ -172,6 +197,8 @@ export const processCreatesSyncTypePush = async (
         failedPushes,
       );
     }
+
+    // Remove any successful rows that had previously failed
     if (successfulPushUuids.length > 0) {
       const newSyncUuids: string[] = rowsToSync.map(
         row => (row as any)[tableUuidColumn],
@@ -190,7 +217,8 @@ export const processCreatesSyncTypePush = async (
       }
     }
   }
+
   logger.info(
-    `Sync type '${SyncType.Push}' operation '${SyncOperation.Creates}' completed successfully on table: '${tableName}'. ${successfulRequests}/${allRowsToSync.length} succeeded.`,
+    `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - complete with (${successfulRequests}/${allRowsToSync.length}) requests succeeded.`,
   );
 };

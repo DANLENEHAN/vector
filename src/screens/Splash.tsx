@@ -19,7 +19,8 @@ import {
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
-// Logger
+// Services
+import NetInfo from '@react-native-community/netinfo';
 import logger from '@utils/Logger';
 // Functions
 import {appEntryCallback} from '@services/system/SystemEvents';
@@ -38,8 +39,7 @@ import {AppEntryType} from '@services/system/Types';
 const Splash: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const {isConnected, systemVarsLoaded, migrationsComplete, theme} =
-    useSystem();
+  const {systemVarsLoaded, migrationsComplete, theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const loginAndRedirectUser = useCallback(async () => {
@@ -49,7 +49,11 @@ const Splash: React.FC<ScreenProps> = ({
       navigation.navigate('Login');
     } else {
       // If the user has a session cookie and is connected we validate
-      if (isConnected === true) {
+      const networkState = await NetInfo.fetch();
+      if (
+        networkState.isInternetReachable === true &&
+        networkState.isConnected === true
+      ) {
         const response = await testAuthentication();
         if (response === undefined) {
           navigation.navigate('App', {screen: 'Home'});
@@ -66,7 +70,7 @@ const Splash: React.FC<ScreenProps> = ({
         appEntryCallback(AppEntryType.LoginTokenOffline);
       }
     }
-  }, [isConnected, navigation]);
+  }, [navigation]);
 
   useEffect(() => {
     if (systemVarsLoaded && migrationsComplete) {

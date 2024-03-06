@@ -88,7 +88,6 @@ export const logoutUser = async (): Promise<void | SwaggerValidationError> => {
     const response: AxiosResponse<void> = await UserApi.logoutCreate();
 
     if (response.status === 204) {
-      AsyncStorage.removeItem(AsyncStorageKeys.FlaskLoginCookie);
       return Promise.resolve();
     } else {
       return new SwaggerValidationError();

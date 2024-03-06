@@ -28,9 +28,8 @@ export const runSyncProcess = async (): Promise<void> => {
     // Iterate through each table in apiFunctions
     for (const [tableName, tableFunctions] of Object.entries(apiFunctions)) {
       logger.info(
-        `Processing Sync type '${SyncType.Pull}' for table: '${tableName}'`,
+        `(Synctype)=(${SyncType.Pull}); (tableName)=(${tableName}) - Sync Beginning`,
       );
-
       // Need a sync stsrt time here to make sure we don't miss out on any data created during thr sync process
       const timestampTimezone: TimestampTimezone = getUtcNowAndDeviceTimezone();
       const syncStart: string = timestampTimezone.timestamp;
@@ -53,11 +52,11 @@ export const runSyncProcess = async (): Promise<void> => {
 
       // Log information about the completion of synchronization pull
       logger.info(
-        `Sync '${SyncType.Pull}' completed successfully for table: '${tableName}'.`,
+        `(Synctype)=(${SyncType.Pull}); (tableName)=(${tableName})- Sync Complete`,
       );
 
       logger.info(
-        `Processing Sync type '${SyncType.Push}' for table: '${tableName}'`,
+        `(Synctype)=(${SyncType.Push}); (tableName)=(${tableName}) - Sync Beginning`,
       );
 
       // Trigger synchronization push for create operation
@@ -77,15 +76,13 @@ export const runSyncProcess = async (): Promise<void> => {
       );
 
       logger.info(
-        `Sync type ${SyncType.Push} completed successfully for table: '${tableName}'.`,
+        `(Synctype)=(${SyncType.Push}); (tableName)=(${tableName}) - Sync Complete`,
       );
     }
 
-    logger.info(
-      `Sync types '${SyncType.Pull}' and '${SyncType.Push}' completed successfully for all tables.`,
-    );
+    logger.info('Sync complete for all tables');
   } catch (error) {
-    logger.error('Error processing synchronization:', error);
+    logger.info(`Sync Error (${error})`);
     throw error;
   }
 };
