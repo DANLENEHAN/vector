@@ -40,16 +40,15 @@ export const processUpdatesSyncTypePush = async (
   const failedSyncPushesForTable: SyncUpdateSchemas[] =
     await getFailedSyncPushesUpdatesForTable(tableName);
 
+  // Default the lastSyncedTimestamp to the syncStart.
+  // In the event there are no rows or only failed rows
+  // to sync this will be used.
+  let lastSyncedTimestamp = syncStart;
+
   if (failedSyncPushesForTable.length === 0 && rows.length === 0) {
     logger.info(
       `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Updates}); (tableName)=(${tableName}) - has no rows to sync`,
     );
-    await insertSyncUpdate({
-      table_name: tableName,
-      last_synced: syncStart,
-      sync_type: SyncType.Push,
-      sync_operation: SyncOperation.Updates,
-    });
   } else {
     // Convert the CreateSchemas to UpdateSchemas
     const rowsToSync: SyncUpdateSchemas[] =
@@ -86,12 +85,7 @@ export const processUpdatesSyncTypePush = async (
     if (lastRow) {
       // The lastRow can be undefined if we're only
       // retrying failed rows with no new to process
-      await insertSyncUpdate({
-        table_name: tableName,
-        last_synced: lastRow[timestampFields.updatedAt],
-        sync_type: SyncType.Push,
-        sync_operation: SyncOperation.Updates,
-      });
+      lastSyncedTimestamp = lastRow[timestampFields.updatedAt];
     }
     if (failedPushes.length > 0) {
       storeFailedSyncPushErrors(tableName, SyncOperation.Updates, failedPushes);
@@ -114,6 +108,13 @@ export const processUpdatesSyncTypePush = async (
       }
     }
   }
+
+  await insertSyncUpdate({
+    table_name: tableName,
+    last_synced: lastSyncedTimestamp,
+    sync_type: SyncType.Push,
+    sync_operation: SyncOperation.Updates,
+  });
 
   logger.info(
     `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${
@@ -140,16 +141,15 @@ export const processCreatesSyncTypePush = async (
   const successfulPushUuids: string[] = [];
   const tableUuidColumn = `${tableName}_id`;
 
+  // Default the lastSyncedTimestamp to the syncStart.
+  // In the event there are no rows or only failed rows
+  // to sync this will be used.
+  let lastSyncedTimestamp = syncStart;
+
   if (allRowsToSync.length === 0) {
     logger.info(
       `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - has no rows to sync`,
     );
-    await insertSyncUpdate({
-      table_name: tableName,
-      last_synced: syncStart,
-      sync_type: SyncType.Push,
-      sync_operation: SyncOperation.Creates,
-    });
   } else {
     // Use the last (Latest Updated) row as the 'lastRow' not the last
     // of allRowsToSync
@@ -181,12 +181,7 @@ export const processCreatesSyncTypePush = async (
     if (lastRow) {
       // The lastRow can be undefined if we're only
       // retrying failed rows with no new to process
-      await insertSyncUpdate({
-        table_name: tableName,
-        last_synced: lastRow[timestampFields.createdAt],
-        sync_type: SyncType.Push,
-        sync_operation: SyncOperation.Creates,
-      });
+      lastSyncedTimestamp = lastRow[timestampFields.createdAt];
     }
 
     // Stored any unsuccessful pushes
@@ -217,6 +212,13 @@ export const processCreatesSyncTypePush = async (
       }
     }
   }
+
+  await insertSyncUpdate({
+    table_name: tableName,
+    last_synced: lastSyncedTimestamp,
+    sync_type: SyncType.Push,
+    sync_operation: SyncOperation.Creates,
+  });
 
   logger.info(
     `(Synctype)=(${SyncType.Push}); (SyncOperation)=(${SyncOperation.Creates}); (tableName)=(${tableName}) - complete with (${successfulRequests}/${allRowsToSync.length}) requests succeeded.`,

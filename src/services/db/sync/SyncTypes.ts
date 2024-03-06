@@ -104,6 +104,8 @@ export const processSyncTypePull = async (
       logger.error(
         `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - failed with status code (${response.status})`,
       );
+      // Something has gone wrong with the pull request do not save to sync table
+      return Promise.resolve();
     } else {
       logger.info(
         `(Synctype)=(${SyncType.Pull}); (SyncOperation)=(${syncOperation}); (tableName)=(${tableName}) - has no rows to Sync`,
