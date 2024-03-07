@@ -130,7 +130,6 @@ export const handleCreateAccount = async (
     return createResponse.message;
   } else {
     logger.info('Account creation successful, logging in.');
-    await insertUser(userObject);
     const loginResponse = await loginUser({
       email: params.email,
       password: params.password,
@@ -145,21 +144,6 @@ export const handleCreateAccount = async (
   }
 };
 
-/**
- * Asynchronously retrieves an existing user from the local database or requests it from an external API.
- * This function first attempts to fetch the user from the local database by calling the getUser function.
- * If a user is found locally, it is immediately returned. If not, the function then attempts to retrieve the
- * active user's ID from AsyncStorage using the AsyncStorageKeys.ActiveUser key. With the active user ID, it makes
- * an external API call to UserApi.getUser to fetch the user data. If the API call is successful and returns user data,
- * this data is then inserted into the local database via the insertUser function before the user object is returned.
- * If no user can be retrieved either from the local database or the external API, or if any step in the process fails,
- * the function logs an error and returns null, indicating the absence of a retrievable user.
- *
- * @returns {Promise<UserCreateSchema | null>} A promise that resolves to a UserCreateSchema object if a user is
- *                                             successfully retrieved or requested and inserted into the local database.
- *                                             If no user is found or an error occurs at any stage of the process,
- *                                             the promise resolves to null. Error situations are logged for debugging.
- */
 export const retrieveOrRequestUser =
   async (): Promise<UserCreateSchema | null> => {
     const user: UserCreateSchema | null = await getUser();
