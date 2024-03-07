@@ -6,6 +6,7 @@ import {SyncErrorDumpApi} from '@services/api/ApiService';
 import {
   FailedSyncPushError,
   SyncPushErrorItem,
+  UserData,
 } from '@services/asyncStorage/Types';
 import {SyncCreateSchemas, SyncUpdateSchemas} from '@services/db/sync/Types';
 
@@ -16,7 +17,7 @@ import {maxSyncPushRetry} from '@services/db/sync/Constants';
 import logger from '@utils/Logger';
 import {SyncOperation} from '@services/api/swagger/data-contracts';
 import {SyncType} from '@services/api/swagger/data-contracts';
-
+import {DeviceUserData} from '@services/asyncStorage/Types';
 /**
  * Stores failed synchronization push errors in AsyncStorage for a specific table and Sync operation.
  *
@@ -240,4 +241,43 @@ export const deleteSuccessfulSyncPushErrors = async <T>(
       `Failed to delete successfully synchronized push errors: ${error}`,
     );
   }
+};
+
+export const getDeviceUserInfo = async (): Promise<DeviceUserData | null> => {
+  // Stores enough information about the users on the device
+  // to switch between profiles on and offline
+
+  let deviceUserData: DeviceUserData | null = null;
+  try {
+    const response = await AsyncStorage.getItem(
+      AsyncStorageKeys.DeviceUserData,
+    );
+    if (response !== null) {
+      deviceUserData = JSON.parse(response);
+    }
+  } catch (error) {
+    logger.error(
+      `(AsyncStorageKeys)=(${AsyncStorageKeys.DeviceUserData}) - caused error ${error} during retrieval.`,
+    );
+  }
+  return deviceUserData;
+};
+
+export const updateDeviceUserInfo = async (
+  userId: string,
+  values: UserData,
+): Promise<void> => {
+  let deviceUserData: DeviceUserData | null = await getDeviceUserInfo();
+  if (!deviceUserData) {
+    deviceUserData = {};
+  }
+  deviceUserData[userId] = {
+    ...(deviceUserData[userId] || {}),
+    ...values,
+  };
+  AsyncStorage.setItem(
+    AsyncStorageKeys.DeviceUserData,
+    JSON.stringify(deviceUserData),
+  );
+  return Promise.resolve();
 };

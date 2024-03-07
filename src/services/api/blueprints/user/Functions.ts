@@ -23,6 +23,8 @@ import {AppEntryType} from '@services/system/Types';
 // Services
 import {UserApi} from '@services/api/ApiService';
 import logger from '@utils/Logger';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 
 /**
  * Interface for the login parameters.
@@ -64,32 +66,10 @@ export const handleLogin = async (
   if (response instanceof SwaggerValidationError) {
     logger.error(`Error: ${response.message}`);
     return response.message;
-  } else {
-    // If the user has existing data but the device needs to pull it in
-    // we won't have the user. If we insert the user after login we avoid
-    // having to wait for a sync to get the user data.
-    if ((await getUser()) === null) {
-      // If we get a failure here we could force a sync to get the user back
-      logger.info(
-        `Device does not have the user in the DB. Requesting it (user_id)=(${response}) now.`,
-      );
-      try {
-        const user: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
-          response,
-        );
-        if (user.data) {
-          await insertUser(user.data);
-        }
-      } catch (error) {
-        logger.error(
-          `(user_id)=(${response}); Unable to save user after logging in...`,
-        );
-      }
-    }
-    logger.info('Login successful, navigating to home screen.');
-    params.navigation.navigate('App', {screen: 'Home'});
-    appEntryCallback(AppEntryType.LoginAuthed);
   }
+  logger.info('Login successful, navigating to home screen.');
+  params.navigation.navigate('App', {screen: 'Home'});
+  appEntryCallback(AppEntryType.LoginAuthed, response);
 };
 
 /**
@@ -160,7 +140,48 @@ export const handleCreateAccount = async (
       return loginResponse.message;
     } else {
       params.navigation.navigate('App', {screen: 'Home'});
-      appEntryCallback(AppEntryType.CreateAccAuthed);
+      appEntryCallback(AppEntryType.CreateAccAuthed, loginResponse);
     }
   }
 };
+
+/**
+ * Asynchronously retrieves an existing user from the local database or requests it from an external API.
+ * This function first attempts to fetch the user from the local database by calling the getUser function.
+ * If a user is found locally, it is immediately returned. If not, the function then attempts to retrieve the
+ * active user's ID from AsyncStorage using the AsyncStorageKeys.ActiveUser key. With the active user ID, it makes
+ * an external API call to UserApi.getUser to fetch the user data. If the API call is successful and returns user data,
+ * this data is then inserted into the local database via the insertUser function before the user object is returned.
+ * If no user can be retrieved either from the local database or the external API, or if any step in the process fails,
+ * the function logs an error and returns null, indicating the absence of a retrievable user.
+ *
+ * @returns {Promise<UserCreateSchema | null>} A promise that resolves to a UserCreateSchema object if a user is
+ *                                             successfully retrieved or requested and inserted into the local database.
+ *                                             If no user is found or an error occurs at any stage of the process,
+ *                                             the promise resolves to null. Error situations are logged for debugging.
+ */
+export const retrieveOrRequestUser =
+  async (): Promise<UserCreateSchema | null> => {
+    const user: UserCreateSchema | null = await getUser();
+    if (user !== null) {
+      return user;
+    }
+    const activeUserId: string | null = await AsyncStorage.getItem(
+      AsyncStorageKeys.ActiveUser,
+    );
+    if (activeUserId !== null) {
+      try {
+        const response: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
+          activeUserId,
+        );
+        if (response.data) {
+          const user: UserCreateSchema = response.data;
+          await insertUser(user);
+          return user;
+        }
+      } catch (error) {
+        logger.error("Logged In User unable to retrieve it's data.");
+      }
+    }
+    return null;
+  };

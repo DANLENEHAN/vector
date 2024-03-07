@@ -10,6 +10,7 @@ import {HandleSwaggerValidationError} from '@services/api/Functions';
 import {SwaggerValidationError} from '@services/api/Types';
 // Logger
 import logger from '@utils/Logger';
+import {updateDeviceUserInfo} from '@services/asyncStorage/Functions';
 
 /**
  * Function to create a new user.
@@ -50,24 +51,21 @@ export const loginUser = async (data: {
   password: string;
 }): Promise<string | SwaggerValidationError> => {
   try {
-    const response: AxiosResponse<object> = await UserApi.loginCreate(data);
+    const response: AxiosResponse<string> = await UserApi.loginCreate(data);
     if (response.status === 201) {
       const cookieHeader = response.headers['set-cookie'];
+      const userId: string = response.data;
       if (cookieHeader) {
         const targetCookie = cookieHeader.find(cookie =>
           cookie.includes('session'),
         );
         const cookieValue = targetCookie?.split(';')[0].split('=')[1].trim();
         if (cookieValue) {
-          AsyncStorage.setItem(AsyncStorageKeys.FlaskLoginCookie, cookieValue);
+          await updateDeviceUserInfo(userId, {token: cookieValue});
+          AsyncStorage.setItem(AsyncStorageKeys.ActiveUser, userId);
         }
       }
-      const response_data = response.data;
-      // If data is null, return an error.
-      if (!response_data) {
-        return new SwaggerValidationError();
-      }
-      return Promise.resolve((response_data as any).user_id);
+      return Promise.resolve(userId);
     } else {
       return new SwaggerValidationError();
     }

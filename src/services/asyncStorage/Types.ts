@@ -38,3 +38,12 @@ export type FailedSyncPushError<T> = {
     };
   };
 };
+
+export interface UserData {
+  // Extend as needed
+  token: string | null;
+}
+
+export interface DeviceUserData {
+  [userId: string]: UserData;
+}

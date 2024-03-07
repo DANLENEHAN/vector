@@ -21,6 +21,7 @@ import logger from '@utils/Logger';
 import {layoutStyles} from '@styles/Main';
 // Constants
 import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
+import {updateDeviceUserInfo} from '@services/asyncStorage/Functions';
 
 /**
  * Account Settings Screen
@@ -44,7 +45,13 @@ const AccountSettings: React.FC<ScreenProps> = ({
         logger.info('Logout successful');
       }
     }
-    AsyncStorage.removeItem(AsyncStorageKeys.FlaskLoginCookie);
+    const activeUser = await AsyncStorage.getItem(AsyncStorageKeys.ActiveUser);
+    if (activeUser === null) {
+      logger.warn('No active user to logout');
+    } else {
+      updateDeviceUserInfo(activeUser, {token: null});
+    }
+    AsyncStorage.removeItem(AsyncStorageKeys.ActiveUser);
     handleClientSessionEvent(ClientSessionEventType.Logout);
     navigation.navigate('Login');
   };

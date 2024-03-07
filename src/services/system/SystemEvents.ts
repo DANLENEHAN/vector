@@ -9,6 +9,8 @@ import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 import logger from '@utils/Logger';
 import {checkStreakBreak} from '@services/notifcations/streak/Functions';
 import {registerStreakNotifcation} from '@services/notifcations/streak/Events';
+// Services
+import {dbConnectionManager} from '@services/db/SqlClient';
 
 /**
  * Handles various app entry events, logging the entry type, checking and updating user session
@@ -41,8 +43,13 @@ import {registerStreakNotifcation} from '@services/notifcations/streak/Events';
  */
 export const appEntryCallback = async (
   appEntryType: AppEntryType,
+  activeUserId: string,
 ): Promise<void> => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
+
+  if (dbConnectionManager.database === null) {
+    await dbConnectionManager.openDatabase(activeUserId);
+  }
 
   // Add Entry Session Event
   await handleClientSessionEvent(ClientSessionEventType.AppOpen);

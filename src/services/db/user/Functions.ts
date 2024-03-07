@@ -2,11 +2,7 @@
 import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
-import {insertRows} from '@services/db/Operations';
-import {executeSqlBatch} from '../SqlClient';
-// Types
-import {ExecutionResult} from '../Types';
-// Services
+import {insertRows, getRows} from '@services/db/Operations';
 import logger from '@utils/Logger';
 
 /**
@@ -27,43 +23,27 @@ export const insertUser = async (user: UserCreateSchema): Promise<void> => {
 };
 
 /**
- * Fetches a user record by user ID from the user table asynchronously.
- * Attempts to retrieve a single user record that matches the provided `userId`. If the query is successful and
- * a user is found, the function returns the user object cast to `UserCreateSchema`. If no user is found, or if
- * an error occurs during the query execution (including SQL errors or exceptions caught in the try-catch block),
- * the function logs the error and returns `null`.
- * @param {string} userId - The ID of the user to retrieve. This ID is utilized in the SQL query's WHERE clause
- *                          to locate the specific user record in the database.
- * @returns {Promise<UserCreateSchema | null>} - A promise that resolves to the user object conforming to the
- *                                               `UserCreateSchema` if the user is found, or `null` if no user
- *                                               is found or an error occurs during execution.
+ * Asynchronously retrieves the first user from the database.
+ * This function queries the user table specified in the syncDbTables constants to fetch the first user record
+ * adhering to the UserCreateSchema interface. It leverages the getRows function from the database services with
+ * a limit of 1 to ensure only the first user is fetched. If a user is found, it returns the user object;
+ * otherwise, it logs an error and returns null, indicating no user was found or an error occurred in retrieval.
+ *
+ * @returns {Promise<UserCreateSchema | null>} A promise that resolves with the first user object conforming to the
+ *                                             UserCreateSchema interface if a user is successfully retrieved from
+ *                                             the database. If no user is found or an error occurs during retrieval,
+ *                                             the promise resolves to null. The function logs an error message in
+ *                                             case of failure to retrieve a user.
  */
 export const getUser = async (): Promise<UserCreateSchema | null> => {
-  try {
-    const sqlResult: ExecutionResult<UserCreateSchema>[] =
-      await executeSqlBatch([
-        {
-          sqlStatement: `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`,
-        },
-      ]);
-
-    if (sqlResult[0].error) {
-      if (
-        // Table will not exist pre migrations
-        !sqlResult[0].error.includes('no such table: user')
-      ) {
-        logger.warn(`Unable to get user with error: ${sqlResult[0].error}`);
-      }
-      return null;
-    }
-
-    const user = sqlResult[0].result[0];
-    if (!user) {
-      return null;
-    }
-    return user as UserCreateSchema;
-  } catch (error) {
-    logger.warn('Error fetching user', {error});
-    return null;
+  const response: UserCreateSchema[] | null = await getRows<UserCreateSchema>({
+    tableName: syncDbTables.userTable,
+    limit: 1,
+  });
+  if (response !== null && response.length > 0) {
+    return response[0];
+  } else {
+    logger.error('Unable to retrieve user...not good!');
   }
+  return null;
 };

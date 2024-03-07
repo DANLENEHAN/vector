@@ -1,54 +1,12 @@
-import SQLite, {
-  SQLiteDatabase,
-  Transaction,
-  ResultSet,
-  SQLError,
-} from 'react-native-sqlite-storage';
-import RNFS from 'react-native-fs';
+import {Transaction, ResultSet} from 'react-native-sqlite-storage';
 // Types
-import {dbName} from '@services/db/Types';
 import 'react-native-get-random-values';
 import {ExecutionResult, SqlQuery} from '@services/db/Types';
-// Logger
+// Services
+import DbConnectionManager from './DbConnectionManager';
 import logger from '@utils/Logger';
 
-/**
- * @description Retrieves the document directory path using React Native File System (RNFS).
- *
- * @returns {void} This function doesn't return a value; it logs the document directory path.
- */
-const getDocumentDirectoryPath = (): void => {
-  try {
-    const documentDirectoryPath = RNFS.DocumentDirectoryPath;
-    logger.info('Document Directory Path:', documentDirectoryPath);
-  } catch (error) {
-    logger.error('Error getting document directory path:', error);
-  }
-};
-
-/**
- * Initializes and returns an instance of the SQLite database.
- * This function opens the database using the specified database name. Upon successful connection,
- * it prints the location of the devices documents.
- *
- * @type {SQLiteDatabase} db - The SQLite Database instance. This instance allows for executing SQL
- *                              queries, transactions, and interacting with the database.
- *
- * @param {Object} {name: dbName} - Configuration object for the database, where `dbName` is the name
- *                                  of the database file to open or create if it does not exist.
- * @param {Function} successCallback - A callback function prints the location of the Devices document
- *                                     dir for devs to find the local db.
- * @param {Function} errorCallback - A callback function that logs errors encountered during the
- *                                   database opening process.
- */
-export const db: SQLiteDatabase = SQLite.openDatabase(
-  {name: dbName},
-  getDocumentDirectoryPath,
-  (error: SQLError) => {
-    // Error callback: Log database opening error
-    logger.error('Error opening database:', error);
-  },
-);
+export const dbConnectionManager = new DbConnectionManager();
 
 /**
  * Executes a batch of SQL queries in a transaction.
@@ -60,9 +18,13 @@ export const db: SQLiteDatabase = SQLite.openDatabase(
 export const executeSqlBatch = <T>(
   queries: SqlQuery[],
 ): Promise<ExecutionResult<T>[]> => {
+  if (dbConnectionManager.database === null) {
+    logger.error('Critical Error - No database connection found');
+    return Promise.reject();
+  }
   return new Promise(resolve => {
     const executionResults: ExecutionResult<T>[] = [];
-    db.transaction((tx: Transaction) => {
+    dbConnectionManager.database!.transaction((tx: Transaction) => {
       const promises: Promise<void>[] = queries.map(
         ({sqlStatement, params = []}, index) => {
           return new Promise<void>((queryResolve, queryReject) => {
