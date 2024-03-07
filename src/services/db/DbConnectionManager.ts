@@ -30,4 +30,8 @@ export default class DbConnectionManager {
       await runDbMigrationProcess(revisionObject);
     }
   }
+
+  getDB(): SQLiteDatabase | null {
+    return this.database;
+  }
 }

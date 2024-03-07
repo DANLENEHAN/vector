@@ -5,7 +5,7 @@ import * as ClientSessionEventFunctions from '@services/api/blueprints/clientSes
 import * as StreakFunctions from '@services/notifcations/streak/Functions';
 import * as SyncProcessFunctions from '@services/db/sync/SyncProcess';
 import * as StreakEvents from '@services/notifcations/streak/Events';
-
+import * as SqlClient from '@services/db/SqlClient';
 // Types
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 
@@ -39,6 +39,11 @@ describe('SystemEvents Functions Tests', () => {
     jest.clearAllMocks();
   });
 
+  const fakeUserId = 'fakeUserId';
+  const openDbSpy = jest
+    .spyOn(SqlClient.dbConnectionManager, 'openDatabase')
+    .mockResolvedValue();
+
   test('appEntryCallback - Type LoginTokenOnline', async () => {
     // Arrange
     jest
@@ -48,9 +53,11 @@ describe('SystemEvents Functions Tests', () => {
     // Act
     const response = await SystemEventFunctions.appEntryCallback(
       AppEntryType.LoginTokenOnline,
+      fakeUserId,
     );
 
     // Assert
+    expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledTimes(1);
@@ -73,9 +80,11 @@ describe('SystemEvents Functions Tests', () => {
     // Act
     const response = await SystemEventFunctions.appEntryCallback(
       AppEntryType.LoginTokenOnline,
+      fakeUserId,
     );
 
     // Assert
+    expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledTimes(1);
@@ -98,9 +107,11 @@ describe('SystemEvents Functions Tests', () => {
     // Act
     const response = await SystemEventFunctions.appEntryCallback(
       AppEntryType.LoginTokenOffline,
+      fakeUserId,
     );
 
     // Assert
+    expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledTimes(1);
@@ -123,9 +134,11 @@ describe('SystemEvents Functions Tests', () => {
     // Act
     const response = await SystemEventFunctions.appEntryCallback(
       AppEntryType.LoginAuthed,
+      fakeUserId,
     );
 
     // Assert
+    expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledTimes(2);
@@ -151,9 +164,11 @@ describe('SystemEvents Functions Tests', () => {
     // Act
     const response = await SystemEventFunctions.appEntryCallback(
       AppEntryType.CreateAccAuthed,
+      fakeUserId,
     );
 
     // Assert
+    expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledTimes(3);

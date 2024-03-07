@@ -57,7 +57,7 @@ export const appEntryCallback = async (
   const isFirstAppEntry: boolean = await isFirstAppEntryToday();
   if (isFirstAppEntry) {
     await checkStreakBreak();
-    await registerStreakNotifcation();
+    registerStreakNotifcation();
   }
 
   if (

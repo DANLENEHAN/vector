@@ -18,13 +18,13 @@ export const dbConnectionManager = new DbConnectionManager();
 export const executeSqlBatch = <T>(
   queries: SqlQuery[],
 ): Promise<ExecutionResult<T>[]> => {
-  if (dbConnectionManager.database === null) {
+  if (dbConnectionManager.getDB() === null) {
     logger.error('Critical Error - No database connection found');
     return Promise.reject();
   }
   return new Promise(resolve => {
     const executionResults: ExecutionResult<T>[] = [];
-    dbConnectionManager.database!.transaction((tx: Transaction) => {
+    dbConnectionManager.getDB()!.transaction((tx: Transaction) => {
       const promises: Promise<void>[] = queries.map(
         ({sqlStatement, params = []}, index) => {
           return new Promise<void>((queryResolve, queryReject) => {

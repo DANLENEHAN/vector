@@ -2,15 +2,13 @@
 import * as UserApiFunctions from '@services/api/blueprints/user/Api';
 import * as DateFunctions from '@services/date/Functions';
 import logger from '@utils/Logger';
-import * as Apis from '@services/api/ApiService';
 // Test Functions
 import {
   handleLogin,
   handleCreateAccount,
 } from '@services/api/blueprints/user/Functions';
-import * as UserFunctions from '@services/db/user/Functions';
 // Data
-import {mockNavigation, sampleUser} from '../../../../Objects';
+import {mockNavigation} from '../../../../Objects';
 import {SwaggerValidationError} from '@services/api/Types';
 // Types
 import {TimestampTimezone} from '@services/date/Type';
@@ -49,12 +47,6 @@ jest.mock('@services/api/blueprints/user/Api', () => ({
 jest.mock('uuid', () => ({
   v4: jest.fn().mockReturnValue('fakeUuid'),
 }));
-jest.mock('@services/api/blueprints/device/Functions', () => ({
-  retrieveOrRegisterDeviceId: jest.fn(),
-}));
-jest.mock('uuid', () => ({
-  v4: jest.fn().mockReturnValue('mockedUuid'),
-}));
 jest.mock('@services/system/SystemEvents.ts', () => ({
   ...jest.requireActual('@services/system/SystemEvents.ts'),
   appEntryCallback: jest.fn(),
@@ -83,11 +75,6 @@ describe('User Functions Tests', () => {
     // Arrange
     const params = mockParams;
     jest.spyOn(UserApiFunctions, 'loginUser').mockResolvedValueOnce('fakeUuid');
-    jest.spyOn(UserFunctions, 'getUser').mockResolvedValueOnce(null);
-    jest
-      .spyOn(Apis.UserApi, 'getUser')
-      .mockResolvedValue({status: 201, data: [sampleUser]} as any);
-
     // Act
     await handleLogin(params);
     // Assert
@@ -96,50 +83,10 @@ describe('User Functions Tests', () => {
       email: mockParams.email,
       password: mockParams.password,
     });
-    expect(UserFunctions.getUser).toHaveBeenCalledTimes(1);
-    expect(Apis.UserApi.getUser).toHaveBeenCalledTimes(1);
-    expect(Apis.UserApi.getUser).toHaveBeenCalledWith('fakeUuid');
-    expect(UserFunctions.insertUser).toHaveBeenCalledTimes(1);
-    expect(UserFunctions.insertUser).toHaveBeenCalledWith([sampleUser]);
-
     expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledTimes(1);
     expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledWith(
       AppEntryType.LoginAuthed,
-    );
-    expect(mockNavigation.navigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigation.navigate).toHaveBeenCalledWith('App', {
-      screen: 'Home',
-    });
-  });
-
-  it('handleLogin sucessful - get user unsuccessful', async () => {
-    // Arrange
-    const params = mockParams;
-    jest.spyOn(UserApiFunctions, 'loginUser').mockResolvedValueOnce('fakeUuid');
-    jest.spyOn(UserFunctions, 'getUser').mockResolvedValueOnce(null);
-    jest
-      .spyOn(Apis.UserApi, 'getUser')
-      .mockRejectedValueOnce({status: 500, data: null} as any);
-
-    // Act
-    await handleLogin(params);
-    // Assert
-    expect(UserApiFunctions.loginUser).toHaveBeenCalledTimes(1);
-    expect(UserApiFunctions.loginUser).toHaveBeenCalledWith({
-      email: mockParams.email,
-      password: mockParams.password,
-    });
-    expect(UserFunctions.getUser).toHaveBeenCalledTimes(1);
-    expect(Apis.UserApi.getUser).toHaveBeenCalledTimes(1);
-    expect(Apis.UserApi.getUser).toHaveBeenCalledWith('fakeUuid');
-    expect(UserFunctions.insertUser).toHaveBeenCalledTimes(0);
-    expect(logger.error).toHaveBeenCalledTimes(1);
-    expect(logger.error).toHaveBeenCalledWith(
-      `(user_id)=(fakeUuid); Unable to save user after logging in...`,
-    );
-    expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledTimes(1);
-    expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledWith(
-      AppEntryType.LoginAuthed,
+      'fakeUuid',
     );
     expect(mockNavigation.navigate).toHaveBeenCalledTimes(1);
     expect(mockNavigation.navigate).toHaveBeenCalledWith('App', {
@@ -181,7 +128,7 @@ describe('User Functions Tests', () => {
   it('handleCreateAccount sucessful', async () => {
     // Arrange
     const params = mockParams;
-    const userObjct: UserCreateSchema = {
+    const userObject: UserCreateSchema = {
       age: 125,
       birthday: '1997-05-18',
       created_at: 'test',
@@ -198,7 +145,7 @@ describe('User Functions Tests', () => {
       premium: false,
       status: ProfileStatus.Active,
       timezone: 'test',
-      user_id: 'mockedUuid',
+      user_id: 'fakeUuid',
       username: 'danlen97',
       weight_unit_pref: WeightUnit.Kg,
     };
@@ -213,9 +160,7 @@ describe('User Functions Tests', () => {
     await handleCreateAccount(params);
     // Assert
     expect(UserApiFunctions.createUser).toHaveBeenCalledTimes(1);
-    expect(UserApiFunctions.createUser).toHaveBeenCalledWith(userObjct);
-    expect(UserFunctions.insertUser).toHaveBeenCalledTimes(1);
-    expect(UserFunctions.insertUser).toHaveBeenCalledWith(userObjct);
+    expect(UserApiFunctions.createUser).toHaveBeenCalledWith(userObject);
     expect(UserApiFunctions.loginUser).toHaveBeenCalledWith({
       email: mockParams.email,
       password: mockParams.password,
@@ -223,6 +168,7 @@ describe('User Functions Tests', () => {
     expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledTimes(1);
     expect(SystemEventsFunctions.appEntryCallback).toHaveBeenCalledWith(
       AppEntryType.CreateAccAuthed,
+      'fakeUuid',
     );
     expect(mockNavigation.navigate).toHaveBeenCalledTimes(1);
     expect(mockNavigation.navigate).toHaveBeenCalledWith('App', {

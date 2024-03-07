@@ -12,7 +12,7 @@ describe('Test User Db Functions', () => {
     jest.clearAllMocks();
   });
 
-  const getUserMockSql = `SELECT * FROM ${syncDbTables.userTable} LIMIT 1;`;
+  const getUserMockSql = `SELECT * FROM ${syncDbTables.userTable} WHERE deleted is False LIMIT 1;`;
 
   test('getUser - executeSqlBatch returns valid response ', async () => {
     const executeSqlBatchSpy = jest
@@ -81,7 +81,7 @@ describe('Test User Db Functions', () => {
     ]);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(logger.warn).toHaveBeenCalledWith(
-      `Unable to get user with error: Error!`,
+      `Unable to get data with error: Error!`,
     );
     expect(response).toEqual(null);
   });
