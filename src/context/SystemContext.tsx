@@ -17,10 +17,6 @@ import {
 } from '@react-native-community/netinfo';
 // Logger
 import logger from '@utils/Logger';
-// Functions
-import {runDbMigrationProcess} from '@services/db/alembic/Functions';
-// Constants
-import {revisionObject} from '@services/db/alembic/VectorRevisions';
 
 /**
  * System Context
@@ -43,7 +39,6 @@ interface SystemContextType {
   setUserPreferenceTheme: (theme: 'light' | 'dark' | 'system') => void;
   isConnected: boolean;
   systemVarsLoaded: boolean;
-  migrationsComplete: boolean;
 }
 
 /**
@@ -80,7 +75,6 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({
   >('light');
   const [isConnected, setIsConnected] = useState(false);
   const [systemVarsLoaded, setIsLoaded] = useState(false);
-  const [migrationsComplete, setMigrationsComplete] = useState(false);
 
   // Run once on mount
   useEffect(() => {
@@ -113,10 +107,6 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({
         setIsLoaded(true);
       });
 
-    runDbMigrationProcess(revisionObject).finally(() => {
-      setMigrationsComplete(true);
-    });
-
     // Create system theme subscription
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       const systemColorScheme = colorScheme === 'dark' ? 'dark' : 'light';
@@ -144,7 +134,6 @@ export const SystemProvider: React.FC<{children: ReactNode}> = ({
         setUserPreferenceTheme,
         isConnected,
         systemVarsLoaded,
-        migrationsComplete,
       }}>
       {children}
     </SystemContext.Provider>

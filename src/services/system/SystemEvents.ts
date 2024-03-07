@@ -47,9 +47,8 @@ export const appEntryCallback = async (
 ): Promise<void> => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
 
-  if (dbConnectionManager.database === null) {
-    await dbConnectionManager.openDatabase(activeUserId);
-  }
+  // Create DB connection with User's DB
+  await dbConnectionManager.openDatabase(activeUserId);
 
   // Add Entry Session Event
   await handleClientSessionEvent(ClientSessionEventType.AppOpen);

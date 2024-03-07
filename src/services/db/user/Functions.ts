@@ -3,7 +3,6 @@ import {UserCreateSchema} from '@services/api/swagger/data-contracts';
 import {syncDbTables} from '@shared/Constants';
 // Functions
 import {insertRows, getRows} from '@services/db/Operations';
-import logger from '@utils/Logger';
 
 /**
  * Asynchronously inserts a new user into the database.
@@ -42,8 +41,6 @@ export const getUser = async (): Promise<UserCreateSchema | null> => {
   });
   if (response !== null && response.length > 0) {
     return response[0];
-  } else {
-    logger.error('Unable to retrieve user...not good!');
   }
   return null;
 };
