@@ -47,7 +47,7 @@ describe('Streak Notification Function Tests', () => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        eq: ClientSessionEventType.AppOpen,
+        eq: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
@@ -69,7 +69,7 @@ describe('Streak Notification Function Tests', () => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        eq: ClientSessionEventType.AppOpen,
+        eq: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},
@@ -84,7 +84,7 @@ describe('Streak Notification Function Tests', () => {
         [NumericOperators.Le]: sampleMoment4,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {

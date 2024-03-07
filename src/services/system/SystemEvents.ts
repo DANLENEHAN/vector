@@ -50,24 +50,14 @@ export const appEntryCallback = async (
   // Create DB connection with User's DB
   await dbConnectionManager.openDatabase(activeUserId);
 
-  // Add Entry Session Event
-  await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+  // Add Login Entry Session Event
+  await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
 
   // Only Update Streak info on the first login of the day
   const isFirstAppEntry: boolean = await isFirstAppEntryToday();
   if (isFirstAppEntry) {
     await checkStreakBreak();
     registerStreakNotifcation();
-  }
-
-  if (
-    appEntryType === AppEntryType.LoginAuthed ||
-    appEntryType === AppEntryType.CreateAccAuthed
-  ) {
-    if (appEntryType === AppEntryType.CreateAccAuthed) {
-      handleClientSessionEvent(ClientSessionEventType.CreateAccount);
-    }
-    handleClientSessionEvent(ClientSessionEventType.LoggedIn);
   }
 
   // Run Sync if Online

@@ -45,7 +45,7 @@ export const getStreak = async (): Promise<number | null> => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
@@ -80,7 +80,7 @@ export const getStreak = async (): Promise<number | null> => {
       selectColumns: [timestampFields.createdAt],
       whereConditions: {
         event_type: {
-          [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+          [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
         },
       },
       orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},
@@ -145,7 +145,7 @@ export const checkStreakBreak = async (): Promise<void> => {
         [NumericOperators.Le]: dayBounds.startOfDay,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
   });
@@ -159,7 +159,7 @@ export const checkStreakBreak = async (): Promise<void> => {
         [NumericOperators.Le]: dayBounds.endOfDay,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {

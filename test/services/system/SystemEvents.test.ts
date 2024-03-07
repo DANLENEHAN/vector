@@ -63,7 +63,7 @@ describe('SystemEvents Functions Tests', () => {
     ).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledWith(ClientSessionEventType.AppOpen);
+    ).toHaveBeenCalledWith(ClientSessionEventType.LoggedIn);
     expect(SystemFunctions.isFirstAppEntryToday).toHaveBeenCalledTimes(1);
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
@@ -90,7 +90,7 @@ describe('SystemEvents Functions Tests', () => {
     ).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledWith(ClientSessionEventType.AppOpen);
+    ).toHaveBeenCalledWith(ClientSessionEventType.LoggedIn);
     expect(SystemFunctions.isFirstAppEntryToday).toHaveBeenCalledTimes(1);
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(0);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
@@ -117,7 +117,7 @@ describe('SystemEvents Functions Tests', () => {
     ).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledWith(ClientSessionEventType.AppOpen);
+    ).toHaveBeenCalledWith(ClientSessionEventType.LoggedIn);
     expect(SystemFunctions.isFirstAppEntryToday).toHaveBeenCalledTimes(1);
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(0);
@@ -141,13 +141,10 @@ describe('SystemEvents Functions Tests', () => {
     expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledTimes(2);
+    ).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenNthCalledWith(1, ClientSessionEventType.AppOpen);
-    expect(
-      ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenNthCalledWith(2, ClientSessionEventType.LoggedIn);
+    ).toHaveBeenNthCalledWith(1, ClientSessionEventType.LoggedIn);
     expect(SystemFunctions.isFirstAppEntryToday).toHaveBeenCalledTimes(1);
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);
@@ -171,16 +168,10 @@ describe('SystemEvents Functions Tests', () => {
     expect(openDbSpy).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenCalledTimes(3);
+    ).toHaveBeenCalledTimes(1);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenNthCalledWith(1, ClientSessionEventType.AppOpen);
-    expect(
-      ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenNthCalledWith(2, ClientSessionEventType.CreateAccount);
-    expect(
-      ClientSessionEventFunctions.handleClientSessionEvent,
-    ).toHaveBeenNthCalledWith(3, ClientSessionEventType.LoggedIn);
+    ).toHaveBeenNthCalledWith(1, ClientSessionEventType.LoggedIn);
     expect(SystemFunctions.isFirstAppEntryToday).toHaveBeenCalledTimes(1);
     expect(StreakFunctions.checkStreakBreak).toHaveBeenCalledTimes(1);
     expect(SyncProcessFunctions.runSyncProcess).toHaveBeenCalledTimes(1);

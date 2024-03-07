@@ -61,7 +61,7 @@ describe('System Functions Tests', () => {
         [NumericOperators.Le]: 'endOfDay',
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
   };
