@@ -47,7 +47,7 @@ describe('Streak Notification Function Tests', () => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        eq: ClientSessionEventType.AppOpen,
+        eq: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
@@ -69,7 +69,7 @@ describe('Streak Notification Function Tests', () => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        eq: ClientSessionEventType.AppOpen,
+        eq: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},
@@ -84,7 +84,7 @@ describe('Streak Notification Function Tests', () => {
         [NumericOperators.Le]: sampleMoment4,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {
@@ -179,13 +179,16 @@ describe('Streak Notification Function Tests', () => {
       startOfDay: sampleMoment3,
       endOfDay: sampleMoment4,
     });
-    jest.spyOn(DbFunctions, 'getRows').mockResolvedValueOnce([]);
+    jest
+      .spyOn(DbFunctions, 'getRows')
+      .mockResolvedValueOnce([{client_session_event_id: 10}])
+      .mockResolvedValueOnce([]);
 
     // Act
     const response = await checkStreakBreak();
 
     // Assert
-    expect(DbFunctions.getRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.getRows).toHaveBeenCalledTimes(2);
     expect(DbFunctions.getRows).toHaveBeenCalledWith(yesterdaysAppOpenEvent);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
@@ -193,6 +196,32 @@ describe('Streak Notification Function Tests', () => {
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,
     ).toHaveBeenCalledWith(ClientSessionEventType.StreakBreak);
+    expect(response).toEqual(undefined);
+  });
+
+  test('checkStreakBreak - is first ever app entry', async () => {
+    // Arrange
+    jest
+      .spyOn(DateFunctions, 'deviceTimestampNow')
+      .mockReturnValue(sampleMoment2);
+    jest.spyOn(DateFunctions, 'getDayBoundsOfDate').mockReturnValueOnce({
+      startOfDay: sampleMoment3,
+      endOfDay: sampleMoment4,
+    });
+    jest
+      .spyOn(DbFunctions, 'getRows')
+      .mockResolvedValueOnce([{client_session_event_id: 0}])
+      .mockResolvedValueOnce([]);
+
+    // Act
+    const response = await checkStreakBreak();
+
+    // Assert
+    expect(DbFunctions.getRows).toHaveBeenCalledTimes(2);
+    expect(DbFunctions.getRows).toHaveBeenCalledWith(yesterdaysAppOpenEvent);
+    expect(
+      ClientSessionEventFunctions.handleClientSessionEvent,
+    ).toHaveBeenCalledTimes(0);
     expect(response).toEqual(undefined);
   });
 
@@ -207,13 +236,14 @@ describe('Streak Notification Function Tests', () => {
     });
     jest
       .spyOn(DbFunctions, 'getRows')
+      .mockResolvedValueOnce([{client_session_event_id: 10}])
       .mockResolvedValueOnce([{created_at: sampleMoment2}]);
 
     // Act
     const response = await checkStreakBreak();
 
     // Assert
-    expect(DbFunctions.getRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.getRows).toHaveBeenCalledTimes(2);
     expect(DbFunctions.getRows).toHaveBeenCalledWith(yesterdaysAppOpenEvent);
     expect(
       ClientSessionEventFunctions.handleClientSessionEvent,

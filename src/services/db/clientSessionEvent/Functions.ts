@@ -17,7 +17,7 @@ import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functi
 
 // Logger
 import logger from '@utils/Logger';
-import {getUser} from '../user/Functions';
+import {retrieveOrRequestUser} from '@services/api/blueprints/user/Functions';
 
 /**
  * Inserts a client session event into the database.
@@ -35,7 +35,7 @@ export const insertClientSessionEvent = async (
 
   let userId = null;
   try {
-    const user: UserCreateSchema | null = await getUser();
+    const user: UserCreateSchema | null = await retrieveOrRequestUser();
     userId = user != null ? user.user_id : null;
     if (userId !== null) {
       const deviceRow: DeviceCreateSchema | null =

@@ -1,10 +1,10 @@
 // Functions
-import {getUser} from '@services/db/user/Functions';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {v4 as uuid4} from 'uuid';
 import {getRows} from '@services/db/Operations';
 import {generateGraphData} from '@services/timeSeries/timeSeries';
 import {deviceTimestampNow} from '@services/date/Functions';
+import {getUser} from '@services/db/user/Functions';
 
 // Types
 import {

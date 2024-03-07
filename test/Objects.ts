@@ -100,5 +100,4 @@ export const mockSystemContextData = {
   setUserPreferenceTheme: jest.fn(),
   isConnected: true,
   systemVarsLoaded: true,
-  migrationsComplete: true,
 };

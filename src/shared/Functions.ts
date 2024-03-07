@@ -1,3 +1,8 @@
+// Services
+import logger from '@utils/Logger';
+// Functions
+import RNFS from 'react-native-fs';
+
 /**
  * Capitalizes the first letter of a given string.
  * @param {string} str - The input string to be capitalized.
@@ -59,3 +64,17 @@ export const transformsInternalNameToDisplay = (name: string) => {
 
 export const isInEnum = <T>(enumType: T, value: any): boolean =>
   Object.values(enumType as object).includes(value);
+
+/**
+ * @description Retrieves the document directory path using React Native File System (RNFS).
+ *
+ * @returns {void} This function doesn't return a value; it logs the document directory path.
+ */
+export const getDocumentDirectoryPath = (): void => {
+  try {
+    const documentDirectoryPath = RNFS.DocumentDirectoryPath;
+    logger.info('Document Directory Path:', documentDirectoryPath);
+  } catch (error) {
+    logger.error('Error getting document directory path:', error);
+  }
+};

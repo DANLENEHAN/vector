@@ -4,8 +4,13 @@ import * as SqlClientFuncs from '@services/db/SqlClient';
 const successSql = 'successSql';
 const failureSql = 'failureSql';
 
-jest.mock('react-native-sqlite-storage', () => ({
-  openDatabase: jest.fn(() => ({
+describe('DB Functions Tests', () => {
+  beforeEach(() => {
+    // Clears 'toHaveBeenCalledTimes' cache
+    jest.clearAllMocks();
+  });
+
+  const mock = jest.fn(() => ({
     transaction: jest.fn(callback => {
       const tx = {
         executeSql: jest
@@ -37,22 +42,23 @@ jest.mock('react-native-sqlite-storage', () => ({
       };
       callback(tx);
     }),
-  })),
-}));
+  }));
 
-describe('DB Functions Tests', () => {
-  beforeEach(() => {
-    // Clears 'toHaveBeenCalledTimes' cache
-    jest.clearAllMocks();
-  });
+  const openDatabaseSpy = jest
+    .spyOn(SqlClientFuncs.dbConnectionManager, 'getDB')
+    .mockImplementation(mock as any);
 
   test(`executeSqlBatch successful sql execution`, async () => {
+    // Arrange
+    // Act
     const response = await SqlClientFuncs.executeSqlBatch([
       {
         sqlStatement: successSql,
       },
     ]);
 
+    // Assert
+    expect(openDatabaseSpy).toHaveBeenCalledTimes(2);
     expect(response).toEqual([
       {
         error: null,
@@ -68,12 +74,16 @@ describe('DB Functions Tests', () => {
   });
 
   test(`executeSqlBatch unsuccessful sql execution`, async () => {
+    // Arrange
+    // Act
     const response = await SqlClientFuncs.executeSqlBatch([
       {
         sqlStatement: failureSql,
       },
     ]);
 
+    // Assert
+    expect(openDatabaseSpy).toHaveBeenCalledTimes(2);
     expect(response).toEqual([
       {
         error: `Execution failed with error: 'Your SQL is shit'`,
@@ -84,6 +94,8 @@ describe('DB Functions Tests', () => {
   });
 
   test(`executeSqlBatch successful and unsuccessful sql execution`, async () => {
+    // Arrange
+    // Act
     const response = await SqlClientFuncs.executeSqlBatch([
       {
         sqlStatement: successSql,
@@ -93,6 +105,8 @@ describe('DB Functions Tests', () => {
       },
     ]);
 
+    // Assert
+    expect(openDatabaseSpy).toHaveBeenCalledTimes(2);
     expect(response).toEqual([
       {
         error: null,

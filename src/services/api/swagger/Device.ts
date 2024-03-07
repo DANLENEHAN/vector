@@ -59,17 +59,17 @@ export class Device<SecurityDataType = unknown> {
    * @description Delete a Device.
    *
    * @tags Device
-   * @name DeleteStringDeviceIdDelete
+   * @name DeleteDelete
    * @summary Delete a Device.
-   * @request DELETE:/device/delete/{string:device_id}
+   * @request DELETE:/device/delete/{device_id}
    * @secure
    * @response `204` `void` Device deleted successfully
    * @response `400` `void` Device validation error
    * @response `404` `void` Device not found
    */
-  deleteStringDeviceIdDelete = (deviceId: string, params: RequestParams = {}) =>
+  deleteDelete = (deviceId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/device/delete/{string${deviceId}}`,
+      path: `/device/delete/${deviceId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -78,16 +78,16 @@ export class Device<SecurityDataType = unknown> {
    * @description Get specific Device for a user.
    *
    * @tags Device
-   * @name GetStringDeviceIdList
+   * @name GetDevice
    * @summary Get a specific Device for a user.
-   * @request GET:/device/get/{string:device_id}
+   * @request GET:/device/get/{device_id}
    * @secure
    * @response `200` `DeviceCreateSchema` Device for user retrieved successfully
    * @response `404` `void` Device not found
    */
-  getStringDeviceIdList = (deviceId: string, params: RequestParams = {}) =>
+  getDevice = (deviceId: string, params: RequestParams = {}) =>
     this.http.request<DeviceCreateSchema, void>({
-      path: `/device/get/{string${deviceId}}`,
+      path: `/device/get/${deviceId}`,
       method: 'GET',
       secure: true,
       format: 'json',

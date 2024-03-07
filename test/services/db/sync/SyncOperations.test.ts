@@ -1,5 +1,6 @@
 // Test Objects
 import {sampleStat, sampleUpdatedStat} from '../../../Objects';
+import {sampleSyncStartTimestamp} from './Objects';
 import {
   TableFunctionsMock,
   postBodyStatSpy,
@@ -60,6 +61,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -137,6 +139,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -210,6 +213,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -272,6 +276,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -293,7 +298,13 @@ describe('Sync Operation Tests', () => {
     expect(postBodyStatSpy).toHaveBeenCalledTimes(0);
     expect(updateUpdateSpy).toHaveBeenCalledTimes(0);
 
-    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleSyncStartTimestamp,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Updates,
+    });
 
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
@@ -315,6 +326,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -378,7 +390,12 @@ describe('Sync Operation Tests', () => {
       .mockResolvedValueOnce([failedStatUpdate]);
 
     // Act
-    await processUpdatesSyncTypePush([], tableToSync, TableFunctionsMock);
+    await processUpdatesSyncTypePush(
+      [],
+      tableToSync,
+      TableFunctionsMock,
+      sampleSyncStartTimestamp,
+    );
 
     // Assert
     expect(
@@ -405,7 +422,13 @@ describe('Sync Operation Tests', () => {
       isSync: true,
     });
 
-    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleSyncStartTimestamp,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Updates,
+    });
 
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
@@ -450,6 +473,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -519,6 +543,7 @@ describe('Sync Operation Tests', () => {
       rowsToSync,
       tableToSync,
       TableFunctionsMock,
+      sampleSyncStartTimestamp,
     );
 
     // Assert
@@ -568,7 +593,12 @@ describe('Sync Operation Tests', () => {
       .mockResolvedValueOnce([]);
 
     // Act
-    await processCreatesSyncTypePush([], tableToSync, TableFunctionsMock);
+    await processCreatesSyncTypePush(
+      [],
+      tableToSync,
+      TableFunctionsMock,
+      sampleSyncStartTimestamp,
+    );
 
     // Assert
     expect(
@@ -584,7 +614,14 @@ describe('Sync Operation Tests', () => {
     expect(updateUpdateSpy).toHaveBeenCalledTimes(0);
     expect(postBodyStatSpy).toHaveBeenCalledTimes(0);
     expect(createCreateSpy).toHaveBeenCalledTimes(0);
-    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleSyncStartTimestamp,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Creates,
+    });
+
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,
     ).toHaveBeenCalledTimes(0);
@@ -606,7 +643,12 @@ describe('Sync Operation Tests', () => {
       .mockResolvedValueOnce([sampleStat]);
 
     // Act
-    await processCreatesSyncTypePush([], tableToSync, TableFunctionsMock);
+    await processCreatesSyncTypePush(
+      [],
+      tableToSync,
+      TableFunctionsMock,
+      sampleSyncStartTimestamp,
+    );
 
     // Assert
     expect(
@@ -630,7 +672,13 @@ describe('Sync Operation Tests', () => {
       isSync: true,
     });
 
-    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(0);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledTimes(1);
+    expect(SyncUtilFunctions.insertSyncUpdate).toHaveBeenCalledWith({
+      table_name: syncDbTables.bodyStatTable,
+      last_synced: sampleSyncStartTimestamp,
+      sync_type: SyncType.Push,
+      sync_operation: SyncOperation.Creates,
+    });
 
     expect(
       AsyncStorageFunctions.storeFailedSyncPushErrors,

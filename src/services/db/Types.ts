@@ -6,9 +6,6 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {SortOrders, syncDbTables} from '@shared/Constants';
 
-export const dbName = 'vector.db';
-export const alembicTable: string = 'alembic_version';
-
 /**
  * Interface for a row data object.
  *

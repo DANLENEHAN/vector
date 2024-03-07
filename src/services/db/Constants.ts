@@ -5,6 +5,8 @@ import {
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
 
+export const alembicTable: string = 'alembic_version';
+
 /**
  * Maps various operator types (base, boolean, numeric) to their corresponding SQL string representations.
  *

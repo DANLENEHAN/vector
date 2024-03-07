@@ -14,10 +14,14 @@ import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 // Theme
 import {lightThemeColors, darkThemeColors} from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
-// Logger
+// Services
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import logger from '@utils/Logger';
 // Styling
 import {layoutStyles} from '@styles/Main';
+// Constants
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
+import {updateDeviceUserInfo} from '@services/asyncStorage/Functions';
 
 /**
  * Account Settings Screen
@@ -30,18 +34,28 @@ import {layoutStyles} from '@styles/Main';
 const AccountSettings: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
+  const {isConnected, theme} = useSystem();
+
   const handleLogout = async () => {
-    const response = await logoutUser();
-    if (response instanceof SwaggerValidationError) {
-      logger.error(`Error: ${response.message}`);
-    } else {
-      // Also captured upon logging in if required
-      await handleClientSessionEvent(ClientSessionEventType.Logout);
-      navigation.navigate('Login');
+    if (isConnected) {
+      const response = await logoutUser();
+      if (response instanceof SwaggerValidationError) {
+        logger.error(`Error: ${response.message}`);
+      } else {
+        logger.info('Logout successful');
+      }
     }
+    const activeUser = await AsyncStorage.getItem(AsyncStorageKeys.ActiveUser);
+    if (activeUser === null) {
+      logger.warn('No active user to logout');
+    } else {
+      updateDeviceUserInfo(activeUser, {token: null});
+    }
+    AsyncStorage.removeItem(AsyncStorageKeys.ActiveUser);
+    handleClientSessionEvent(ClientSessionEventType.Logout);
+    navigation.navigate('Login');
   };
 
-  const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   return (
     <View style={[styles.content, {backgroundColor: currentTheme.background}]}>
