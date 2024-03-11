@@ -12,6 +12,7 @@ import {TimestampTimezone} from '@services/date/Type';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {insertRows} from '@services/db/Operations';
 import {getDeviceInfo} from '@services/system/Functions';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
 import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
 

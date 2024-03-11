@@ -5,6 +5,7 @@ import {Keyboard} from 'react-native';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
 import {getUser, insertUser} from '@services/db/user/Functions';
 import {appEntryCallback} from '@services/system/SystemEvents';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
 // Types
 import {AxiosResponse} from 'axios';

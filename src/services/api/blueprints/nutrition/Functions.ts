@@ -3,6 +3,7 @@ import {
   deviceTimestampNow,
   getUtcNowAndDeviceTimezone,
 } from '@services/date/Functions';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
 import moment from 'moment-timezone';
 import {generateGraphData} from '@services/timeSeries/timeSeries';
