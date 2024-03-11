@@ -6,6 +6,7 @@ import {
   getQueryCondition,
   buildWhereClause,
   transformDbRows,
+  isLiteralObject,
 } from '@services/db/Functions';
 import * as DateFunctions from '@services/date/Functions';
 
@@ -207,6 +208,21 @@ describe('DB Functions Tests', () => {
     ).toThrow(`Cannot Query with nested array values ${columnValue}`);
   });
 
+  test('getQueryCondition - literal valid, valid operator', () => {
+    // Arrange
+    const columnName = 'fakeCol';
+    const operator = NumericOperators.Lt;
+    const columnValue = {
+      isLiteral: true,
+      value: 'otherFakeCol',
+    };
+    // Act
+    const response = getQueryCondition(columnName, columnValue, operator);
+
+    // Assert
+    expect(response).toEqual('fakeCol < otherFakeCol');
+  });
+
   test('buildWhereClause - basic whereConditions object ', () => {
     // Arrange
     // Act
@@ -302,5 +318,30 @@ describe('DB Functions Tests', () => {
     expect(deviceTimezoneSpy).toHaveBeenCalledTimes(0);
     expect(momentToDateStrSpy).toHaveBeenCalledTimes(0);
     expect(response).toEqual(fakeData);
+  });
+
+  test('returns true for a literal object', () => {
+    const literalObj = {isLiteral: true, value: 'test'};
+    expect(isLiteralObject(literalObj)).toBe(true);
+  });
+
+  test('returns false for an object without isLiteral property', () => {
+    const nonLiteralObj = {value: 'test'};
+    expect(isLiteralObject(nonLiteralObj)).toBe(false);
+  });
+
+  test('returns false for an object with isLiteral set to false', () => {
+    const nonLiteralObj = {isLiteral: false, value: 'test'};
+    expect(isLiteralObject(nonLiteralObj)).toBe(false);
+  });
+
+  test('returns false for a non-object', () => {
+    const notAnObject = 'I am not an object';
+    expect(isLiteralObject(notAnObject)).toBe(false);
+  });
+
+  test('returns false for null', () => {
+    const nullValue = null;
+    expect(isLiteralObject(nullValue)).toBe(false);
   });
 });

@@ -28,9 +28,12 @@ import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
  * @param {any} obj - The object to check for being a Literal object.
  * @returns {obj is Literal} A boolean indicating whether the provided object matches the Literal object structure.
  */
-const isLiteralObject = (obj: any): obj is Literal => {
+export const isLiteralObject = (obj: any): obj is Literal => {
   return (
-    obj && typeof obj === 'object' && obj.isLiteral === true && 'value' in obj
+    (obj || false) &&
+    typeof obj === 'object' &&
+    obj.isLiteral === true &&
+    'value' in obj
   );
 };
 
@@ -51,7 +54,13 @@ const isLiteralObject = (obj: any): obj is Literal => {
  */
 export const getQueryCondition = (
   columnName: string,
-  columnValue: moment.Moment | number | string | Array<number | string> | null,
+  columnValue:
+    | moment.Moment
+    | number
+    | string
+    | Array<number | string>
+    | Literal
+    | null,
   operator: QueryOperators,
 ): string => {
   // Transformation variables with initial values identical to the input parameters.
@@ -61,6 +70,7 @@ export const getQueryCondition = (
     | number
     | string
     | Array<number | string>
+    | Literal
     | null = columnValue;
 
   // Handling Boolean and Null checks
