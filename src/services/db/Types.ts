@@ -4,7 +4,7 @@ import {
   StringOperators,
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
-import {SortOrders, syncDbTables} from '@shared/Constants';
+import {SortOrders, syncDbTables, otherDbTables} from '@shared/Constants';
 import {JoinOperators} from './Constants';
 
 /**
@@ -47,9 +47,9 @@ export interface JoinObject {
   on: Record<string, any>;
 }
 export interface GetRowsParams {
-  tableName: syncDbTables;
+  tableName: syncDbTables | otherDbTables;
   selectColumns?: Array<string>;
-  joins?: Record<syncDbTables, JoinObject>;
+  joins?: Partial<Record<syncDbTables | otherDbTables, JoinObject>>;
   whereConditions?: Record<string, any>;
   orderConditions?: Record<string, SortOrders>;
   limit?: number;

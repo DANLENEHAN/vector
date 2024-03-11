@@ -301,11 +301,11 @@ export const transformDbRows = <T extends RowData>(rows: T[]): T[] => {
 export const buildJoinClause = (
   joins: Record<string, {join: string; on: any}>,
 ) => {
-  let joinString = '';
+  let parseJoins: Array<string> = [];
   Object.keys(joins).forEach(key => {
-    joinString += `${joins[key].join} JOIN ON ${buildWhereClause(
-      joins[key].on,
-    )}`;
+    parseJoins.push(
+      `${joins[key].join} JOIN ${key} ON ${buildWhereClause(joins[key].on)}`,
+    );
   });
-  return joinString;
+  return parseJoins.join(' ');
 };

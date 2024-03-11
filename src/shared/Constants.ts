@@ -8,6 +8,7 @@
 export enum otherDbTables {
   syncTable = 'sync_table',
   SyncErrorDumpTable = 'sync_error_dump',
+  bodypart = 'bodypart',
 }
 
 /**
@@ -26,6 +27,10 @@ export enum syncDbTables {
   nutritionTable = 'nutrition',
   deviceTable = 'device',
   clientSessionEventTable = 'client_session_event',
+  exercise = 'exercise',
+  equipment = 'equipment',
+  exerciseBodypart = 'exercise_bodypart',
+  exerciseEquipment = 'exercise_equipment',
 }
 
 /**

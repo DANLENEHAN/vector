@@ -2,6 +2,7 @@
 import logger from '@utils/Logger';
 // Functions
 import DeviceInfo from 'react-native-device-info';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
 import messaging from '@react-native-firebase/messaging';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';

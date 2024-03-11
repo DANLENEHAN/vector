@@ -115,6 +115,27 @@ export class Exercise<SecurityDataType = unknown> {
       ...params,
     });
   /**
+   * @description Performs a search on an exercise, returning the exercise, equipment, and bodyparts used.
+   *
+   * @tags Exercise
+   * @name SearchCreate
+   * @summary Perform an exercise search
+   * @request POST:/exercise/search
+   * @secure
+   * @response `201` `any` Exercise request found results
+   * @response `400` `void` Request is invalid
+   */
+  searchCreate = (data: any, params: RequestParams = {}) =>
+    this.http.request<any, void>({
+      path: `/exercise/search`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
    * @description Update a Exercise for a user.
    *
    * @tags Exercise

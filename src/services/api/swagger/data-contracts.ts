@@ -913,7 +913,7 @@ export interface ExerciseCreateSchema {
   laterality: Laterality;
   /**
    * Name
-   * @example "Dan's Workout"
+   * @example "Dan's Exercise"
    */
   name: string;
   /**
@@ -1071,7 +1071,7 @@ export interface ExerciseUpdateSchema {
   laterality: Laterality;
   /**
    * Name
-   * @example "Dan's Workout"
+   * @example "Dan's Exercise"
    */
   name: string;
   /**

@@ -8,7 +8,11 @@ import {getTimestampForRow} from '@services/db/QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
-import {buildWhereClause, transformDbRows} from '@services/db/Functions';
+import {
+  buildJoinClause,
+  buildWhereClause,
+  transformDbRows,
+} from '@services/db/Functions';
 
 /**
  * Inserts multiple rows of data into the specified table.
@@ -176,12 +180,17 @@ export const updateRows = async <T extends RowData>(
 export const getRows = async <T extends RowData>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
+  // Time Start
+  const startTime = new Date().getTime();
   // Build Query Components
   const columnsToSelect = (params.selectColumns || ['*']).join(', ');
   const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
+  const joinString = params.joins ? buildJoinClause(params.joins) : '';
   const whereString = params.whereConditions
-    ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted is False`
-    : 'WHERE deleted is False';
+    ? `WHERE ${buildWhereClause(params.whereConditions)} AND ${
+        params.tableName
+      }.deleted is False`
+    : `WHERE ${params.tableName}.deleted is False`;
   const orderByString = params.orderConditions
     ? `ORDER BY ${Object.entries(params.orderConditions)
         .map((item: [string, SortOrders]) => {
@@ -194,6 +203,7 @@ export const getRows = async <T extends RowData>(
   // Build full query from components
   const sqlStatement = `${[
     selectString,
+    joinString,
     whereString,
     orderByString,
     limitString,
@@ -208,12 +218,13 @@ export const getRows = async <T extends RowData>(
     logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
     return null;
   }
-  const result = sqlResult[0].result;
+  let result = sqlResult[0].result;
 
-  if (result.length > 0) {
-    // Fix typing later
-    return transformDbRows<T>(result);
-  } else {
-    return result as T[];
-  }
+  const endTime = new Date().getTime();
+  result = transformDbRows<T>(result);
+  logger.info(
+    `(function)=(getRows); (tableName)=(${params.tableName}) ` +
+      `- query took ${((endTime - startTime) / 1000).toFixed(2)}s`,
+  );
+  return result;
 };
