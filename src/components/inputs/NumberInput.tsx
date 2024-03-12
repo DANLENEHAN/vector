@@ -19,7 +19,7 @@ import {useSystem} from '@context/SystemContext';
 interface NumberInputProps {
   allowFloat: boolean;
   inputValue: string;
-  setInputValue: any;
+  setInputValue: CallableFunction;
   style?: object;
   maxVal?: number;
 }
