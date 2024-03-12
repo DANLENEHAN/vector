@@ -5,9 +5,9 @@ import {
   convertData,
   convertDataDate,
   getGraphData,
-} from './Functions';
+} from '@services/timeSeries/Functions';
 // Constants
-import {emptyGraphPeriodData} from './Constants';
+import {emptyGraphPeriodData} from '@services/timeSeries/Constants';
 // Logger
 import logger from '@utils/Logger';
 // Types
@@ -17,7 +17,7 @@ import {
   GetSchemaType,
   graphPeriodData,
   statisticType,
-} from './Types';
+} from '@services/timeSeries/Types';
 
 /**
  * Function to generate graph data
