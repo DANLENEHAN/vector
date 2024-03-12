@@ -202,15 +202,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
               {!isSingleInput ? (
                 <>
                   <NumberInput
-                    style={[
-                      styles.inputStyle,
-                      {
-                        maxWidth: '30%',
-                        minWidth: '10%',
-                        textAlign: 'center',
-                        marginRight: marginSizes.xSmall,
-                      },
-                    ]}
+                    style={[styles.inputStyle, styles.multiNumberInput]}
                     allowFloat={isSingleInput}
                     inputValue={displayValueA}
                     setInputValue={handleValueAChange}
