@@ -10,7 +10,9 @@ import {
 
 // Components
 import Header from '@components/navbar/Header';
-
+import NumberInput from '@components/inputs/NumberInput';
+import UnitSelector from '@components/buttons/UnitSelector';
+import ButtonComponent from '@components/buttons/ButtonComponent';
 // Types
 import {ScreenProps} from '@screens/Types';
 import {BodyStatType} from '@services/api/swagger/data-contracts';
@@ -29,14 +31,13 @@ import {
 import {useState} from 'react';
 import {MeasurementConfig} from '@screens/track/bodyMeasurement/Constants';
 import {createNewBodyStat} from '@services/api/blueprints/bodyStat/Functions';
-import logger from '@utils/Logger';
-import {WeightUnit} from '@services/api/swagger/data-contracts';
-import NumberInput from '@components/inputs/NumberInput';
-import UnitSelector from '@components/buttons/UnitSelector';
-import ButtonComponent from '@components/buttons/ButtonComponent';
 import {useSystem} from '@context/SystemContext';
 import {convertValue} from '@utils/Conversion';
+// Constants
 import {maxWeighValues} from '@shared/Constants';
+import {WeightUnit} from '@services/api/swagger/data-contracts';
+// Logger
+import logger from '@utils/Logger';
 
 /**
  * Weight tracking screen component
