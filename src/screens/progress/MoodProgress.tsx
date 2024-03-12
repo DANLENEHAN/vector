@@ -53,7 +53,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
     const fetchData = async () => {
       setLoading(true);
       setGraphData(loadingGraphPeriodData);
-      const data = await getMoodData({statisticType: graphStatType});
+      const data = await getMoodData({statType: graphStatType});
       setGraphData(data);
       setLoading(false);
     };

@@ -201,7 +201,7 @@ const Graph: React.FC<GraphProps> = ({
           currentDate={currentDate}
           unit={unit && showUnit ? unit : ''}
           loading={loading}
-          statisticType={statisticType}
+          statType={statisticType}
         />
         <TouchableOpacity
           style={{
