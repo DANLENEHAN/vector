@@ -7,11 +7,12 @@ import {
   buildWhereClause,
   transformDbRows,
   isLiteralObject,
+  buildJoinClause,
 } from '@services/db/Functions';
 import * as DateFunctions from '@services/date/Functions';
 
 // Constants
-import {timestampColumns} from '@shared/Constants';
+import {otherDbTables, syncDbTables, timestampColumns} from '@shared/Constants';
 import {
   BaseOperators,
   NumericOperators,
@@ -26,6 +27,7 @@ import {
   timezone,
   sampleWhereConditionsNestedObject,
 } from './Objects';
+import {JoinOperators} from '@services/db/Constants';
 
 describe('DB Functions Tests', () => {
   beforeEach(() => {
@@ -343,5 +345,71 @@ describe('DB Functions Tests', () => {
   test('returns false for null', () => {
     const nullValue = null;
     expect(isLiteralObject(nullValue)).toBe(false);
+  });
+
+  test('buildJoinClause', () => {
+    // Arrange
+    const joins = {
+      // Join One
+      [syncDbTables.exerciseBodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+            },
+          },
+        },
+      },
+      // Join Two
+      [syncDbTables.exerciseEquipment]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseEquipment}.exercise_id`,
+            },
+          },
+        },
+      },
+      // Join Three
+      [syncDbTables.equipment]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.equipment}.equipment_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseEquipment}.equipment_id`,
+            },
+          },
+        },
+      },
+      // Join Four
+      [otherDbTables.bodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${otherDbTables.bodypart}.bodypart_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.bodypart_id`,
+            },
+          },
+        },
+      },
+    };
+
+    // Act
+    const response = buildJoinClause(joins);
+
+    // Assert
+    expect(response).toEqual(
+      'INNER JOIN exercise_bodypart ON (exercise.exercise_id = ' +
+        'exercise_bodypart.exercise_id) INNER JOIN exercise_equipment ' +
+        'ON (exercise.exercise_id = exercise_equipment.exercise_id) INNER ' +
+        'JOIN equipment ON (equipment.equipment_id = exercise_equipment.equipment_id) ' +
+        'INNER JOIN bodypart ON (bodypart.bodypart_id = exercise_bodypart.bodypart_id)',
+    );
   });
 });
