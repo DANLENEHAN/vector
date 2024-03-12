@@ -1,5 +1,5 @@
 // Types
-import {alembicTable} from '@services/db/Types';
+import {alembicTable} from '@services/db/Constants';
 import {SqlQuery, ExecutionResult} from '@services/db/Types';
 // Functions
 import {executeSqlBatch} from '@services/db/SqlClient';

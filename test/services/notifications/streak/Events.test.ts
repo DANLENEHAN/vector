@@ -18,11 +18,6 @@ jest.mock('@services/date/Functions', () => ({
   deviceTimestampNow: jest.fn(),
 }));
 
-jest.mock('@services/notifcations/streak/Functions', () => ({
-  ...jest.requireActual('@services/notifcations/streak/Functions'),
-  getStreak: jest.fn(),
-}));
-
 describe('Streak Functions Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();

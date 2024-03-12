@@ -19,11 +19,17 @@ import {
 } from '@styles/Main';
 // Types
 import {ScreenProps} from '@screens/Types';
-// Logger
+// Services
+import NetInfo from '@react-native-community/netinfo';
 import logger from '@utils/Logger';
 // Functions
 import {appEntryCallback} from '@services/system/SystemEvents';
 import {AppEntryType} from '@services/system/Types';
+import {
+  getDeviceUserInfo,
+  updateDeviceUserInfo,
+} from '@services/asyncStorage/Functions';
+import {DeviceUserData} from '@services/asyncStorage/Types';
 
 /**
  * Splash screen that checks if the user is logged in or not
@@ -38,41 +44,52 @@ import {AppEntryType} from '@services/system/Types';
 const Splash: React.FC<ScreenProps> = ({
   navigation,
 }: ScreenProps): React.ReactElement<ScreenProps> => {
-  const {isConnected, systemVarsLoaded, migrationsComplete, theme} =
-    useSystem();
+  const {systemVarsLoaded, theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const loginAndRedirectUser = useCallback(async () => {
-    const value = await AsyncStorage.getItem(AsyncStorageKeys.FlaskLoginCookie);
-    if (value === null) {
+    const activeUser = await AsyncStorage.getItem(AsyncStorageKeys.ActiveUser);
+    let authToken: string | null = null;
+    if (activeUser) {
+      const deviceUserInfo: DeviceUserData | null = await getDeviceUserInfo();
+      if (deviceUserInfo !== null) {
+        authToken = deviceUserInfo[activeUser]?.token;
+      }
+    }
+    if (activeUser === null || authToken === null) {
       logger.info('Auth failed, login required, redirecting');
       navigation.navigate('Login');
     } else {
       // If the user has a session cookie and is connected we validate
-      if (isConnected === true) {
+      const networkState = await NetInfo.fetch();
+      if (
+        networkState.isInternetReachable === true &&
+        networkState.isConnected === true
+      ) {
         const response = await testAuthentication();
         if (response === undefined) {
           navigation.navigate('App', {screen: 'Home'});
-          appEntryCallback(AppEntryType.LoginAuthed);
+          appEntryCallback(AppEntryType.LoginAuthed, activeUser);
         } else {
           logger.info(
-            `Trouble logging in with key ${AsyncStorageKeys.FlaskLoginCookie} value ${value}. Deleting...`,
+            "Trouble Authenticating with Active User's auth token. Token will be deleted.",
           );
-          AsyncStorage.removeItem(AsyncStorageKeys.FlaskLoginCookie);
+          AsyncStorage.removeItem(AsyncStorageKeys.ActiveUser);
+          updateDeviceUserInfo(activeUser, {token: null});
           navigation.navigate('Login');
         }
       } else {
         navigation.navigate('App', {screen: 'Home'});
-        appEntryCallback(AppEntryType.LoginTokenOffline);
+        appEntryCallback(AppEntryType.LoginTokenOffline, activeUser);
       }
     }
-  }, [isConnected, navigation]);
+  }, [navigation]);
 
   useEffect(() => {
-    if (systemVarsLoaded && migrationsComplete) {
+    if (systemVarsLoaded) {
       loginAndRedirectUser();
     }
-  }, [systemVarsLoaded, migrationsComplete, loginAndRedirectUser]);
+  }, [systemVarsLoaded, loginAndRedirectUser]);
 
   return (
     <ScreenWrapper>

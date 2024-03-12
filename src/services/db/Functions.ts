@@ -14,8 +14,25 @@ import {timestampColumns, AndOrOperatos} from '@shared/Constants';
 // Types
 import {isInEnum} from '@shared/Functions';
 // Functions
-import {QueryOperators, RowData} from '@services/db/Types';
+import {QueryOperators, RowData, Literal} from '@services/db/Types';
 import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
+
+/**
+ * Checks if a given object is a Literal object.
+ *
+ * A Literal object is defined as an object that specifically includes `isLiteral` set to `true` and also
+ * contains a `value` property. This function is typically used to identify objects that should be treated
+ * differently, such as not automatically wrapping their `value` in quotes when constructing SQL queries
+ * or other string-based representations.
+ *
+ * @param {any} obj - The object to check for being a Literal object.
+ * @returns {obj is Literal} A boolean indicating whether the provided object matches the Literal object structure.
+ */
+const isLiteralObject = (obj: any): obj is Literal => {
+  return (
+    obj && typeof obj === 'object' && obj.isLiteral === true && 'value' in obj
+  );
+};
 
 /**
  * Generates a query condition string based on column name, value, and operator.
@@ -143,6 +160,22 @@ export const getQueryCondition = (
     }
   }
 
+  // Handling Literal String Values
+  else if (isLiteralObject(columnValue)) {
+    if (
+      !isInEnum(BaseOperators, operator) &&
+      !isInEnum(NumericOperators, operator) &&
+      !isInEnum(StringOperators, operator)
+    ) {
+      throw new Error(
+        `Operator '${operator}' is not allowed for literal values. Allowed ` +
+          'operators include BaseOperators, NumericOperators, and StringOperators.',
+      );
+    } else {
+      transformedColumnValue = columnValue.value;
+    }
+  }
+
   // Error for unhandled columnValue types
   else {
     throw new Error(`Unhandled column value type: ${typeof columnValue}.`);
@@ -252,4 +285,27 @@ export const transformDbRows = <T extends RowData>(rows: T[]): T[] => {
     }
     return transformedRow;
   });
+};
+
+/**
+ * Constructs a SQL JOIN clause string from a given `joins` object.
+ *
+ * The `joins` object should have keys representing join aliases or identifiers, with each key mapping to an object
+ * that specifies the type of join (e.g., INNER JOIN, LEFT JOIN) and the conditions for the join.
+ * These conditions are passed to `buildWhereClause` to generate the ON clause of the JOIN.
+ *
+ * @param {Record<string, {join: string; on: any}>} joins - An object where each key represents a join, and the value
+ * is an object containing `join` (type of join) and `on` (conditions for the join).
+ * @returns {string} A string representing the SQL JOIN clause constructed from the input.
+ */
+export const buildJoinClause = (
+  joins: Record<string, {join: string; on: any}>,
+) => {
+  let joinString = '';
+  Object.keys(joins).forEach(key => {
+    joinString += `${joins[key].join} JOIN ON ${buildWhereClause(
+      joins[key].on,
+    )}`;
+  });
+  return joinString;
 };

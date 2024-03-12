@@ -51,15 +51,19 @@ export const insertRows = async <T extends RowData>(
     })),
   );
 
+  let insertedRows: number = 0;
   results.forEach((result, index) => {
     if (result.error) {
       logger.error(
         `Error during insertion of row ${index + 1}: ${result.error}`,
       );
     } else {
-      logger.info(`Successfully inserted row ${index + 1} in '${tableName}'.`);
+      insertedRows++;
     }
   });
+  logger.info(
+    `(tableName)=(${tableName}) - (${insertedRows}/${results.length}) rows successfully inserted`,
+  );
 };
 
 /**

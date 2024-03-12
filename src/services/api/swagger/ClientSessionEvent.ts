@@ -59,20 +59,17 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @description Delete a ClientSessionEvent.
    *
    * @tags ClientSessionEvent
-   * @name DeleteStringClientSessionEventIdDelete
+   * @name DeleteDelete
    * @summary Delete a ClientSessionEvent.
-   * @request DELETE:/client_session_event/delete/{string:client_session_event_id}
+   * @request DELETE:/client_session_event/delete/{client_session_event_id}
    * @secure
    * @response `204` `void` ClientSessionEvent deleted successfully
    * @response `400` `void` ClientSessionEvent validation error
    * @response `404` `void` ClientSessionEvent not found
    */
-  deleteStringClientSessionEventIdDelete = (
-    clientSessionEventId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (clientSessionEventId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/client_session_event/delete/{string${clientSessionEventId}}`,
+      path: `/client_session_event/delete/${clientSessionEventId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -81,19 +78,19 @@ export class ClientSessionEvent<SecurityDataType = unknown> {
    * @description Get specific ClientSessionEvent for a user.
    *
    * @tags ClientSessionEvent
-   * @name GetStringClientSessionEventIdList
+   * @name GetClientSessionEvent
    * @summary Get a specific ClientSessionEvent for a user.
-   * @request GET:/client_session_event/get/{string:client_session_event_id}
+   * @request GET:/client_session_event/get/{client_session_event_id}
    * @secure
    * @response `200` `ClientSessionEventCreateSchema` ClientSessionEvent for user retrieved successfully
    * @response `404` `void` ClientSessionEvent not found
    */
-  getStringClientSessionEventIdList = (
+  getClientSessionEvent = (
     clientSessionEventId: string,
     params: RequestParams = {},
   ) =>
     this.http.request<ClientSessionEventCreateSchema, void>({
-      path: `/client_session_event/get/{string${clientSessionEventId}}`,
+      path: `/client_session_event/get/${clientSessionEventId}`,
       method: 'GET',
       secure: true,
       format: 'json',

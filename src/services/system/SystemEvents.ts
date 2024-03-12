@@ -1,19 +1,16 @@
 // Functions
 import {handleClientSessionEvent} from '@services/api/blueprints/clientSessionEvent/Functions';
 import {runSyncProcess} from '@services/db/sync/SyncProcess';
-import {retrieveOrRegisterDeviceId} from '@services/api/blueprints/device/Functions';
-import {getUser} from '@services/db/user/Functions';
 import {isFirstAppEntryToday} from './Functions';
 // Types
 import {AppEntryType} from '@services/system/Types';
-import {
-  ClientSessionEventType,
-  UserCreateSchema,
-} from '@services/api/swagger/data-contracts';
+import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 // Logger
 import logger from '@utils/Logger';
 import {checkStreakBreak} from '@services/notifcations/streak/Functions';
 import {registerStreakNotifcation} from '@services/notifcations/streak/Events';
+// Services
+import {dbConnectionManager} from '@services/db/SqlClient';
 
 /**
  * Handles various app entry events, logging the entry type, checking and updating user session
@@ -46,33 +43,25 @@ import {registerStreakNotifcation} from '@services/notifcations/streak/Events';
  */
 export const appEntryCallback = async (
   appEntryType: AppEntryType,
+  activeUserId: string,
 ): Promise<void> => {
   logger.info(`App Entry Event. Type: '${appEntryType}'`);
 
-  const user: UserCreateSchema | null = await getUser();
-  await handleClientSessionEvent(ClientSessionEventType.AppOpen);
+  // Create DB connection with User's DB
+  await dbConnectionManager.openDatabase(activeUserId);
 
+  // Add Login Entry Session Event
+  await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
+
+  // Only Update Streak info on the first login of the day
   const isFirstAppEntry: boolean = await isFirstAppEntryToday();
-
   if (isFirstAppEntry) {
     await checkStreakBreak();
-    await registerStreakNotifcation();
+    registerStreakNotifcation();
   }
 
-  if (
-    appEntryType === AppEntryType.LoginAuthed ||
-    appEntryType === AppEntryType.CreateAccAuthed
-  ) {
-    if (appEntryType === AppEntryType.CreateAccAuthed) {
-      await handleClientSessionEvent(ClientSessionEventType.CreateAccount);
-    }
-    await handleClientSessionEvent(ClientSessionEventType.LoggedIn);
-  }
-
+  // Run Sync if Online
   if (appEntryType !== AppEntryType.LoginTokenOffline) {
     await runSyncProcess();
-    if (user != null) {
-      await retrieveOrRegisterDeviceId(user.user_id);
-    }
   }
 };

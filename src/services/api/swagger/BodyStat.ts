@@ -59,20 +59,17 @@ export class BodyStat<SecurityDataType = unknown> {
    * @description Delete a BodyStat.
    *
    * @tags BodyStat
-   * @name DeleteStringBodyStatIdDelete
+   * @name DeleteDelete
    * @summary Delete a BodyStat.
-   * @request DELETE:/body_stat/delete/{string:body_stat_id}
+   * @request DELETE:/body_stat/delete/{body_stat_id}
    * @secure
    * @response `204` `void` BodyStat deleted successfully
    * @response `400` `void` BodyStat validation error
    * @response `404` `void` BodyStat not found
    */
-  deleteStringBodyStatIdDelete = (
-    bodyStatId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (bodyStatId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/body_stat/delete/{string${bodyStatId}}`,
+      path: `/body_stat/delete/${bodyStatId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -81,16 +78,16 @@ export class BodyStat<SecurityDataType = unknown> {
    * @description Get specific BodyStat for a user.
    *
    * @tags BodyStat
-   * @name GetStringBodyStatIdList
+   * @name GetBodyStat
    * @summary Get a specific BodyStat for a user.
-   * @request GET:/body_stat/get/{string:body_stat_id}
+   * @request GET:/body_stat/get/{body_stat_id}
    * @secure
    * @response `200` `BodyStatCreateSchema` BodyStat for user retrieved successfully
    * @response `404` `void` BodyStat not found
    */
-  getStringBodyStatIdList = (bodyStatId: string, params: RequestParams = {}) =>
+  getBodyStat = (bodyStatId: string, params: RequestParams = {}) =>
     this.http.request<BodyStatCreateSchema, void>({
-      path: `/body_stat/get/{string${bodyStatId}}`,
+      path: `/body_stat/get/${bodyStatId}`,
       method: 'GET',
       secure: true,
       format: 'json',

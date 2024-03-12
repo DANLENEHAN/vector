@@ -3,13 +3,14 @@ import {
   deviceTimestampNow,
   getUtcNowAndDeviceTimezone,
 } from '@services/date/Functions';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
-import {getUser} from '@services/db/user/Functions';
 import moment from 'moment-timezone';
 import {generateGraphData} from '@services/timeSeries/timeSeries';
 import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
 import {getRows} from '@services/db/Operations';
 import {insertNutritions} from '@services/db/nutrition/Functions';
+import {getUser} from '@services/db/user/Functions';
 
 // Types
 import {

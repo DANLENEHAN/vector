@@ -5,6 +5,8 @@ import {
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
 
+export const alembicTable: string = 'alembic_version';
+
 /**
  * Maps various operator types (base, boolean, numeric) to their corresponding SQL string representations.
  *
@@ -30,8 +32,8 @@ export const OperatorMap: Record<
   [BaseOperators.NotIn]: 'NOT IN',
   [BaseOperators.Isnull]: 'IS NULL',
   [BaseOperators.Notnull]: 'IS NOT NULL',
-  [BooleanOperators.Isfalse]: '= 0',
-  [BooleanOperators.Istrue]: '= 1',
+  [BooleanOperators.Isfalse]: 'IS FALSE',
+  [BooleanOperators.Istrue]: 'IS TRUE',
   [NumericOperators.Lt]: '<',
   [NumericOperators.Le]: '<=',
   [NumericOperators.Gt]: '>',
@@ -59,3 +61,15 @@ export const StringOperatorMap: Record<StringOperators, CallableFunction> = {
   [StringOperators.Startswith]: (subStr: any) => `LIKE '${subStr}%'`,
   [StringOperators.Endswith]: (subStr: any) => `LIKE '%${subStr}'`,
 };
+
+/**
+ * Enum for SQL join operators.
+ */
+export enum JoinOperators {
+  INNER = 'INNER',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  CROSS = 'CROSS',
+  NATURAL = 'NATURAL',
+  FULLOUTER = 'FULL OUTER',
+}

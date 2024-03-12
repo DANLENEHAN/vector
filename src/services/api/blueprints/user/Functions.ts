@@ -1,14 +1,14 @@
-// Utils
-import logger from '@utils/Logger';
 // Functions
 import {loginUser, createUser} from '@services/api/blueprints/user/Api';
 import {SwaggerValidationError} from '@services/api/Types';
 import {Keyboard} from 'react-native';
 import {getUtcNowAndDeviceTimezone} from '@services/date/Functions';
-import {insertUser} from '@services/db/user/Functions';
+import {getUser, insertUser} from '@services/db/user/Functions';
 import {appEntryCallback} from '@services/system/SystemEvents';
+import 'react-native-get-random-values';
 import {v4 as uuid4} from 'uuid';
 // Types
+import {AxiosResponse} from 'axios';
 import {TimestampTimezone} from '@services/date/Type';
 import {
   DateFormat,
@@ -21,6 +21,11 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {timestampFields} from '@shared/Constants';
 import {AppEntryType} from '@services/system/Types';
+// Services
+import {UserApi} from '@services/api/ApiService';
+import logger from '@utils/Logger';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AsyncStorageKeys} from '@services/asyncStorage/Constants';
 
 /**
  * Interface for the login parameters.
@@ -62,11 +67,10 @@ export const handleLogin = async (
   if (response instanceof SwaggerValidationError) {
     logger.error(`Error: ${response.message}`);
     return response.message;
-  } else {
-    logger.info('Login successful, navigating to home screen.');
-    params.navigation.navigate('App', {screen: 'Home'});
-    appEntryCallback(AppEntryType.LoginAuthed);
   }
+  logger.info('Login successful, navigating to home screen.');
+  params.navigation.navigate('App', {screen: 'Home'});
+  appEntryCallback(AppEntryType.LoginAuthed, response);
 };
 
 /**
@@ -127,7 +131,6 @@ export const handleCreateAccount = async (
     return createResponse.message;
   } else {
     logger.info('Account creation successful, logging in.');
-    await insertUser(userObject);
     const loginResponse = await loginUser({
       email: params.email,
       password: params.password,
@@ -137,7 +140,33 @@ export const handleCreateAccount = async (
       return loginResponse.message;
     } else {
       params.navigation.navigate('App', {screen: 'Home'});
-      appEntryCallback(AppEntryType.CreateAccAuthed);
+      appEntryCallback(AppEntryType.CreateAccAuthed, loginResponse);
     }
   }
 };
+
+export const retrieveOrRequestUser =
+  async (): Promise<UserCreateSchema | null> => {
+    const user: UserCreateSchema | null = await getUser();
+    if (user !== null) {
+      return user;
+    }
+    const activeUserId: string | null = await AsyncStorage.getItem(
+      AsyncStorageKeys.ActiveUser,
+    );
+    if (activeUserId !== null) {
+      try {
+        const response: AxiosResponse<UserCreateSchema> = await UserApi.getUser(
+          activeUserId,
+        );
+        if (response.data) {
+          const user: UserCreateSchema = response.data;
+          await insertUser(user);
+          return user;
+        }
+      } catch (error) {
+        logger.error("Logged In User unable to retrieve it's data.");
+      }
+    }
+    return null;
+  };

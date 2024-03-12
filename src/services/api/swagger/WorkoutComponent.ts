@@ -81,20 +81,17 @@ export class WorkoutComponent<SecurityDataType = unknown> {
    * @description Delete a WorkoutComponent.
    *
    * @tags WorkoutComponent
-   * @name DeleteStringWorkoutComponentIdDelete
+   * @name DeleteDelete
    * @summary Delete a WorkoutComponent.
-   * @request DELETE:/workout_component/delete/{string:workout_component_id}
+   * @request DELETE:/workout_component/delete/{workout_component_id}
    * @secure
    * @response `204` `void` WorkoutComponent deleted successfully
    * @response `400` `void` WorkoutComponent validation error
    * @response `404` `void` WorkoutComponent not found
    */
-  deleteStringWorkoutComponentIdDelete = (
-    workoutComponentId: string,
-    params: RequestParams = {},
-  ) =>
+  deleteDelete = (workoutComponentId: string, params: RequestParams = {}) =>
     this.http.request<void, void>({
-      path: `/workout_component/delete/{string${workoutComponentId}}`,
+      path: `/workout_component/delete/${workoutComponentId}`,
       method: 'DELETE',
       secure: true,
       ...params,
@@ -103,19 +100,19 @@ export class WorkoutComponent<SecurityDataType = unknown> {
    * @description Get specific WorkoutComponent for a user.
    *
    * @tags WorkoutComponent
-   * @name GetStringWorkoutComponentIdList
+   * @name GetWorkoutComponent
    * @summary Get a specific WorkoutComponent for a user.
-   * @request GET:/workout_component/get/{string:workout_component_id}
+   * @request GET:/workout_component/get/{workout_component_id}
    * @secure
    * @response `200` `WorkoutComponentCreateSchema` WorkoutComponent for user retrieved successfully
    * @response `404` `void` WorkoutComponent not found
    */
-  getStringWorkoutComponentIdList = (
+  getWorkoutComponent = (
     workoutComponentId: string,
     params: RequestParams = {},
   ) =>
     this.http.request<WorkoutComponentCreateSchema, void>({
-      path: `/workout_component/get/{string${workoutComponentId}}`,
+      path: `/workout_component/get/${workoutComponentId}`,
       method: 'GET',
       secure: true,
       format: 'json',

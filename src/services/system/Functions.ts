@@ -80,7 +80,7 @@ export const isFirstAppEntryToday = async (): Promise<boolean> => {
         [NumericOperators.Le]: dayBounds.endOfDay,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
   });

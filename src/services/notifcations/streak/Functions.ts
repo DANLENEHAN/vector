@@ -45,7 +45,7 @@ export const getStreak = async (): Promise<number | null> => {
     selectColumns: [timestampFields.createdAt],
     whereConditions: {
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {[timestampFields.createdAt]: SortOrders.DESC},
@@ -80,7 +80,7 @@ export const getStreak = async (): Promise<number | null> => {
       selectColumns: [timestampFields.createdAt],
       whereConditions: {
         event_type: {
-          [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+          [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
         },
       },
       orderConditions: {[timestampFields.createdAt]: SortOrders.ASC},
@@ -93,13 +93,20 @@ export const getStreak = async (): Promise<number | null> => {
       );
       return null;
     }
-    startTime = firstAppOpen[0].created_at;
+    startTime = moment(firstAppOpen[0].created_at);
   } else {
-    startTime = latestAppStreakBreak[0].created_at;
+    // A streak break is added the day after the streak is actually broken
+    // Therefore the streak was actually broken at 23:59:59 the night before.
+    // With only 'created_at' and 'updated_at' columns we cannot insert into the
+    // past as the insertion may never be picked up in the sync. To counter this
+    // we'd need a third timestamp column or create a new table for the streaks.
+    // For now we'll handle this below with the above situation in mind.
+    startTime = moment(latestAppStreakBreak[0].created_at);
+    startTime.subtract(1, 'days');
+    startTime.hour(23).minute(59).second(59).milliseconds(999);
   }
-
   // the number of full days between the two dates
-  return moment(endTime).diff(moment(startTime), 'days');
+  return moment(endTime).diff(startTime, 'days');
 };
 
 /**
@@ -129,6 +136,20 @@ export const checkStreakBreak = async (): Promise<void> => {
   const yesterday = timestampNow.clone().subtract(1, 'days');
   const dayBounds: DayBounds = getDayBoundsOfDate(yesterday);
 
+  const tableIdCol: string = `${syncDbTables.clientSessionEventTable}_id`;
+  const allTimeAppOpens = await getRows<ClientSessionEventCreateSchema>({
+    tableName: syncDbTables.clientSessionEventTable,
+    selectColumns: [`count(${tableIdCol}) as ${tableIdCol}`],
+    whereConditions: {
+      [timestampFields.createdAt]: {
+        [NumericOperators.Le]: dayBounds.startOfDay,
+      },
+      event_type: {
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
+      },
+    },
+  });
+
   const yesterdaysAppOpenEvent = await getRows<ClientSessionEventCreateSchema>({
     tableName: syncDbTables.clientSessionEventTable,
     selectColumns: [`${syncDbTables.clientSessionEventTable}_id`],
@@ -138,7 +159,7 @@ export const checkStreakBreak = async (): Promise<void> => {
         [NumericOperators.Le]: dayBounds.endOfDay,
       },
       event_type: {
-        [BaseOperators.Eq]: ClientSessionEventType.AppOpen,
+        [BaseOperators.Eq]: ClientSessionEventType.LoggedIn,
       },
     },
     orderConditions: {
@@ -146,9 +167,16 @@ export const checkStreakBreak = async (): Promise<void> => {
     },
     limit: 1,
   });
-  if (yesterdaysAppOpenEvent !== null && yesterdaysAppOpenEvent.length === 0) {
+  if (
+    yesterdaysAppOpenEvent !== null &&
+    yesterdaysAppOpenEvent.length === 0 &&
+    // Is not the first day they logged in....
+    allTimeAppOpens !== null &&
+    allTimeAppOpens.length > 0 &&
+    // Will be an number given the select
+    (allTimeAppOpens[0].client_session_event_id as any) > 0
+  ) {
     await handleClientSessionEvent(ClientSessionEventType.StreakBreak);
-  } else {
-    logger.info('User logged in yesterday will not end streak');
+    logger.info('User failed to log in yesterday, adding streak break...');
   }
 };
