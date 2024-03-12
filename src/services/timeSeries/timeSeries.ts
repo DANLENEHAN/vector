@@ -12,7 +12,12 @@ import {emptyGraphPeriodData} from './Constants';
 import logger from '@utils/Logger';
 // Types
 import {UnitType} from '@utils/Conversion';
-import {SchemaMapping, GetSchemaType, graphPeriodData} from './Types';
+import {
+  SchemaMapping,
+  GetSchemaType,
+  graphPeriodData,
+  statisticType,
+} from './Types';
 
 /**
  * Function to generate graph data
@@ -25,11 +30,13 @@ import {SchemaMapping, GetSchemaType, graphPeriodData} from './Types';
 export function generateGraphData<T extends keyof SchemaMapping>({
   table,
   data,
+  statType,
   targetUnit,
   targetDate,
 }: {
   table: T;
   data: Array<GetSchemaType<T>>;
+  statType: statisticType;
   targetUnit?: UnitType;
   targetDate?: Moment;
 }): graphPeriodData {
@@ -42,5 +49,5 @@ export function generateGraphData<T extends keyof SchemaMapping>({
     ? convertData(transformedData, targetUnit)
     : transformedData;
   const graphData = convertDataDate(convertedData);
-  return getGraphData(graphData, targetDate, targetUnit);
+  return getGraphData(graphData, statType, targetDate, targetUnit);
 }

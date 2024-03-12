@@ -11,6 +11,7 @@ import {
   borderWidth,
   layoutStyles,
   headingTextStyles,
+  topNavBarHeight,
 } from '@styles/Main';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 //Services
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   },
   navBar: {
     ...layoutStyles.spaceAroundHorizontal,
-    height: 60,
+    height: topNavBarHeight,
     borderBottomWidth: borderWidth.small,
   },
   label: {

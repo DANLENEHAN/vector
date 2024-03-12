@@ -15,6 +15,7 @@ import {
   getPeriodData,
   getEarliestLookbackDate,
 } from '@services/timeSeries/Functions';
+import {statisticType} from '@services/timeSeries/Types';
 import {syncDbTables} from '@shared/Constants';
 import {TimestampFormat} from '@shared/Enums';
 import moment from 'moment-timezone';
@@ -167,12 +168,8 @@ describe('Time Series Functions Tests', () => {
     ).valueOf();
     const expectedOutput = {
       value: 3,
-      startDate: dateVal,
-      endDate: dateVal,
-      numberOfDataPoints: 1,
-      axisLabel: '',
+      date: dateVal,
       unit: 'kg',
-      label: '',
       index: 0,
     };
     // Act
@@ -205,22 +202,14 @@ describe('Time Series Functions Tests', () => {
     const expectedOutput = [
       {
         value: 3,
-        startDate: dateVal1,
-        endDate: dateVal1,
-        numberOfDataPoints: 1,
-        axisLabel: '',
+        date: dateVal1,
         unit: 'kg',
-        label: '',
         index: 0,
       },
       {
         value: 4,
-        startDate: dateVal2,
-        endDate: dateVal2,
-        numberOfDataPoints: 1,
-        axisLabel: '',
+        date: dateVal2,
         unit: 'kg',
-        label: '',
         index: 1,
       },
     ];
@@ -236,34 +225,22 @@ describe('Time Series Functions Tests', () => {
     const data = [
       {
         value: 3,
-        startDate: startDate,
-        endDate: startDate,
+        date: startDate,
         unit: 'kg',
-        label: '',
-        numberOfDataPoints: 1,
-        axisLabel: '',
         index: 0,
       }, // Kept
       {
         value: 4,
-        startDate: endDate + 10,
-        endDate: endDate + 10,
+        date: endDate + 10,
         unit: 'kg',
-        label: '',
-        numberOfDataPoints: 1,
-        axisLabel: '',
         index: 1,
       }, // Filtered out
     ];
     const expectedOutput = [
       {
         value: 3,
-        startDate: startDate,
-        endDate: startDate,
+        date: startDate,
         unit: 'kg',
-        label: '',
-        numberOfDataPoints: 1,
-        axisLabel: '',
         index: 0,
       },
     ];
@@ -278,54 +255,33 @@ describe('Time Series Functions Tests', () => {
     const data = [
       {
         value: 3,
-        startDate: moment(
-          '2021-07-01T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        endDate: moment(
+        date: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
         unit: 'kg',
-        label: '',
         index: 0,
-        axisLabel: '',
-        numberOfDataPoints: 1,
       },
       {
         value: 4,
-        startDate: moment(
-          '2021-07-02T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        endDate: moment(
+        date: moment(
           '2021-07-02T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
         unit: 'kg',
-        label: '',
         index: 1,
-        axisLabel: '',
-        numberOfDataPoints: 1,
       },
     ];
     const period = 'day';
     const expectedOutput = [
       {
         value: 3,
-        startDate: moment(
-          '2021-07-01T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        endDate: moment(
+        date: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
         unit: 'kg',
-        label: '',
         index: 0,
-        axisLabel: '',
-        numberOfDataPoints: 1,
       },
     ];
     // Act
@@ -597,50 +553,29 @@ describe('Time Series Functions Tests', () => {
     const data = [
       {
         value: 3,
-        startDate: moment(
+        date: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
-        endDate: moment(
-          '2021-07-01T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        axisLabel: '',
-        numberOfDataPoints: 1,
         unit: 'kg',
-        label: '',
         index: 0,
       },
       {
         value: 4,
-        startDate: moment(
+        date: moment(
           '2021-07-01T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
-        endDate: moment(
-          '2021-07-01T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        axisLabel: '',
-        numberOfDataPoints: 1,
         unit: 'kg',
-        label: '',
         index: 1,
       },
       {
         value: 5,
-        startDate: moment(
+        date: moment(
           '2021-07-03T01:00:00.000Z',
           TimestampFormat.YYYYMMDDHHMMssSSS,
         ).valueOf(),
-        endDate: moment(
-          '2021-07-03T01:00:00.000Z',
-          TimestampFormat.YYYYMMDDHHMMssSSS,
-        ).valueOf(),
-        axisLabel: '',
-        numberOfDataPoints: 1,
         unit: 'kg',
-        label: '',
         index: 2,
       },
     ];
@@ -766,7 +701,13 @@ describe('Time Series Functions Tests', () => {
       },
     ];
     // Act
-    const result = getPeriodData(data, intervals, period, 'kg');
+    const result = getPeriodData(
+      data,
+      intervals,
+      period,
+      'kg',
+      statisticType.mean,
+    );
     // Assert
     expect(result).toEqual(expectedOutput);
   });

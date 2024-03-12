@@ -8,7 +8,7 @@ import {layoutStyles} from '@styles/Main';
 // Components
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 import BodyMap from '@components/visualisations/BodyMap/BodyMap';
-import GenericMeasurementTracking from '@screens/track/bodyMeasurement/GenericMeasurementTracking';
+import GenericMeasurementTracking from '@screens/track/GenericMeasurementTracking';
 import Header from '@components/navbar/Header';
 
 // Types
@@ -31,18 +31,16 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <View style={styles.headerSection}>
-        <Header
-          onClick={() => {
-            if (selectedBodyPart) {
-              setSelectedBodyPart(null);
-            } else {
-              navigation.goBack();
-            }
-          }}
-          includeBackArrow={true}
-        />
-      </View>
+      <Header
+        onClick={() => {
+          if (selectedBodyPart) {
+            setSelectedBodyPart(null);
+          } else {
+            navigation.goBack();
+          }
+        }}
+        includeBackArrow={true}
+      />
       <View style={styles.componentContainer}>
         {!selectedBodyPart ? (
           <BodyMap onBodyPartSelect={handleBodyPartSelect} />
@@ -61,11 +59,8 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  headerSection: {
-    flex: 1,
-  },
   componentContainer: {
-    flex: 15,
+    flex: 1,
     ...layoutStyles.centerVertically,
   },
   bodyMapContainer: {

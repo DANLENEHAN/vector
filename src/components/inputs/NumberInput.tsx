@@ -19,8 +19,9 @@ import {useSystem} from '@context/SystemContext';
 interface NumberInputProps {
   allowFloat: boolean;
   inputValue: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  setInputValue: any;
   style?: object;
+  maxVal?: number;
 }
 
 /**
@@ -35,6 +36,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   inputValue,
   setInputValue,
   style,
+  maxVal,
 }: NumberInputProps): React.ReactElement<NumberInputProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -45,11 +47,16 @@ const NumberInput: React.FC<NumberInputProps> = ({
     } else {
       text = text.replace(/[^0-9]/g, '');
     }
+    const num = parseFloat(text);
+    if (maxVal && num > maxVal) {
+      console;
+    }
     setInputValue(text);
   };
 
   const handleFocus = () => {
-    if (inputValue === '0' || inputValue === '0.0') {
+    if (inputValue === '0' || inputValue === '0.00') {
+      console.log('inputValue', inputValue);
       setInputValue('');
     }
   };
@@ -76,6 +83,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 const styles = StyleSheet.create({
   textInput: {
     ...bodyTextStyles.large,
+    maxWidth: 100,
   },
 });
 

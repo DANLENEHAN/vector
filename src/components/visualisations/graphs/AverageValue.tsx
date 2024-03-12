@@ -14,8 +14,11 @@ import {useSystem} from '@context/SystemContext';
 import {AnimatedText} from '@components/inputs/AnimatedText';
 import {StyleSheet, View, Text} from 'react-native';
 // Typing
-import {type SharedValue} from 'react-native-reanimated';
-
+import {useDerivedValue, type SharedValue} from 'react-native-reanimated';
+import {WeightUnit} from '@services/api/swagger/data-contracts';
+// Constants
+import {StatisticLabels} from '@services/timeSeries/Constants';
+import {statisticType} from '@services/timeSeries/Types';
 /**
  * Interface for the AverageValueText component
  *
@@ -30,6 +33,7 @@ interface AverageValueText {
   unit: string;
   currentValue: SharedValue<string>;
   currentDate: SharedValue<string>;
+  statType: statisticType;
   loading?: boolean;
 }
 
@@ -45,11 +49,14 @@ export const AverageValueText: React.FC<AverageValueText> = ({
   currentDate,
   unit,
   loading,
+  statType,
 }): React.ReactElement<AverageValueText> => {
   // Setup theme for the component
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
-  const topLabel = loading ? '' : 'Average:';
+
+  const topLabel = loading ? '' : StatisticLabels[statType];
+
   const unitLabel = loading ? '' : unit;
   // Render the component
   /**
@@ -61,19 +68,44 @@ export const AverageValueText: React.FC<AverageValueText> = ({
    *
    * These values are animated using the AnimatedText component
    */
+
+  const isStone = unit === WeightUnit.Stone;
+
+  const getStoneValue = useDerivedValue(() => {
+    if (isStone) {
+      const stoneValue = parseFloat(currentValue.value);
+      if (stoneValue === null || isNaN(stoneValue)) {
+        return currentValue.value;
+      }
+      return Math.floor(stoneValue).toString();
+    }
+    return currentValue.value;
+  });
+  const getPoundValue = useDerivedValue(() => {
+    if (isStone) {
+      const stoneValue = parseFloat(currentValue.value);
+      if (stoneValue === null || isNaN(stoneValue)) {
+        return currentValue.value;
+      }
+      return ((stoneValue - Math.floor(stoneValue)) * 14).toFixed(2);
+    }
+    return currentValue.value;
+  });
+
   return (
     <View style={styles.componentWrapper}>
       <Text
         style={[
           styles.header,
-          {color: currentTheme.lightText, marginBottom: marginSizes.xSmall},
+          {
+            color: currentTheme.lightText,
+          },
         ]}>
         {topLabel}
       </Text>
-
       <View style={styles.averageContainer}>
         <AnimatedText
-          text={currentValue}
+          text={getStoneValue}
           style={[
             styles.averageValueLabel,
             {
@@ -84,6 +116,24 @@ export const AverageValueText: React.FC<AverageValueText> = ({
         <Text style={[styles.unitLabel, {color: currentTheme.lightText}]}>
           {` ${unitLabel}`}
         </Text>
+
+        {isStone && (
+          <>
+            <AnimatedText
+              text={getPoundValue}
+              style={[
+                styles.averageValueLabel,
+                {
+                  marginLeft: marginSizes.xSmall,
+                  color: currentTheme.text,
+                },
+              ]}
+            />
+            <Text style={[styles.unitLabel, {color: currentTheme.lightText}]}>
+              lbs
+            </Text>
+          </>
+        )}
       </View>
 
       <AnimatedText
@@ -101,9 +151,7 @@ export const AverageValueText: React.FC<AverageValueText> = ({
 
 const styles = StyleSheet.create({
   componentWrapper: {
-    flex: 1,
     marginLeft: marginSizes.large,
-    ...layoutStyles.flexStretchVertical,
   },
   header: {
     ...bodyTextStyles.small,

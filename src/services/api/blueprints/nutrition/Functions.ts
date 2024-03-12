@@ -21,7 +21,7 @@ import {
   NutritionCreateSchema,
 } from '@services/api/swagger/data-contracts';
 import {TimestampTimezone} from '@services/date/Type';
-import {graphPeriodData} from '@services/timeSeries/Types';
+import {graphPeriodData, statisticType} from '@services/timeSeries/Types';
 
 import {
   BaseOperators,
@@ -89,6 +89,7 @@ export const createNewNutrition = async ({
 export const getNutritionGraphData = async (
   nutritionType: NutritionType,
   targetUnit: NutritionWeightUnit | WaterUnit | CaloriesUnit,
+  statType: statisticType,
 ): Promise<graphPeriodData> => {
   const user: UserCreateSchema | null = await getUser();
   if (user != null) {
@@ -115,6 +116,7 @@ export const getNutritionGraphData = async (
       data: nutritionData || [],
       targetDate: moment(),
       targetUnit: targetUnit,
+      statType: statType,
     });
   } else {
     throw new Error('Unable to retreive user, cannot get nutrition data.');

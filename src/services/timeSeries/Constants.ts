@@ -5,7 +5,10 @@ import {
   intervalDates,
   graphData,
   graphPeriodData,
+  statisticAggregator,
+  statisticType,
 } from '@services/timeSeries/Types';
+import {mean, median, mode, range, sum} from '@services/timeSeries/Aggregators';
 import moment, {Moment} from 'moment-timezone';
 import {DateFormat, TimeFormat} from '@shared/Enums';
 
@@ -103,16 +106,16 @@ export const axisLabelGenerators: labelGenerators = {
  */
 const emptyGraphData: graphData = {
   data: [],
-  averageValue: 'No Data',
+  value: 'No Data',
   unit: '',
-  averagePeriodLabel: '',
+  periodLabel: '',
 };
 
 const loadingGraphData: graphData = {
   data: [],
-  averageValue: 'Loading...',
+  value: 'Loading...',
   unit: '',
-  averagePeriodLabel: '',
+  periodLabel: '',
 };
 /**
  * Object to represent the data for the graph for each time period when no data is available.
@@ -136,4 +139,20 @@ export const loadingGraphPeriodData: graphPeriodData = {
   month: loadingGraphData,
   halfYear: loadingGraphData,
   year: loadingGraphData,
+};
+
+export const Aggregators: statisticAggregator = {
+  [statisticType.mean]: mean,
+  [statisticType.median]: median,
+  [statisticType.mode]: mode,
+  [statisticType.range]: range,
+  [statisticType.sum]: sum,
+};
+
+export const StatisticLabels: Record<statisticType, string> = {
+  [statisticType.mean]: 'Average:',
+  [statisticType.median]: 'Median:',
+  [statisticType.mode]: 'Mode:',
+  [statisticType.range]: 'Range"',
+  [statisticType.sum]: 'Total:',
 };
