@@ -21,7 +21,6 @@ interface NumberInputProps {
   inputValue: string;
   setInputValue: CallableFunction;
   style?: object;
-  maxVal?: number;
 }
 
 /**
@@ -36,7 +35,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
   inputValue,
   setInputValue,
   style,
-  maxVal,
 }: NumberInputProps): React.ReactElement<NumberInputProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -46,10 +44,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
       text = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
     } else {
       text = text.replace(/[^0-9]/g, '');
-    }
-    const num = parseFloat(text);
-    if (maxVal && num > maxVal) {
-      console;
     }
     setInputValue(text);
   };
@@ -83,7 +77,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
 const styles = StyleSheet.create({
   textInput: {
     ...bodyTextStyles.large,
-    maxWidth: 100,
   },
 });
 
