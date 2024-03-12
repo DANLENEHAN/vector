@@ -247,7 +247,8 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE deleted is False;',
+          `SELECT * FROM ${syncDbTables.clientSessionEventTable} ` +
+          `WHERE ${syncDbTables.clientSessionEventTable}.deleted is False;`,
       },
     ]);
 
@@ -280,7 +281,8 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT col1, col2 FROM client_session_event WHERE deleted is False;',
+          `SELECT col1, col2 FROM ${syncDbTables.clientSessionEventTable}` +
+          ` WHERE ${syncDbTables.clientSessionEventTable}.deleted is False;`,
       },
     ]);
 
@@ -320,7 +322,8 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE (fakeCol = 1) AND deleted is False;',
+          `SELECT * FROM ${syncDbTables.clientSessionEventTable} ` +
+          `WHERE (fakeCol = 1) AND ${syncDbTables.clientSessionEventTable}.deleted is False;`,
       },
     ]);
 
@@ -358,7 +361,9 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE deleted is False ORDER BY created_at DESC, updated_at ASC;',
+          `SELECT * FROM ${syncDbTables.clientSessionEventTable} WHERE ` +
+          `${syncDbTables.clientSessionEventTable}.deleted is False ORDER BY ` +
+          `created_at DESC, updated_at ASC;`,
       },
     ]);
     expect(response).toEqual([]);
@@ -391,7 +396,8 @@ describe('DB Functions Tests', () => {
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
       {
         sqlStatement:
-          'SELECT * FROM client_session_event WHERE deleted is False LIMIT 1;',
+          `SELECT * FROM ${syncDbTables.clientSessionEventTable} WHERE ` +
+          `${syncDbTables.clientSessionEventTable}.deleted is False LIMIT 1;`,
       },
     ]);
     expect(response).toEqual([]);
@@ -403,8 +409,8 @@ describe('DB Functions Tests', () => {
     const whereConditions = {fakeCol: {eq: 1}};
     const orderConditions = {fakeCol: SortOrders.DESC};
     const sqlQuery =
-      'SELECT fakeCol FROM client_session_event WHERE (fakeCol = 1) ' +
-      'AND deleted is False ORDER BY fakeCol DESC LIMIT 1;';
+      `SELECT fakeCol FROM ${syncDbTables.clientSessionEventTable} WHERE (fakeCol = 1) ` +
+      `AND ${syncDbTables.clientSessionEventTable}.deleted is False ORDER BY fakeCol DESC LIMIT 1;`;
 
     jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
       {
