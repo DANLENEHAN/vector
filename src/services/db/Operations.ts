@@ -191,6 +191,9 @@ export const getRows = async <T extends RowData>(
         params.tableName
       }.deleted is False`
     : `WHERE ${params.tableName}.deleted is False`;
+  const groupbyString = params.groupby
+    ? `GROUP BY ${params.groupby.join(', ')}`
+    : '';
   const orderByString = params.orderConditions
     ? `ORDER BY ${Object.entries(params.orderConditions)
         .map((item: [string, SortOrders]) => {
@@ -205,6 +208,7 @@ export const getRows = async <T extends RowData>(
     selectString,
     joinString,
     whereString,
+    groupbyString,
     orderByString,
     limitString,
   ]

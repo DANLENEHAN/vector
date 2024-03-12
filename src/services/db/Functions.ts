@@ -310,7 +310,7 @@ export const transformDbRows = <T extends RowData>(rows: T[]): T[] => {
  */
 export const buildJoinClause = (
   joins: Record<string, {join: string; on: any}>,
-) => {
+): string => {
   let parseJoins: Array<string> = [];
   Object.keys(joins).forEach(key => {
     parseJoins.push(

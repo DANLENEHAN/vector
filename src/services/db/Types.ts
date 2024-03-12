@@ -50,6 +50,7 @@ export interface GetRowsParams {
   tableName: syncDbTables | otherDbTables;
   selectColumns?: Array<string>;
   joins?: Partial<Record<syncDbTables | otherDbTables, JoinObject>>;
+  groupby?: Array<string>;
   whereConditions?: Record<string, any>;
   orderConditions?: Record<string, SortOrders>;
   limit?: number;

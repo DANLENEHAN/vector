@@ -10,6 +10,8 @@ import {sampleStat} from '../../Objects';
 // Types
 import {SortOrders, syncDbTables} from '@shared/Constants';
 import {timestampFields} from '@shared/Constants';
+import {BaseOperators} from '@services/api/swagger/data-contracts';
+import {JoinOperators} from '@services/db/Constants';
 
 jest.mock('@services/db/QueryExecutors', () => ({
   ...jest.requireActual('@services/db/QueryExecutors'),
@@ -30,6 +32,7 @@ jest.mock('@services/db/QueryExecutors', () => ({
 jest.mock('@services/db/Functions', () => ({
   ...jest.requireActual('@services/db/Functions'),
   buildWhereClause: jest.fn(),
+  buildJoinClause: jest.fn(),
 }));
 
 describe('DB Functions Tests', () => {
@@ -330,6 +333,63 @@ describe('DB Functions Tests', () => {
     expect(response).toEqual([]);
   });
 
+  test('getRows - table name and join object', async () => {
+    // Arrange
+    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
+      {
+        error: null,
+        result: [],
+        originalQuery: {
+          sqlStatement: '',
+        },
+      },
+    ]);
+    jest
+      .spyOn(DbFunctions, 'buildJoinClause')
+      .mockReturnValueOnce(
+        `${JoinOperators.INNER} JOIN ${syncDbTables.exerciseBodypart} ` +
+          `ON (${syncDbTables.exercise}.exercise_id = ${syncDbTables.exerciseBodypart}.exercise_id)`,
+      );
+
+    const tableName = syncDbTables.exercise;
+    const joins = {
+      // Join One
+      [syncDbTables.exerciseBodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+            },
+          },
+        },
+      },
+    };
+    // Act
+
+    const response = await DbOperationsFunctions.getRows({
+      tableName,
+      joins,
+    });
+
+    // Assert
+    expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(0);
+    expect(DbFunctions.buildJoinClause).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.buildJoinClause).toHaveBeenCalledWith(joins);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement:
+          `SELECT * FROM ${syncDbTables.exercise} ` +
+          `INNER JOIN ${syncDbTables.exerciseBodypart} ON (${syncDbTables.exercise}.exercise_id = ${syncDbTables.exerciseBodypart}.exercise_id) ` +
+          `WHERE ${syncDbTables.exercise}.deleted is False;`,
+      },
+    ]);
+
+    expect(response).toEqual([]);
+  });
+
   test('getRows - table name and order by object', async () => {
     // Arrange
     const orderConditions = {
@@ -364,6 +424,40 @@ describe('DB Functions Tests', () => {
           `SELECT * FROM ${syncDbTables.clientSessionEventTable} WHERE ` +
           `${syncDbTables.clientSessionEventTable}.deleted is False ORDER BY ` +
           `created_at DESC, updated_at ASC;`,
+      },
+    ]);
+    expect(response).toEqual([]);
+  });
+
+  test('getRows - groupby included', async () => {
+    // Arrange
+    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
+      {
+        error: null,
+        result: [],
+        originalQuery: {
+          sqlStatement: '',
+        },
+      },
+    ]);
+
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+
+    const response = await DbOperationsFunctions.getRows({
+      tableName,
+      groupby: ['col1', 'col2'],
+    });
+
+    // Assert
+    expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(0);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
+      {
+        sqlStatement:
+          `SELECT * FROM ${syncDbTables.clientSessionEventTable} WHERE ` +
+          `${syncDbTables.clientSessionEventTable}.deleted is False ` +
+          `GROUP BY col1, col2;`,
       },
     ]);
     expect(response).toEqual([]);
@@ -405,40 +499,63 @@ describe('DB Functions Tests', () => {
 
   test('getRows - all params', async () => {
     // Arrange
-    const selectColumns = ['fakeCol'];
-    const whereConditions = {fakeCol: {eq: 1}};
-    const orderConditions = {fakeCol: SortOrders.DESC};
+    const selectColumns = ['exercise_id'];
+    const whereConditions = {exercise_id: {eq: 1}};
+    const orderConditions = {exercise_id: SortOrders.DESC};
+    const joins = {
+      // Join One
+      [syncDbTables.exerciseBodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+            },
+          },
+        },
+      },
+    };
     const sqlQuery =
-      `SELECT fakeCol FROM ${syncDbTables.clientSessionEventTable} WHERE (fakeCol = 1) ` +
-      `AND ${syncDbTables.clientSessionEventTable}.deleted is False ORDER BY fakeCol DESC LIMIT 1;`;
+      'SELECT exercise_id FROM client_session_event INNER JOIN exercise_bodypart ' +
+      'ON (exercise.exercise_id = exercise_bodypart.exercise_id) WHERE (exercise_id = 1) ' +
+      'AND client_session_event.deleted is False ORDER BY exercise_id DESC LIMIT 1;';
 
     jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
       {
         error: null,
-        result: [{fakeCol: 'fakeValue'}],
+        result: [{exercise_id: '5f505af9-92ca-445f-ba0e-8e936933662c'}],
         originalQuery: {
           sqlStatement: sqlQuery,
         },
       },
     ]);
-
+    jest
+      .spyOn(DbFunctions, 'buildJoinClause')
+      .mockReturnValueOnce(
+        `${JoinOperators.INNER} JOIN ${syncDbTables.exerciseBodypart} ` +
+          `ON (${syncDbTables.exercise}.exercise_id = ${syncDbTables.exerciseBodypart}.exercise_id)`,
+      );
     jest
       .spyOn(DbFunctions, 'buildWhereClause')
-      .mockReturnValueOnce('(fakeCol = 1)');
+      .mockReturnValueOnce('(exercise_id = 1)');
 
     const tableName = syncDbTables.clientSessionEventTable;
     // Act
 
     const response = await DbOperationsFunctions.getRows({
       tableName,
-      selectColumns: selectColumns,
-      whereConditions: whereConditions,
-      orderConditions: orderConditions,
+      selectColumns,
+      joins,
+      whereConditions,
+      orderConditions,
       limit: 1,
     });
 
     // Assert
     expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.buildJoinClause).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.buildJoinClause).toHaveBeenCalledWith(joins);
     expect(DbFunctions.buildWhereClause).toHaveBeenCalledWith(whereConditions);
 
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
@@ -447,6 +564,8 @@ describe('DB Functions Tests', () => {
         sqlStatement: sqlQuery,
       },
     ]);
-    expect(response).toEqual([{fakeCol: 'fakeValue'}]);
+    expect(response).toEqual([
+      {exercise_id: '5f505af9-92ca-445f-ba0e-8e936933662c'},
+    ]);
   });
 });
