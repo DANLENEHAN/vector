@@ -80,7 +80,6 @@ const WeightTracking: React.FC<ScreenProps> = ({
     } else {
       totalValue = valueA;
     }
-    console.log(totalValue, valueA);
     if (totalValue > maxWeighValues[activeUnit]) {
       setErrorMessage('Max value reached');
     } else {
@@ -181,8 +180,6 @@ const WeightTracking: React.FC<ScreenProps> = ({
       );
       return;
     }
-    console.log(parsedMeasurement);
-
     createNewBodyStat({
       value: parsedMeasurement,
       unitValue: activeUnit,

@@ -50,7 +50,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
   const handleFocus = () => {
     if (inputValue === '0' || inputValue === '0.00') {
-      console.log('inputValue', inputValue);
       setInputValue('');
     }
   };
