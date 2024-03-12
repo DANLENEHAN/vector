@@ -11,19 +11,11 @@ import {
   borderRadius,
   headingTextStyles,
   layoutStyles,
-  iconSizes,
 } from '@styles/Main';
 // Services
 import {useSystem} from '@context/SystemContext';
 // Components
-import {
-  View,
-  StyleSheet,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import {
   CartesianChart,
   Line,
@@ -195,25 +187,13 @@ const Graph: React.FC<GraphProps> = ({
    *  */
   return (
     <View>
-      <View style={layoutStyles.spaceBetweenHorizontal}>
-        <AverageValueText
-          currentValue={currentValue}
-          currentDate={currentDate}
-          unit={unit && showUnit ? unit : ''}
-          loading={loading}
-          statType={statisticType}
-        />
-        <TouchableOpacity
-          style={{
-            paddingRight: marginSizes.large,
-          }}>
-          <Icon
-            name="ellipsis-vertical"
-            size={iconSizes.large}
-            color={currentTheme.text}
-          />
-        </TouchableOpacity>
-      </View>
+      <AverageValueText
+        currentValue={currentValue}
+        currentDate={currentDate}
+        unit={unit && showUnit ? unit : ''}
+        loading={loading}
+        statType={statisticType}
+      />
       <View style={styles.chartContainer}>
         <CartesianChart
           data={data}

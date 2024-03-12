@@ -233,7 +233,6 @@ const WeightTracking: React.FC<ScreenProps> = ({
                     allowFloat={true}
                     inputValue={displayValueB}
                     setInputValue={handleValueBChange}
-                    maxVal={14}
                   />
                   <Text
                     testID={`${testID}_unit_b`}
