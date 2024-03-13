@@ -2,13 +2,21 @@
 import * as DbOperationsFunctions from '@services/db/Operations';
 import * as SqlClientFuncs from '@services/db/SqlClient';
 import * as QueryExecutors from '@services/db/QueryExecutors';
+import * as DbFunctions from '@services/db/Functions';
 
 // Test Objects
 import {sampleStat} from '../../Objects';
 
 // Types
-import {syncDbTables} from '@shared/Constants';
+import {SortOrders, syncDbTables} from '@shared/Constants';
 import {timestampFields} from '@shared/Constants';
+import {BaseOperators} from '@services/api/swagger/data-contracts';
+import {JoinOperators} from '@services/db/Constants';
+
+jest.mock('@services/db/Functions', () => ({
+  buildSqlQuery: jest.fn().mockReturnValue('fakeSql'),
+  transformDbRows: jest.fn().mockReturnValue([{fakeCol: 'fakeVal'}]),
+}));
 
 jest.mock('@services/db/QueryExecutors', () => ({
   ...jest.requireActual('@services/db/QueryExecutors'),
@@ -24,10 +32,6 @@ jest.mock('@services/db/QueryExecutors', () => ({
         return responseObject[uuid] || null;
       },
     ),
-}));
-
-jest.mock('@services/db/Functions', () => ({
-  ...jest.requireActual('@services/db/Functions'),
 }));
 
 describe('DB Functions Tests', () => {
@@ -218,5 +222,89 @@ describe('DB Functions Tests', () => {
 
     expect(QueryExecutors.getTimestampForRow).toHaveBeenCalledTimes(0);
     expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(0);
+  });
+
+  test('getRows', async () => {
+    // Arrange
+    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
+      {
+        originalQuery: {
+          sqlStatement: 'fakeSql',
+        },
+        result: [{fakeCol: 'fakeVal'}],
+        error: null,
+      },
+    ]);
+
+    // Act
+    const response = await DbOperationsFunctions.getRows({
+      tableName: syncDbTables.bodyStatTable,
+      selectColumns: ['fakeCol'],
+      joins: {
+        [syncDbTables.userTable]: {
+          on: {
+            [`${syncDbTables.bodyStatTable}.fakeCol`]: {
+              [BaseOperators.Eq]: {
+                isLiteral: true,
+                value: `${syncDbTables.userTable}.fakeCol`,
+              },
+            },
+          },
+          join: JoinOperators.INNER,
+        },
+      },
+      groupby: ['fakeCol'],
+      whereConditions: {
+        fakeCol: {
+          [BaseOperators.Eq]: '1',
+        },
+      },
+      orderConditions: {
+        fakeCol: SortOrders.ASC,
+      },
+      limit: 20,
+    });
+
+    // Assert
+    expect(DbFunctions.buildSqlQuery).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.buildSqlQuery).toHaveBeenCalledWith({
+      groupby: ['fakeCol'],
+      joins: {
+        user: {
+          join: 'INNER',
+          on: {
+            'body_stat.fakeCol': {
+              eq: {
+                isLiteral: true,
+                value: 'user.fakeCol',
+              },
+            },
+          },
+        },
+      },
+      limit: 20,
+      orderConditions: {
+        fakeCol: 'ASC',
+      },
+      selectColumns: ['fakeCol'],
+      table: 'body_stat',
+      whereConditions: {
+        'body_stat.deleted': {
+          isfalse: null,
+        },
+        fakeCol: {
+          eq: '1',
+        },
+      },
+    });
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledTimes(1);
+    expect(SqlClientFuncs.executeSqlBatch).toHaveBeenCalledWith([
+      {sqlStatement: 'fakeSql'},
+    ]);
+    expect(DbFunctions.transformDbRows).toHaveBeenCalledTimes(1);
+    expect(DbFunctions.transformDbRows).toHaveBeenCalledWith([
+      {fakeCol: 'fakeVal'},
+    ]);
+    expect(response).toEqual([{fakeCol: 'fakeVal'}]);
   });
 });
