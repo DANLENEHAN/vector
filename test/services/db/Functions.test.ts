@@ -2,17 +2,17 @@
 import moment from 'moment-timezone';
 
 // Functions
-import {
-  getQueryCondition,
-  buildWhereClause,
-  transformDbRows,
-  isLiteralObject,
-  buildJoinClause,
-} from '@services/db/Functions';
+import * as DbFunctions from '@services/db/Functions';
+import * as SqlClientFuncs from '@services/db/SqlClient';
 import * as DateFunctions from '@services/date/Functions';
 
 // Constants
-import {otherDbTables, syncDbTables, timestampColumns} from '@shared/Constants';
+import {
+  SortOrders,
+  otherDbTables,
+  syncDbTables,
+  timestampColumns,
+} from '@shared/Constants';
 import {
   BaseOperators,
   NumericOperators,
@@ -42,7 +42,11 @@ describe('DB Functions Tests', () => {
     const operator = NumericOperators.Lt;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual("datetime(created_at) < '2024-02-29 09:00:00'");
@@ -55,7 +59,9 @@ describe('DB Functions Tests', () => {
     const operator = NumericOperators.Lt;
 
     // Act
-    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+    expect(() =>
+      DbFunctions.getQueryCondition(columnName, columnValue, operator),
+    ).toThrow(
       'Date value must be a moment.Moment object for timestamp columns.',
     );
   });
@@ -68,7 +74,7 @@ describe('DB Functions Tests', () => {
 
     // Act
     expect(() =>
-      getQueryCondition(columnName, columnValue, operator as any),
+      DbFunctions.getQueryCondition(columnName, columnValue, operator as any),
     ).toThrow(
       `Operator '${operator}' is not allowed for timestamp columns. ` +
         'Allowed operators include BaseOperators and NumericOperators.',
@@ -82,7 +88,11 @@ describe('DB Functions Tests', () => {
     const operator = BaseOperators.Isnull;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual('boolColumn IS NULL');
@@ -96,9 +106,9 @@ describe('DB Functions Tests', () => {
 
     // Act
     // Assert
-    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
-      'Boolean and Null checks must not include a column value.',
-    );
+    expect(() =>
+      DbFunctions.getQueryCondition(columnName, columnValue, operator),
+    ).toThrow('Boolean and Null checks must not include a column value.');
   });
 
   test('getQueryCondition - number value, valid operator', () => {
@@ -108,7 +118,11 @@ describe('DB Functions Tests', () => {
     const operator = BaseOperators.Eq;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual('numberColumn = 1');
@@ -122,7 +136,9 @@ describe('DB Functions Tests', () => {
 
     // Act
     // Assert
-    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+    expect(() =>
+      DbFunctions.getQueryCondition(columnName, columnValue, operator),
+    ).toThrow(
       `Operator '${operator}' is not allowed for number values. ` +
         'Allowed operators include BaseOperators and NumericOperators.',
     );
@@ -135,7 +151,11 @@ describe('DB Functions Tests', () => {
     const operator = BaseOperators.Eq;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual("stringColumn = '1'");
@@ -150,7 +170,7 @@ describe('DB Functions Tests', () => {
     // Act
     // Assert
     expect(() =>
-      getQueryCondition(columnName, columnValue, operator as any),
+      DbFunctions.getQueryCondition(columnName, columnValue, operator as any),
     ).toThrow(
       `Operator '${operator}' is not allowed for string values. Allowed ` +
         'operators include BaseOperators, NumericOperators, and StringOperators.',
@@ -164,7 +184,11 @@ describe('DB Functions Tests', () => {
     const operator = StringOperators.Startswith;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual("stringColumn LIKE 'cap%'");
@@ -177,7 +201,11 @@ describe('DB Functions Tests', () => {
     const operator = BaseOperators.In;
 
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual("stringColumn IN (2, '1', 3, '5')");
@@ -191,7 +219,9 @@ describe('DB Functions Tests', () => {
 
     // Act
     // Assert
-    expect(() => getQueryCondition(columnName, columnValue, operator)).toThrow(
+    expect(() =>
+      DbFunctions.getQueryCondition(columnName, columnValue, operator),
+    ).toThrow(
       `Operator '${operator}' is not allowed for array values. Allowed ` +
         'operators include BaseOperators.NotIn and BaseOperators.NotIn.',
     );
@@ -206,7 +236,7 @@ describe('DB Functions Tests', () => {
     // Act
     // Assert
     expect(() =>
-      getQueryCondition(columnName, columnValue as any, operator),
+      DbFunctions.getQueryCondition(columnName, columnValue as any, operator),
     ).toThrow(`Cannot Query with nested array values ${columnValue}`);
   });
 
@@ -219,7 +249,11 @@ describe('DB Functions Tests', () => {
       value: 'otherFakeCol',
     };
     // Act
-    const response = getQueryCondition(columnName, columnValue, operator);
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
 
     // Assert
     expect(response).toEqual('fakeCol < otherFakeCol');
@@ -228,7 +262,7 @@ describe('DB Functions Tests', () => {
   test('buildWhereClause - basic whereConditions object ', () => {
     // Arrange
     // Act
-    const response = buildWhereClause({
+    const response = DbFunctions.buildWhereClause({
       fakeCol: {
         eq: 1,
       },
@@ -240,7 +274,9 @@ describe('DB Functions Tests', () => {
   test('buildWhereClause - flat whereConditions object ', () => {
     // Arrange
     // Act
-    const response = buildWhereClause(sampleWhereConditionsFlatObject);
+    const response = DbFunctions.buildWhereClause(
+      sampleWhereConditionsFlatObject,
+    );
     // Assert
     expect(response).toEqual(
       '(numberCol = 20 and numberCol <= 30 and stringCol = 10 and stringCol <= 20)',
@@ -250,7 +286,9 @@ describe('DB Functions Tests', () => {
   test('buildWhereClause - flat whereConditions object ', () => {
     // Arrange
     // Act
-    const response = buildWhereClause(sampleWhereConditionsNestedObject);
+    const response = DbFunctions.buildWhereClause(
+      sampleWhereConditionsNestedObject,
+    );
 
     // Assert
     expect(response).toEqual(
@@ -272,7 +310,7 @@ describe('DB Functions Tests', () => {
       .mockReturnValue('transformedDate');
 
     // Act
-    const response = transformDbRows([
+    const response = DbFunctions.transformDbRows([
       {
         created_at: '2024-02-08T10:30:36.989',
         updated_at: '2024-02-08T10:30:36.989000Z',
@@ -314,7 +352,7 @@ describe('DB Functions Tests', () => {
       .mockReturnValue('');
 
     // Act
-    const response = transformDbRows(fakeData);
+    const response = DbFunctions.transformDbRows(fakeData);
 
     // Assert
     expect(deviceTimezoneSpy).toHaveBeenCalledTimes(0);
@@ -324,27 +362,27 @@ describe('DB Functions Tests', () => {
 
   test('returns true for a literal object', () => {
     const literalObj = {isLiteral: true, value: 'test'};
-    expect(isLiteralObject(literalObj)).toBe(true);
+    expect(DbFunctions.isLiteralObject(literalObj)).toBe(true);
   });
 
   test('returns false for an object without isLiteral property', () => {
     const nonLiteralObj = {value: 'test'};
-    expect(isLiteralObject(nonLiteralObj)).toBe(false);
+    expect(DbFunctions.isLiteralObject(nonLiteralObj)).toBe(false);
   });
 
   test('returns false for an object with isLiteral set to false', () => {
     const nonLiteralObj = {isLiteral: false, value: 'test'};
-    expect(isLiteralObject(nonLiteralObj)).toBe(false);
+    expect(DbFunctions.isLiteralObject(nonLiteralObj)).toBe(false);
   });
 
   test('returns false for a non-object', () => {
     const notAnObject = 'I am not an object';
-    expect(isLiteralObject(notAnObject)).toBe(false);
+    expect(DbFunctions.isLiteralObject(notAnObject)).toBe(false);
   });
 
   test('returns false for null', () => {
     const nullValue = null;
-    expect(isLiteralObject(nullValue)).toBe(false);
+    expect(DbFunctions.isLiteralObject(nullValue)).toBe(false);
   });
 
   test('buildJoinClause', () => {
@@ -401,7 +439,7 @@ describe('DB Functions Tests', () => {
     };
 
     // Act
-    const response = buildJoinClause(joins);
+    const response = DbFunctions.buildJoinClause(joins);
 
     // Assert
     expect(response).toEqual(
@@ -410,6 +448,177 @@ describe('DB Functions Tests', () => {
         'ON (exercise.exercise_id = exercise_equipment.exercise_id) INNER ' +
         'JOIN equipment ON (equipment.equipment_id = exercise_equipment.equipment_id) ' +
         'INNER JOIN bodypart ON (bodypart.bodypart_id = exercise_bodypart.bodypart_id)',
+    );
+  });
+
+  test('buildSqlQuery - table name param only', () => {
+    // Arrange
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+    });
+    // Assert
+    expect(response).toEqual('SELECT * FROM client_session_event');
+  });
+
+  test('getRows - table name and select columns', async () => {
+    // Arrange
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      selectColumns: ['col1', 'col2'],
+    });
+
+    // Assert
+    expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(0);
+    expect(response).toEqual('SELECT col1, col2 FROM client_session_event');
+  });
+
+  test('getRows - table name and where object', async () => {
+    // Arrange
+    const tableName = syncDbTables.clientSessionEventTable;
+    const whereConditions = {fakeCol: {eq: 1}};
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      whereConditions: whereConditions,
+    });
+
+    // Assert
+    expect(response).toEqual(
+      'SELECT * FROM client_session_event WHERE (fakeCol = 1)',
+    );
+  });
+
+  test('getRows - table name and join object', async () => {
+    // Arrange
+    const tableName = syncDbTables.exercise;
+    const joins = {
+      // Join One
+      [syncDbTables.exerciseBodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+            },
+          },
+        },
+      },
+    };
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      joins,
+    });
+
+    // Assert
+    expect(response).toEqual(
+      'SELECT * FROM exercise INNER JOIN exercise_bodypart ON (exercise.exercise_id = exercise_bodypart.exercise_id)',
+    );
+  });
+
+  test('getRows - table name and order by object', async () => {
+    // Arrange
+    const orderConditions = {
+      created_at: SortOrders.DESC,
+      updated_at: SortOrders.ASC,
+    };
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      orderConditions: orderConditions,
+    });
+
+    // Assert
+    expect(response).toEqual(
+      'SELECT * FROM client_session_event ORDER BY created_at DESC, updated_at ASC',
+    );
+  });
+
+  test('getRows - groupby included', async () => {
+    // Arrange
+    jest.spyOn(SqlClientFuncs, 'executeSqlBatch').mockResolvedValueOnce([
+      {
+        error: null,
+        result: [],
+        originalQuery: {
+          sqlStatement: '',
+        },
+      },
+    ]);
+
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      groupby: ['col1', 'col2'],
+    });
+
+    // Assert
+    expect(response).toEqual(
+      'SELECT * FROM client_session_event GROUP BY col1, col2',
+    );
+  });
+
+  test('getRows - table name and limit string', async () => {
+    // Arrange
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      limit: 1,
+    });
+
+    // Assert
+    expect(response).toEqual('SELECT * FROM client_session_event LIMIT 1');
+  });
+
+  test('getRows - all params', async () => {
+    // Arrange
+    const selectColumns = ['exercise_id'];
+    const whereConditions = {exercise_id: {eq: 1}};
+    const orderConditions = {exercise_id: SortOrders.DESC};
+    const joins = {
+      // Join One
+      [syncDbTables.exerciseBodypart]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exercise}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+            },
+          },
+        },
+      },
+    };
+    const tableName = syncDbTables.clientSessionEventTable;
+    // Act
+
+    const response = DbFunctions.buildSqlQuery({
+      table: tableName,
+      selectColumns,
+      joins,
+      whereConditions,
+      orderConditions,
+      limit: 1,
+    });
+
+    // Assert
+    expect(response).toEqual(
+      'SELECT exercise_id FROM client_session_event INNER JOIN exercise_bodypart ON ' +
+        '(exercise.exercise_id = exercise_bodypart.exercise_id) WHERE (exercise_id = 1) ' +
+        'ORDER BY exercise_id DESC LIMIT 1',
     );
   });
 });

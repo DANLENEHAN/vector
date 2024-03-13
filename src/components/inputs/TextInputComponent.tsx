@@ -53,7 +53,7 @@ interface TextInputProps {
     [key: string]: any;
     marginBottom?: number;
   };
-  validation: TextValidation;
+  validation?: TextValidation;
   enableErrors?: boolean;
 }
 
@@ -81,17 +81,19 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleTextChange = (text: string) => {
-    const validationError: string | null = validation.validate(text)
-      ? null
-      : validation.error;
-    if (enableErrors) {
-      setError(validationError);
+    if (validation) {
+      const validationError: string | null = validation.validate(text)
+        ? null
+        : validation.error;
+      if (enableErrors) {
+        setError(validationError);
+      }
     }
     onChangeText(text, error ? false : true);
   };
 
   useEffect(() => {
-    if (enableErrors) {
+    if (enableErrors && validation) {
       setError(validation.validate(value) ? null : validation.error);
     }
   }, [enableErrors, value, validation]);

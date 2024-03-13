@@ -60,3 +60,15 @@ export interface Literal {
   isLiteral: boolean;
   value: string;
 }
+
+export interface SqlStatementParams {
+  table: string;
+  selectColumns?: Array<string>;
+  joins?: Record<string, JoinObject>;
+  groupby?: Array<string>;
+  whereConditions?: Record<string, any>;
+  orderConditions?: Record<string, SortOrders>;
+  limit?: number;
+  ctes?: Array<{name: string; value: string}>;
+  alias?: string;
+}

@@ -36,7 +36,6 @@ describe('getMoodTagObject', () => {
           label: 'Happy',
           icon: 'happy',
           color: undefined,
-          tagId: '1',
         },
       ],
     });

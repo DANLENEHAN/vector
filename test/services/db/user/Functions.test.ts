@@ -14,7 +14,7 @@ describe('Test User Db Functions', () => {
 
   const getUserMockSql =
     `SELECT * FROM ${syncDbTables.userTable} WHERE ` +
-    `${syncDbTables.userTable}.deleted is False LIMIT 1;`;
+    `(${syncDbTables.userTable}.deleted IS FALSE) LIMIT 1`;
 
   test('getUser - executeSqlBatch returns valid response ', async () => {
     const executeSqlBatchSpy = jest

@@ -26,13 +26,11 @@ import {useSystem} from '@context/SystemContext';
  * @param {string} label - The label for the tag
  * @param {string} icon - The icon for the tag
  * @param {string} color - The color for the tag (optional)
- * @param {string} tagID - The ID for the tag
  */
 export interface TagProps {
   label: string;
-  icon: string;
+  icon?: string;
   color?: string;
-  tagId: string;
 }
 
 /**
@@ -84,7 +82,9 @@ export const Tag: React.FC<
       ]}
       onPress={onPress}
       testID={`tagSelectorTag_${label}`}>
-      <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
+      {icon && (
+        <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
+      )}
       <Text style={[styles.tagLabel, {color: fontColor}]}>{label}</Text>
     </TouchableOpacity>
   );
@@ -158,11 +158,10 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
             <Tag
               key={index}
               label={tag.label}
-              tagId={tag.tagId}
               icon={tag.icon}
               color={tag.color}
-              active={selectedTags.includes(tag.tagId)}
-              onPress={() => onTagSelect(tag.tagId)}
+              active={selectedTags.includes(tag.label)}
+              onPress={() => onTagSelect(tag.label)}
             />
           ))}
         </View>

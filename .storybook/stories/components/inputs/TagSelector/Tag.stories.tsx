@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Tag, TagProps} from '../../../../../src/components/inputs/TagSelector';
+import {Tag} from '../../../../../src/components/inputs/TagSelector';
 import {SystemProvider} from '../../../../../src/context/SystemContext';
 import {layoutStyles} from '../../../../../src/styles/Main';
 

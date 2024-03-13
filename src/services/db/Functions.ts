@@ -14,8 +14,14 @@ import {timestampColumns, AndOrOperatos} from '@shared/Constants';
 // Types
 import {isInEnum} from '@shared/Functions';
 // Functions
-import {QueryOperators, RowData, Literal} from '@services/db/Types';
+import {
+  QueryOperators,
+  RowData,
+  Literal,
+  SqlStatementParams,
+} from '@services/db/Types';
 import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
+import {format} from 'sql-formatter';
 
 /**
  * Checks if a given object is a Literal object.
@@ -93,6 +99,7 @@ export const getQueryCondition = (
   }
 
   // Handling Timestamp Columns
+  // TODO: This will need to work for Fully Qualified Column names
   else if (isInEnum(timestampColumns, columnName)) {
     if (
       !isInEnum(BaseOperators, operator) &&
@@ -318,4 +325,83 @@ export const buildJoinClause = (
     );
   });
   return parseJoins.join(' ');
+};
+
+/**
+ * Builds a SQL query string based on the provided parameters.
+ *
+ * @param params - An object containing parameters for constructing the SQL query.
+ * @param params.table - The name of the table to select data from.
+ * @param params.selectColumns - An array of column names to select. Defaults to ["*"].
+ * @param params.joins - An array of join clauses to apply in the query.
+ * @param params.whereConditions - An array of conditions to apply in the WHERE clause.
+ * @param params.groupby - An array of columns to group by.
+ * @param params.orderConditions - An object containing column names as keys and sorting order (ASC or DESC) as values.
+ * @param params.limit - The maximum number of rows to return.
+ * @param params.ctes - An array of common table expressions (CTEs) to include in the query.
+ * @param params.alias - An optional alias for the resulting query.
+ * @param formatSql - A boolean indicating whether to format the SQL query string. Defaults to false.
+ *
+ * @returns The constructed SQL query string.
+ * @throws Error when the table name is not provided.
+ */
+export const buildSqlQuery = (
+  params: SqlStatementParams,
+  formatSql: boolean = false,
+): string => {
+  if (!params.table) {
+    throw new Error('Table name is required.');
+  }
+
+  // Function to build CTEs
+  const buildCtes = (ctes: Array<{name: string; value: string}>): string => {
+    return ctes
+      .map((cte, index) => {
+        return index === 0
+          ? `WITH ${cte.name} as (${cte.value})`
+          : `, ${cte.name} AS (${cte.value})`;
+      })
+      .join('');
+  };
+
+  // Build Query Components
+  const columnsToSelect = (params.selectColumns || ['*']).join(', ');
+  const selectString = `SELECT ${columnsToSelect} FROM ${params.table}`;
+  const joinString = params.joins ? buildJoinClause(params.joins) : '';
+  const whereConditions =
+    params.whereConditions && Object.keys(params.whereConditions).length
+      ? buildWhereClause(params.whereConditions)
+      : '';
+  const whereString = whereConditions ? `WHERE ${whereConditions}` : '';
+  const groupbyString = params.groupby
+    ? `GROUP BY ${params.groupby.join(', ')}`
+    : '';
+  const orderByString = params.orderConditions
+    ? `ORDER BY ${Object.entries(params.orderConditions)
+        .map(([column, order]) => `${column} ${order}`)
+        .join(', ')}`
+    : '';
+  const limitString = params.limit ? `LIMIT ${params.limit}` : '';
+
+  // Build CTEs
+  const cteString = params.ctes ? buildCtes(params.ctes) : '';
+
+  // Build full query from components
+  let sqlStatement = `${[
+    selectString,
+    joinString,
+    whereString,
+    groupbyString,
+    orderByString,
+    limitString,
+  ]
+    .filter(string => string)
+    .join(' ')}`;
+
+  if (cteString) {
+    sqlStatement = `${cteString} ${sqlStatement}`;
+  } else if (params.alias) {
+    sqlStatement = `${sqlStatement} AS ${params.alias};`;
+  }
+  return formatSql ? format(sqlStatement) : sqlStatement;
 };
