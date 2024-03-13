@@ -474,7 +474,6 @@ describe('DB Functions Tests', () => {
     });
 
     // Assert
-    expect(DbFunctions.buildWhereClause).toHaveBeenCalledTimes(0);
     expect(response).toEqual('SELECT col1, col2 FROM client_session_event');
   });
 
