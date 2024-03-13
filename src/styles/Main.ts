@@ -14,6 +14,8 @@ import {
   themeColors,
 } from '@styles/Types';
 
+export const topNavBarHeight: number = 60;
+
 const black = '#333333';
 const white = '#FFFFFF';
 const blue = '#3498db';

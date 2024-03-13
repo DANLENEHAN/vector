@@ -6,6 +6,7 @@ import {
 import {syncDbTables} from '@shared/Constants';
 import {emptyGraphPeriodData} from '@services/timeSeries/Constants';
 import * as timeSeriesFunctions from '@services/timeSeries/Functions';
+import {statisticType} from '@services/timeSeries/Types';
 
 describe('Test timeSeries functions', () => {
   beforeEach(() => {
@@ -16,7 +17,11 @@ describe('Test timeSeries functions', () => {
     const data = [] as MoodCreateSchema[];
     const table = syncDbTables.moodTable;
     // Act
-    const result = generateGraphData({data, table});
+    const result = generateGraphData({
+      data: data,
+      table: table,
+      statType: statisticType.mean,
+    });
     // Assert
     expect(result).toEqual(emptyGraphPeriodData);
   });
@@ -48,7 +53,7 @@ describe('Test timeSeries functions', () => {
       .spyOn(timeSeriesFunctions, 'getGraphData')
       .mockReturnValue([] as any);
     // Act
-    generateGraphData({data, table, targetUnit});
+    generateGraphData({data, table, statType: statisticType.mean, targetUnit});
     // Assert
     expect(transformDataSpy).toHaveBeenCalledTimes(1);
     expect(transformDataSpy).toHaveBeenCalledWith({data: data, table: table});
@@ -57,7 +62,12 @@ describe('Test timeSeries functions', () => {
     expect(convertDataDateSpy).toHaveBeenCalledTimes(1);
     expect(convertDataDateSpy).toHaveBeenCalledWith(data);
     expect(getGraphDataSpy).toHaveBeenCalledTimes(1);
-    expect(getGraphDataSpy).toHaveBeenCalledWith(data, undefined, targetUnit);
+    expect(getGraphDataSpy).toHaveBeenCalledWith(
+      data,
+      statisticType.mean,
+      undefined,
+      targetUnit,
+    );
   });
 
   test('generateGraphData should call correct functions no targetUnit', () => {
@@ -86,7 +96,7 @@ describe('Test timeSeries functions', () => {
       .spyOn(timeSeriesFunctions, 'getGraphData')
       .mockReturnValue([] as any);
     // Act
-    generateGraphData({data, table});
+    generateGraphData({data: data, table: table, statType: statisticType.mean});
     // Assert
     expect(transformDataSpy).toHaveBeenCalledTimes(1);
     expect(transformDataSpy).toHaveBeenCalledWith({data: data, table: table});
@@ -94,6 +104,11 @@ describe('Test timeSeries functions', () => {
     expect(convertDataDateSpy).toHaveBeenCalledTimes(1);
     expect(convertDataDateSpy).toHaveBeenCalledWith(data);
     expect(getGraphDataSpy).toHaveBeenCalledTimes(1);
-    expect(getGraphDataSpy).toHaveBeenCalledWith(data, undefined, undefined);
+    expect(getGraphDataSpy).toHaveBeenCalledWith(
+      data,
+      statisticType.mean,
+      undefined,
+      undefined,
+    );
   });
 });

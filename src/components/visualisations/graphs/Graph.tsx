@@ -29,7 +29,8 @@ import {AverageValueText} from '@components/visualisations/graphs/AverageValue';
 import {useFont} from '@shopify/react-native-skia';
 // Types
 import {useDerivedValue} from 'react-native-reanimated';
-import {graphDataPoint} from '@services/timeSeries/Types';
+import {graphDataPoint, statisticType} from '@services/timeSeries/Types';
+// Constants
 import {maxValuePadding} from '@services/timeSeries/Constants';
 
 /**
@@ -49,14 +50,15 @@ import {maxValuePadding} from '@services/timeSeries/Constants';
  */
 interface GraphProps {
   data: graphDataPoint[];
-  averageValue: number | null | string;
-  averageLabel: string;
+  displayValue: number | null | string;
+  displayLabel: string;
   unit: string;
   chartType: 'bar' | 'line';
   maxYValue?: number;
   minYValue?: number;
   showUnit?: boolean;
   loading?: boolean;
+  statisticType: statisticType;
 }
 
 /**
@@ -68,12 +70,13 @@ interface GraphProps {
  */
 const Graph: React.FC<GraphProps> = ({
   data,
-  averageLabel,
-  averageValue,
+  displayLabel,
+  displayValue,
   unit,
   maxYValue,
   minYValue,
   chartType = 'line',
+  statisticType,
   showUnit,
   loading,
 }): React.ReactElement<GraphProps> => {
@@ -99,14 +102,14 @@ const Graph: React.FC<GraphProps> = ({
     }
     // If graph not clicked
     // If the data is null i.e. no values.
-    if (averageValue === null) {
+    if (displayValue === null) {
       return '-';
     }
     // If average value is a string
-    if (typeof averageValue === 'string') {
-      return averageValue;
+    if (typeof displayValue === 'string') {
+      return displayValue;
     }
-    return averageValue.toFixed(2);
+    return displayValue.toFixed(2);
   });
 
   const formatXLabel = (ms: number) => {
@@ -136,7 +139,7 @@ const Graph: React.FC<GraphProps> = ({
       return currDate;
     }
     // If graph not clicked
-    return averageLabel;
+    return displayLabel;
   });
 
   const getYBounds = (
@@ -183,15 +186,14 @@ const Graph: React.FC<GraphProps> = ({
    *
    *  */
   return (
-    <View style={styles.componentWrapper}>
-      <View style={styles.averageValueContainer}>
-        <AverageValueText
-          currentValue={currentValue}
-          currentDate={currentDate}
-          unit={unit && showUnit ? unit : ''}
-          loading={loading}
-        />
-      </View>
+    <View>
+      <AverageValueText
+        currentValue={currentValue}
+        currentDate={currentDate}
+        unit={unit && showUnit ? unit : ''}
+        loading={loading}
+        statType={statisticType}
+      />
       <View style={styles.chartContainer}>
         <CartesianChart
           data={data}
@@ -307,14 +309,8 @@ const Graph: React.FC<GraphProps> = ({
 export default Graph;
 
 const styles = StyleSheet.create({
-  componentWrapper: {
-    flex: 1,
-  },
-  averageValueContainer: {
-    flex: 4,
-  },
   chartContainer: {
-    flex: 15,
+    height: 300,
   },
   overlayContainer: {
     ...StyleSheet.absoluteFillObject, // Make overlay cover the chart container completely

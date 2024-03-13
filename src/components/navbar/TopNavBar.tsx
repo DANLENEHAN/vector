@@ -10,6 +10,7 @@ import {
   iconSizes,
   layoutStyles,
   headingTextStyles,
+  topNavBarHeight,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -73,7 +74,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
 const styles = StyleSheet.create({
   navBar: {
     ...layoutStyles.spaceAroundHorizontal,
-    height: 60,
+    height: topNavBarHeight,
     borderBottomWidth: borderWidth.small,
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 2,

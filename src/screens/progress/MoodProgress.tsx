@@ -3,7 +3,12 @@ import React, {useEffect, useState} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  layoutStyles,
+  marginSizes,
+} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
@@ -19,6 +24,7 @@ import {timePeriodLabels, timePeriods} from '@services/timeSeries/Types';
 import {defaultNullString} from '@services/timeSeries/Constants';
 // Constants
 import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
+import {statisticType} from '@services/timeSeries/Types';
 
 // Give me typing for an object with keys of dateOptions and values of GraphPlotData
 // I think that's what's happening here
@@ -41,40 +47,41 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const [graphData, setGraphData] = useState<graphPeriodData>();
   const [loading, setLoading] = useState<boolean>(true);
 
+  const graphStatType = statisticType.mean;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setGraphData(loadingGraphPeriodData);
-      const data = await getMoodData();
+      const data = await getMoodData({statType: graphStatType});
       setGraphData(data);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [graphStatType]);
 
   return (
     <ScreenWrapper>
       <View style={styles.pageWrapper}>
-        <View style={styles.headerSection}>
-          <Header
-            label="Mood"
-            onClick={navigation.goBack}
-            includeBackArrow={true}
-          />
-        </View>
+        <Header
+          label="Mood"
+          onClick={navigation.goBack}
+          includeBackArrow={true}
+        />
         <View style={styles.unitSelectorSection}>
           <UnitSelector
             units={Object.values(dateOptions)}
             activeUnit={activePeriod}
             setActiveUnit={setActivePeriod}
             style={[
+              styles.periodSelector,
               {
                 color: currentTheme.text,
               },
             ]}
           />
         </View>
-        <View style={styles.graphSection}>
+        <View>
           {graphData &&
             activePeriod &&
             timePeriodLabels[activePeriod as timePeriods] &&
@@ -83,13 +90,12 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 data={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].data
                 }
-                averageLabel={
+                displayLabel={
                   graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averagePeriodLabel || defaultNullString
+                    .periodLabel || defaultNullString
                 }
-                averageValue={
-                  graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averageValue
+                displayValue={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].value
                 }
                 unit={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].unit
@@ -99,6 +105,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 chartType="bar"
                 showUnit={false}
                 loading={loading}
+                statisticType={graphStatType}
               />
             )}
         </View>
@@ -111,15 +118,12 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flex: 1,
   },
-  headerSection: {
-    flex: 1,
-  },
   unitSelectorSection: {
-    flex: 2,
     ...layoutStyles.centerHorizontally,
   },
-  graphSection: {
-    flex: 10,
+  periodSelector: {
+    height: 30,
+    marginVertical: marginSizes.medium,
   },
 });
 

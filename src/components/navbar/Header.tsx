@@ -7,6 +7,7 @@ import {
   marginSizes,
   layoutStyles,
   headingTextStyles,
+  topNavBarHeight,
 } from '@styles/Main';
 import {useSystem} from '@context/SystemContext';
 // Components
@@ -62,8 +63,8 @@ const Header: React.FC<HeaderProps> = ({
 
 const styles = StyleSheet.create({
   header: {
-    flex: 1,
     ...layoutStyles.centerHorizontally,
+    height: topNavBarHeight,
   },
   caretContainer: {
     flex: 2,

@@ -10,6 +10,8 @@ import {
   dataPoint,
   graphDataPoint,
   timePeriods,
+  datedDataPoint,
+  statisticType,
 } from '@services/timeSeries/Types';
 // Constants
 import {timestampFields} from '@shared/Constants';
@@ -17,6 +19,7 @@ import {
   timePeriodLookbacks,
   intervalLengths,
   axisLabelGenerators,
+  Aggregators,
 } from '@services/timeSeries/Constants';
 import {TimestampFormat, TimeFormat, DateFormat} from '@shared/Enums';
 // Functions
@@ -149,22 +152,22 @@ export function transformData<T extends keyof SchemaMapping>({
  * @returns {dataPoint} - The data point with the value converted to the target unit
  */
 export function convertDataPoint(
-  dataPoint: dataPoint,
+  point: dataPoint,
   targetUnit: UnitType,
   precision: number = 2,
 ): dataPoint {
-  if (dataPoint.unit === targetUnit) {
-    return dataPoint;
+  if (point.unit === targetUnit) {
+    return point;
   }
   return {
     value: Number(
       convertValue({
-        value: dataPoint.value,
-        fromUnit: dataPoint.unit as UnitType,
+        value: point.value,
+        fromUnit: point.unit as UnitType,
         toUnit: targetUnit,
       }).toFixed(precision),
     ),
-    date: dataPoint.date,
+    date: point.date,
     unit: targetUnit,
   };
 }
@@ -179,7 +182,7 @@ export function convertData(
   data: Array<dataPoint>,
   targetUnit: UnitType,
 ): Array<dataPoint> {
-  return data.map(dataPoint => convertDataPoint(dataPoint, targetUnit));
+  return data.map(point => convertDataPoint(point, targetUnit));
 }
 
 /**
@@ -187,21 +190,14 @@ export function convertData(
  * @param data {dataPoint} - The data point
  * @returns {graphDataPoint} - The graph data point
  */
-export function convertDataPointDate(data: dataPoint): graphDataPoint {
+export function convertDataPointDate(data: dataPoint): datedDataPoint {
   const date = moment(data.date, TimestampFormat.YYYYMMDDHHMMssSSS).valueOf();
   return {
     value: data.value,
-    // Date is same for start and end
-    // These are individual points not intervals
-    startDate: date,
-    endDate: date,
+    date: date,
     unit: data.unit,
-    // These will be updated later
-    label: '',
-    axisLabel: '',
+    // Overwritten in the next step
     index: 0,
-    // This is always 1 for individual points
-    numberOfDataPoints: 1,
   };
 }
 
@@ -210,11 +206,11 @@ export function convertDataPointDate(data: dataPoint): graphDataPoint {
  * @param data {Array<dataPoint>} - The data
  * @returns {Array<graphDataPoint>} - The data with the values converted to the target unit
  */
-export function convertDataDate(data: Array<dataPoint>): Array<graphDataPoint> {
+export function convertDataDate(data: Array<dataPoint>): Array<datedDataPoint> {
   return data.map((point, index) => {
-    const graphDataPoint = convertDataPointDate(point);
-    graphDataPoint.index = index;
-    return graphDataPoint;
+    const graphPoint = convertDataPointDate(point);
+    graphPoint.index = index;
+    return graphPoint;
   });
 }
 
@@ -226,16 +222,16 @@ export function convertDataDate(data: Array<dataPoint>): Array<graphDataPoint> {
  * @returns {Array<graphDataPoint>} - The filtered data
  */
 export function filterDataByDates(
-  data: Array<graphDataPoint>,
+  data: Array<datedDataPoint>,
   startDate: number,
   endDate: number,
-): Array<graphDataPoint> {
+): Array<datedDataPoint> {
   return data.filter(dataPoint => {
     // At this point, we are dealing with points not intervals
     // therefore data.startDate === data.endDate
     // Using >= and < to filter the data, as we want to include the start date
     // but exclude the end date so that the intervals don't overlap
-    return dataPoint.startDate >= startDate && dataPoint.startDate < endDate;
+    return dataPoint.date >= startDate && dataPoint.date < endDate;
   });
 }
 
@@ -247,10 +243,10 @@ export function filterDataByDates(
  * @returns {Array<graphDataPoint>} - The data for the period
  * */
 export function getDataForPeriod(
-  data: Array<graphDataPoint>,
+  data: Array<datedDataPoint>,
   period: timePeriods,
   targetDate?: Moment,
-): Array<graphDataPoint> {
+): Array<datedDataPoint> {
   // If no target date is provided, use the current date
   const date = targetDate ? targetDate : moment();
   const lookback = timePeriodLookbacks[period];
@@ -291,24 +287,6 @@ export function getIntervals(
 }
 
 /**
- * Function to calculate the average value
- * @param data {Array<graphDataPoint>} - The data
- * @returns {number | null} - The average value
- */
-function calculateAverageValue(data: Array<graphDataPoint>): number | null {
-  let sum = 0;
-  let count = 0;
-  data.forEach(dataPoint => {
-    if (dataPoint.value !== null) {
-      // Only include non-null values
-      sum += dataPoint.value;
-      count++;
-    }
-  });
-  return count > 0 ? sum / count : null;
-}
-
-/**
  * Function to get data for a period
  * @param data {Array<graphDataPoint>} - The data
  * @param intervals {Array<intervalDates>} - The intervals
@@ -317,10 +295,11 @@ function calculateAverageValue(data: Array<graphDataPoint>): number | null {
  * @returns {Array<graphDataPoint>} - The data for the period
  * */
 export function getPeriodData(
-  data: Array<graphDataPoint>,
+  data: Array<datedDataPoint>,
   intervals: intervalDates[],
   period: timePeriods,
   unit: string,
+  statisticType: statisticType,
 ): Array<graphDataPoint> {
   const output = [] as graphDataPoint[];
   let count = 0;
@@ -330,10 +309,14 @@ export function getPeriodData(
       interval.startDate,
       interval.endDate,
     );
-    const averageValue = calculateAverageValue(filteredData);
+
+    const value = Aggregators[statisticType](
+      filteredData.map(dataPoint => dataPoint.value),
+    );
+
     const result = {
       label: valueLabelGenerators[period](interval),
-      value: Number(averageValue?.toFixed(2)) || null,
+      value: value,
       startDate: interval.startDate,
       endDate: interval.endDate,
       axisLabel: axisLabelGenerators[period](interval),
@@ -356,7 +339,8 @@ export function getPeriodData(
  * @returns {graphPeriodData} - The full graph data
  * */
 export function getGraphData(
-  data: Array<graphDataPoint>,
+  data: Array<datedDataPoint>,
+  statisticType: statisticType,
   targetDate?: Moment,
   targetUnit?: UnitType,
 ): graphPeriodData {
@@ -373,17 +357,25 @@ export function getGraphData(
     // Filter data by earliest to latest date
     const filteredData = filterDataByDates(data, startDate, endDate);
     // Get data for the period
-    const periodData = getPeriodData(filteredData, intervals, period, unit);
+    const periodData = getPeriodData(
+      filteredData,
+      intervals,
+      period,
+      unit,
+      statisticType,
+    );
     // Get average value for the period
-    const periodAverage = calculateAverageValue(filteredData);
+    const periodValue = Aggregators[statisticType](
+      filteredData.map(dataPoint => dataPoint.value),
+    );
 
     const periodGraphData = {
       data: periodData,
-      averagePeriodLabel: getIntervalDatesLabel({
+      periodLabel: getIntervalDatesLabel({
         startDate: periodData[0].startDate,
         endDate: periodData[periodData.length - 1].endDate,
       }),
-      averageValue: Number(periodAverage?.toFixed(2)) || null,
+      value: Number(periodValue?.toFixed(2)) || null,
       unit: unit,
     };
 

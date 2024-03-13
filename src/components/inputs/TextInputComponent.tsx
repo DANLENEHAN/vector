@@ -103,7 +103,6 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const errorContainerMarginTop = marginSizes.xSmall;
   const errorContainerMarginBottom =
     defaultMarginBottom - errorContainerHeight - errorContainerMarginTop;
-
   return (
     <View
       style={[

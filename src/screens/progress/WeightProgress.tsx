@@ -3,7 +3,12 @@ import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  layoutStyles,
+  marginSizes,
+} from '@styles/Main';
 // Components
 import Header from '@components/navbar/Header';
 import Graph from '@components/visualisations/graphs/Graph';
@@ -18,7 +23,7 @@ import {BodyStatType, WeightUnit} from '@services/api/swagger/data-contracts';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriods} from '@services/timeSeries/Types';
 // Constants
-import {timePeriodLabels} from '@services/timeSeries/Types';
+import {timePeriodLabels, statisticType} from '@services/timeSeries/Types';
 import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
 
 /**
@@ -41,6 +46,8 @@ const WeightProgress: React.FC<ScreenProps> = ({
   );
   const [loading, setLoading] = useState<boolean>(true);
 
+  const graphStatType = statisticType.mean;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -48,29 +55,29 @@ const WeightProgress: React.FC<ScreenProps> = ({
       const data = await getBodyStatGraphData(
         BodyStatType.Weight,
         WeightUnit.Stone,
+        graphStatType,
       );
       setGraphData(data);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [graphStatType]);
 
   return (
     <ScreenWrapper>
       <View style={styles.pageWrapper}>
-        <View style={styles.headerSection}>
-          <Header
-            label="Weight"
-            onClick={navigation.goBack}
-            includeBackArrow={true}
-          />
-        </View>
+        <Header
+          label="Weight"
+          onClick={navigation.goBack}
+          includeBackArrow={true}
+        />
         <View style={styles.unitSelectorSection}>
           <UnitSelector
             units={Object.values(dateOptions)}
             activeUnit={activePeriod}
             setActiveUnit={setActivePeriod}
             style={[
+              styles.periodSelector,
               {
                 color: currentTheme.text,
               },
@@ -78,7 +85,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
             disabled={loading}
           />
         </View>
-        <View style={styles.graphSection}>
+        <View>
           {graphData &&
             activePeriod &&
             timePeriodLabels[activePeriod as timePeriods] &&
@@ -87,17 +94,17 @@ const WeightProgress: React.FC<ScreenProps> = ({
                 data={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].data
                 }
-                averageLabel={
+                displayLabel={
                   loading
                     ? ''
                     : graphData[timePeriodLabels[activePeriod as timePeriods]]
-                        .averagePeriodLabel || ''
+                        .periodLabel || ''
                 }
-                averageValue={
+                displayValue={
                   loading
                     ? 'Loading'
                     : graphData[timePeriodLabels[activePeriod as timePeriods]]
-                        .averageValue
+                        .value
                 }
                 unit={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].unit
@@ -106,6 +113,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
                 chartType="line"
                 showUnit={true}
                 loading={loading}
+                statisticType={graphStatType}
               />
             )}
         </View>
@@ -118,15 +126,12 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flex: 1,
   },
-  headerSection: {
-    flex: 1,
-  },
   unitSelectorSection: {
-    flex: 2,
     ...layoutStyles.centerHorizontally,
   },
-  graphSection: {
-    flex: 10,
+  periodSelector: {
+    height: 30,
+    marginVertical: marginSizes.medium,
   },
 });
 

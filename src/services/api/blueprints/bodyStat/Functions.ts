@@ -19,7 +19,7 @@ import {
 } from '@services/api/swagger/data-contracts';
 import {SwaggerValidationError} from '@services/api/Types';
 import {TimestampTimezone} from '@services/date/Type';
-import {graphPeriodData} from '@services/timeSeries/Types';
+import {graphPeriodData, statisticType} from '@services/timeSeries/Types';
 import {
   BaseOperators,
   NumericOperators,
@@ -127,6 +127,7 @@ export const getUserStats = async ({
 export const getBodyStatGraphData = async (
   bodyStatType: BodyStatType,
   targetUnit: BodyStatCreateSchema['unit'],
+  statType: statisticType,
 ): Promise<graphPeriodData> => {
   const user: UserCreateSchema | null = await getUser();
   if (user != null) {
@@ -153,6 +154,7 @@ export const getBodyStatGraphData = async (
       data: stats || [],
       targetDate: moment(),
       targetUnit: targetUnit,
+      statType: statType,
     });
   } else {
     throw new Error('Unable to retreive user, cannot get body stat data.');
