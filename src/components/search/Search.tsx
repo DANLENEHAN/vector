@@ -3,29 +3,52 @@ import React, {useState} from 'react';
 import {View, StyleSheet, FlatList, Text} from 'react-native';
 // Components
 import TextInputComponent from '@components/inputs/TextInputComponent';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styles
+import {
+  iconSizes,
+  darkThemeColors,
+  lightThemeColors,
+  layoutStyles,
+  marginSizes,
+  ctaTextStyles,
+  borderRadius,
+  paddingSizes,
+  borderWidth,
+} from '@styles/Main';
 import TagSelector from '@components/inputs/TagSelector';
 import {SearchFuncResponse, SearchResults} from './Types';
+import HeaderBackButton from '@components/buttons/HeaderBackButton';
+// Services
+import {useSystem} from '@context/SystemContext';
 
 export interface SearchComponentProps {
   initialFilters: Record<string, Array<any>>;
   initialSearchResults: Array<SearchResults>;
   searchFunction: (
     searchString: string,
-    filters?: any, // TODO:
+    filters?: any, // TODO: Fix any typing
   ) => Promise<SearchFuncResponse | null>;
+  onClickBack: CallableFunction;
 }
 
-const SearchComponent: React.FC<SearchComponentProps> = (
-  props: SearchComponentProps,
-): React.ReactElement<SearchComponentProps> => {
-  const searchFilters = props.initialFilters as Record<string, Array<any>>;
+const SearchComponent: React.FC<SearchComponentProps> = ({
+  initialFilters,
+  initialSearchResults,
+  searchFunction,
+  onClickBack,
+}: SearchComponentProps): React.ReactElement<SearchComponentProps> => {
+  const {theme} = useSystem();
+  const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
+
+  const [showFilters, setShowFilters] = useState(false);
+  const searchFilters = initialFilters as Record<string, Array<any>>;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setselectedFilters] = useState(
     {} as Record<string, Array<any>>,
   );
   const [searchResults, setSearchResults] = useState(
-    props.initialSearchResults as SearchResults[],
+    initialSearchResults as SearchResults[],
   );
 
   const onSelectFilter = async (filterName: string, selectedFilter: string) => {
@@ -56,7 +79,7 @@ const SearchComponent: React.FC<SearchComponentProps> = (
     text: string,
     filters: Record<string, Array<any>>,
   ) => {
-    const response = await props.searchFunction(text, filters);
+    const response = await searchFunction(text, filters);
     if (response !== null) {
       setSearchResults(response.searchResults);
     }
@@ -64,43 +87,81 @@ const SearchComponent: React.FC<SearchComponentProps> = (
 
   return (
     <View style={styles.screenContainer}>
-      <View style={styles.headerContainer}>
-        <TextInputComponent
-          placeholder="Search Exercises"
-          value={searchQuery}
-          onChangeText={async (text: string) => {
-            setSearchQuery(text);
-            performSearch(text, searchFilters);
-          }}
-          iconName="magnifying-glass"
-        />
+      <View style={styles.contentContainer}>
+        <View style={styles.searchHeader}>
+          <HeaderBackButton onClick={() => onClickBack()} />
+          <TextInputComponent
+            placeholder="Search Exercises"
+            value={searchQuery}
+            onChangeText={async (text: string) => {
+              setSearchQuery(text);
+              performSearch(text, searchFilters);
+            }}
+            iconName="magnifying-glass"
+            iconSize={iconSizes.large}
+            style={{
+              marginBottom: 0,
+              minWidth: 275,
+            }}
+          />
+          <Icon
+            name="filter"
+            size={iconSizes.large}
+            color={currentTheme.text}
+            onPress={() => setShowFilters(!showFilters)}
+          />
+        </View>
+
+        <View style={styles.searchBody}>
+          {showFilters &&
+            Object.entries(searchFilters).map(
+              (value: [string, any[]], index: number) => {
+                const filterName = value[0];
+                const filters = value[1];
+                return (
+                  <TagSelector
+                    style={styles.filterSelector}
+                    key={index}
+                    tags={filters.map(item => {
+                      return {
+                        label: item,
+                        color: currentTheme.borders,
+                      };
+                    })}
+                    tagSelectorLabel={filterName}
+                    selectedTags={selectedFilters[filterName] || []}
+                    onTagSelect={(selectedFilter: string) => {
+                      onSelectFilter(filterName, selectedFilter);
+                    }}
+                  />
+                );
+              },
+            )}
+          <FlatList
+            style={{overflow: 'hidden'}}
+            showsVerticalScrollIndicator={false}
+            data={searchResults}
+            renderItem={({item}) => {
+              return (
+                <View
+                  style={[
+                    styles.searchResult,
+                    {borderColor: currentTheme.borders},
+                  ]}>
+                  <Text
+                    style={[
+                      styles.searchResultText,
+                      {color: currentTheme.text},
+                    ]}>
+                    {item.itemName}
+                  </Text>
+                </View>
+              );
+            }}
+            keyExtractor={item => item.itemId}
+          />
+        </View>
       </View>
-
-      {Object.entries(searchFilters).map(
-        (value: [string, any[]], index: number) => {
-          const filterName = value[0];
-          const filters = value[1];
-          return (
-            <TagSelector
-              key={index}
-              tags={filters.map(item => {
-                return {label: item};
-              })}
-              tagSelectorLabel={filterName}
-              selectedTags={selectedFilters[filterName] || []}
-              onTagSelect={(selectedFilter: string) => {
-                onSelectFilter(filterName, selectedFilter);
-              }}
-            />
-          );
-        },
-      )}
-
-      <FlatList
-        data={searchResults}
-        renderItem={({item}) => <Text>{item.itemName}</Text>}
-        keyExtractor={item => item.itemId}
-      />
     </View>
   );
 };
@@ -108,9 +169,37 @@ const SearchComponent: React.FC<SearchComponentProps> = (
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    width: '90%',
+    ...layoutStyles.centerVertically,
   },
-  headerContainer: {},
+  contentContainer: {
+    flex: 1,
+    width: '95%',
+  },
+  searchHeader: {
+    flex: 1,
+    ...layoutStyles.spaceBetweenHorizontal,
+  },
+  searchBody: {
+    flex: 9,
+    ...layoutStyles.centerVertically,
+  },
+  filterSelector: {
+    maxHeight: 125,
+    minWidth: '100%',
+    marginBottom: marginSizes.xSmall,
+  },
+  searchResult: {
+    flex: 1,
+    borderWidth: borderWidth.small,
+    minWidth: '95%',
+    padding: paddingSizes.small,
+    marginVertical: marginSizes.small,
+    borderRadius: borderRadius.medium,
+  },
+  searchResultText: {
+    ...ctaTextStyles.small,
+    textAlign: 'center',
+  },
 });
 
 export default SearchComponent;

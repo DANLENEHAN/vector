@@ -1,7 +1,13 @@
 // React Import
 import React, {useState} from 'react';
 // Components
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
 import {
@@ -153,7 +159,9 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         </View>
       </View>
       {!isCollapsed && (
-        <View style={styles.tagContainer}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.tagContainer}>
           {tags.map((tag, index) => (
             <Tag
               key={index}
@@ -164,7 +172,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
               onPress={() => onTagSelect(tag.label)}
             />
           ))}
-        </View>
+        </ScrollView>
       )}
     </View>
   );
@@ -187,6 +195,7 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexWrap: 'wrap',
     ...layoutStyles.flexStartHorizontal,
+    paddingRight: paddingSizes.xSmall,
   },
   // Tag Selector Styles
   TagSelectorContainer: {

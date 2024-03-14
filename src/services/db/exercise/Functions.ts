@@ -50,6 +50,7 @@ export const exerciseSearch = async (
     selectColumns: [
       `${syncDbTables.exerciseEquipment}.exercise_id`,
       `GROUP_CONCAT(${syncDbTables.equipment}.name, ';') as equipment_name`,
+      `COUNT(DISTINCT(${syncDbTables.equipment}.name)) as equipment_count`,
     ],
     joins: {
       [syncDbTables.exerciseEquipment]: {
@@ -89,6 +90,8 @@ export const exerciseSearch = async (
       `${syncDbTables.exerciseBodypart}.exercise_id`,
       `GROUP_CONCAT(${otherDbTables.bodypart}.muscle_group, ';') as muscle_group`,
       `GROUP_CONCAT(${otherDbTables.bodypart}.specific_muscle, ';') as specific_muscle`,
+      `COUNT(DISTINCT(${otherDbTables.bodypart}.muscle_group)) as muscle_group_count`,
+      `COUNT(DISTINCT(${otherDbTables.bodypart}.muscle_group)) as specific_muscle_count`,
     ],
     joins: {
       [syncDbTables.exerciseBodypart]: {
@@ -127,6 +130,25 @@ export const exerciseSearch = async (
     },
     groupby: [`${syncDbTables.exerciseBodypart}.exercise_id`],
   });
+
+  const selectWhereConditions: Record<string, any> = {};
+  if (filters?.equipments) {
+    selectWhereConditions.equipment_count = {
+      [BaseOperators.Eq]: filters.equipments.length,
+    };
+  }
+  if (filters?.muscleGroups) {
+    selectWhereConditions.muscle_group_count = {
+      [BaseOperators.Eq]: filters.muscleGroups.length,
+    };
+  }
+  if (filters?.specificMuscles) {
+    selectWhereConditions.specific_muscle_count = {
+      [BaseOperators.Eq]: filters.specificMuscles.length,
+    };
+  }
+
+  console.log(selectWhereConditions);
 
   const selectQuery = buildSqlQuery({
     table: exerciseCteName,
@@ -175,6 +197,7 @@ export const exerciseSearch = async (
         },
       },
     },
+    whereConditions: selectWhereConditions,
   });
 
   const response = await executeSqlBatch<ExerciseSearchResponse>([
