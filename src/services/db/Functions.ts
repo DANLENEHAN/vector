@@ -21,7 +21,6 @@ import {
   SqlStatementParams,
 } from '@services/db/Types';
 import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
-import {format} from 'sql-formatter';
 
 /**
  * Checks if a given object is a Literal object.
@@ -340,15 +339,11 @@ export const buildJoinClause = (
  * @param params.limit - The maximum number of rows to return.
  * @param params.ctes - An array of common table expressions (CTEs) to include in the query.
  * @param params.alias - An optional alias for the resulting query.
- * @param formatSql - A boolean indicating whether to format the SQL query string. Defaults to false.
  *
  * @returns The constructed SQL query string.
  * @throws Error when the table name is not provided.
  */
-export const buildSqlQuery = (
-  params: SqlStatementParams,
-  formatSql: boolean = false,
-): string => {
+export const buildSqlQuery = (params: SqlStatementParams): string => {
   if (!params.table) {
     throw new Error('Table name is required.');
   }
@@ -403,5 +398,5 @@ export const buildSqlQuery = (
   } else if (params.alias) {
     sqlStatement = `${sqlStatement} AS ${params.alias};`;
   }
-  return formatSql ? format(sqlStatement) : sqlStatement;
+  return sqlStatement;
 };

@@ -55,7 +55,6 @@
     "react-native-vector-icons": "^10.0.2",
     "react-native-viewpager": "^0.2.13",
     "react-navigation": "^5.0.0",
-    "sql-formatter": "^15.2.0",
     "swagger-typescript-api": "^13.0.3",
     "uuid": "^9.0.1",
     "victory-native": "^40.0.3"

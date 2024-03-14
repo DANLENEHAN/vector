@@ -16,7 +16,6 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 // Typing
 import {NavBarProps} from '@components/navbar/Types';
 // Logging
-import logger from '@utils/Logger';
 
 /**
  * TopNavBar Component
@@ -47,7 +46,7 @@ const TopNavBar: React.FC<NavBarProps> = ({
           solid
           size={iconSizes.medium}
           color={currentTheme.text}
-          onPress={() => logger.info('Pressed Search')}
+          onPress={() => navigation.navigate('Search')}
         />
       </View>
       <View style={styles.logoContainer}>

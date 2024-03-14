@@ -11,6 +11,7 @@
 
 import {
   ExerciseCreateSchema,
+  ExerciseSearchResponse,
   ExerciseUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -122,11 +123,11 @@ export class Exercise<SecurityDataType = unknown> {
    * @summary Perform an exercise search
    * @request POST:/exercise/search
    * @secure
-   * @response `201` `any` Exercise request found results
+   * @response `201` `ExerciseSearchResponse` Exercise request found results
    * @response `400` `void` Request is invalid
    */
-  searchCreate = (data: any, params: RequestParams = {}) =>
-    this.http.request<any, void>({
+  searchCreate = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<ExerciseSearchResponse, void>({
       path: `/exercise/search`,
       method: 'POST',
       body: data,

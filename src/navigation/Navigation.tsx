@@ -28,6 +28,7 @@ import ProgressTabNavigator from '@navigation/navigators/ProgressTab';
 import SettingsStackNavigator from '@navigation/navigators/SettingsStack';
 // Types
 import {BottomBarProps} from '@components/navbar/Types';
+import SearchScreen from '@screens/Search';
 
 // Navigation stacks
 const AppStack = createNativeStackNavigator<RootStackParamList>();
@@ -144,6 +145,14 @@ const AuthNavigator: React.FC = (): React.ReactElement => {
         <AppStack.Screen
           name="WaterProgress"
           component={WaterProgress}
+          options={{headerShown: false}}
+        />
+        {
+          // Search
+        }
+        <AppStack.Screen
+          name="Search"
+          component={SearchScreen}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>
