@@ -23,13 +23,6 @@ export const exerciseSearch = async (
   filters?: ExerciseSearchFiltersSchema,
 ): Promise<SearchFuncResponse | null> => {
   const startTime = new Date().getTime();
-
-  console.log(
-    `(function)=(exerciseSearch);  (searchString)=(${searchString}); (filters)=(${Object.entries(
-      filters || {},
-    )})`,
-  );
-
   const exerciseCteName = 'exercises';
   const exerciseCteSql = buildSqlQuery({
     table: syncDbTables.exercise,
@@ -147,8 +140,6 @@ export const exerciseSearch = async (
       [BaseOperators.Eq]: filters.specificMuscles.length,
     };
   }
-
-  console.log(selectWhereConditions);
 
   const selectQuery = buildSqlQuery({
     table: exerciseCteName,

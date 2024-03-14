@@ -98,7 +98,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
           value={searchQuery}
           onChangeText={async (text: string) => {
             setSearchQuery(text);
-            performSearch(text, searchFilters);
+            performSearch(text, selectedFilters);
           }}
           iconName="magnifying-glass"
           iconSize={iconSizes.large}
