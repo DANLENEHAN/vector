@@ -140,7 +140,11 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                 );
               },
             )}
-            <TouchableOpacity onPress={() => setselectedFilters({})}>
+            <TouchableOpacity
+              onPress={() => {
+                setselectedFilters({});
+                performSearch(searchQuery, {});
+              }}>
               <Text style={styles.clearFilterTitle}>Clear filters</Text>
             </TouchableOpacity>
           </View>
