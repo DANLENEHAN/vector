@@ -242,6 +242,19 @@ export const exerciseSearch = async (
   );
   return {
     searchResults: exercises,
-    filters: {equipments, muscleGroups, specificMuscles},
+    filters: {
+      equipments: {
+        label: 'Equipment',
+        values: equipments,
+      },
+      muscleGroups: {
+        label: 'Muscle Groups',
+        values: muscleGroups,
+      },
+      specificMuscles: {
+        label: 'Specific Muscles',
+        values: specificMuscles,
+      },
+    },
   };
 };

@@ -4,7 +4,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 import SearchComponent from '@components/search/Search';
 import {exerciseSearch} from '@services/db/exercise/Functions';
-import {SearchResults} from '@components/search/Types';
+import {SearchFilters, SearchResults} from '@components/search/Types';
 // Types
 import {ScreenProps} from '@screens/Types';
 
@@ -15,7 +15,7 @@ const SearchScreen: React.FC<ScreenProps> = ({
     null as SearchResults[] | null,
   );
   const [filters, setFilters] = useState(
-    null as Record<string, Array<any>> | null,
+    null as Record<string, SearchFilters> | null,
   );
 
   const runInitialExerciseSearch = useCallback(async () => {

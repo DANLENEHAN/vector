@@ -18,13 +18,17 @@ import {
   headingTextStyles,
 } from '@styles/Main';
 import TagSelector from '@components/inputs/TagSelector';
-import {SearchFuncResponse, SearchResults} from './Types';
+import {
+  SearchFilters,
+  SearchFuncResponse,
+  SearchResults,
+} from '@components/search/Types';
 import HeaderBackButton from '@components/buttons/HeaderBackButton';
 // Services
 import {useSystem} from '@context/SystemContext';
 
 export interface SearchComponentProps {
-  initialFilters: Record<string, Array<any>>;
+  initialFilters: Record<string, SearchFilters>;
   initialSearchResults: Array<SearchResults>;
   searchFunction: (
     searchString: string,
@@ -43,10 +47,10 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const [showFilters, setShowFilters] = useState(false);
-  const searchFilters = initialFilters as Record<string, Array<any>>;
+  const searchFilters = initialFilters;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setselectedFilters] = useState(
-    {} as Record<string, Array<any>>,
+    {} as Record<string, Array<string>>,
   );
   const [searchResults, setSearchResults] = useState(
     initialSearchResults as SearchResults[],
@@ -78,7 +82,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 
   const performSearch = async (
     text: string,
-    filters: Record<string, Array<any>>,
+    filters: Record<string, Array<string>>,
   ) => {
     const response = await searchFunction(text, filters);
     if (response !== null) {
@@ -118,9 +122,10 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
             style={[styles.filterContainer, {borderColor: currentTheme.text}]}>
             <Text style={styles.filterTitle}>Filters</Text>
             {Object.entries(searchFilters).map(
-              (value: [string, any[]], index: number) => {
-                const filterName = value[0];
-                const filters = value[1];
+              (value: [string, SearchFilters], index: number) => {
+                const filterKey = value[0];
+                const filterLabel = value[1].label;
+                const filters = value[1].values;
                 return (
                   <TagSelector
                     style={styles.filterSelector}
@@ -131,10 +136,10 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                         color: currentTheme.borders,
                       };
                     })}
-                    tagSelectorLabel={filterName}
-                    selectedTags={selectedFilters[filterName] || []}
+                    tagSelectorLabel={filterLabel}
+                    selectedTags={selectedFilters[filterKey] || []}
                     onTagSelect={(selectedFilter: string) => {
-                      onSelectFilter(filterName, selectedFilter);
+                      onSelectFilter(filterKey, selectedFilter);
                     }}
                   />
                 );

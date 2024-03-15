@@ -3,7 +3,12 @@ export interface SearchResults {
   itemName: string;
 }
 
+export interface SearchFilters {
+  label: string;
+  values: Array<string>;
+}
+
 export interface SearchFuncResponse {
   searchResults: SearchResults[];
-  filters: Record<string, Array<any>>;
+  filters: Record<string, SearchFilters>;
 }
