@@ -78,6 +78,15 @@ export const getQueryCondition = (
     | Literal
     | null = columnValue;
 
+  let shortHandCol = columnName;
+  if (shortHandCol.includes('.')) {
+    if (shortHandCol.split('.').filter(item => item).length === 2) {
+      shortHandCol = shortHandCol.split('.')[1];
+    } else {
+      throw new Error(`Column Name '${shortHandCol}' is invalid.`);
+    }
+  }
+
   // Handling Boolean and Null checks
   if (
     isInEnum(BooleanOperators, operator) ||
@@ -98,8 +107,7 @@ export const getQueryCondition = (
   }
 
   // Handling Timestamp Columns
-  // TODO: This will need to work for Fully Qualified Column names
-  else if (isInEnum(timestampColumns, columnName)) {
+  else if (isInEnum(timestampColumns, shortHandCol)) {
     if (
       !isInEnum(BaseOperators, operator) &&
       !isInEnum(NumericOperators, operator)

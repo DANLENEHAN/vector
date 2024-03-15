@@ -108,19 +108,22 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
           iconSize={iconSizes.large}
           style={styles.searchBar}
         />
-        <Icon
-          name="filter"
-          size={iconSizes.large}
-          color={currentTheme.text}
-          onPress={() => setShowFilters(!showFilters)}
-        />
+        <TouchableOpacity onPress={() => setShowFilters(!showFilters)}>
+          <Icon
+            name="filter"
+            size={iconSizes.large}
+            color={currentTheme.text}
+          />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.searchBody}>
         {showFilters && (
           <View
             style={[styles.filterContainer, {borderColor: currentTheme.text}]}>
-            <Text style={styles.filterTitle}>Filters</Text>
+            <Text style={[styles.filterTitle, {color: currentTheme.text}]}>
+              Filters
+            </Text>
             {Object.entries(searchFilters).map(
               (value: [string, SearchFilters], index: number) => {
                 const filterKey = value[0];
@@ -138,7 +141,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                     })}
                     tagSelectorLabel={filterLabel}
                     selectedTags={selectedFilters[filterKey] || []}
-                    onTagSelect={(selectedFilter: string) => {
+                    onTagSelect={selectedFilter => {
                       onSelectFilter(filterKey, selectedFilter);
                     }}
                   />
@@ -150,7 +153,10 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
                 setselectedFilters({});
                 performSearch(searchQuery, {});
               }}>
-              <Text style={styles.clearFilterTitle}>Clear filters</Text>
+              <Text
+                style={[styles.clearFilterTitle, {color: currentTheme.text}]}>
+                Clear filters
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -205,7 +211,7 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     borderRadius: borderRadius.large,
-    borderWidth: borderWidth.small,
+    borderWidth: borderWidth.xSmall,
     padding: paddingSizes.small,
     ...layoutStyles.centerVertically,
     marginBottom: marginSizes.large,
@@ -215,7 +221,7 @@ const styles = StyleSheet.create({
     ...headingTextStyles.xSmall,
   },
   clearFilterTitle: {
-    ...ctaTextStyles.small,
+    ...ctaTextStyles.xSmall,
   },
   filterSelector: {
     maxHeight: 125,
@@ -224,14 +230,14 @@ const styles = StyleSheet.create({
   },
   searchResult: {
     flex: 1,
-    borderWidth: borderWidth.small,
+    borderWidth: borderWidth.xSmall,
     minWidth: '95%',
     padding: paddingSizes.small,
     marginVertical: marginSizes.small,
     borderRadius: borderRadius.medium,
   },
   searchResultText: {
-    ...ctaTextStyles.small,
+    ...ctaTextStyles.xSmall,
     textAlign: 'center',
   },
 });

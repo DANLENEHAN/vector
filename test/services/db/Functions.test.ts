@@ -52,6 +52,36 @@ describe('DB Functions Tests', () => {
     expect(response).toEqual("datetime(created_at) < '2024-02-29 09:00:00'");
   });
 
+  test('getQueryCondition - timestamp fqn column, valid value and operator', () => {
+    // Arrange
+    const columnName = `table.${timestampColumns.CREATED_AT}`;
+    const columnValue = moment.tz(sampleTimeStamp, timezone);
+    const operator = NumericOperators.Lt;
+
+    // Act
+    const response = DbFunctions.getQueryCondition(
+      columnName,
+      columnValue,
+      operator,
+    );
+
+    // Assert
+    expect(response).toEqual(`datetime(${columnName}) < '2024-02-29 09:00:00'`);
+  });
+
+  test('getQueryCondition - invalid fqn column', () => {
+    // Arrange
+    const columnName = `table.`;
+    const columnValue = moment.tz(sampleTimeStamp, timezone);
+    const operator = NumericOperators.Lt;
+
+    // Act
+    // Assert
+    expect(() =>
+      DbFunctions.getQueryCondition(columnName, columnValue, operator),
+    ).toThrow(`Column Name '${columnName}' is invalid.`);
+  });
+
   test('getQueryCondition - timestamp column, invalid value valid operator', () => {
     // Arrange
     const columnName = timestampColumns.CREATED_AT;
