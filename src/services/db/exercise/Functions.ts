@@ -18,11 +18,29 @@ import {SearchResults, SearchFuncResponse} from '@components/search/Types';
 // Services
 import logger from '@utils/Logger';
 
-export const exerciseSearch = async (
+/**
+ * Generates a SQL query for searching exercises based on optional search strings and filter criteria.
+ * The function constructs complex SQL queries using common table expressions (CTEs) to aggregate information about
+ * exercises, equipment used, and body parts targeted. It supports filtering exercises by name, equipment, muscle groups,
+ * and specific muscles. The final query returns detailed information about each exercise, including its name, associated
+ * equipment, and muscle groups targeted.
+ *
+ * The query construction process involves three main CTEs:
+ * 1. `exercises` CTE, which selects exercise names and IDs based on the search string.
+ * 2. `equipment_agg` CTE, which aggregates equipment names and counts per exercise, applying equipment filters if provided.
+ * 3. `bodypart_agg` CTE, which aggregates body part names and counts per exercise, applying muscle group and specific muscle filters if provided.
+ *
+ * The final selection joins these CTEs to compile a comprehensive list of exercises along with their equipment and targeted body parts,
+ * applying additional filters based on the counts of equipment, muscle groups, and specific muscles to match the lengths of the filter arrays.
+ *
+ * @param {string} [searchString] - Optional. The search string to filter exercises by name.
+ * @param {ExerciseSearchFiltersSchema} [filters] - Optional. An object containing arrays of strings for equipment, muscle groups, and specific muscles to filter the exercises.
+ * @returns {string} A SQL query string that can be executed to retrieve the filtered list of exercises with their associated equipment and targeted body parts.
+ */
+export const getExerciseSearchQuery = (
   searchString?: string,
   filters?: ExerciseSearchFiltersSchema,
-): Promise<SearchFuncResponse | null> => {
-  const startTime = new Date().getTime();
+) => {
   const exerciseCteName = 'exercises';
   const exerciseCteSql = buildSqlQuery({
     table: syncDbTables.exercise,
@@ -190,9 +208,36 @@ export const exerciseSearch = async (
     },
     whereConditions: selectWhereConditions,
   });
+  return selectQuery;
+};
 
+/**
+ * Executes a search for exercises based on a given search string and filter criteria, returning structured search results
+ * and aggregated filters for equipment, muscle groups, and specific muscles. This function leverages `getExerciseSearchQuery`
+ * to construct a complex SQL query, which is then executed to fetch matching exercises. The results are processed to
+ * compile a list of unique exercises and aggregate the equipment, muscle groups, and specific muscles associated with them.
+ *
+ * If the SQL query execution encounters an error, the function logs the error and returns `null` to indicate failure.
+ * Otherwise, it returns an object containing the search results and aggregated filters, which include unique lists of
+ * equipment, muscle groups, and specific muscles that are involved in the returned exercises. This allows for efficient
+ * front-end rendering or further processing of the search results and the dynamic generation of filter options based on
+ * the search output.
+ *
+ * The function also logs the execution time, helping with performance monitoring.
+ *
+ * @param {string} [searchString] - Optional. The search string to filter exercises by their names.
+ * @param {ExerciseSearchFiltersSchema} [filters] - Optional. Filter criteria including arrays of strings for equipment, muscle groups, and specific muscles.
+ * @returns {Promise<SearchFuncResponse | null>} A promise that resolves to the search results and aggregated filters, or `null` if an error occurs during the SQL query execution.
+ */
+export const exerciseSearch = async (
+  searchString?: string,
+  filters?: ExerciseSearchFiltersSchema,
+): Promise<SearchFuncResponse | null> => {
+  const startTime = new Date().getTime();
+
+  const exerciseSearchQuery = getExerciseSearchQuery(searchString, filters);
   const response = await executeSqlBatch<ExerciseSearchResponse>([
-    {sqlStatement: selectQuery},
+    {sqlStatement: exerciseSearchQuery},
   ]);
 
   if (response[0].error) {
