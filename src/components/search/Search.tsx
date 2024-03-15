@@ -1,5 +1,5 @@
 // React
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {View, StyleSheet, FlatList, Text, TouchableOpacity} from 'react-native';
 // Components
 import TextInputComponent from '@components/inputs/TextInputComponent';
@@ -26,15 +26,16 @@ import {
 import HeaderBackButton from '@components/buttons/HeaderBackButton';
 // Services
 import {useSystem} from '@context/SystemContext';
+import logger from '@utils/Logger';
 
-export interface SearchComponentProps<FilterKeys extends PropertyKey> {
+interface SearchComponentProps<FilterKeys extends PropertyKey> {
   initialFilters: Record<FilterKeys, SearchFilters>;
   initialSearchResults: Array<SearchResults>;
   searchFunction: (
     searchString: string,
-    filters?: Record<FilterKeys, Array<string>>,
+    filters?: Partial<Record<FilterKeys, Array<string>>>,
   ) => Promise<SearchFuncResponse | null>;
-  onClickBack: CallableFunction;
+  onClickBack: () => void;
 }
 
 const SearchComponent = <FilterKeys extends PropertyKey>({
@@ -49,61 +50,62 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
   const [showFilters, setShowFilters] = useState(false);
   const searchFilters = initialFilters;
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilters, setselectedFilters] = useState(
-    {} as Record<FilterKeys, Array<string>>,
-  );
-  const [searchResults, setSearchResults] = useState(
-    initialSearchResults as SearchResults[],
-  );
+  const [selectedFilters, setSelectedFilters] = useState<
+    Partial<Record<FilterKeys, Array<string>>>
+  >({});
+  const [searchResults, setSearchResults] =
+    useState<SearchResults[]>(initialSearchResults);
 
-  const onSelectFilter = async (
-    filterName: FilterKeys,
-    selectedFilter: string,
-  ) => {
-    setselectedFilters(prevFilters => {
-      const updatedFilters = {...prevFilters};
-      if (
-        prevFilters[filterName] &&
-        prevFilters[filterName].includes(selectedFilter)
-      ) {
-        updatedFilters[filterName] = prevFilters[filterName].filter(
-          (value: string) => value !== selectedFilter,
-        );
-        if (updatedFilters[filterName].length === 0) {
-          delete updatedFilters[filterName];
+  const performSearch = useCallback(
+    async (
+      text: string,
+      filters: Partial<Record<FilterKeys, Array<string>>>,
+    ) => {
+      try {
+        const response = await searchFunction(text, filters);
+        if (response !== null) {
+          setSearchResults(response.searchResults);
         }
-      } else {
-        updatedFilters[filterName] = [
-          ...(prevFilters[filterName] || []),
-          selectedFilter,
-        ];
+      } catch (error) {
+        logger.error('Failed to perform search:', error);
       }
-      performSearch(searchQuery, updatedFilters);
-      return updatedFilters;
-    });
-  };
+    },
+    [searchFunction],
+  );
 
-  const performSearch = async (
-    text: string,
-    filters: Record<FilterKeys, Array<string>>,
-  ) => {
-    const response = await searchFunction(text, filters);
-    if (response !== null) {
-      setSearchResults(response.searchResults);
-    }
-  };
+  const onSelectFilter = useCallback(
+    async (filterName: FilterKeys, selectedFilter: string) => {
+      setSelectedFilters(prevFilters => {
+        const updatedFilters = {...prevFilters};
+        const currentFilter = prevFilters[filterName] || [];
+        const isFilterSelected = currentFilter.includes(selectedFilter);
+
+        if (isFilterSelected) {
+          updatedFilters[filterName] = currentFilter.filter(
+            value => value !== selectedFilter,
+          );
+          if (updatedFilters[filterName]!.length === 0) {
+            delete updatedFilters[filterName];
+          }
+        } else {
+          updatedFilters[filterName] = [...currentFilter, selectedFilter];
+        }
+
+        performSearch(searchQuery, updatedFilters);
+        return updatedFilters;
+      });
+    },
+    [performSearch, searchQuery],
+  );
 
   return (
     <View style={styles.screenContainer}>
       <View style={styles.searchHeader}>
-        <HeaderBackButton
-          onClick={() => onClickBack()}
-          style={styles.backButton}
-        />
+        <HeaderBackButton onClick={onClickBack} style={styles.backButton} />
         <TextInputComponent
           placeholder="Search Exercises"
           value={searchQuery}
-          onChangeText={async (text: string) => {
+          onChangeText={text => {
             setSearchQuery(text);
             performSearch(text, selectedFilters);
           }}
@@ -153,11 +155,8 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
             )}
             <TouchableOpacity
               onPress={() => {
-                setselectedFilters({} as Record<FilterKeys, Array<string>>);
-                performSearch(
-                  searchQuery,
-                  {} as Record<FilterKeys, Array<string>>,
-                );
+                setSelectedFilters({});
+                performSearch(searchQuery, {});
               }}>
               <Text
                 style={[styles.clearFilterTitle, {color: currentTheme.text}]}>
@@ -170,20 +169,18 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
         <FlatList
           showsVerticalScrollIndicator={false}
           data={searchResults}
-          renderItem={({item}) => {
-            return (
-              <View
-                style={[
-                  styles.searchResult,
-                  {borderColor: currentTheme.borders},
-                ]}>
-                <Text
-                  style={[styles.searchResultText, {color: currentTheme.text}]}>
-                  {item.itemName}
-                </Text>
-              </View>
-            );
-          }}
+          renderItem={({item}) => (
+            <View
+              style={[
+                styles.searchResult,
+                {borderColor: currentTheme.borders},
+              ]}>
+              <Text
+                style={[styles.searchResultText, {color: currentTheme.text}]}>
+                {item.itemName}
+              </Text>
+            </View>
+          )}
           keyExtractor={item => item.itemId}
         />
       </View>
