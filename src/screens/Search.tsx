@@ -7,6 +7,7 @@ import {exerciseSearch} from '@services/db/exercise/Functions';
 import {SearchFilters, SearchResults} from '@components/search/Types';
 // Types
 import {ScreenProps} from '@screens/Types';
+import {ExerciseSearchFilters} from '@services/db/exercise/Types';
 
 const SearchScreen: React.FC<ScreenProps> = ({
   navigation,
@@ -33,7 +34,7 @@ const SearchScreen: React.FC<ScreenProps> = ({
   return (
     <ScreenWrapper>
       {filters && searchResults && (
-        <SearchComponent
+        <SearchComponent<ExerciseSearchFilters>
           initialSearchResults={searchResults}
           initialFilters={filters}
           searchFunction={exerciseSearch}

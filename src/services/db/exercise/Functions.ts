@@ -19,28 +19,24 @@ import {SearchResults, SearchFuncResponse} from '@components/search/Types';
 import logger from '@utils/Logger';
 
 /**
- * Generates a SQL query for searching exercises based on optional search strings and filter criteria.
- * The function constructs complex SQL queries using common table expressions (CTEs) to aggregate information about
- * exercises, equipment used, and body parts targeted. It supports filtering exercises by name, equipment, muscle groups,
- * and specific muscles. The final query returns detailed information about each exercise, including its name, associated
- * equipment, and muscle groups targeted.
+ * Constructs an SQL query for searching exercises based on optional search strings and filter criteria.
  *
- * The query construction process involves three main CTEs:
- * 1. `exercises` CTE, which selects exercise names and IDs based on the search string.
- * 2. `equipment_agg` CTE, which aggregates equipment names and counts per exercise, applying equipment filters if provided.
- * 3. `bodypart_agg` CTE, which aggregates body part names and counts per exercise, applying muscle group and specific muscle filters if provided.
+ * This function dynamically generates a complex SQL query utilizing Common Table Expressions (CTEs)
+ * for exercises, equipment aggregations, and body part aggregations. It supports filtering exercises
+ * by names, equipment, and muscle groups, including specific muscles. The core logic involves building
+ * SQL queries for each CTE based on the given filters and search string, and then constructing a final
+ * query that selects exercises satisfying these conditions. This approach allows for flexible and efficient
+ * data retrieval from a relational database structure, especially useful in fitness or workout tracking applications
+ * where complex queries are common.
  *
- * The final selection joins these CTEs to compile a comprehensive list of exercises along with their equipment and targeted body parts,
- * applying additional filters based on the counts of equipment, muscle groups, and specific muscles to match the lengths of the filter arrays.
- *
- * @param {string} [searchString] - Optional. The search string to filter exercises by name.
- * @param {ExerciseSearchFiltersSchema} [filters] - Optional. An object containing arrays of strings for equipment, muscle groups, and specific muscles to filter the exercises.
- * @returns {string} A SQL query string that can be executed to retrieve the filtered list of exercises with their associated equipment and targeted body parts.
+ * @param {string} [searchString] - Optional search string for filtering exercises by name.
+ * @param {ExerciseSearchFiltersSchema} [filters] - Optional filter criteria including equipment, muscle groups, and specific muscles.
+ * @returns {string} An SQL query string that can be executed to retrieve filtered exercise data.
  */
 export const getExerciseSearchQuery = (
   searchString?: string,
   filters?: ExerciseSearchFiltersSchema,
-) => {
+): string => {
   const exerciseCteName = 'exercises';
   const exerciseCteSql = buildSqlQuery({
     table: syncDbTables.exercise,
@@ -212,22 +208,19 @@ export const getExerciseSearchQuery = (
 };
 
 /**
- * Executes a search for exercises based on a given search string and filter criteria, returning structured search results
- * and aggregated filters for equipment, muscle groups, and specific muscles. This function leverages `getExerciseSearchQuery`
- * to construct a complex SQL query, which is then executed to fetch matching exercises. The results are processed to
- * compile a list of unique exercises and aggregate the equipment, muscle groups, and specific muscles associated with them.
+ * Performs a search for exercises based on a given search string and filter criteria.
  *
- * If the SQL query execution encounters an error, the function logs the error and returns `null` to indicate failure.
- * Otherwise, it returns an object containing the search results and aggregated filters, which include unique lists of
- * equipment, muscle groups, and specific muscles that are involved in the returned exercises. This allows for efficient
- * front-end rendering or further processing of the search results and the dynamic generation of filter options based on
- * the search output.
+ * This asynchronous function initiates a search for exercises using optional search strings and filters,
+ * executing a SQL query to retrieve relevant data. It processes the search results to compile a list of exercises
+ * along with associated equipment, muscle groups, and specific muscles. The function handles errors gracefully,
+ * logging them and returning null if the SQL execution fails. On successful retrieval, it constructs a structured
+ * response including the search results and deduplicated lists of equipment, muscle groups, and specific muscles.
+ * This function is useful in applications requiring complex data retrieval for fitness or workout planning,
+ * providing a comprehensive search capability with detailed results.
  *
- * The function also logs the execution time, helping with performance monitoring.
- *
- * @param {string} [searchString] - Optional. The search string to filter exercises by their names.
- * @param {ExerciseSearchFiltersSchema} [filters] - Optional. Filter criteria including arrays of strings for equipment, muscle groups, and specific muscles.
- * @returns {Promise<SearchFuncResponse | null>} A promise that resolves to the search results and aggregated filters, or `null` if an error occurs during the SQL query execution.
+ * @param {string} [searchString] - Optional search string for filtering exercises by name.
+ * @param {ExerciseSearchFiltersSchema} [filters] - Optional filter criteria including equipment, muscle groups, and specific muscles.
+ * @returns {Promise<SearchFuncResponse | null>} A promise that resolves to a structured search response object or null in case of an error.
  */
 export const exerciseSearch = async (
   searchString?: string,

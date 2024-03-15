@@ -27,22 +27,22 @@ import HeaderBackButton from '@components/buttons/HeaderBackButton';
 // Services
 import {useSystem} from '@context/SystemContext';
 
-export interface SearchComponentProps {
-  initialFilters: Record<string, SearchFilters>;
+export interface SearchComponentProps<FilterKeys extends PropertyKey> {
+  initialFilters: Record<FilterKeys, SearchFilters>;
   initialSearchResults: Array<SearchResults>;
   searchFunction: (
     searchString: string,
-    filters?: any, // TODO: Fix any typing
+    filters?: Record<FilterKeys, Array<string>>,
   ) => Promise<SearchFuncResponse | null>;
   onClickBack: CallableFunction;
 }
 
-const SearchComponent: React.FC<SearchComponentProps> = ({
+const SearchComponent = <FilterKeys extends PropertyKey>({
   initialFilters,
   initialSearchResults,
   searchFunction,
   onClickBack,
-}: SearchComponentProps): React.ReactElement<SearchComponentProps> => {
+}: SearchComponentProps<FilterKeys>): React.ReactElement => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
@@ -50,13 +50,16 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   const searchFilters = initialFilters;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setselectedFilters] = useState(
-    {} as Record<string, Array<string>>,
+    {} as Record<FilterKeys, Array<string>>,
   );
   const [searchResults, setSearchResults] = useState(
     initialSearchResults as SearchResults[],
   );
 
-  const onSelectFilter = async (filterName: string, selectedFilter: string) => {
+  const onSelectFilter = async (
+    filterName: FilterKeys,
+    selectedFilter: string,
+  ) => {
     setselectedFilters(prevFilters => {
       const updatedFilters = {...prevFilters};
       if (
@@ -82,7 +85,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 
   const performSearch = async (
     text: string,
-    filters: Record<string, Array<string>>,
+    filters: Record<FilterKeys, Array<string>>,
   ) => {
     const response = await searchFunction(text, filters);
     if (response !== null) {
@@ -125,10 +128,10 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
               Filters
             </Text>
             {Object.entries(searchFilters).map(
-              (value: [string, SearchFilters], index: number) => {
-                const filterKey = value[0];
-                const filterLabel = value[1].label;
-                const filters = value[1].values;
+              (value: [string, any], index: number) => {
+                const filterKey = value[0] as FilterKeys;
+                const filterLabel = value[1].label as string;
+                const filters = value[1].values as Array<string>;
                 return (
                   <TagSelector
                     style={styles.filterSelector}
@@ -150,8 +153,11 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
             )}
             <TouchableOpacity
               onPress={() => {
-                setselectedFilters({});
-                performSearch(searchQuery, {});
+                setselectedFilters({} as Record<FilterKeys, Array<string>>);
+                performSearch(
+                  searchQuery,
+                  {} as Record<FilterKeys, Array<string>>,
+                );
               }}>
               <Text
                 style={[styles.clearFilterTitle, {color: currentTheme.text}]}>
