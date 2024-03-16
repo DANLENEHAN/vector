@@ -120,14 +120,14 @@ export const getExerciseSearchQuery = (
           value: `(SELECT exercise_id FROM ${exerciseCteName})`,
         },
       },
-      ...(filters?.muscleGroups
+      ...(filters?.muscleGroups && !filters?.specificMuscles
         ? {
             [`${otherDbTables.bodypart}.muscle_group`]: {
               [BaseOperators.In]: filters.muscleGroups,
             },
           }
         : {}),
-      ...(filters?.specificMuscles
+      ...(filters?.specificMuscles && !filters.muscleGroups
         ? {
             [`${otherDbTables.bodypart}.specific_muscle`]: {
               [BaseOperators.In]: filters.specificMuscles,
@@ -145,14 +145,26 @@ export const getExerciseSearchQuery = (
     };
   }
   if (filters?.muscleGroups) {
-    selectWhereConditions.muscle_group_count = {
-      [BaseOperators.Eq]: filters.muscleGroups.length,
-    };
+    if (!filters?.specificMuscles) {
+      selectWhereConditions.muscle_group_count = {
+        [BaseOperators.Eq]: filters.muscleGroups.length,
+      };
+    } else {
+      selectWhereConditions[`${bodypartAggCteName}.muscle_group`] = {
+        [StringOperators.Like]: filters.muscleGroups,
+      };
+    }
   }
   if (filters?.specificMuscles) {
-    selectWhereConditions.specific_muscle_count = {
-      [BaseOperators.Eq]: filters.specificMuscles.length,
-    };
+    if (!filters?.muscleGroups) {
+      selectWhereConditions.specific_muscle_count = {
+        [BaseOperators.Eq]: filters.specificMuscles.length,
+      };
+    } else {
+      selectWhereConditions[`${bodypartAggCteName}.specific_muscle`] = {
+        [StringOperators.Like]: filters.specificMuscles,
+      };
+    }
   }
 
   const selectQuery = buildSqlQuery({

@@ -258,9 +258,21 @@ export const buildWhereClause = (
           isInEnum(StringOperators, operator) ||
           isInEnum(NumericOperators, operator)
         ) {
-          conditions.push(
-            getQueryCondition(key, value as any, operator as QueryOperators),
-          );
+          if (
+            Array.isArray(value) &&
+            operator !== BaseOperators.NotIn &&
+            operator !== BaseOperators.In
+          ) {
+            for (const val of value) {
+              conditions.push(
+                getQueryCondition(key, val as any, operator as QueryOperators),
+              );
+            }
+          } else {
+            conditions.push(
+              getQueryCondition(key, value as any, operator as QueryOperators),
+            );
+          }
         } else {
           throw new Error(
             `Invalid Query Structure for operator '${operator}'.`,
