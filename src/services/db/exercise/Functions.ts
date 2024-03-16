@@ -98,7 +98,7 @@ export const getExerciseSearchQuery = (
       `GROUP_CONCAT(${otherDbTables.bodypart}.muscle_group, ';') as muscle_group`,
       `GROUP_CONCAT(${otherDbTables.bodypart}.specific_muscle, ';') as specific_muscle`,
       `COUNT(DISTINCT(${otherDbTables.bodypart}.muscle_group)) as muscle_group_count`,
-      `COUNT(DISTINCT(${otherDbTables.bodypart}.muscle_group)) as specific_muscle_count`,
+      `COUNT(DISTINCT(${otherDbTables.bodypart}.specific_muscle)) as specific_muscle_count`,
     ],
     joins: {
       [syncDbTables.exerciseBodypart]: {
@@ -282,9 +282,9 @@ export const exerciseSearch = async (
   }
 
   // If you need to work with arrays instead of sets later in your code
-  const equipments = Array.from(equipmentSet);
-  const muscleGroups = Array.from(muscleGroupSet);
-  const specificMuscles = Array.from(specificMuscleSet);
+  const equipments = Array.from(equipmentSet).sort();
+  const muscleGroups = Array.from(muscleGroupSet).sort();
+  const specificMuscles = Array.from(specificMuscleSet).sort();
 
   const endTime = new Date().getTime();
   logger.info(

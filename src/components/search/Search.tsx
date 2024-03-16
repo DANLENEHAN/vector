@@ -98,6 +98,16 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
     [performSearch, searchQuery],
   );
 
+  const SearchResultItem = React.memo(({itemName}: Partial<SearchResults>) => {
+    return (
+      <View style={[styles.searchResult, {borderColor: currentTheme.borders}]}>
+        <Text style={[styles.searchResultText, {color: currentTheme.text}]}>
+          {itemName}
+        </Text>
+      </View>
+    );
+  });
+
   return (
     <View style={styles.screenContainer}>
       <View style={styles.searchHeader}>
@@ -169,18 +179,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
         <FlatList
           showsVerticalScrollIndicator={false}
           data={searchResults}
-          renderItem={({item}) => (
-            <View
-              style={[
-                styles.searchResult,
-                {borderColor: currentTheme.borders},
-              ]}>
-              <Text
-                style={[styles.searchResultText, {color: currentTheme.text}]}>
-                {item.itemName}
-              </Text>
-            </View>
-          )}
+          renderItem={({item}) => <SearchResultItem itemName={item.itemName} />}
           keyExtractor={item => item.itemId}
         />
       </View>
