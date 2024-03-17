@@ -16,6 +16,7 @@ import {
   paddingSizes,
   borderWidth,
   headingTextStyles,
+  bodyTextStyles,
 } from '@styles/Main';
 import TagSelector from '@components/inputs/TagSelector';
 import {
@@ -100,7 +101,14 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
 
   const SearchResultItem = React.memo(({itemName}: Partial<SearchResults>) => {
     return (
-      <View style={[styles.searchResult, {borderColor: currentTheme.borders}]}>
+      <View
+        style={[
+          styles.searchResult,
+          {
+            borderColor: currentTheme.borders,
+            backgroundColor: currentTheme.secondaryBackground,
+          },
+        ]}>
         <Text style={[styles.searchResultText, {color: currentTheme.text}]}>
           {itemName}
         </Text>
@@ -239,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.medium,
   },
   searchResultText: {
-    ...ctaTextStyles.xSmall,
+    ...bodyTextStyles.small,
     textAlign: 'center',
   },
 });

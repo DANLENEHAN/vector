@@ -247,8 +247,9 @@ export const exerciseSearch = async (
 
   if (response[0].error) {
     logger.error(
-      `(function)=(exerciseSearch);(exerciseSubStr)=(${searchString}) ` +
-        `- error ${response[0].error}`,
+      `(function)=(exerciseSearch);${
+        searchString ? `(searchString)=(${searchString})` : ''
+      } ` + `- error recieved '${response[0].error}'`,
     );
     return null;
   }
