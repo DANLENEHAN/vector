@@ -131,7 +131,9 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
           iconSize={iconSizes.large}
           style={styles.searchBar}
         />
-        <TouchableOpacity onPress={() => setShowFilters(!showFilters)}>
+        <TouchableOpacity
+          onPress={() => setShowFilters(!showFilters)}
+          testID="filterButton">
           <Icon
             name="filter"
             size={iconSizes.large}

@@ -12,7 +12,7 @@ import {
 import {executeSqlBatch} from '../SqlClient';
 
 // Types
-import {ExerciseSearchFiltersSchema} from '@services/db/exercise/Types';
+import {ExerciseSearchFilters} from '@services/db/exercise/Types';
 import {SearchResults, SearchFuncResponse} from '@components/search/Types';
 
 // Services
@@ -35,7 +35,7 @@ import logger from '@utils/Logger';
  */
 export const getExerciseSearchQuery = (
   searchString?: string,
-  filters?: ExerciseSearchFiltersSchema,
+  filters?: Partial<Record<ExerciseSearchFilters, Array<string>>>,
 ): string => {
   const exerciseCteName = 'exercises';
   const exerciseCteSql = buildSqlQuery({
@@ -236,7 +236,7 @@ export const getExerciseSearchQuery = (
  */
 export const exerciseSearch = async (
   searchString?: string,
-  filters?: ExerciseSearchFiltersSchema,
+  filters?: Partial<Record<ExerciseSearchFilters, Array<string>>>,
 ): Promise<SearchFuncResponse | null> => {
   const startTime = new Date().getTime();
 
