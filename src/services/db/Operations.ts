@@ -204,7 +204,7 @@ export const getRows = async <T extends RowData>(
   result = transformDbRows<T>(result);
   logger.info(
     `(function)=(getRows); (tableName)=(${params.tableName}) ` +
-      `- took ${((endTime - startTime) / 1000).toFixed(2)}s`,
+      `- took ${endTime - startTime}ms`,
   );
   return result;
 };

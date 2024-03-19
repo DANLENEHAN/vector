@@ -20,23 +20,31 @@ generate_api() {
     echo "API generation completed successfully."
 }
 
-delete_current_migrations() {
-    echo "Deleting current migrations..."
-    rm -rf $MIGRATIONS_PATH/revisions/* && \
-    if [ -f $VECTOR_REVISIONS_FILE ]; then
-        rm $VECTOR_REVISIONS_FILE && \
-        echo "VectorRevisions.ts file deleted."
-    else
-        echo "No VectorRevisions.ts file found."
-    fi
-    echo "Current migrations deleted successfully."
+delete_vector_revisions_file() {
+    echo "Deleting VectorRevisions.ts file..."
+    rm -f $VECTOR_REVISIONS_FILE && \
+    echo "VectorRevisions.ts file deleted."
 }
 
-generate_new_migrations() {
-    echo "Generating new migrations..."
-    cp -r $ALEMBIC_PATH/revisions $MIGRATIONS_PATH && \
+copy_new_migrations_only() {
+    echo "Copying new migrations..."
+    mkdir -p $MIGRATIONS_PATH/revisions
+    for file in $ALEMBIC_PATH/revisions/*; do
+        filename=$(basename "$file")
+        if [ ! -f "$MIGRATIONS_PATH/revisions/$filename" ]; then
+            cp "$file" "$MIGRATIONS_PATH/revisions/"
+            echo "Copied new file: $filename"
+        else
+            echo "File already exists, skipping: $filename"
+        fi
+    done
+    echo "New migrations copied successfully."
+}
+
+copy_vector_revisions() {
+    echo "Copying VectorRevisions.ts..."
     cp $ALEMBIC_PATH/VectorRevisions.ts $VECTOR_REVISIONS_FILE && \
-    echo "New migrations generated successfully."
+    echo "VectorRevisions.ts copied."
 }
 
 run_precommits() {
@@ -50,8 +58,9 @@ run_precommits() {
 
 # Execute functions
 generate_api
-delete_current_migrations
-generate_new_migrations
+delete_vector_revisions_file
+copy_new_migrations_only
+copy_vector_revisions
 run_precommits
 
 echo "All operations completed successfully."

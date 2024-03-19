@@ -1026,6 +1026,45 @@ export interface ExerciseEquipmentUpdateSchema {
 }
 
 /**
+ * ExerciseQueryFilters
+ * Represents filtering criteria for querying exercise-related
+ * data.
+ * This class extends QuerySchema, specifically designed for
+ * exercise queries, allowing the specification of equipment,
+ * muscle groups, specific muscles, and a search string for more
+ * targeted results.
+ */
+export interface ExerciseQueryFilters {
+  /**
+   * Equipments
+   * @default null
+   */
+  equipments?: string[] | null;
+  /**
+   * Musclegroups
+   * @default null
+   */
+  muscleGroups?: string[] | null;
+  /**
+   * Searchstring
+   * @default null
+   */
+  searchString?: string | null;
+  /**
+   * Sort
+   * The sort to apply to the query
+   * @default []
+   * @example ["created_at:desc"]
+   */
+  sort?: any[];
+  /**
+   * Specificmuscles
+   * @default null
+   */
+  specificMuscles?: string[] | null;
+}
+
+/**
  * ExerciseSearchResponse
  * Represents the response schema for an exercise search query,
  * detailing information about both the exercise and associated
@@ -2110,7 +2149,7 @@ export interface QuerySchema {
   /**
    * Sort
    * The sort to apply to the query
-   * @default ["created_at:desc"]
+   * @default []
    * @example ["created_at:desc"]
    */
   sort?: any[];
