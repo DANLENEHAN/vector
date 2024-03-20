@@ -23,7 +23,7 @@ import {
   NumericOperators,
 } from '@services/api/swagger/data-contracts';
 import {getEarliestLookbackDate} from '@services/timeSeries/Functions';
-
+import {statisticType} from '@services/timeSeries/Types';
 // Logger
 import logger from '@utils/Logger';
 import moment from 'moment-timezone';
@@ -89,7 +89,11 @@ export const createNewMood = async ({
  * @returns {Promise<graphPeriodData>} A promise that resolves to an object containing the mood data.
  * @throws {Error} Throws an error if there's a problem executing the SQL queries.
  */
-export const getMoodData = async (): Promise<graphPeriodData> => {
+export const getMoodData = async ({
+  statType,
+}: {
+  statType: statisticType;
+}): Promise<graphPeriodData> => {
   const user: UserCreateSchema | null = await getUser();
   if (user != null) {
     const timestampNow = deviceTimestampNow();
@@ -112,6 +116,7 @@ export const getMoodData = async (): Promise<graphPeriodData> => {
       table: syncDbTables.moodTable,
       data: moods || [],
       targetDate: moment(),
+      statType: statType,
     });
   } else {
     throw new Error('Unable to retreive user, cannot get mood data.');

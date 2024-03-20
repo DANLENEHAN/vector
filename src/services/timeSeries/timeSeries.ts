@@ -5,14 +5,19 @@ import {
   convertData,
   convertDataDate,
   getGraphData,
-} from './Functions';
+} from '@services/timeSeries/Functions';
 // Constants
-import {emptyGraphPeriodData} from './Constants';
+import {emptyGraphPeriodData} from '@services/timeSeries/Constants';
 // Logger
 import logger from '@utils/Logger';
 // Types
 import {UnitType} from '@utils/Conversion';
-import {SchemaMapping, GetSchemaType, graphPeriodData} from './Types';
+import {
+  SchemaMapping,
+  GetSchemaType,
+  graphPeriodData,
+  statisticType,
+} from '@services/timeSeries/Types';
 
 /**
  * Function to generate graph data
@@ -25,11 +30,13 @@ import {SchemaMapping, GetSchemaType, graphPeriodData} from './Types';
 export function generateGraphData<T extends keyof SchemaMapping>({
   table,
   data,
+  statType,
   targetUnit,
   targetDate,
 }: {
   table: T;
   data: Array<GetSchemaType<T>>;
+  statType: statisticType;
   targetUnit?: UnitType;
   targetDate?: Moment;
 }): graphPeriodData {
@@ -42,5 +49,5 @@ export function generateGraphData<T extends keyof SchemaMapping>({
     ? convertData(transformedData, targetUnit)
     : transformedData;
   const graphData = convertDataDate(convertedData);
-  return getGraphData(graphData, targetDate, targetUnit);
+  return getGraphData(graphData, statType, targetDate, targetUnit);
 }

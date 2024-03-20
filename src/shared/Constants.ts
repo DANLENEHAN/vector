@@ -1,3 +1,5 @@
+import {WeightUnit} from '@services/api/swagger/data-contracts';
+
 /**
  * Enum representing database table names.
  *
@@ -72,3 +74,13 @@ export enum AndOrOperatos {
   OR = 'or',
   AND = 'and',
 }
+
+type MaxWeightValues = {
+  [key in WeightUnit]: number;
+};
+
+export const maxWeighValues: MaxWeightValues = {
+  [WeightUnit.Lbs]: 1400, // Heaviest person ever recorded
+  [WeightUnit.Kg]: 635.0293,
+  [WeightUnit.Stone]: 100,
+};

@@ -19,7 +19,7 @@ import {useSystem} from '@context/SystemContext';
 interface NumberInputProps {
   allowFloat: boolean;
   inputValue: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  setInputValue: CallableFunction;
   style?: object;
 }
 
@@ -49,7 +49,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   };
 
   const handleFocus = () => {
-    if (inputValue === '0' || inputValue === '0.0') {
+    if (inputValue === '0' || inputValue === '0.00') {
       setInputValue('');
     }
   };

@@ -49,6 +49,13 @@ export interface dataPoint {
   unit: string;
 }
 
+export interface datedDataPoint {
+  value: number;
+  date: number;
+  unit: string;
+  index: number;
+}
+
 /**
  * @description Data point that will be used in the graph.
  */
@@ -69,8 +76,8 @@ export type graphDataPoint = {
  */
 export interface graphData {
   data: graphDataPoint[];
-  averagePeriodLabel: string | null;
-  averageValue: number | null | string;
+  periodLabel: string | null;
+  value: number | null | string;
   unit: string;
 }
 
@@ -154,3 +161,15 @@ export type labelGap = {
  * @description Object to map time periods to the data for the graph for that period.
  */
 export type graphPeriodData = Record<timePeriods, graphData>;
+
+export type valueAggregator = (data: number[] | null[]) => number | null;
+export enum statisticType {
+  mean = 'mean',
+  median = 'median',
+  mode = 'mode',
+  range = 'range',
+  sum = 'sum',
+}
+export type statisticAggregator = {
+  [key in statisticType]: valueAggregator;
+};

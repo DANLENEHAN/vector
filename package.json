@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "./set_storybook.sh false & react-native start",
-    "test": "jest",
+    "test": "jest --coverage",
     "prepare": "husky install",
     "storybook": "./set_storybook.sh true & react-native start"
   },

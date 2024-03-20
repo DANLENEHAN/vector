@@ -3,7 +3,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 // Components
 import Header from '@components/navbar/Header';
-import GenericMeasurementTracking from '@screens/track/bodyMeasurement/GenericMeasurementTracking';
+import GenericMeasurementTracking from '@screens/track/GenericMeasurementTracking';
 
 // Types
 import {ScreenProps} from '@screens/Types';
@@ -26,9 +26,7 @@ const WaterScreen: React.FC<ScreenProps> = ({
 }: ScreenProps): React.ReactElement<ScreenProps> => {
   return (
     <ScreenWrapper>
-      <View style={styles.headerSection}>
-        <Header onClick={navigation.goBack} includeBackArrow={true} />
-      </View>
+      <Header onClick={navigation.goBack} includeBackArrow={true} />
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
           statType={NutritionType.Water}
@@ -41,11 +39,8 @@ const WaterScreen: React.FC<ScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  headerSection: {
-    flex: 1,
-  },
   componentContainer: {
-    flex: 15,
+    flex: 1,
     ...layoutStyles.centerVertically,
   },
 });

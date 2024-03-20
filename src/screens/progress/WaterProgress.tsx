@@ -3,7 +3,12 @@ import React, {useState, useEffect} from 'react';
 // Layouts
 import ScreenWrapper from '@components/layout/ScreenWrapper';
 // Styling
-import {lightThemeColors, darkThemeColors, layoutStyles} from '@styles/Main';
+import {
+  lightThemeColors,
+  darkThemeColors,
+  layoutStyles,
+  marginSizes,
+} from '@styles/Main';
 // Components
 import {View, StyleSheet} from 'react-native';
 import Header from '@components/navbar/Header';
@@ -17,7 +22,7 @@ import {ScreenProps} from '@screens/Types';
 import {NutritionType, WaterUnit} from '@services/api/swagger/data-contracts';
 import {graphPeriodData} from '@services/timeSeries/Types';
 import {timePeriods} from '@services/timeSeries/Types';
-import {timePeriodLabels} from '@services/timeSeries/Types';
+import {timePeriodLabels, statisticType} from '@services/timeSeries/Types';
 // Constants
 import {loadingGraphPeriodData} from '@services/timeSeries/Constants';
 
@@ -39,6 +44,8 @@ const MoodProgress: React.FC<ScreenProps> = ({
   const [graphData, setGraphData] = useState<graphPeriodData>();
   const [loading, setLoading] = useState<boolean>(true);
 
+  const graphStatType = statisticType.sum;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -46,36 +53,36 @@ const MoodProgress: React.FC<ScreenProps> = ({
       const data = await getNutritionGraphData(
         NutritionType.Water,
         WaterUnit.Ml,
+        graphStatType,
       );
       setGraphData(data);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [graphStatType]);
 
   return (
     <ScreenWrapper>
       <View style={styles.pageWrapper}>
-        <View style={styles.headerSection}>
-          <Header
-            label="Water"
-            onClick={navigation.goBack}
-            includeBackArrow={true}
-          />
-        </View>
+        <Header
+          label="Water"
+          onClick={navigation.goBack}
+          includeBackArrow={true}
+        />
         <View style={styles.unitSelectorSection}>
           <UnitSelector
             units={Object.values(dateOptions)}
             activeUnit={activePeriod}
             setActiveUnit={setActivePeriod}
             style={[
+              styles.periodSelector,
               {
                 color: currentTheme.text,
               },
             ]}
           />
         </View>
-        <View style={styles.graphSection}>
+        <View>
           {graphData &&
             activePeriod &&
             timePeriodLabels[activePeriod as timePeriods] &&
@@ -84,13 +91,12 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 data={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].data
                 }
-                averageLabel={
+                displayLabel={
                   graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averagePeriodLabel || ''
+                    .periodLabel || ''
                 }
-                averageValue={
-                  graphData[timePeriodLabels[activePeriod as timePeriods]]
-                    .averageValue
+                displayValue={
+                  graphData[timePeriodLabels[activePeriod as timePeriods]].value
                 }
                 unit={
                   graphData[timePeriodLabels[activePeriod as timePeriods]].unit
@@ -99,6 +105,7 @@ const MoodProgress: React.FC<ScreenProps> = ({
                 chartType="line"
                 showUnit={true}
                 loading={loading}
+                statisticType={graphStatType}
               />
             )}
         </View>
@@ -111,15 +118,12 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flex: 1,
   },
-  headerSection: {
-    flex: 1,
-  },
   unitSelectorSection: {
-    flex: 2,
     ...layoutStyles.centerHorizontally,
   },
-  graphSection: {
-    flex: 10,
+  periodSelector: {
+    height: 30,
+    marginVertical: marginSizes.medium,
   },
 });
 

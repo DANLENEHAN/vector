@@ -186,8 +186,7 @@ const styles = StyleSheet.create({
   content: {
     height: '45%',
     ...layoutStyles.spaceBetweenVertical,
-    paddingLeft: paddingSizes.large,
-    paddingRight: paddingSizes.large,
+    paddingHorizontal: paddingSizes.large,
   },
   buttonContainer: {
     ...layoutStyles.spaceBetweenHorizontal,
