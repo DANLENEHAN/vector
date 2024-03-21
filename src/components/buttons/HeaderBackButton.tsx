@@ -1,7 +1,7 @@
 // React Import
 import React from 'react';
 // Components
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet, ViewStyle} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
 import {useSystem} from '@context/SystemContext';
@@ -22,6 +22,7 @@ import {
  */
 interface HeaderBackButtonProps {
   onClick: () => void;
+  style?: ViewStyle;
 }
 
 /**
@@ -33,6 +34,7 @@ interface HeaderBackButtonProps {
  */
 const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
   onClick,
+  style,
 }: HeaderBackButtonProps): React.ReactElement<HeaderBackButtonProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
@@ -41,6 +43,7 @@ const HeaderBackButton: React.FC<HeaderBackButtonProps> = ({
       style={[
         styles.headerBackButton,
         {backgroundColor: currentTheme.background},
+        style || {},
       ]}
       onPress={() => onClick()}>
       <Icon

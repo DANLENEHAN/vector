@@ -14,7 +14,12 @@ import {timestampColumns, AndOrOperatos} from '@shared/Constants';
 // Types
 import {isInEnum} from '@shared/Functions';
 // Functions
-import {QueryOperators, RowData, Literal} from '@services/db/Types';
+import {
+  QueryOperators,
+  RowData,
+  Literal,
+  SqlStatementParams,
+} from '@services/db/Types';
 import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
 
 /**
@@ -28,9 +33,12 @@ import {momentToDateStr, deviceTimezone} from '@services/date/Functions';
  * @param {any} obj - The object to check for being a Literal object.
  * @returns {obj is Literal} A boolean indicating whether the provided object matches the Literal object structure.
  */
-const isLiteralObject = (obj: any): obj is Literal => {
+export const isLiteralObject = (obj: any): obj is Literal => {
   return (
-    obj && typeof obj === 'object' && obj.isLiteral === true && 'value' in obj
+    (obj || false) &&
+    typeof obj === 'object' &&
+    obj.isLiteral === true &&
+    'value' in obj
   );
 };
 
@@ -51,7 +59,13 @@ const isLiteralObject = (obj: any): obj is Literal => {
  */
 export const getQueryCondition = (
   columnName: string,
-  columnValue: moment.Moment | number | string | Array<number | string> | null,
+  columnValue:
+    | moment.Moment
+    | number
+    | string
+    | Array<number | string>
+    | Literal
+    | null,
   operator: QueryOperators,
 ): string => {
   // Transformation variables with initial values identical to the input parameters.
@@ -61,7 +75,17 @@ export const getQueryCondition = (
     | number
     | string
     | Array<number | string>
+    | Literal
     | null = columnValue;
+
+  let shortHandCol = columnName;
+  if (shortHandCol.includes('.')) {
+    if (shortHandCol.split('.').filter(item => item).length === 2) {
+      shortHandCol = shortHandCol.split('.')[1];
+    } else {
+      throw new Error(`Column Name '${shortHandCol}' is invalid.`);
+    }
+  }
 
   // Handling Boolean and Null checks
   if (
@@ -83,7 +107,7 @@ export const getQueryCondition = (
   }
 
   // Handling Timestamp Columns
-  else if (isInEnum(timestampColumns, columnName)) {
+  else if (isInEnum(timestampColumns, shortHandCol)) {
     if (
       !isInEnum(BaseOperators, operator) &&
       !isInEnum(NumericOperators, operator)
@@ -234,9 +258,21 @@ export const buildWhereClause = (
           isInEnum(StringOperators, operator) ||
           isInEnum(NumericOperators, operator)
         ) {
-          conditions.push(
-            getQueryCondition(key, value as any, operator as QueryOperators),
-          );
+          if (
+            Array.isArray(value) &&
+            operator !== BaseOperators.NotIn &&
+            operator !== BaseOperators.In
+          ) {
+            for (const val of value) {
+              conditions.push(
+                getQueryCondition(key, val as any, operator as QueryOperators),
+              );
+            }
+          } else {
+            conditions.push(
+              getQueryCondition(key, value as any, operator as QueryOperators),
+            );
+          }
         } else {
           throw new Error(
             `Invalid Query Structure for operator '${operator}'.`,
@@ -300,12 +336,87 @@ export const transformDbRows = <T extends RowData>(rows: T[]): T[] => {
  */
 export const buildJoinClause = (
   joins: Record<string, {join: string; on: any}>,
-) => {
-  let joinString = '';
+): string => {
+  let parseJoins: Array<string> = [];
   Object.keys(joins).forEach(key => {
-    joinString += `${joins[key].join} JOIN ON ${buildWhereClause(
-      joins[key].on,
-    )}`;
+    parseJoins.push(
+      `${joins[key].join} JOIN ${key} ON ${buildWhereClause(joins[key].on)}`,
+    );
   });
-  return joinString;
+  return parseJoins.join(' ');
+};
+
+/**
+ * Builds a SQL query string based on the provided parameters.
+ *
+ * @param params - An object containing parameters for constructing the SQL query.
+ * @param params.table - The name of the table to select data from.
+ * @param params.selectColumns - An array of column names to select. Defaults to ["*"].
+ * @param params.joins - An array of join clauses to apply in the query.
+ * @param params.whereConditions - An array of conditions to apply in the WHERE clause.
+ * @param params.groupby - An array of columns to group by.
+ * @param params.orderConditions - An object containing column names as keys and sorting order (ASC or DESC) as values.
+ * @param params.limit - The maximum number of rows to return.
+ * @param params.ctes - An array of common table expressions (CTEs) to include in the query.
+ * @param params.alias - An optional alias for the resulting query.
+ *
+ * @returns The constructed SQL query string.
+ * @throws Error when the table name is not provided.
+ */
+export const buildSqlQuery = (params: SqlStatementParams): string => {
+  if (!params.table) {
+    throw new Error('Table name is required.');
+  }
+
+  // Function to build CTEs
+  const buildCtes = (ctes: Array<{name: string; value: string}>): string => {
+    return ctes
+      .map((cte, index) => {
+        return index === 0
+          ? `WITH ${cte.name} as (${cte.value})`
+          : `, ${cte.name} AS (${cte.value})`;
+      })
+      .join('');
+  };
+
+  // Build Query Components
+  const columnsToSelect = (params.selectColumns || ['*']).join(', ');
+  const selectString = `SELECT ${columnsToSelect} FROM ${params.table}`;
+  const joinString = params.joins ? buildJoinClause(params.joins) : '';
+  const whereConditions =
+    params.whereConditions && Object.keys(params.whereConditions).length
+      ? buildWhereClause(params.whereConditions)
+      : '';
+  const whereString = whereConditions ? `WHERE ${whereConditions}` : '';
+  const groupbyString = params.groupby
+    ? `GROUP BY ${params.groupby.join(', ')}`
+    : '';
+  const orderByString = params.orderConditions
+    ? `ORDER BY ${Object.entries(params.orderConditions)
+        .map(([column, order]) => `${column} ${order}`)
+        .join(', ')}`
+    : '';
+  const limitString = params.limit ? `LIMIT ${params.limit}` : '';
+
+  // Build CTEs
+  const cteString = params.ctes ? buildCtes(params.ctes) : '';
+
+  // Build full query from components
+  let sqlStatement = `${[
+    selectString,
+    joinString,
+    whereString,
+    groupbyString,
+    orderByString,
+    limitString,
+  ]
+    .filter(string => string)
+    .join(' ')}`;
+
+  if (cteString) {
+    sqlStatement = `${cteString} ${sqlStatement}`;
+  } else if (params.alias) {
+    sqlStatement = `${sqlStatement} AS ${params.alias};`;
+  }
+  return sqlStatement;
 };

@@ -11,7 +11,7 @@ import PushNotification from 'react-native-push-notification';
 import {ClientSessionEventType} from '@services/api/swagger/data-contracts';
 import {apiBaseUrl} from '@services/api/ApiService';
 // Constants
-const config = require('./app.config.js');
+import config from './app.config.js';
 
 NetInfo.configure({
   reachabilityUrl: apiBaseUrl + '/health',

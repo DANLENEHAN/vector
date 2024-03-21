@@ -24,7 +24,6 @@ export const getMoodTagObject = async (): Promise<
         label: moodTag.label,
         icon: moodTag.icon,
         color: undefined,
-        tagId: moodTag.mood_tag_id, // Ensure this matches the expected property name in TagProps
       };
 
       if (!output[category]) {

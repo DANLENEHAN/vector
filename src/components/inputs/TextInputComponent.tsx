@@ -37,6 +37,7 @@ import TextValidation from '@validation/TextValidation';
  * @property {boolean} [secureTextEntry] - Determines whether the input is a secure text entry (e.g., for passwords).
  * @property {boolean} [autoCapitalize] - Determines whether the input automatically capitalizes certain characters.
  * @property {string} iconName - The name of the icon associated with the input.
+ * @property {number} iconSize - The szie of the icon associated with the input.
  * @property {object} [style] - Additional styles to be applied to the TextInput component.
  * @property {TextValidation} validation - An instance of TextValidation for validating the input.
  * @property {boolean} [enableErrors] - Indicates whether error messages from validation should be displayed.
@@ -49,11 +50,12 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
   iconName: string;
+  iconSize?: number;
   style?: {
     [key: string]: any;
     marginBottom?: number;
   };
-  validation: TextValidation;
+  validation?: TextValidation;
   enableErrors?: boolean;
 }
 
@@ -68,6 +70,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   placeholder,
   value,
   iconName,
+  iconSize,
   onChangeText,
   validation,
   style,
@@ -81,17 +84,19 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleTextChange = (text: string) => {
-    const validationError: string | null = validation.validate(text)
-      ? null
-      : validation.error;
-    if (enableErrors) {
-      setError(validationError);
+    if (validation) {
+      const validationError: string | null = validation.validate(text)
+        ? null
+        : validation.error;
+      if (enableErrors) {
+        setError(validationError);
+      }
     }
     onChangeText(text, error ? false : true);
   };
 
   useEffect(() => {
-    if (enableErrors) {
+    if (enableErrors && validation) {
       setError(validation.validate(value) ? null : validation.error);
     }
   }, [enableErrors, value, validation]);
@@ -99,10 +104,13 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   // Fixing the Height of the Error Container and adjusting marginSizes
   // to prevent movement on error popup
   const errorContainerHeight = 16;
-  const defaultMarginBottom = style?.marginBottom || marginSizes.xLarge;
+  const defaultMarginBottom =
+    style?.marginBottom !== undefined ? style.marginBottom : marginSizes.xLarge;
   const errorContainerMarginTop = marginSizes.xSmall;
-  const errorContainerMarginBottom =
-    defaultMarginBottom - errorContainerHeight - errorContainerMarginTop;
+  const errorContainerMarginBottom = defaultMarginBottom
+    ? defaultMarginBottom - errorContainerHeight - errorContainerMarginTop
+    : defaultMarginBottom;
+
   return (
     <View
       style={[
@@ -119,7 +127,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
         ]}>
         <Icon
           name={iconName}
-          size={iconSizes.xLarge}
+          size={iconSize || iconSizes.xLarge}
           color={currentTheme.icon}
           solid
         />

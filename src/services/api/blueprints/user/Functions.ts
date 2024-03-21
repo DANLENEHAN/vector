@@ -69,8 +69,9 @@ export const handleLogin = async (
     return response.message;
   }
   logger.info('Login successful, navigating to home screen.');
+  // We must wait for the DB to Open
+  await appEntryCallback(AppEntryType.LoginAuthed, response);
   params.navigation.navigate('App', {screen: 'Home'});
-  appEntryCallback(AppEntryType.LoginAuthed, response);
 };
 
 /**
@@ -139,8 +140,9 @@ export const handleCreateAccount = async (
       logger.error(`Error: ${loginResponse.message}`);
       return loginResponse.message;
     } else {
+      // We must wait for the DB to Open
+      await appEntryCallback(AppEntryType.CreateAccAuthed, loginResponse);
       params.navigation.navigate('App', {screen: 'Home'});
-      appEntryCallback(AppEntryType.CreateAccAuthed, loginResponse);
     }
   }
 };

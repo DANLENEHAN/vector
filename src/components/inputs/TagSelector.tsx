@@ -1,7 +1,13 @@
 // React Import
 import React, {useState} from 'react';
 // Components
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
 import {
@@ -26,24 +32,35 @@ import {useSystem} from '@context/SystemContext';
  * @param {string} label - The label for the tag
  * @param {string} icon - The icon for the tag
  * @param {string} color - The color for the tag (optional)
- * @param {string} tagID - The ID for the tag
  */
 export interface TagProps {
   label: string;
-  icon: string;
+  icon?: string;
   color?: string;
-  tagId: string;
 }
 
 /**
- * Interface for the TagSelector Component
+ * Interface for Tag Selector Component properties.
  *
- * @interface TagSelectorProps
+ * The Tag Selector Component allows users to select from a list of tags,
+ * providing a flexible and dynamic tag selection UI.
  *
- * @param {TagProps[]} tags - The tags to be displayed
- * @param {string} tagSelectorLabel - The label for the tag selector
- * @param {object} style - The style for the tag selector
+ * @param {TagProps[]} tags - Array of TagProps, representing the individual
+ *  tags available for selection.
+ * @param {string} tagSelectorLabel - Label for the tag selector component,
+ *  typically displayed above the selection area.
+ * @param {string[]} selectedTags - Array of selected tag IDs, indicating
+ *  which tags are currently selected.
+ * @param {(tagID: string) => void} onTagSelect - Callback function that
+ *  is called when a tag is selected or deselected. Receives the tag ID as
+ *  an argument.
+ * @param {object} [style] - Optional styling object to customize the
+ *  appearance of the tag selector component.
+ *
+ * @returns {React.FC} - React Functional Component that renders the
+ *  tag selector interface.
  */
+
 export interface TagSelectorProps {
   tags: TagProps[];
   tagSelectorLabel: string;
@@ -84,7 +101,9 @@ export const Tag: React.FC<
       ]}
       onPress={onPress}
       testID={`tagSelectorTag_${label}`}>
-      <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
+      {icon && (
+        <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
+      )}
       <Text style={[styles.tagLabel, {color: fontColor}]}>{label}</Text>
     </TouchableOpacity>
   );
@@ -123,16 +142,18 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         <Text style={[styles.TagSelectorLabel, {color: currentTheme.text}]}>
           {tagSelectorLabel}
         </Text>
-        {isCollapsed && selectedTags.length > 0 && (
-          <Text
-            style={[
-              styles.TagSelectorActiveOptions,
-              {color: currentTheme.lightText},
-            ]}
-            testID="tagSelectorSelectedCount">
-            ({selectedTags.length} Selected)
-          </Text>
-        )}
+        <View style={styles.selectedTagsContainer}>
+          {isCollapsed && selectedTags.length > 0 && (
+            <Text
+              style={[
+                styles.TagSelectorActiveOptions,
+                {color: currentTheme.lightText},
+              ]}
+              testID="tagSelectorSelectedCount">
+              ({selectedTags.length} Selected)
+            </Text>
+          )}
+        </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
             onPress={toggleCollapse}
@@ -153,19 +174,20 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         </View>
       </View>
       {!isCollapsed && (
-        <View style={styles.tagContainer}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.tagContainer}>
           {tags.map((tag, index) => (
             <Tag
               key={index}
               label={tag.label}
-              tagId={tag.tagId}
               icon={tag.icon}
               color={tag.color}
-              active={selectedTags.includes(tag.tagId)}
-              onPress={() => onTagSelect(tag.tagId)}
+              active={selectedTags.includes(tag.label)}
+              onPress={() => onTagSelect(tag.label)}
             />
           ))}
-        </View>
+        </ScrollView>
       )}
     </View>
   );
@@ -188,6 +210,7 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexWrap: 'wrap',
     ...layoutStyles.flexStartHorizontal,
+    paddingRight: paddingSizes.xSmall,
   },
   // Tag Selector Styles
   TagSelectorContainer: {
@@ -198,9 +221,14 @@ const styles = StyleSheet.create({
   },
   TagSelectorLabel: {
     ...headingTextStyles.xxSmall,
+    width: '40%',
+  },
+  selectedTagsContainer: {
+    width: '40%',
   },
   TagSelectorActiveOptions: {
     ...bodyTextStyles.small,
+    textAlign: 'center',
   },
   TagSelectorAdd: {
     borderRadius: borderRadius.circle,
@@ -210,6 +238,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     ...layoutStyles.flexEndHorizontal,
+    width: '10%',
   },
   TagSelectorHeader: {
     margin: marginSizes.xSmall,

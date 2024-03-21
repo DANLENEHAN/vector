@@ -31,7 +31,7 @@ export const createUser = async (
       return new SwaggerValidationError();
     }
   } catch (error) {
-    return HandleSwaggerValidationError(error, {400: null});
+    return HandleSwaggerValidationError(error, {409: null});
   }
 };
 

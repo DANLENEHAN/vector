@@ -68,8 +68,9 @@ const Splash: React.FC<ScreenProps> = ({
       ) {
         const response = await testAuthentication();
         if (response === undefined) {
+          // We must wait for the DB to Open
+          await appEntryCallback(AppEntryType.LoginAuthed, activeUser);
           navigation.navigate('App', {screen: 'Home'});
-          appEntryCallback(AppEntryType.LoginAuthed, activeUser);
         } else {
           logger.info(
             "Trouble Authenticating with Active User's auth token. Token will be deleted.",
@@ -79,8 +80,9 @@ const Splash: React.FC<ScreenProps> = ({
           navigation.navigate('Login');
         }
       } else {
+        // We must wait for the DB to Open
+        await appEntryCallback(AppEntryType.LoginTokenOffline, activeUser);
         navigation.navigate('App', {screen: 'Home'});
-        appEntryCallback(AppEntryType.LoginTokenOffline, activeUser);
       }
     }
   }, [navigation]);

@@ -70,6 +70,7 @@ export type RootStackParamList = {
   WeightProgress: undefined;
   WaterProgress: undefined;
   BodyMeasurementTracking: undefined;
+  Search: undefined;
 };
 
 /**

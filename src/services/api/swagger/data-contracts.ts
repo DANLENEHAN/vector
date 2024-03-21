@@ -913,7 +913,7 @@ export interface ExerciseCreateSchema {
   laterality: Laterality;
   /**
    * Name
-   * @example "Dan's Workout"
+   * @example "Dan's Exercise"
    */
   name: string;
   /**
@@ -1026,6 +1026,80 @@ export interface ExerciseEquipmentUpdateSchema {
 }
 
 /**
+ * ExerciseQueryFilters
+ * Represents filtering criteria for querying exercise-related
+ * data.
+ * This class extends QuerySchema, specifically designed for
+ * exercise queries, allowing the specification of equipment,
+ * muscle groups, specific muscles, and a search string for more
+ * targeted results.
+ */
+export interface ExerciseQueryFilters {
+  /**
+   * Equipments
+   * @default null
+   */
+  equipments?: string[] | null;
+  /**
+   * Musclegroups
+   * @default null
+   */
+  muscleGroups?: string[] | null;
+  /**
+   * Searchstring
+   * @default null
+   */
+  searchString?: string | null;
+  /**
+   * Sort
+   * The sort to apply to the query
+   * @default []
+   * @example ["created_at:desc"]
+   */
+  sort?: any[];
+  /**
+   * Specificmuscles
+   * @default null
+   */
+  specificMuscles?: string[] | null;
+}
+
+/**
+ * ExerciseSearchResponse
+ * Represents the response schema for an exercise search query,
+ * detailing information about both the exercise and associated
+ * equipment and bodyparts used.
+ */
+export interface ExerciseSearchResponse {
+  /**
+   * Equipment Name
+   * Semi Colon seperated list of the Equipment for the exercise
+   * @example ["Dumbell"]
+   */
+  equipment_name: string;
+  /**
+   * Exercise Id
+   * Unique uuid for the exercise
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  exercise_id: string;
+  /** Exercise Name */
+  exercise_name: string;
+  /**
+   * Muscle Group
+   * Semi Colon seperated string of (enum)=(MuscleGroups) that the exercise hits
+   * @example ["Back"]
+   */
+  muscle_group: string;
+  /**
+   * Specific Muscle
+   * Semi Colon seperated string of (enum)=(SubMuscleGroup) that the exercise hits
+   * @example ["Teres Major"]
+   */
+  specific_muscle: string;
+}
+
+/**
  * ExerciseUpdateSchema
  * Schema for validating the full exercise schema
  */
@@ -1071,7 +1145,7 @@ export interface ExerciseUpdateSchema {
   laterality: Laterality;
   /**
    * Name
-   * @example "Dan's Workout"
+   * @example "Dan's Exercise"
    */
   name: string;
   /**
@@ -2075,7 +2149,7 @@ export interface QuerySchema {
   /**
    * Sort
    * The sort to apply to the query
-   * @default ["created_at:desc"]
+   * @default []
    * @example ["created_at:desc"]
    */
   sort?: any[];

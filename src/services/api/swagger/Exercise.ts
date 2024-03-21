@@ -11,6 +11,7 @@
 
 import {
   ExerciseCreateSchema,
+  ExerciseSearchResponse,
   ExerciseUpdateSchema,
   QuerySchema,
 } from './data-contracts';
@@ -107,6 +108,27 @@ export class Exercise<SecurityDataType = unknown> {
   postExercise = (data: QuerySchema, params: RequestParams = {}) =>
     this.http.request<ExerciseCreateSchema[], void>({
       path: `/exercise/get`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Performs a search on an exercise, returning the exercise, equipment, and bodyparts used.
+   *
+   * @tags Exercise
+   * @name SearchCreate
+   * @summary Perform an exercise search
+   * @request POST:/exercise/search
+   * @secure
+   * @response `201` `ExerciseSearchResponse` Exercise request found results
+   * @response `400` `void` Request is invalid
+   */
+  searchCreate = (data: QuerySchema, params: RequestParams = {}) =>
+    this.http.request<ExerciseSearchResponse, void>({
+      path: `/exercise/search`,
       method: 'POST',
       body: data,
       secure: true,

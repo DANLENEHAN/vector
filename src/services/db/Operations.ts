@@ -1,6 +1,6 @@
 // Types
 import {GetRowsParams, RowData} from '@services/db/Types';
-import {SortOrders, timestampFields} from '@shared/Constants';
+import {timestampFields} from '@shared/Constants';
 import {SqlQuery, ExecutionResult} from '@services/db/Types';
 // Functions
 import {executeSqlBatch} from '@services/db/SqlClient';
@@ -8,7 +8,8 @@ import {getTimestampForRow} from '@services/db/QueryExecutors';
 import 'react-native-get-random-values';
 // Logger
 import logger from '@utils/Logger';
-import {buildWhereClause, transformDbRows} from '@services/db/Functions';
+import {buildSqlQuery, transformDbRows} from '@services/db/Functions';
+import {BooleanOperators} from '@services/api/swagger/data-contracts';
 
 /**
  * Inserts multiple rows of data into the specified table.
@@ -154,52 +155,41 @@ export const updateRows = async <T extends RowData>(
 };
 
 /**
- * Retrieves rows from a specified table in the database, filtered by the provided parameters.
+ * Retrieves rows of data from the database based on the provided parameters.
  *
- * This generic function constructs and executes a SQL query to fetch data from a database table
- * based on a set of parameters including selected columns, where conditions, order conditions, and
- * a limit on the number of rows to retrieve. It automatically filters out logically deleted rows
- * (where `deleted` is not equal to 1) to ensure only relevant data is fetched. The function is
- * capable of transforming the fetched rows into a specified type `T`, extending the basic `RowData`
- * structure, allowing for a typed and convenient way to work with the retrieved data.
+ * @param params - An object containing parameters for retrieving rows from the database.
+ * @param params.tableName - The name of the table to fetch data from.
+ * @param params.selectColumns - An array of column names to select. Defaults to ["*"].
+ * @param params.joins - An array of join clauses to apply in the query.
+ * @param params.groupby - An array of columns to group by.
+ * @param params.whereConditions - An array of conditions to apply in the WHERE clause.
+ * @param params.orderConditions - An object containing column names as keys and sorting order (ASC or DESC) as values.
+ * @param params.limit - The maximum number of rows to return.
  *
- * @template T - The type into which the database rows will be transformed, extending `RowData`.
- * @param {GetRowsParams} params - An object containing parameters to filter, sort, and limit the
- *                                  query results.
- * @async
- * @returns {Promise<T[] | null>} A promise that resolves to an array of rows of type `T` if any
- *                                rows match the query criteria, or `null` if an error occurs during
- *                                the query execution.
- * @throws {Error} This function captures errors encountered during SQL execution and logs a warning,
- *                 returning `null` to indicate that the data retrieval was unsuccessful.
+ * @returns A Promise that resolves with an array of retrieved rows, or null if an error occurs.
  */
 export const getRows = async <T extends RowData>(
   params: GetRowsParams,
 ): Promise<T[] | null> => {
+  // Time Start
+  const startTime = new Date().getTime();
   // Build Query Components
-  const columnsToSelect = (params.selectColumns || ['*']).join(', ');
-  const selectString = `SELECT ${columnsToSelect} FROM ${params.tableName}`;
-  const whereString = params.whereConditions
-    ? `WHERE ${buildWhereClause(params.whereConditions)} AND deleted is False`
-    : 'WHERE deleted is False';
-  const orderByString = params.orderConditions
-    ? `ORDER BY ${Object.entries(params.orderConditions)
-        .map((item: [string, SortOrders]) => {
-          return `${item[0]} ${item[1]}`;
-        })
-        .join(', ')}`
-    : '';
-  const limitString = params.limit ? `LIMIT ${params.limit}` : '';
-
-  // Build full query from components
-  const sqlStatement = `${[
-    selectString,
-    whereString,
-    orderByString,
-    limitString,
-  ]
-    .filter(string => string)
-    .join(' ')};`;
+  const sqlStatement = buildSqlQuery({
+    table: params.tableName,
+    selectColumns: params.selectColumns,
+    joins: params.joins,
+    groupby: params.groupby,
+    whereConditions: {
+      ...(params.whereConditions || {}),
+      ...{
+        [`${params.tableName}.deleted`]: {
+          [BooleanOperators.Isfalse]: null,
+        },
+      },
+    },
+    orderConditions: params.orderConditions,
+    limit: params.limit,
+  });
 
   const sqlResult: ExecutionResult<T>[] = await executeSqlBatch<T>([
     {sqlStatement},
@@ -208,12 +198,13 @@ export const getRows = async <T extends RowData>(
     logger.warn(`Unable to get data with error: ${sqlResult[0].error}`);
     return null;
   }
-  const result = sqlResult[0].result;
+  let result = sqlResult[0].result;
 
-  if (result.length > 0) {
-    // Fix typing later
-    return transformDbRows<T>(result);
-  } else {
-    return result as T[];
-  }
+  const endTime = new Date().getTime();
+  result = transformDbRows<T>(result);
+  logger.info(
+    `(function)=(getRows); (tableName)=(${params.tableName}) ` +
+      `- took ${endTime - startTime}ms`,
+  );
+  return result;
 };
