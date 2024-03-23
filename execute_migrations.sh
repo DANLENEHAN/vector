@@ -26,8 +26,8 @@ delete_vector_revisions_file() {
     echo "VectorRevisions.ts file deleted."
 }
 
-copy_new_migrations_only() {
-    echo "Copying new migrations..."
+copy_and_clean_migrations() {
+    echo "Copying new migrations and cleaning up old ones..."
     mkdir -p $MIGRATIONS_PATH/revisions
     for file in $ALEMBIC_PATH/revisions/*; do
         filename=$(basename "$file")
@@ -38,7 +38,17 @@ copy_new_migrations_only() {
             echo "File already exists, skipping: $filename"
         fi
     done
-    echo "New migrations copied successfully."
+    
+    # Deleting files in MIGRATIONS_PATH not present in ALEMBIC_PATH
+    for file in $MIGRATIONS_PATH/revisions/*; do
+        filename=$(basename "$file")
+        if [ ! -f "$ALEMBIC_PATH/revisions/$filename" ]; then
+            rm -f "$file"
+            echo "Deleted old file: $filename"
+        fi
+    done
+
+    echo "New migrations copied and old migrations cleaned up successfully."
 }
 
 copy_vector_revisions() {
@@ -59,7 +69,7 @@ run_precommits() {
 # Execute functions
 generate_api
 delete_vector_revisions_file
-copy_new_migrations_only
+copy_and_clean_migrations
 copy_vector_revisions
 run_precommits
 

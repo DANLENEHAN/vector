@@ -10,7 +10,9 @@ import {WeightUnit} from '@services/api/swagger/data-contracts';
 export enum otherDbTables {
   syncTable = 'sync_table',
   SyncErrorDumpTable = 'sync_error_dump',
-  bodypart = 'bodypart',
+  specificMuscle = 'specific_muscle',
+  subMuscleGroup = 'sub_muscle_group',
+  muscleGroup = 'muscle_group',
 }
 
 /**
@@ -31,7 +33,7 @@ export enum syncDbTables {
   clientSessionEventTable = 'client_session_event',
   exercise = 'exercise',
   equipment = 'equipment',
-  exerciseBodypart = 'exercise_bodypart',
+  exerciseSpecificMuscle = 'exercise_specific_muscle',
   exerciseEquipment = 'exercise_equipment',
 }
 
