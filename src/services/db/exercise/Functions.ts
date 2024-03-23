@@ -118,7 +118,9 @@ export const getExerciseSearchQuery = (
           value: `(SELECT exercise_id FROM ${exerciseCteName})`,
         },
       },
-      ...(filters?.specificMuscles
+      ...(filters?.specificMuscles &&
+      !filters.muscleGroups &&
+      !filters.subMuscleGroups
         ? {
             [`${otherDbTables.specificMuscle}.name`]: {
               [BaseOperators.In]: filters.specificMuscles,
@@ -150,16 +152,17 @@ export const getExerciseSearchQuery = (
         },
       },
     },
-    // Add Conditional If and Where we update filters
-    // whereConditions: {
-    //   ...(filters?.subMuscleGroups
-    //     ? {
-    //         [`${otherDbTables.subMuscleGroup}.name`]: {
-    //           [BaseOperators.In]: filters.subMuscleGroups,
-    //         },
-    //       }
-    //     : {}),
-    // },
+    whereConditions: {
+      ...(filters?.subMuscleGroups &&
+      !filters?.muscleGroups &&
+      !filters?.specificMuscles
+        ? {
+            [`${otherDbTables.subMuscleGroup}.name`]: {
+              [BaseOperators.In]: filters.subMuscleGroups,
+            },
+          }
+        : {}),
+    },
   });
 
   const muscleGroupCteName = 'muscle_group_agg';
@@ -192,7 +195,9 @@ export const getExerciseSearchQuery = (
       },
     },
     whereConditions: {
-      ...(filters?.muscleGroups
+      ...(filters?.muscleGroups &&
+      !filters.specificMuscles &&
+      !filters.subMuscleGroups
         ? {
             [`${otherDbTables.muscleGroup}.name`]: {
               [BaseOperators.In]: filters.muscleGroups,
@@ -210,14 +215,37 @@ export const getExerciseSearchQuery = (
     };
   }
   if (filters?.muscleGroups) {
-    selectWhereConditions.muscle_group_count = {
-      [BaseOperators.Eq]: filters.muscleGroups.length,
-    };
+    if (!filters?.specificMuscles && !filters.subMuscleGroups) {
+      selectWhereConditions.muscle_group_count = {
+        [BaseOperators.Eq]: filters.muscleGroups.length,
+      };
+    } else {
+      selectWhereConditions[`${muscleGroupCteName}.muscle_group`] = {
+        [StringOperators.Like]: filters.muscleGroups,
+      };
+    }
   }
   if (filters?.specificMuscles) {
-    selectWhereConditions.specific_muscle_count = {
-      [BaseOperators.Eq]: filters.specificMuscles.length,
-    };
+    if (!filters?.muscleGroups && !filters.subMuscleGroups) {
+      selectWhereConditions.specific_muscle_count = {
+        [BaseOperators.Eq]: filters.specificMuscles.length,
+      };
+    } else {
+      selectWhereConditions[`${muscleGroupCteName}.specific_muscle`] = {
+        [StringOperators.Like]: filters.specificMuscles,
+      };
+    }
+  }
+  if (filters?.subMuscleGroups) {
+    if (!filters?.muscleGroups && !filters.specificMuscles) {
+      selectWhereConditions.sub_muscle_group_count = {
+        [BaseOperators.Eq]: filters.subMuscleGroups.length,
+      };
+    } else {
+      selectWhereConditions[`${muscleGroupCteName}.sub_muscle_group`] = {
+        [StringOperators.Like]: filters.subMuscleGroups,
+      };
+    }
   }
 
   const selectQuery = buildSqlQuery({
@@ -322,6 +350,7 @@ export const exerciseSearch = async (
   const exercises: SearchResults[] = [];
   const equipmentSet = new Set<string>();
   const muscleGroupSet = new Set<string>();
+  const subMuscleGroupSet = new Set<string>();
   const specificMuscleSet = new Set<string>();
 
   for (const exerciseObj of result) {
@@ -339,6 +368,10 @@ export const exerciseSearch = async (
       .split(';')
       .filter(Boolean)
       .forEach(mg => muscleGroupSet.add(mg));
+    exerciseObj.sub_muscle_group
+      .split(';')
+      .filter(Boolean)
+      .forEach(smg => subMuscleGroupSet.add(smg));
     exerciseObj.specific_muscle
       .split(';')
       .filter(Boolean)
@@ -348,6 +381,7 @@ export const exerciseSearch = async (
   // If you need to work with arrays instead of sets later in your code
   const equipments = Array.from(equipmentSet).sort();
   const muscleGroups = Array.from(muscleGroupSet).sort();
+  const subMuscleGroups = Array.from(subMuscleGroupSet).sort();
   const specificMuscles = Array.from(specificMuscleSet).sort();
 
   const endTime = new Date().getTime();
@@ -364,6 +398,10 @@ export const exerciseSearch = async (
       muscleGroups: {
         label: 'Muscle Groups',
         values: muscleGroups,
+      },
+      subMuscleGroups: {
+        label: 'Sub Muscle Groups',
+        values: subMuscleGroups,
       },
       specificMuscles: {
         label: 'Specific Muscles',
