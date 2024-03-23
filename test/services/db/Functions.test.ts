@@ -7,12 +7,7 @@ import * as SqlClientFuncs from '@services/db/SqlClient';
 import * as DateFunctions from '@services/date/Functions';
 
 // Constants
-import {
-  SortOrders,
-  otherDbTables,
-  syncDbTables,
-  timestampColumns,
-} from '@shared/Constants';
+import {SortOrders, syncDbTables, timestampColumns} from '@shared/Constants';
 import {
   BaseOperators,
   NumericOperators,
@@ -313,7 +308,7 @@ describe('DB Functions Tests', () => {
     );
   });
 
-  test('buildWhereClause - flat whereConditions object ', () => {
+  test('buildWhereClause - nested whereConditions object ', () => {
     // Arrange
     // Act
     const response = DbFunctions.buildWhereClause(
@@ -419,13 +414,13 @@ describe('DB Functions Tests', () => {
     // Arrange
     const joins = {
       // Join One
-      [syncDbTables.exerciseBodypart]: {
+      [syncDbTables.exerciseSpecificMuscle]: {
         join: JoinOperators.INNER,
         on: {
           [`${syncDbTables.exercise}.exercise_id`]: {
             [BaseOperators.Eq]: {
               isLiteral: true,
-              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+              value: `${syncDbTables.exerciseSpecificMuscle}.exercise_id`,
             },
           },
         },
@@ -454,18 +449,6 @@ describe('DB Functions Tests', () => {
           },
         },
       },
-      // Join Four
-      [otherDbTables.bodypart]: {
-        join: JoinOperators.INNER,
-        on: {
-          [`${otherDbTables.bodypart}.bodypart_id`]: {
-            [BaseOperators.Eq]: {
-              isLiteral: true,
-              value: `${syncDbTables.exerciseBodypart}.bodypart_id`,
-            },
-          },
-        },
-      },
     };
 
     // Act
@@ -473,11 +456,10 @@ describe('DB Functions Tests', () => {
 
     // Assert
     expect(response).toEqual(
-      'INNER JOIN exercise_bodypart ON (exercise.exercise_id = ' +
-        'exercise_bodypart.exercise_id) INNER JOIN exercise_equipment ' +
-        'ON (exercise.exercise_id = exercise_equipment.exercise_id) INNER ' +
-        'JOIN equipment ON (equipment.equipment_id = exercise_equipment.equipment_id) ' +
-        'INNER JOIN bodypart ON (bodypart.bodypart_id = exercise_bodypart.bodypart_id)',
+      'INNER JOIN exercise_specific_muscle ON (exercise.exercise_id = ' +
+        'exercise_specific_muscle.exercise_id) INNER JOIN exercise_equipment ' +
+        'ON (exercise.exercise_id = exercise_equipment.exercise_id) INNER JOIN ' +
+        'equipment ON (equipment.equipment_id = exercise_equipment.equipment_id)',
     );
   });
 
@@ -529,13 +511,13 @@ describe('DB Functions Tests', () => {
     const tableName = syncDbTables.exercise;
     const joins = {
       // Join One
-      [syncDbTables.exerciseBodypart]: {
+      [syncDbTables.exerciseSpecificMuscle]: {
         join: JoinOperators.INNER,
         on: {
           [`${syncDbTables.exercise}.exercise_id`]: {
             [BaseOperators.Eq]: {
               isLiteral: true,
-              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+              value: `${syncDbTables.exerciseSpecificMuscle}.exercise_id`,
             },
           },
         },
@@ -550,7 +532,7 @@ describe('DB Functions Tests', () => {
 
     // Assert
     expect(response).toEqual(
-      'SELECT * FROM exercise INNER JOIN exercise_bodypart ON (exercise.exercise_id = exercise_bodypart.exercise_id)',
+      'SELECT * FROM exercise INNER JOIN exercise_specific_muscle ON (exercise.exercise_id = exercise_specific_muscle.exercise_id)',
     );
   });
 
@@ -619,13 +601,13 @@ describe('DB Functions Tests', () => {
     const orderConditions = {exercise_id: SortOrders.DESC};
     const joins = {
       // Join One
-      [syncDbTables.exerciseBodypart]: {
+      [syncDbTables.exerciseSpecificMuscle]: {
         join: JoinOperators.INNER,
         on: {
           [`${syncDbTables.exercise}.exercise_id`]: {
             [BaseOperators.Eq]: {
               isLiteral: true,
-              value: `${syncDbTables.exerciseBodypart}.exercise_id`,
+              value: `${syncDbTables.exerciseSpecificMuscle}.exercise_id`,
             },
           },
         },
@@ -645,8 +627,8 @@ describe('DB Functions Tests', () => {
 
     // Assert
     expect(response).toEqual(
-      'SELECT exercise_id FROM client_session_event INNER JOIN exercise_bodypart ON ' +
-        '(exercise.exercise_id = exercise_bodypart.exercise_id) WHERE (exercise_id = 1) ' +
+      'SELECT exercise_id FROM client_session_event INNER JOIN exercise_specific_muscle ON ' +
+        '(exercise.exercise_id = exercise_specific_muscle.exercise_id) WHERE (exercise_id = 1) ' +
         'ORDER BY exercise_id DESC LIMIT 1',
     );
   });
