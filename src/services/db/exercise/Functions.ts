@@ -306,7 +306,6 @@ export const getExerciseSearchQuery = (
     },
     whereConditions: selectWhereConditions,
   });
-  console.log(selectQuery);
   return selectQuery;
 };
 
