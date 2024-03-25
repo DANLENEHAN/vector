@@ -175,45 +175,6 @@ export interface BodyStatUpdateSchema {
 }
 
 /**
- * BodypartCreateSchema
- * Schema for validating the full exercise_bodypart schema
- */
-export interface BodypartCreateSchema {
-  /** Muscle groups */
-  muscle_group: MuscleGroup;
-  /** Sub muscle groups */
-  specific_muscle: SubMuscleGroup;
-}
-
-/**
- * BodypartGetSchema
- * ExerciseBodyPartGetSchema get schema
- */
-export interface BodypartGetSchema {
-  /**
-   * Bodypart Id
-   * @example 1
-   */
-  bodypart_id: number;
-  /**
-   * Created At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  created_at: string;
-  /** Muscle groups */
-  muscle_group: MuscleGroup;
-  /** Sub muscle groups */
-  specific_muscle: SubMuscleGroup;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2021-05-18T20:00:00"
-   */
-  updated_at: string;
-}
-
-/**
  * BooleanOperators
  * Boolean operators for filters.
  */
@@ -765,110 +726,13 @@ export interface EquipmentUpdateSchema {
 }
 
 /**
- * ExerciseBodypartCreateSchema
- * Schema for validating the full exercise_bodypart schema
- */
-export interface ExerciseBodypartCreateSchema {
-  /**
-   * Bodypart Id
-   * @example 1
-   */
-  bodypart_id: number;
-  /**
-   * Created At
-   * @format date-time
-   * @example "2024-12-18T12:00:00.000Z"
-   */
-  created_at: string;
-  /**
-   * Deleted
-   * @default false
-   * @example false
-   */
-  deleted?: boolean | null;
-  /**
-   * Exercise Bodypart Id
-   * ID for the set entry
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  exercise_bodypart_id: string;
-  /**
-   * Exercise Id
-   * The exercise_id of the exercise_equipment
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  exercise_id: string;
-  /**
-   * Severity levels. For a set for example you
-   * could do number of sets divided by the severity level
-   */
-  severity: SeverityLevel;
-  /**
-   * Timezone
-   * @example "UTC"
-   */
-  timezone: string;
-  /**
-   * Updated At
-   * @default null
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at?: string | null;
-}
-
-/**
- * ExerciseBodypartUpdateSchema
- * ExerciseBodypart update schema
- */
-export interface ExerciseBodypartUpdateSchema {
-  /**
-   * Bodypart Id
-   * @example 1
-   */
-  bodypart_id: number;
-  /**
-   * Deleted
-   * @default false
-   * @example false
-   */
-  deleted?: boolean | null;
-  /**
-   * Exercise Bodypart Id
-   * ID for the set entry
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  exercise_bodypart_id: string;
-  /**
-   * Exercise Id
-   * The exercise_id of the exercise_equipment
-   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-   * @example "16945c77-6076-4dce-8921-7db976327923"
-   */
-  exercise_id: string;
-  /**
-   * Severity levels. For a set for example you
-   * could do number of sets divided by the severity level
-   */
-  severity: SeverityLevel;
-  /**
-   * Updated At
-   * @format date-time
-   * @example "2024-12-18T12:01:00.000Z"
-   */
-  updated_at: string;
-}
-
-/**
  * ExerciseCreateSchema
  * Schema for validating the full exercise schema
  */
 export interface ExerciseCreateSchema {
   /**
    * Category
-   * @example "Compound"
+   * @example "JackKnife"
    */
   category: string;
   /**
@@ -904,6 +768,11 @@ export interface ExerciseCreateSchema {
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
+  /**
+   * Exercise Type
+   * @example "Compound"
+   */
+  exercise_type: string;
   /**
    * Instructions
    * @example "Put the bar on your back and squat"
@@ -1093,10 +962,113 @@ export interface ExerciseSearchResponse {
   muscle_group: string;
   /**
    * Specific Muscle
-   * Semi Colon seperated string of (enum)=(SubMuscleGroup) that the exercise hits
+   * Semi Colon seperated string of (enum)=(SpecificMuscles) that the exercise hits
    * @example ["Teres Major"]
    */
   specific_muscle: string;
+  /**
+   * Sub Muscle Group
+   * Semi Colon seperated string of (enum)=(SubMuscleGroups) that the exercise hits
+   * @example ["Upper Back"]
+   */
+  sub_muscle_group: string;
+}
+
+/**
+ * ExerciseSpecificMuscleCreateSchema
+ * Schema for validating the full exercise_specific_muscle schema
+ */
+export interface ExerciseSpecificMuscleCreateSchema {
+  /**
+   * Created At
+   * @format date-time
+   * @example "2024-12-18T12:00:00.000Z"
+   */
+  created_at: string;
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Exercise Id
+   * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  exercise_id: string;
+  /**
+   * Exercise Specific Muscle Id
+   * ID for the set entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  exercise_specific_muscle_id: string;
+  /**
+   * Severity levels. For a set for example you
+   * could do number of sets divided by the severity level
+   */
+  severity: SeverityLevel;
+  /**
+   * Specific Muscle Id
+   * @example 1
+   */
+  specific_muscle_id: number;
+  /**
+   * Timezone
+   * @example "UTC"
+   */
+  timezone: string;
+  /**
+   * Updated At
+   * @default null
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at?: string | null;
+}
+
+/**
+ * ExerciseSpecificMuscleUpdateSchema
+ * ExerciseSpecificMuscle update schema
+ */
+export interface ExerciseSpecificMuscleUpdateSchema {
+  /**
+   * Deleted
+   * @default false
+   * @example false
+   */
+  deleted?: boolean | null;
+  /**
+   * Exercise Id
+   * The exercise_id of the exercise_equipment
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  exercise_id: string;
+  /**
+   * Exercise Specific Muscle Id
+   * ID for the set entry
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+   * @example "16945c77-6076-4dce-8921-7db976327923"
+   */
+  exercise_specific_muscle_id: string;
+  /**
+   * Severity levels. For a set for example you
+   * could do number of sets divided by the severity level
+   */
+  severity: SeverityLevel;
+  /**
+   * Specific Muscle Id
+   * @example 1
+   */
+  specific_muscle_id: number;
+  /**
+   * Updated At
+   * @format date-time
+   * @example "2024-12-18T12:01:00.000Z"
+   */
+  updated_at: string;
 }
 
 /**
@@ -1106,7 +1078,7 @@ export interface ExerciseSearchResponse {
 export interface ExerciseUpdateSchema {
   /**
    * Category
-   * @example "Compound"
+   * @example "JackKnife"
    */
   category: string;
   /**
@@ -1136,6 +1108,11 @@ export interface ExerciseUpdateSchema {
    * @example "16945c77-6076-4dce-8921-7db976327923"
    */
   exercise_id: string;
+  /**
+   * Exercise Type
+   * @example "Compound"
+   */
+  exercise_type: string;
   /**
    * Instructions
    * @example "Put the bar on your back and squat"
@@ -1572,17 +1549,28 @@ export enum MoodValue {
  */
 export enum MuscleGroup {
   Chest = 'Chest',
-  Back = 'Back',
   Shoulders = 'Shoulders',
-  Biceps = 'Biceps',
-  Triceps = 'Triceps',
-  Legs = 'Legs',
-  Glutes = 'Glutes',
-  Abdominals = 'Abdominals',
-  Calves = 'Calves',
-  Forearms = 'Forearms',
+  Back = 'Back',
+  UpperArms = 'Upper Arms',
+  LowerArms = 'Lower Arms',
+  UpperLegs = 'Upper Legs',
+  LowerLegs = 'Lower Legs',
+  Core = 'Core',
   Neck = 'Neck',
-  Traps = 'Traps',
+}
+
+/**
+ * MuscleGroupGetSchema
+ * MuscleGroup get schema
+ */
+export interface MuscleGroupGetSchema {
+  /**
+   * Muscle Group Id
+   * @example 1
+   */
+  muscle_group_id: number;
+  /** Muscle groups */
+  name: MuscleGroup;
 }
 
 /**
@@ -2666,21 +2654,29 @@ export enum SeverityLevel {
 }
 
 /**
- * StringOperators
- * String operators for filters.
+ * SpecificMuscleGetSchema
+ * MuscleGroup get schema
  */
-export enum StringOperators {
-  Contains = 'contains',
-  Startswith = 'startswith',
-  Endswith = 'endswith',
-  Like = 'like',
+export interface SpecificMuscleGetSchema {
+  /** Sub muscle groups */
+  name: SpecificMuscles;
+  /**
+   * Specific Muscle Id
+   * @example 1
+   */
+  specific_muscle_id: number;
+  /**
+   * Sub Muscle Group Id
+   * @example 1
+   */
+  sub_muscle_group_id: number;
 }
 
 /**
- * SubMuscleGroup
+ * SpecificMuscles
  * Sub muscle groups
  */
-export enum SubMuscleGroup {
+export enum SpecificMuscles {
   PectoralisMajorClavicularHead = 'Pectoralis Major (Clavicular Head)',
   PectoralisMajorSternalHead = 'Pectoralis Major (Sternal Head)',
   PectoralisMajorAbdominalHead = 'Pectoralis Major (Abdominal Head)',
@@ -2703,6 +2699,7 @@ export enum SubMuscleGroup {
   Gracilis = 'Gracilis',
   Pectineus = 'Pectineus',
   Iliopsoas = 'Iliopsoas',
+  Sartorius = 'Sartorius',
   GluteusMaximus = 'Gluteus Maximus',
   GluteusMedius = 'Gluteus Medius',
   GluteusMinimus = 'Gluteus Minimus',
@@ -2752,6 +2749,70 @@ export enum SubMuscleGroup {
   Infraspinatus = 'Infraspinatus',
   Supraspinatus = 'Supraspinatus',
   LevatorScapulae = 'Levator Scapulae',
+  Subscapularis = 'Subscapularis',
+}
+
+/**
+ * StringOperators
+ * String operators for filters.
+ */
+export enum StringOperators {
+  Contains = 'contains',
+  Startswith = 'startswith',
+  Endswith = 'endswith',
+  Like = 'like',
+}
+
+/**
+ * SubMuscleGroup
+ * Sub muscle groups
+ */
+export enum SubMuscleGroup {
+  UpperChest = 'Upper Chest',
+  LowerChest = 'Lower Chest',
+  MiddleChest = 'Middle Chest',
+  FrontDeltoid = 'Front Deltoid',
+  SideDeltoid = 'Side Deltoid',
+  RearDeltoid = 'Rear Deltoid',
+  ScapularStabilizers = 'Scapular Stabilizers',
+  RotatorCuff = 'Rotator Cuff',
+  UpperBack = 'Upper Back',
+  MiddleBack = 'Middle Back',
+  LowerBack = 'Lower Back',
+  Bicep = 'Bicep',
+  Triceps = 'Triceps',
+  ForearmExtensors = 'Forearm Extensors',
+  ForearmFlexors = 'Forearm Flexors',
+  ForearmRotationAndElbowFlexion = 'Forearm Rotation and Elbow Flexion',
+  Hamstrings = 'Hamstrings',
+  Quadriceps = 'Quadriceps',
+  Abductors = 'Abductors',
+  Adductors = 'Adductors',
+  HipFlexors = 'Hip Flexors',
+  Glutes = 'Glutes',
+  Calves = 'Calves',
+  Abdominals = 'Abdominals',
+  Obliques = 'Obliques',
+  Neck = 'Neck',
+}
+
+/**
+ * SubMuscleGroupGetSchema
+ * MuscleGroup get schema
+ */
+export interface SubMuscleGroupGetSchema {
+  /**
+   * Muscle Group Id
+   * @example 1
+   */
+  muscle_group_id: number;
+  /** Sub muscle groups */
+  name: SubMuscleGroup;
+  /**
+   * Sub Muscle Group Id
+   * @example 1
+   */
+  sub_muscle_group_id: number;
 }
 
 /**
@@ -2810,7 +2871,7 @@ export interface SyncErrorDumpCreateSchema {
   /**
    * Table Name
    * The name of the table associated with the failed synchronization push error.
-   * @example "bodypart"
+   * @example "muscle_group"
    */
   table_name: string;
   /**

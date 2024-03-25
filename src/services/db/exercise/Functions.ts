@@ -90,52 +90,122 @@ export const getExerciseSearchQuery = (
     groupby: [`${syncDbTables.exerciseEquipment}.exercise_id`],
   });
 
-  const bodypartAggCteName = 'bodypart_agg';
-  const bodypartAggCte = buildSqlQuery({
-    table: otherDbTables.bodypart,
+  const specificMuscleCteName = 'specific_muscle_agg';
+  const specificMuscleCte = buildSqlQuery({
+    table: otherDbTables.specificMuscle,
     selectColumns: [
-      `${syncDbTables.exerciseBodypart}.exercise_id`,
-      `GROUP_CONCAT(${otherDbTables.bodypart}.muscle_group, ';') as muscle_group`,
-      `GROUP_CONCAT(${otherDbTables.bodypart}.specific_muscle, ';') as specific_muscle`,
-      `COUNT(DISTINCT(${otherDbTables.bodypart}.muscle_group)) as muscle_group_count`,
-      `COUNT(DISTINCT(${otherDbTables.bodypart}.specific_muscle)) as specific_muscle_count`,
+      `${syncDbTables.exerciseSpecificMuscle}.exercise_id`,
+      `${otherDbTables.specificMuscle}.sub_muscle_group_id`,
+      `${otherDbTables.specificMuscle}.name as specific_muscle`,
     ],
     joins: {
-      [syncDbTables.exerciseBodypart]: {
+      [syncDbTables.exerciseSpecificMuscle]: {
         join: JoinOperators.INNER,
         on: {
-          [`${syncDbTables.exerciseBodypart}.bodypart_id`]: {
+          [`${syncDbTables.exerciseSpecificMuscle}.specific_muscle_id`]: {
             [BaseOperators.Eq]: {
               isLiteral: true,
-              value: `${otherDbTables.bodypart}.bodypart_id`,
+              value: `${otherDbTables.specificMuscle}.specific_muscle_id`,
             },
           },
         },
       },
     },
     whereConditions: {
-      [`${syncDbTables.exerciseBodypart}.exercise_id`]: {
+      [`${syncDbTables.exerciseSpecificMuscle}.exercise_id`]: {
         [BaseOperators.In]: {
           isLiteral: true,
           value: `(SELECT exercise_id FROM ${exerciseCteName})`,
         },
       },
-      ...(filters?.muscleGroups && !filters?.specificMuscles
+      ...(filters?.specificMuscles &&
+      !filters.muscleGroups &&
+      !filters.subMuscleGroups
         ? {
-            [`${otherDbTables.bodypart}.muscle_group`]: {
-              [BaseOperators.In]: filters.muscleGroups,
-            },
-          }
-        : {}),
-      ...(filters?.specificMuscles && !filters.muscleGroups
-        ? {
-            [`${otherDbTables.bodypart}.specific_muscle`]: {
+            [`${otherDbTables.specificMuscle}.name`]: {
               [BaseOperators.In]: filters.specificMuscles,
             },
           }
         : {}),
     },
-    groupby: [`${syncDbTables.exerciseBodypart}.exercise_id`],
+  });
+
+  const subMuscleGroupCteName = 'sub_muscle_group_agg';
+  const subMuscleGroupCte = buildSqlQuery({
+    table: otherDbTables.subMuscleGroup,
+    selectColumns: [
+      `${otherDbTables.subMuscleGroup}.muscle_group_id`,
+      `${otherDbTables.subMuscleGroup}.name as sub_muscle_group`,
+      `${specificMuscleCteName}.specific_muscle`,
+      `${specificMuscleCteName}.exercise_id`,
+    ],
+    joins: {
+      [specificMuscleCteName]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${otherDbTables.subMuscleGroup}.sub_muscle_group_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${specificMuscleCteName}.sub_muscle_group_id`,
+            },
+          },
+        },
+      },
+    },
+    whereConditions: {
+      ...(filters?.subMuscleGroups &&
+      !filters?.muscleGroups &&
+      !filters?.specificMuscles
+        ? {
+            [`${otherDbTables.subMuscleGroup}.name`]: {
+              [BaseOperators.In]: filters.subMuscleGroups,
+            },
+          }
+        : {}),
+    },
+  });
+
+  const muscleGroupCteName = 'muscle_group_agg';
+  const muscleGroupCte = buildSqlQuery({
+    table: otherDbTables.muscleGroup,
+    selectColumns: [
+      // Muscle Group Fields
+      `GROUP_CONCAT(${otherDbTables.muscleGroup}.name, ';') as muscle_group`,
+      `COUNT(DISTINCT(${otherDbTables.muscleGroup}.name)) as muscle_group_count`,
+      // Sub Muscle Group Fields
+      `GROUP_CONCAT(${subMuscleGroupCteName}.sub_muscle_group, ';') as sub_muscle_group`,
+      `COUNT(DISTINCT(${subMuscleGroupCteName}.sub_muscle_group)) as sub_muscle_group_count`,
+      // Specific Muscle Fields
+      `GROUP_CONCAT(${subMuscleGroupCteName}.specific_muscle, ';') as specific_muscle`,
+      `COUNT(DISTINCT(${subMuscleGroupCteName}.specific_muscle)) as specific_muscle_count`,
+      // Exercise Id
+      `${subMuscleGroupCteName}.exercise_id`,
+    ],
+    joins: {
+      [subMuscleGroupCteName]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${subMuscleGroupCteName}.muscle_group_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${otherDbTables.muscleGroup}.muscle_group_id`,
+            },
+          },
+        },
+      },
+    },
+    whereConditions: {
+      ...(filters?.muscleGroups &&
+      !filters.specificMuscles &&
+      !filters.subMuscleGroups
+        ? {
+            [`${otherDbTables.muscleGroup}.name`]: {
+              [BaseOperators.In]: filters.muscleGroups,
+            },
+          }
+        : {}),
+    },
+    groupby: ['exercise_id'],
   });
 
   const selectWhereConditions: Record<string, any> = {};
@@ -145,24 +215,35 @@ export const getExerciseSearchQuery = (
     };
   }
   if (filters?.muscleGroups) {
-    if (!filters?.specificMuscles) {
+    if (!filters?.specificMuscles && !filters.subMuscleGroups) {
       selectWhereConditions.muscle_group_count = {
         [BaseOperators.Eq]: filters.muscleGroups.length,
       };
     } else {
-      selectWhereConditions[`${bodypartAggCteName}.muscle_group`] = {
+      selectWhereConditions[`${muscleGroupCteName}.muscle_group`] = {
         [StringOperators.Like]: filters.muscleGroups,
       };
     }
   }
   if (filters?.specificMuscles) {
-    if (!filters?.muscleGroups) {
+    if (!filters?.muscleGroups && !filters.subMuscleGroups) {
       selectWhereConditions.specific_muscle_count = {
         [BaseOperators.Eq]: filters.specificMuscles.length,
       };
     } else {
-      selectWhereConditions[`${bodypartAggCteName}.specific_muscle`] = {
+      selectWhereConditions[`${muscleGroupCteName}.specific_muscle`] = {
         [StringOperators.Like]: filters.specificMuscles,
+      };
+    }
+  }
+  if (filters?.subMuscleGroups) {
+    if (!filters?.muscleGroups && !filters.specificMuscles) {
+      selectWhereConditions.sub_muscle_group_count = {
+        [BaseOperators.Eq]: filters.subMuscleGroups.length,
+      };
+    } else {
+      selectWhereConditions[`${muscleGroupCteName}.sub_muscle_group`] = {
+        [StringOperators.Like]: filters.subMuscleGroups,
       };
     }
   }
@@ -173,8 +254,9 @@ export const getExerciseSearchQuery = (
       `${exerciseCteName}.exercise_id`,
       `${exerciseCteName}.exercise_name`,
       `${equipmentAggCteName}.equipment_name`,
-      `${bodypartAggCteName}.muscle_group`,
-      `${bodypartAggCteName}.specific_muscle`,
+      `${muscleGroupCteName}.muscle_group`,
+      `${muscleGroupCteName}.sub_muscle_group`,
+      `${muscleGroupCteName}.specific_muscle`,
     ],
     ctes: [
       {
@@ -186,8 +268,16 @@ export const getExerciseSearchQuery = (
         value: equipmentAggCte,
       },
       {
-        name: bodypartAggCteName,
-        value: bodypartAggCte,
+        name: specificMuscleCteName,
+        value: specificMuscleCte,
+      },
+      {
+        name: subMuscleGroupCteName,
+        value: subMuscleGroupCte,
+      },
+      {
+        name: muscleGroupCteName,
+        value: muscleGroupCte,
       },
     ],
     joins: {
@@ -202,10 +292,10 @@ export const getExerciseSearchQuery = (
           },
         },
       },
-      [bodypartAggCteName]: {
+      [muscleGroupCteName]: {
         join: JoinOperators.INNER,
         on: {
-          [`${bodypartAggCteName}.exercise_id`]: {
+          [`${muscleGroupCteName}.exercise_id`]: {
             [BaseOperators.Eq]: {
               isLiteral: true,
               value: `${exerciseCteName}.exercise_id`,
@@ -259,6 +349,7 @@ export const exerciseSearch = async (
   const exercises: SearchResults[] = [];
   const equipmentSet = new Set<string>();
   const muscleGroupSet = new Set<string>();
+  const subMuscleGroupSet = new Set<string>();
   const specificMuscleSet = new Set<string>();
 
   for (const exerciseObj of result) {
@@ -276,6 +367,10 @@ export const exerciseSearch = async (
       .split(';')
       .filter(Boolean)
       .forEach(mg => muscleGroupSet.add(mg));
+    exerciseObj.sub_muscle_group
+      .split(';')
+      .filter(Boolean)
+      .forEach(smg => subMuscleGroupSet.add(smg));
     exerciseObj.specific_muscle
       .split(';')
       .filter(Boolean)
@@ -285,6 +380,7 @@ export const exerciseSearch = async (
   // If you need to work with arrays instead of sets later in your code
   const equipments = Array.from(equipmentSet).sort();
   const muscleGroups = Array.from(muscleGroupSet).sort();
+  const subMuscleGroups = Array.from(subMuscleGroupSet).sort();
   const specificMuscles = Array.from(specificMuscleSet).sort();
 
   const endTime = new Date().getTime();
@@ -301,6 +397,10 @@ export const exerciseSearch = async (
       muscleGroups: {
         label: 'Muscle Groups',
         values: muscleGroups,
+      },
+      subMuscleGroups: {
+        label: 'Sub Muscle Groups',
+        values: subMuscleGroups,
       },
       specificMuscles: {
         label: 'Specific Muscles',
