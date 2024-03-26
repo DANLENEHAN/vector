@@ -315,6 +315,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: borderWidth.xSmall,
     minWidth: '95%',
+    maxWidth: '95%',
     padding: paddingSizes.small,
     marginVertical: marginSizes.small,
     borderRadius: borderRadius.medium,
