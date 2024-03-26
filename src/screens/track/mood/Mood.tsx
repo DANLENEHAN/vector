@@ -66,7 +66,7 @@ const MoodScreen: React.FC<ScreenProps> = ({
   return (
     <ScreenWrapper>
       <View style={styles.headerSection}>
-        <Header onClick={navigation.goBack} includeBackArrow={true} />
+        <Header onClick={navigation.goBack} />
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.content}>

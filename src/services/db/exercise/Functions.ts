@@ -1,5 +1,5 @@
 // Constants
-import {otherDbTables, syncDbTables} from '@shared/Constants';
+import {SortOrders, otherDbTables, syncDbTables} from '@shared/Constants';
 import {JoinOperators} from '@services/db/Constants';
 import {ExerciseSearchResponse} from '@services/api/swagger/data-contracts';
 
@@ -36,6 +36,7 @@ import logger from '@utils/Logger';
 export const getExerciseSearchQuery = (
   searchString?: string,
   filters?: Partial<Record<ExerciseSearchFilters, Array<string>>>,
+  resultsSortOrder: SortOrders = SortOrders.ASC,
 ): string => {
   const exerciseCteName = 'exercises';
   const exerciseCteSql = buildSqlQuery({
@@ -305,6 +306,7 @@ export const getExerciseSearchQuery = (
       },
     },
     whereConditions: selectWhereConditions,
+    orderConditions: {[`${exerciseCteName}.exercise_name`]: resultsSortOrder},
   });
   return selectQuery;
 };
@@ -327,10 +329,15 @@ export const getExerciseSearchQuery = (
 export const exerciseSearch = async (
   searchString?: string,
   filters?: Partial<Record<ExerciseSearchFilters, Array<string>>>,
+  resultsSortOrder: SortOrders = SortOrders.ASC,
 ): Promise<SearchFuncResponse | null> => {
   const startTime = new Date().getTime();
 
-  const exerciseSearchQuery = getExerciseSearchQuery(searchString, filters);
+  const exerciseSearchQuery = getExerciseSearchQuery(
+    searchString,
+    filters,
+    resultsSortOrder,
+  );
   const response = await executeSqlBatch<ExerciseSearchResponse>([
     {sqlStatement: exerciseSearchQuery},
   ]);
@@ -408,4 +415,169 @@ export const exerciseSearch = async (
       },
     },
   };
+};
+
+/**
+ * Generates a SQL query to obtain comprehensive details for a specified exercise.
+ * This function creates a complex SQL query that includes a Common Table Expression (CTE)
+ * for aggregating muscle information (muscle group, sub-muscle group, specific muscle) related
+ * to an exercise, and a main query that fetches exercise details including name, instructions,
+ * type, difficulty level, description, category, equipment used, and muscle information. The
+ * muscle information is concatenated into semicolon-separated strings. Designed for applications
+ * needing detailed exercise data, it supports features like workout planning or fitness tracking.
+ *
+ * @param {string} exerciseId - The unique ID of the exercise.
+ * @returns {string} The SQL query string.
+ */
+export const getExerciseDetailsQuery = (exerciseId: string): string => {
+  const muscleCteName = 'muscle_cte';
+  const muscleCte = buildSqlQuery({
+    table: syncDbTables.exercise,
+    selectColumns: [
+      // Exercise Fields
+      `${syncDbTables.exercise}.exercise_id`,
+      // Muscle Fields
+      `GROUP_CONCAT(${otherDbTables.muscleGroup}.name, ';') as muscle_group`,
+      `GROUP_CONCAT(${otherDbTables.subMuscleGroup}.name, ';') as sub_muscle_group`,
+      `GROUP_CONCAT(${otherDbTables.specificMuscle}.name, ';') as specific_muscle`,
+    ],
+    joins: {
+      [syncDbTables.exerciseSpecificMuscle]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exerciseSpecificMuscle}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exercise}.exercise_id`,
+            },
+          },
+        },
+      },
+      [otherDbTables.specificMuscle]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exerciseSpecificMuscle}.specific_muscle_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${otherDbTables.specificMuscle}.specific_muscle_id`,
+            },
+          },
+        },
+      },
+      [otherDbTables.subMuscleGroup]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${otherDbTables.specificMuscle}.sub_muscle_group_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${otherDbTables.subMuscleGroup}.sub_muscle_group_id`,
+            },
+          },
+        },
+      },
+      [otherDbTables.muscleGroup]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${otherDbTables.subMuscleGroup}.muscle_group_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${otherDbTables.muscleGroup}.muscle_group_id`,
+            },
+          },
+        },
+      },
+    },
+    whereConditions: {
+      [`${syncDbTables.exercise}.exercise_id`]: {
+        [BaseOperators.Eq]: exerciseId,
+      },
+    },
+    groupby: [`${syncDbTables.exercise}.exercise_id`],
+  });
+
+  const selectQuery = buildSqlQuery({
+    table: syncDbTables.exercise,
+    selectColumns: [
+      // Exercise Fields
+      `${syncDbTables.exercise}.exercise_id`,
+      `${syncDbTables.exercise}.name as exercise_name`,
+      `${syncDbTables.exercise}.laterality`,
+      `${syncDbTables.exercise}.instructions`,
+      `${syncDbTables.exercise}.exercise_type`,
+      `${syncDbTables.exercise}.difficulty_level`,
+      `${syncDbTables.exercise}.description`,
+      `${syncDbTables.exercise}.category`,
+      // Equipment Fields
+      `${syncDbTables.equipment}.name as equipment_name`,
+      // Muscle Fields
+      `${muscleCteName}.muscle_group`,
+      `${muscleCteName}.sub_muscle_group`,
+      `${muscleCteName}.specific_muscle`,
+    ],
+    joins: {
+      [syncDbTables.exerciseEquipment]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.exerciseEquipment}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exercise}.exercise_id`,
+            },
+          },
+        },
+      },
+      [syncDbTables.equipment]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${syncDbTables.equipment}.equipment_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exerciseEquipment}.equipment_id`,
+            },
+          },
+        },
+      },
+      [muscleCteName]: {
+        join: JoinOperators.INNER,
+        on: {
+          [`${muscleCteName}.exercise_id`]: {
+            [BaseOperators.Eq]: {
+              isLiteral: true,
+              value: `${syncDbTables.exercise}.exercise_id`,
+            },
+          },
+        },
+      },
+    },
+    ctes: [
+      {
+        name: muscleCteName,
+        value: muscleCte,
+      },
+    ],
+  });
+  return selectQuery;
+};
+
+// Fix any return when we've got the response interface from the backend
+export const getExerciseDetails = async (exerciseId: string): Promise<any> => {
+  const queryString = getExerciseDetailsQuery(exerciseId);
+  const response = await executeSqlBatch<ExerciseSearchResponse>([
+    {sqlStatement: queryString},
+  ]);
+  if (response[0].error) {
+    logger.error(
+      '(function)=(getExerciseDetails);(exerciseId)=' +
+        `(${exerciseId}) - error recieved '${response[0].error}'`,
+    );
+    return null;
+  } else if (response[0].result.length === 0) {
+    logger.error(
+      '(function)=(getExerciseDetails);(exerciseId)=' +
+        `(${exerciseId}) - invalid exerciseId'`,
+    );
+    return null;
+  }
+  const result = response[0].result[0];
+  return result;
 };

@@ -153,6 +153,6 @@ export const StatisticLabels: Record<statisticType, string> = {
   [statisticType.mean]: 'Average:',
   [statisticType.median]: 'Median:',
   [statisticType.mode]: 'Mode:',
-  [statisticType.range]: 'Range"',
+  [statisticType.range]: 'Range',
   [statisticType.sum]: 'Total:',
 };

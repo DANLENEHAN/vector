@@ -26,7 +26,7 @@ const WaterScreen: React.FC<ScreenProps> = ({
 }: ScreenProps): React.ReactElement<ScreenProps> => {
   return (
     <ScreenWrapper>
-      <Header onClick={navigation.goBack} includeBackArrow={true} />
+      <Header onClick={navigation.goBack} />
       <View style={styles.componentContainer}>
         <GenericMeasurementTracking
           statType={NutritionType.Water}

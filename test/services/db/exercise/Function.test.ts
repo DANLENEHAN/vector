@@ -2,6 +2,8 @@
 import {
   getExerciseSearchQuery,
   exerciseSearch,
+  getExerciseDetailsQuery,
+  getExerciseDetails,
 } from '@services/db/exercise/Functions';
 import * as SqlClientFunctions from '@services/db/SqlClient';
 
@@ -262,5 +264,136 @@ describe('Exercise DB Functions Tests', () => {
     expect(executeSqlBatchSpy).toHaveBeenCalledWith([
       {sqlStatement: exerciseSearchQueryNoFilters},
     ]);
+  });
+
+  const getExerciseDetailsQuerySql =
+    'WITH muscle_cte as (SELECT exercise.exercise_id, GROUP_CONCAT' +
+    "(muscle_group.name, ';') as muscle_group, GROUP_CONCAT(" +
+    "sub_muscle_group.name, ';') as sub_muscle_group, GROUP_CONCAT" +
+    "(specific_muscle.name, ';') as specific_muscle FROM exercise " +
+    'INNER JOIN exercise_specific_muscle ON (exercise_specific_muscle' +
+    '.exercise_id = exercise.exercise_id) INNER JOIN specific_muscle ' +
+    'ON (exercise_specific_muscle.specific_muscle_id = specific_muscle.' +
+    'specific_muscle_id) INNER JOIN sub_muscle_group ON (specific_muscle.' +
+    'sub_muscle_group_id = sub_muscle_group.sub_muscle_group_id) INNER JOIN ' +
+    'muscle_group ON (sub_muscle_group.muscle_group_id = muscle_group.muscle_group_id)' +
+    " WHERE (exercise.exercise_id = 'fakeExerciseId') GROUP BY " +
+    'exercise.exercise_id) SELECT exercise.exercise_id, exercise.name as exercise_name, ' +
+    'exercise.laterality, exercise.instructions, exercise.exercise_type, exercise.difficulty_level, ' +
+    'exercise.description, exercise.category, equipment.name as equipment_name, muscle_cte.muscle_group, ' +
+    'muscle_cte.sub_muscle_group, muscle_cte.specific_muscle FROM exercise INNER JOIN exercise_equipment ON ' +
+    '(exercise_equipment.exercise_id = exercise.exercise_id) INNER JOIN equipment ON (equipment.equipment_id = ' +
+    'exercise_equipment.equipment_id) INNER JOIN muscle_cte ON (muscle_cte.exercise_id = exercise.exercise_id)';
+  const getExerciseResult = {
+    category: 'Kettlebell pass',
+    description: null,
+    difficulty_level: 1,
+    equipment_name: 'Kettlebells',
+    exercise_id: 'fa72ece0-c475-41c2-84d1-38e05b319b19',
+    exercise_name: 'Kettlebell Pass Between The Legs',
+    exercise_type: 'Accessory',
+    instructions:
+      "['Place one kettlebell between your legs and take a comfortable stance. Bend over by pushing your butt out and keeping your back flat.', 'Pick up a kettlebell and pass it to your other hand between your legs, in the fashion of a \"W\". Go back and forth for several repetitions.']",
+    laterality: 'Unilateral',
+    muscle_group: 'Back;Upper Legs;Core;Shoulders;Core;Core;Core',
+    specific_muscle:
+      'Erector Spinae;Gluteus Medius;Rectus Abdominis;Serratus Anterior;Pyramidalis;External Obliques;Internal Obliques',
+    sub_muscle_group:
+      'Lower Back;Glutes;Abdominals;Scapular Stabilizers;Abdominals;Obliques;Obliques',
+  };
+
+  test('getExerciseDetailsQuery', () => {
+    // Arrange
+    const fakeExerciseId = 'fakeExerciseId';
+    // Act
+    const response = getExerciseDetailsQuery(fakeExerciseId);
+    // Assert
+    expect(response).toEqual(getExerciseDetailsQuerySql);
+  });
+
+  test('getExerciseDetails - gets result', async () => {
+    // Arrange
+    const fakeExerciseId = 'fakeExerciseId';
+    const executeSqlBatchSpy = jest
+      .spyOn(SqlClientFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: getExerciseDetailsQuerySql,
+          },
+          result: [getExerciseResult],
+          error: null,
+        },
+      ]);
+    // Act
+    const response = await getExerciseDetails(fakeExerciseId);
+
+    // Assert
+    expect(executeSqlBatchSpy).toHaveBeenCalledTimes(1);
+    expect(executeSqlBatchSpy).toHaveBeenCalledWith([
+      {sqlStatement: getExerciseDetailsQuerySql},
+    ]);
+    expect(response).toEqual(getExerciseResult);
+  });
+
+  test('getExerciseDetails - no result', async () => {
+    // Arrange
+    const fakeExerciseId = 'fakeExerciseId';
+    const executeSqlBatchSpy = jest
+      .spyOn(SqlClientFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: getExerciseDetailsQuerySql,
+          },
+          result: [],
+          error: null,
+        },
+      ]);
+    // Act
+    const response = await getExerciseDetails(fakeExerciseId);
+
+    // Assert
+    expect(executeSqlBatchSpy).toHaveBeenCalledTimes(1);
+    expect(executeSqlBatchSpy).toHaveBeenCalledWith([
+      {sqlStatement: getExerciseDetailsQuerySql},
+    ]);
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      `(function)=(getExerciseDetails);(exerciseId)=` +
+        `(${fakeExerciseId}) - invalid exerciseId'`,
+    );
+    expect(response).toEqual(null);
+  });
+
+  test('getExerciseDetails - returns error', async () => {
+    // Arrange
+    const bigError = 'bigError';
+    const fakeExerciseId = 'fakeExerciseId';
+    const executeSqlBatchSpy = jest
+      .spyOn(SqlClientFunctions, 'executeSqlBatch')
+      .mockResolvedValueOnce([
+        {
+          originalQuery: {
+            sqlStatement: getExerciseDetailsQuerySql,
+          },
+          result: [],
+          error: bigError,
+        },
+      ]);
+    // Act
+    const response = await getExerciseDetails(fakeExerciseId);
+
+    // Assert
+    expect(executeSqlBatchSpy).toHaveBeenCalledTimes(1);
+    expect(executeSqlBatchSpy).toHaveBeenCalledWith([
+      {sqlStatement: getExerciseDetailsQuerySql},
+    ]);
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      `(function)=(getExerciseDetails);(exerciseId)=` +
+        `(${fakeExerciseId}) - error recieved '${bigError}'`,
+    );
+    expect(response).toEqual(null);
   });
 });

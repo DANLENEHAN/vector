@@ -108,6 +108,7 @@ export const borderRadius = {
 };
 
 export const borderWidth = {
+  xxSmall: 0.5,
   xSmall: 1,
   small: 2,
   medium: 3,

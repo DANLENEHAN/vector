@@ -26,7 +26,7 @@ import {View, StyleSheet, Text} from 'react-native';
 interface HeaderProps {
   onClick: () => void;
   label?: string;
-  includeBackArrow: boolean;
+  includeBackArrow?: boolean;
 }
 
 /**
@@ -39,7 +39,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   onClick,
   label = '',
-  includeBackArrow,
+  includeBackArrow = true,
 }: HeaderProps): React.ReactElement<HeaderProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;

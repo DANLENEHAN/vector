@@ -39,7 +39,6 @@ const BodyMeasurementTracking: React.FC<ScreenProps> = ({
             navigation.goBack();
           }
         }}
-        includeBackArrow={true}
       />
       <View style={styles.componentContainer}>
         {!selectedBodyPart ? (
