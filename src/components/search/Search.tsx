@@ -155,7 +155,15 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
               style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
               Filters
             </Text>
-            <Icon name="filter" size={iconSizes.small} />
+            <Icon
+              name="filter"
+              size={iconSizes.small}
+              color={
+                Object.keys(selectedFilters).length !== 0
+                  ? currentTheme.primary
+                  : currentTheme.text
+              }
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
