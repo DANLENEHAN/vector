@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: marginSizes.large,
   },
   clearFilterTitle: {
-    ...ctaTextStyles.xSmall,
+    ...ctaTextStyles.small,
   },
   filterSelector: {
     maxHeight: 125,
