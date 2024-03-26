@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
@@ -123,7 +124,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
       <View
         style={[
           styles.inputContainer,
-          {borderColor: error ? currentTheme.error : currentTheme.borders},
+          {
+            borderColor: error ? currentTheme.error : currentTheme.borders,
+            padding:
+              Platform.OS === 'ios' ? paddingSizes.large : paddingSizes.xSmall,
+          },
         ]}>
         <Icon
           name={iconName}
@@ -178,7 +183,6 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerHorizontally,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
-    padding: paddingSizes.small,
   },
   input: {
     ...bodyTextStyles.small,

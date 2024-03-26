@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
 
   // Search Bar
   searchBar: {
-    flex: 1,
+    flex: 2,
     marginBottom: 0,
   },
   filterSortButton: {
