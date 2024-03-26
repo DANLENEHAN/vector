@@ -38,7 +38,7 @@ describe('Exercise DB Functions Tests', () => {
     'GROUP BY exercise_id) SELECT exercises.exercise_id, exercises.exercise_name, equipment_agg.equipment_name, ' +
     'muscle_group_agg.muscle_group, muscle_group_agg.sub_muscle_group, muscle_group_agg.specific_muscle FROM exercises ' +
     'INNER JOIN equipment_agg ON (equipment_agg.exercise_id = exercises.exercise_id) INNER JOIN muscle_group_agg ON ' +
-    '(muscle_group_agg.exercise_id = exercises.exercise_id)';
+    '(muscle_group_agg.exercise_id = exercises.exercise_id) ORDER BY exercises.exercise_name ASC';
 
   const exerciseSearchResponse = [
     {
@@ -108,7 +108,7 @@ describe('Exercise DB Functions Tests', () => {
       'muscle_group_agg.specific_muscle FROM exercises INNER JOIN equipment_agg ON (equipment_agg.exercise_id = exercises.exercise_id) ' +
       'INNER JOIN muscle_group_agg ON (muscle_group_agg.exercise_id = exercises.exercise_id) WHERE (equipment_count = 1 and ' +
       "muscle_group_agg.muscle_group LIKE '%Chest%' and muscle_group_agg.muscle_group LIKE '%Shoulders%' and muscle_group_agg.muscle_group " +
-      "LIKE '%Triceps%' and muscle_group_agg.specific_muscle LIKE '%Pectoralis Major (Clavicular Head)%')";
+      "LIKE '%Triceps%' and muscle_group_agg.specific_muscle LIKE '%Pectoralis Major (Clavicular Head)%') ORDER BY exercises.exercise_name ASC";
     // Act
     const response = getExerciseSearchQuery(searchString, filters);
     // Assert
@@ -142,7 +142,7 @@ describe('Exercise DB Functions Tests', () => {
       "'Triceps')) GROUP BY exercise_id) SELECT exercises.exercise_id, exercises.exercise_name, equipment_agg.equipment_name, " +
       'muscle_group_agg.muscle_group, muscle_group_agg.sub_muscle_group, muscle_group_agg.specific_muscle FROM exercises INNER ' +
       'JOIN equipment_agg ON (equipment_agg.exercise_id = exercises.exercise_id) INNER JOIN muscle_group_agg ON (muscle_group_agg.' +
-      'exercise_id = exercises.exercise_id) WHERE (equipment_count = 1 and muscle_group_count = 3)';
+      'exercise_id = exercises.exercise_id) WHERE (equipment_count = 1 and muscle_group_count = 3) ORDER BY exercises.exercise_name ASC';
     // Act
     const response = getExerciseSearchQuery(searchString, filters);
     // Assert

@@ -52,5 +52,6 @@ describe('TagSelector', () => {
     expect(exercise).toBeTruthy();
     expect(muscleGroupLabel).toBeTruthy();
     expect(specificMuscle).toBeTruthy();
+    expect(getByTestId('sortButton'));
   });
 });

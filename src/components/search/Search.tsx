@@ -150,7 +150,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
           <TouchableOpacity
             style={styles.filterSortButton}
             onPress={() => setShowFilters(!showFilters)}
-            testID="filterSortButtonText">
+            testID="filterButton">
             <Text
               style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
               Filters
@@ -178,7 +178,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
                 return newSortOrder;
               });
             }}
-            testID="filterSortButtonText">
+            testID="sortButton">
             <Text
               style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
               Sort Results
