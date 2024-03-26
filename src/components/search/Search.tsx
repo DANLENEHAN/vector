@@ -181,7 +181,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
             testID="filterSortButtonText">
             <Text
               style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
-              Sort
+              Sort Results
             </Text>
             <Icon
               name={
@@ -190,6 +190,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
                   : 'arrow-up-z-a'
               }
               size={iconSizes.small}
+              color={currentTheme.text}
             />
           </TouchableOpacity>
         </View>
