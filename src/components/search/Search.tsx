@@ -237,17 +237,19 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
           </View>
         )}
 
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={searchResults}
-          renderItem={({item}) => (
-            <SearchResultItem
-              itemName={item.itemName}
-              currentTheme={currentTheme}
-            />
-          )}
-          keyExtractor={item => item.itemId}
-        />
+        <View style={styles.searchResultsContainer}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={searchResults}
+            renderItem={({item}) => (
+              <SearchResultItem
+                itemName={item.itemName}
+                currentTheme={currentTheme}
+              />
+            )}
+            keyExtractor={item => item.itemId}
+          />
+        </View>
       </View>
     </View>
   );
@@ -279,6 +281,10 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
     width: '95%',
   },
+  searchResultsContainer: {
+    flex: 1,
+    width: '90%',
+  },
 
   // Search Bar
   searchBar: {
@@ -295,6 +301,7 @@ const styles = StyleSheet.create({
 
   // Filters
   filterContainer: {
+    flex: 0,
     borderRadius: borderRadius.large,
     borderWidth: borderWidth.xSmall,
     padding: paddingSizes.small,
@@ -314,8 +321,6 @@ const styles = StyleSheet.create({
   searchResult: {
     flex: 1,
     borderWidth: borderWidth.xSmall,
-    minWidth: '95%',
-    maxWidth: '95%',
     padding: paddingSizes.small,
     marginVertical: marginSizes.small,
     borderRadius: borderRadius.medium,
