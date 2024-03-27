@@ -135,17 +135,17 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
       </View>
 
       <View style={[styles.searchBarContainer]}>
-        <TextInputComponent
-          placeholder="Search Exercises"
-          value={searchQuery}
-          onChangeText={text => {
-            setSearchQuery(text);
-            performSearch(text, selectedFilters, resultsSortOrder);
-          }}
-          iconName="magnifying-glass"
-          iconSize={iconSizes.medium}
-          style={styles.searchBar}
-        />
+        <View style={styles.searchBar}>
+          <TextInputComponent
+            placeholder="Search Exercises"
+            value={searchQuery}
+            onChangeText={text => {
+              setSearchQuery(text);
+              performSearch(text, selectedFilters, resultsSortOrder);
+            }}
+            iconName="magnifying-glass"
+          />
+        </View>
         <View style={styles.configContainer}>
           <TouchableOpacity
             style={styles.filterSortButton}
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   configContainer: {
     flex: 1,
-    width: '95%',
+    width: '90%',
     paddingHorizontal: paddingSizes.small,
     ...layoutStyles.spaceBetweenHorizontal,
   },
@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
   // Search Bar
   searchBar: {
     flex: 2,
-    marginBottom: 0,
   },
   filterSortButton: {
     ...layoutStyles.spaceBetweenHorizontal,

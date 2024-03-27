@@ -180,9 +180,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         </View>
       </View>
       {!isCollapsed && (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.tagContainer}>
+        <ScrollView contentContainerStyle={styles.tagContainer}>
           {tags.map((tag, index) => (
             <Tag
               key={index}

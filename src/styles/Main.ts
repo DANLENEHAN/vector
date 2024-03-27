@@ -29,6 +29,7 @@ export const fonts = {
 };
 
 export const fontSizes = {
+  xxxSmall: 10,
   xxSmall: 12,
   xSmall: 14, // also the default
   small: 16,
@@ -168,6 +169,11 @@ export const headingTextStyles: HeadingTextStyles = {
 };
 
 export const bodyTextStyles: BodyTextStyles = {
+  xxxSmall: {
+    fontSize: fontSizes.xxxSmall,
+    fontFamily: fonts.body,
+    fontWeight: fontWeights.normal,
+  },
   xxSmall: {
     fontSize: fontSizes.xxSmall,
     fontFamily: fonts.body,

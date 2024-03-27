@@ -29,6 +29,7 @@ import SettingsStackNavigator from '@navigation/navigators/SettingsStack';
 // Types
 import {BottomBarProps} from '@components/navbar/Types';
 import SearchScreen from '@screens/Search';
+import CreateExerciseScreen from '@screens/create/CreateExercise';
 
 // Navigation stacks
 const AppStack = createNativeStackNavigator<RootStackParamList>();
@@ -153,6 +154,14 @@ const AuthNavigator: React.FC = (): React.ReactElement => {
         <AppStack.Screen
           name="Search"
           component={SearchScreen}
+          options={{headerShown: false}}
+        />
+        {
+          // Create Screens
+        }
+        <AppStack.Screen
+          name="CreateExercise"
+          component={CreateExerciseScreen}
           options={{headerShown: false}}
         />
       </AppStack.Navigator>
