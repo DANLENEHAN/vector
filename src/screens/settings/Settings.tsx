@@ -50,7 +50,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({
             caret={true}
           />
           <SettingsOption
-            icon="cog"
+            icon="gear"
             onPress={() =>
               navigation.navigate('Settings', {screen: 'Preferences'})
             }
@@ -58,7 +58,7 @@ const SettingsScreen: React.FC<ScreenProps> = ({
             caret={true}
           />
           <SettingsOption
-            icon="question"
+            icon="circle-info"
             onPress={() => logger.info('Pressed Support')}
             label="Support"
             caret={true}

@@ -104,7 +104,13 @@ export const Tag: React.FC<
       {icon && (
         <Icon name={icon} solid size={iconSizes.small} color={fontColor} />
       )}
-      <Text style={[styles.tagLabel, {color: fontColor}]}>{label}</Text>
+      <Text
+        style={[
+          styles.tagLabel,
+          {color: fontColor, marginLeft: icon ? marginSizes.small : 0},
+        ]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -174,9 +180,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         </View>
       </View>
       {!isCollapsed && (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.tagContainer}>
+        <ScrollView contentContainerStyle={styles.tagContainer}>
           {tags.map((tag, index) => (
             <Tag
               key={index}
@@ -205,7 +209,6 @@ const styles = StyleSheet.create({
   },
   tagLabel: {
     ...bodyTextStyles.xxSmall,
-    marginLeft: marginSizes.small,
   },
   tagContainer: {
     flexWrap: 'wrap',

@@ -66,11 +66,7 @@ const WeightProgress: React.FC<ScreenProps> = ({
   return (
     <ScreenWrapper>
       <View style={styles.pageWrapper}>
-        <Header
-          label="Weight"
-          onClick={navigation.goBack}
-          includeBackArrow={true}
-        />
+        <Header label="Weight" onClick={navigation.goBack} />
         <View style={styles.unitSelectorSection}>
           <UnitSelector
             units={Object.values(dateOptions)}

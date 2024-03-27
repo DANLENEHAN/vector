@@ -29,6 +29,7 @@ export const fonts = {
 };
 
 export const fontSizes = {
+  xxxSmall: 10,
   xxSmall: 12,
   xSmall: 14, // also the default
   small: 16,
@@ -108,6 +109,7 @@ export const borderRadius = {
 };
 
 export const borderWidth = {
+  xxSmall: 0.5,
   xSmall: 1,
   small: 2,
   medium: 3,
@@ -167,6 +169,11 @@ export const headingTextStyles: HeadingTextStyles = {
 };
 
 export const bodyTextStyles: BodyTextStyles = {
+  xxxSmall: {
+    fontSize: fontSizes.xxxSmall,
+    fontFamily: fonts.body,
+    fontWeight: fontWeights.normal,
+  },
   xxSmall: {
     fontSize: fontSizes.xxSmall,
     fontFamily: fonts.body,

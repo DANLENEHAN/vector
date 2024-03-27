@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  TextStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 // Styling
@@ -28,20 +29,18 @@ import {useSystem} from '@context/SystemContext';
 import TextValidation from '@validation/TextValidation';
 
 /**
- * Props for a TextInput component used in forms.
+ * Props for a TextInput component, providing configuration for text entry within forms.
  *
  * @interface TextInputProps
- * @property {string} placeholder - The placeholder text for the input.
- * @property {string} value - The current value of the input.
- * @property {(textInput: string, inputValid: boolean) => void} onChangeText - Callback function triggered when the text changes.
- * @property {boolean} [secureTextEntry] - Determines whether the input is a secure text entry (e.g., for passwords).
- * @property {boolean} [autoCapitalize] - Determines whether the input automatically capitalizes certain characters.
- * @property {string} iconName - The name of the icon associated with the input.
- * @property {number} iconSize - The szie of the icon associated with the input.
- * @property {object} [style] - Additional styles to be applied to the TextInput component.
- * @property {TextValidation} validation - An instance of TextValidation for validating the input.
- * @property {boolean} [enableErrors] - Indicates whether error messages from validation should be displayed.
- *
+ * @property {string} placeholder - The placeholder text displayed in the input when it's empty.
+ * @property {string} value - The current text value of the input field.
+ * @property {(textInput: string, inputValid: boolean) => void} onChangeText - Function called when the input text changes, along with a validity flag.
+ * @property {boolean} [secureTextEntry] - If true, hides the input text, making it suitable for password entry.
+ * @property {boolean} [autoCapitalize] - If true, automatically capitalizes the first letter of each sentence.
+ * @property {string} [iconName] - Optional name of the icon to display alongside the input.
+ * @property {TextValidation} [validation] - Optional validation logic to apply to the input text.
+ * @property {boolean} [enableErrors] - If true, displays error messages based on the validation.
+ * @property {keyof TextInputComponentSizeOptions} size - Defines the size of the input component, affecting its appearance and layout.
  */
 interface TextInputProps {
   placeholder: string;
@@ -49,15 +48,49 @@ interface TextInputProps {
   onChangeText: (textInput: string, inputValid: boolean) => void;
   secureTextEntry?: boolean;
   autoCapitalize?: boolean;
-  iconName: string;
-  iconSize?: number;
-  style?: {
-    [key: string]: any;
-    marginBottom?: number;
-  };
+  iconName?: string;
   validation?: TextValidation;
   enableErrors?: boolean;
+  size?: keyof TextInputComponentSizeOptions;
 }
+
+interface TextInputComponentSizeOption {
+  iconSize: number;
+  inputTextSize: TextStyle;
+  errorTextSize: TextStyle;
+  height: number;
+  width: number;
+}
+
+interface TextInputComponentSizeOptions {
+  large: TextInputComponentSizeOption;
+  medium: TextInputComponentSizeOption;
+  small: TextInputComponentSizeOption;
+}
+
+const TextInputComponentSizeOptions: TextInputComponentSizeOptions = {
+  large: {
+    iconSize: iconSizes.xLarge,
+    inputTextSize: bodyTextStyles.small,
+    errorTextSize: bodyTextStyles.xSmall,
+    height: 60,
+    width: 375,
+  },
+  medium: {
+    iconSize: iconSizes.large,
+    inputTextSize: bodyTextStyles.xSmall,
+    errorTextSize: bodyTextStyles.xxSmall,
+    height: 55,
+    width: 350,
+  },
+  small: {
+    iconSize: iconSizes.medium,
+    inputTextSize: bodyTextStyles.xxSmall,
+    errorTextSize: bodyTextStyles.xxxSmall,
+    height: 50,
+    width: 325,
+  },
+};
 
 /**
  * TextInput Component
@@ -70,18 +103,19 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   placeholder,
   value,
   iconName,
-  iconSize,
   onChangeText,
   validation,
-  style,
   enableErrors = false,
   secureTextEntry = false,
   autoCapitalize = false,
+  size = 'large',
 }: TextInputProps): React.ReactElement<TextInputProps> => {
   const {theme} = useSystem();
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
   const [isSecureEntry, setIsSecureEntry] = useState<boolean>(secureTextEntry);
   const [error, setError] = useState<string | null>(null);
+
+  const componentSizeStlying = TextInputComponentSizeOptions[size];
 
   const handleTextChange = (text: string) => {
     if (validation) {
@@ -101,12 +135,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
     }
   }, [enableErrors, value, validation]);
 
-  // Fixing the Height of the Error Container and adjusting marginSizes
-  // to prevent movement on error popup
-  const errorContainerHeight = 16;
-  const defaultMarginBottom =
-    style?.marginBottom !== undefined ? style.marginBottom : marginSizes.xLarge;
+  // Defining margin is for the Error Messages to show nicely
+  const defaultMarginBottom = validation === undefined ? 0 : marginSizes.xLarge;
+
   const errorContainerMarginTop = marginSizes.xSmall;
+  const errorContainerHeight = defaultMarginBottom - errorContainerMarginTop;
   const errorContainerMarginBottom = defaultMarginBottom
     ? defaultMarginBottom - errorContainerHeight - errorContainerMarginTop
     : defaultMarginBottom;
@@ -115,7 +148,6 @@ const TextInputComponent: React.FC<TextInputProps> = ({
     <View
       style={[
         styles.mainContainer,
-        style,
         error
           ? {marginBottom: errorContainerMarginBottom}
           : {marginBottom: defaultMarginBottom},
@@ -123,17 +155,26 @@ const TextInputComponent: React.FC<TextInputProps> = ({
       <View
         style={[
           styles.inputContainer,
-          {borderColor: error ? currentTheme.error : currentTheme.borders},
+          {
+            width: componentSizeStlying.width,
+            height: componentSizeStlying.height,
+            borderColor: error ? currentTheme.error : currentTheme.borders,
+          },
         ]}>
-        <Icon
-          name={iconName}
-          size={iconSize || iconSizes.xLarge}
-          color={currentTheme.icon}
-          solid
-        />
+        {iconName && (
+          <Icon
+            style={styles.icon}
+            name={iconName}
+            size={componentSizeStlying.iconSize}
+            color={currentTheme.icon}
+            solid
+          />
+        )}
+
         <TextInput
           style={[
             styles.input,
+            componentSizeStlying.inputTextSize,
             {
               color: currentTheme.text,
             },
@@ -145,6 +186,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
           secureTextEntry={isSecureEntry}
           autoCapitalize={autoCapitalize === true ? 'sentences' : 'none'}
         />
+
         {secureTextEntry === true && value.length > 0 && (
           <TouchableOpacity onPress={() => setIsSecureEntry(prev => !prev)}>
             <Text
@@ -154,6 +196,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
           </TouchableOpacity>
         )}
       </View>
+
       {error ? (
         <View
           style={{
@@ -161,7 +204,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
             height: errorContainerHeight,
           }}
           testID="text-input-error">
-          <Text style={[bodyTextStyles.xSmall, {color: currentTheme.error}]}>
+          <Text
+            style={[
+              componentSizeStlying.errorTextSize,
+              {color: currentTheme.error},
+            ]}>
             {error}
           </Text>
         </View>
@@ -175,23 +222,20 @@ const styles = StyleSheet.create({
     ...layoutStyles.centerVertically,
   },
   inputContainer: {
-    ...layoutStyles.centerHorizontally,
+    ...layoutStyles.flexStartHorizontal,
     borderWidth: borderWidth.xSmall,
     borderRadius: borderRadius.medium,
-    padding: paddingSizes.small,
+    paddingHorizontal: paddingSizes.small,
   },
   input: {
-    ...bodyTextStyles.small,
-    flex: 1,
-    marginLeft: marginSizes.small,
+    flex: 8,
   },
   showHideButton: {
-    paddingRight: paddingSizes.small,
     ...ctaTextStyles.small,
   },
   icon: {
+    flex: 1,
     paddingRight: paddingSizes.small,
-    paddingLeft: paddingSizes.small,
   },
 });
 

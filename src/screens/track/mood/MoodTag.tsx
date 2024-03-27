@@ -141,11 +141,7 @@ const MoodTagScreen: React.FC<any> = ({
   return (
     <ScreenWrapper>
       <View style={styles.headerSection}>
-        <Header
-          onClick={navigation.goBack}
-          includeBackArrow={true}
-          label={currentDatetime}
-        />
+        <Header onClick={navigation.goBack} label={currentDatetime} />
       </View>
       <View style={styles.content}>
         <ScrollView contentContainerStyle={styles.scroll}>

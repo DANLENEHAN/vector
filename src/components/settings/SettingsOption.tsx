@@ -75,7 +75,7 @@ const SettingsOption: React.FC<SettingsOptionProps> = ({
         <Icon
           name={icon}
           solid
-          size={iconSizes.small}
+          size={iconSizes.medium}
           color={currentTheme.background}
         />
       </View>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     ...layoutStyles.spaceBetweenHorizontal,
     borderBottomWidth: borderWidth.xSmall,
     padding: paddingSizes.small,
-    width: '85%',
+    width: '90%',
   },
   labelHolder: {
     ...bodyTextStyles.small,
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     ...layoutStyles.centerHorizontally,
     borderRadius: borderRadius.small,
-    width: iconSizes.large,
-    height: iconSizes.large,
+    width: iconSizes.xLarge,
+    height: iconSizes.xLarge,
   },
 });
 

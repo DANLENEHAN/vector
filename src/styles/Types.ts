@@ -34,6 +34,7 @@ export interface HeadingTextStyles {
 }
 
 export interface BodyTextStyles {
+  xxxSmall: TextStyle;
   xxSmall: TextStyle;
   xSmall: TextStyle;
   small: TextStyle;

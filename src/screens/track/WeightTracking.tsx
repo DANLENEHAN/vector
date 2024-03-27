@@ -190,7 +190,7 @@ const WeightTracking: React.FC<ScreenProps> = ({
 
   return (
     <ScreenWrapper>
-      <Header onClick={navigation.goBack} includeBackArrow={true} />
+      <Header onClick={navigation.goBack} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.componentContainer} testID={testID}>
           <View style={styles.content}>

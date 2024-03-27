@@ -15,19 +15,21 @@ import {
   borderRadius,
   paddingSizes,
   borderWidth,
-  headingTextStyles,
   bodyTextStyles,
 } from '@styles/Main';
 import TagSelector from '@components/inputs/TagSelector';
+import Header from '@components/navbar/Header';
+// Types
 import {
   SearchFilters,
   SearchFuncResponse,
   SearchResults,
 } from '@components/search/Types';
-import HeaderBackButton from '@components/buttons/HeaderBackButton';
+import {themeColors} from '@styles/Types';
 // Services
 import {useSystem} from '@context/SystemContext';
 import logger from '@utils/Logger';
+import {SortOrders} from '@shared/Constants';
 
 interface SearchComponentProps<FilterKeys extends PropertyKey> {
   initialFilters: Record<FilterKeys, SearchFilters>;
@@ -35,9 +37,34 @@ interface SearchComponentProps<FilterKeys extends PropertyKey> {
   searchFunction: (
     searchString: string,
     filters?: Partial<Record<FilterKeys, Array<string>>>,
+    resultsSortOrder?: SortOrders,
   ) => Promise<SearchFuncResponse | null>;
   onClickBack: () => void;
 }
+
+interface SearchResultItemProps {
+  itemName: string;
+  currentTheme: themeColors;
+}
+
+const SearchResultItem = React.memo(
+  ({itemName, currentTheme}: SearchResultItemProps) => {
+    return (
+      <View
+        style={[
+          styles.searchResult,
+          {
+            borderColor: currentTheme.borders,
+            backgroundColor: currentTheme.secondaryBackground,
+          },
+        ]}>
+        <Text style={[styles.searchResultText, {color: currentTheme.text}]}>
+          {itemName}
+        </Text>
+      </View>
+    );
+  },
+);
 
 const SearchComponent = <FilterKeys extends PropertyKey>({
   initialFilters,
@@ -49,6 +76,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
   const currentTheme = theme === 'dark' ? darkThemeColors : lightThemeColors;
 
   const [showFilters, setShowFilters] = useState(false);
+  const [resultsSortOrder, setResultsSortOrder] = useState(SortOrders.ASC);
   const searchFilters = initialFilters;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<
@@ -61,9 +89,10 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
     async (
       text: string,
       filters: Partial<Record<FilterKeys, Array<string>>>,
+      sortOrder: SortOrders,
     ) => {
       try {
-        const response = await searchFunction(text, filters);
+        const response = await searchFunction(text, filters, sortOrder);
         if (response !== null) {
           setSearchResults(response.searchResults);
         }
@@ -92,67 +121,85 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
           updatedFilters[filterName] = [...currentFilter, selectedFilter];
         }
 
-        performSearch(searchQuery, updatedFilters);
+        performSearch(searchQuery, updatedFilters, resultsSortOrder);
         return updatedFilters;
       });
     },
-    [performSearch, searchQuery],
+    [performSearch, searchQuery, resultsSortOrder],
   );
-
-  const SearchResultItem = React.memo(({itemName}: Partial<SearchResults>) => {
-    return (
-      <View
-        style={[
-          styles.searchResult,
-          {
-            borderColor: currentTheme.borders,
-            backgroundColor: currentTheme.secondaryBackground,
-          },
-        ]}>
-        <Text style={[styles.searchResultText, {color: currentTheme.text}]}>
-          {itemName}
-        </Text>
-      </View>
-    );
-  });
 
   return (
     <View style={styles.screenContainer}>
-      <View style={styles.searchHeader}>
-        <HeaderBackButton onClick={onClickBack} style={styles.backButton} />
-        <TextInputComponent
-          placeholder="Search Exercises"
-          value={searchQuery}
-          onChangeText={text => {
-            setSearchQuery(text);
-            performSearch(text, selectedFilters);
-          }}
-          iconName="magnifying-glass"
-          iconSize={iconSizes.large}
-          style={styles.searchBar}
-        />
-        <TouchableOpacity
-          onPress={() => setShowFilters(!showFilters)}
-          testID="filterButton">
-          <Icon
-            name="filter"
-            size={iconSizes.large}
-            color={
-              Object.keys(selectedFilters).length !== 0
-                ? currentTheme.primary
-                : currentTheme.text
-            }
+      <View style={styles.headerContainer}>
+        <Header onClick={onClickBack} label="Exercise Search" />
+      </View>
+
+      <View style={[styles.searchBarContainer]}>
+        <View style={styles.searchBar}>
+          <TextInputComponent
+            placeholder="Search Exercises"
+            value={searchQuery}
+            onChangeText={text => {
+              setSearchQuery(text);
+              performSearch(text, selectedFilters, resultsSortOrder);
+            }}
+            iconName="magnifying-glass"
           />
-        </TouchableOpacity>
+        </View>
+        <View style={styles.configContainer}>
+          <TouchableOpacity
+            style={styles.filterSortButton}
+            onPress={() => setShowFilters(!showFilters)}
+            testID="filterButton">
+            <Text
+              style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
+              Filters
+            </Text>
+            <Icon
+              name="filter"
+              size={iconSizes.small}
+              color={
+                Object.keys(selectedFilters).length !== 0
+                  ? currentTheme.primary
+                  : currentTheme.text
+              }
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.filterSortButton}
+            onPress={() => {
+              setResultsSortOrder(prevSortOrder => {
+                const newSortOrder =
+                  prevSortOrder === SortOrders.ASC
+                    ? SortOrders.DESC
+                    : SortOrders.ASC;
+                performSearch(searchQuery, selectedFilters, newSortOrder);
+                return newSortOrder;
+              });
+            }}
+            testID="sortButton">
+            <Text
+              style={[styles.filterSortButtonText, {color: currentTheme.text}]}>
+              Sort Results
+            </Text>
+            <Icon
+              name={
+                resultsSortOrder === SortOrders.ASC
+                  ? 'arrow-up-a-z'
+                  : 'arrow-up-z-a'
+              }
+              size={iconSizes.small}
+              color={currentTheme.text}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.searchBody}>
         {showFilters && (
           <View
             style={[styles.filterContainer, {borderColor: currentTheme.text}]}>
-            <Text style={[styles.filterTitle, {color: currentTheme.text}]}>
-              Filters
-            </Text>
             {Object.entries(searchFilters).map(
               (value: [string, any], index: number) => {
                 const filterKey = value[0] as FilterKeys;
@@ -180,7 +227,7 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
             <TouchableOpacity
               onPress={() => {
                 setSelectedFilters({});
-                performSearch(searchQuery, {});
+                performSearch(searchQuery, {}, resultsSortOrder);
               }}>
               <Text
                 style={[styles.clearFilterTitle, {color: currentTheme.text}]}>
@@ -190,64 +237,89 @@ const SearchComponent = <FilterKeys extends PropertyKey>({
           </View>
         )}
 
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={searchResults}
-          renderItem={({item}) => <SearchResultItem itemName={item.itemName} />}
-          keyExtractor={item => item.itemId}
-        />
+        <View style={styles.searchResultsContainer}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={searchResults}
+            renderItem={({item}) => (
+              <SearchResultItem
+                itemName={item.itemName}
+                currentTheme={currentTheme}
+              />
+            )}
+            keyExtractor={item => item.itemId}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // Containers
   screenContainer: {
     flex: 1,
     ...layoutStyles.centerVertically,
   },
-  backButton: {
-    margin: 0,
-    padding: 0,
-  },
-  searchBar: {
-    marginBottom: 0,
-    marginHorizontal: marginSizes.small,
-    minWidth: 325,
-  },
-  searchHeader: {
+  headerContainer: {
     flex: 1,
-    ...layoutStyles.spaceAroundHorizontal,
     width: '100%',
   },
+  searchBarContainer: {
+    flex: 2,
+    width: '95%',
+    ...layoutStyles.centerVertically,
+  },
+  configContainer: {
+    flex: 1,
+    width: '90%',
+    paddingHorizontal: paddingSizes.small,
+    ...layoutStyles.spaceBetweenHorizontal,
+  },
   searchBody: {
-    flex: 9,
+    flex: 12,
     ...layoutStyles.centerVertically,
     width: '95%',
   },
+  searchResultsContainer: {
+    flex: 1,
+    width: '90%',
+  },
+
+  // Search Bar
+  searchBar: {
+    flex: 2,
+  },
+  filterSortButton: {
+    ...layoutStyles.spaceBetweenHorizontal,
+  },
+  filterSortButtonText: {
+    ...ctaTextStyles.small,
+    marginRight: marginSizes.small,
+  },
+
+  // Filters
   filterContainer: {
+    flex: 0,
     borderRadius: borderRadius.large,
     borderWidth: borderWidth.xSmall,
     padding: paddingSizes.small,
     ...layoutStyles.centerVertically,
     marginBottom: marginSizes.large,
   },
-  filterTitle: {
-    marginBottom: marginSizes.small,
-    ...headingTextStyles.xSmall,
-  },
   clearFilterTitle: {
-    ...ctaTextStyles.xSmall,
+    ...ctaTextStyles.small,
   },
   filterSelector: {
     maxHeight: 125,
     minWidth: '100%',
     marginBottom: marginSizes.small,
   },
+
+  // Search Results
   searchResult: {
     flex: 1,
     borderWidth: borderWidth.xSmall,
-    minWidth: '95%',
     padding: paddingSizes.small,
     marginVertical: marginSizes.small,
     borderRadius: borderRadius.medium,
